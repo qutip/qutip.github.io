@@ -1,0 +1,174 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>Performance (QuTiP vs. qotoolbox) &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../../_static/jquery.js"></script>
+            <script type="text/javascript" src="../../_static/underscore.js"></script>
+            <script type="text/javascript" src="../../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../../index.html"/>
+            <link rel="up" title="Time Evolution and Quantum System Dynamics" href="../guide-dynamics.html"/>
+            <link rel="next" title="Setting Options for the Dynamics ODE Solvers" href="dynamics-options.html"/>
+            <link rel="prev" title="Floquet Formalism" href="dynamics-floquet.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../../index.html">home</a></li>
+                <li>
+                    <a href="../../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="dynamics-options.html"
+                       title="Setting Options for the Dynamics ODE Solvers" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="dynamics-floquet.html"
+                       title="Floquet Formalism" accesskey="P">previous</a>
+                </li>
+                <li><a href="../guide.html"
+                        >QuTiP Users Guide</a>
+                </li>
+                <li><a href="../guide-dynamics.html"
+                        accesskey="U">Time Evolution and Quantum System Dynamics</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="performance-qutip-vs-qotoolbox">
+<span id="performance"></span><h1>Performance (QuTiP vs. qotoolbox)<a class="headerlink" href="#performance-qutip-vs-qotoolbox" title="Permalink to this headline">¶</a></h1>
+<p>Here we compare the performance of the master-equation and Monte Carlo solvers to their quantum optics toolbox counterparts.</p>
+<p>In this example, we calculate the time-evolution of the density matrix for a coupled oscillator system using the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a> function, and compare it to the quantum optics toolbox (qotoolbox).  Here, we see that the QuTiP solver out performs its qotoolbox counterpart by a substantial margin as the system size increases.</p>
+<div class="figure align-center">
+<img alt="../../_images/guide-dynamics-odesolve-performance.png" src="../../_images/guide-dynamics-odesolve-performance.png" style="width: 4in;" />
+</div>
+<p>To test the Monte Carlo solvers, here we simulate a trilinear Hamiltonian over a range of Hilbert space sizes.  Since QuTiP uses multiprocessing, we can measure the performance gain when using several CPU&#8217;s.  In contrast, the qotoolbox is limited to a single processor only.  In the legend, we show the speed-up factor in the parenthesis, which should ideally be equal to the number of processors.  Finally, we have included the results using hyperthreading, written here as 4+(x) where x is the number of hyperthreads, found in some newer Intel processors.  We see however that the performance benefits from hyperthreading are marginal at best.</p>
+<div class="figure align-center">
+<img alt="../../_images/guide-dynamics-mcsolve-performance.png" src="../../_images/guide-dynamics-mcsolve-performance.png" style="width: 4in;" />
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dynamics-floquet.html"
+                        title="previous chapter">Floquet Formalism</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dynamics-options.html"
+                        title="next chapter">Setting Options for the Dynamics ODE Solvers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/guide/dynamics/dynamics-performance.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>

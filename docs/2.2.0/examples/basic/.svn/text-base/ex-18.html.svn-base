@@ -1,0 +1,201 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>Binary Entropy &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../../_static/jquery.js"></script>
+            <script type="text/javascript" src="../../_static/underscore.js"></script>
+            <script type="text/javascript" src="../../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../../index.html"/>
+            <link rel="up" title="Basic Examples" href="../ex-basic.html"/>
+            <link rel="next" title="3-Qubit GHZ State" href="ex-19.html"/>
+            <link rel="prev" title="Cavity-Qubit Steadystate" href="ex-17.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../../index.html">home</a></li>
+                <li>
+                    <a href="../../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="ex-19.html"
+                       title="3-Qubit GHZ State" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="ex-17.html"
+                       title="Cavity-Qubit Steadystate" accesskey="P">previous</a>
+                </li>
+                <li><a href="../examples.html"
+                        >QuTiP Example Scripts</a>
+                </li>
+                <li><a href="../ex-basic.html"
+                        accesskey="U">Basic Examples</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="binary-entropy">
+<span id="exbasic18"></span><h1>Binary Entropy<a class="headerlink" href="#binary-entropy" title="Permalink to this headline">¶</a></h1>
+<p>Entropy of a binary system <span class="math">\(a\left|0\right&gt;\left&lt;0\right|+(1-a)\left|1\right&gt;\left&lt;1\right|\)</span> as probability of being in the excited state <span class="math">\(a\)</span> is varied.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
+<span class="c"># Entropy of binary system as probability</span>
+<span class="c"># of being in the excited state is varied.</span>
+<span class="c">#</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>  <span class="c"># preallocate output array</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+        <span class="c"># a*|0&gt;&lt;0|</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c"># (1-a)*|1&gt;&lt;1|</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+        <span class="c"># Von-Neumann entropy (base 2) of rho</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_vn</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;Probability of being in excited state $(a)$&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;Entropy&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="s">&quot;Entropy of $a|0</span><span class="se">\\</span><span class="s">rangle\langle0|+(1-a)|1</span><span class="se">\\</span><span class="s">rangle\langle1|$&quot;</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../qutip/qutip/examples/ex_18.py">Source code</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_18.png">png</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_18.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../../_images/ex_18.png" src="../../_images/ex_18.png" />
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex-17.html"
+                        title="previous chapter">Cavity-Qubit Steadystate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex-19.html"
+                        title="next chapter">3-Qubit GHZ State</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/examples/basic/ex-18.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>Spectrum of cavity coupled to an atom &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../../_static/jquery.js"></script>
+            <script type="text/javascript" src="../../_static/underscore.js"></script>
+            <script type="text/javascript" src="../../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../../index.html"/>
+            <link rel="up" title="Correlation + Spectrum Examples" href="../ex-correlation.html"/>
+            <link rel="next" title="Dynamics of time-dependent systems" href="../ex-time-dependence.html"/>
+            <link rel="prev" title="Correlation + Spectrum Examples" href="../ex-correlation.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../../index.html">home</a></li>
+                <li>
+                    <a href="../../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="../ex-time-dependence.html"
+                       title="Dynamics of time-dependent systems" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="../ex-correlation.html"
+                       title="Correlation + Spectrum Examples" accesskey="P">previous</a>
+                </li>
+                <li><a href="../examples.html"
+                        >QuTiP Example Scripts</a>
+                </li>
+                <li><a href="../ex-correlation.html"
+                        accesskey="U">Correlation + Spectrum  Examples</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="spectrum-of-cavity-coupled-to-an-atom">
+<span id="excorr35"></span><h1>Spectrum of cavity coupled to an atom<a class="headerlink" href="#spectrum-of-cavity-coupled-to-an-atom" title="Permalink to this headline">¶</a></h1>
+<p>Calculate the correlation and power spectrum of a cavity,  with and without coupling to a two-level atom.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
+<span class="c"># Calculate the correlation and power spectrum of a cavity,</span>
+<span class="c"># with and without coupling to a two-level atom.</span>
+<span class="c">#</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">calc_spectrum</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">wlist</span><span class="p">):</span>
+
+    <span class="c"># Hamiltonian</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> \
+        <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+
+    <span class="c"># collapse operators</span>
+    <span class="n">c_op_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">n_th_a</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">kappa</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_th_a</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">c_op_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">n_th_a</span>
+    <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">c_op_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">gamma</span>
+    <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">c_op_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">sm</span><span class="p">)</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">A</span>
+
+    <span class="c"># calculate the power spectrum</span>
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">correlation_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+
+    <span class="c"># calculate the power spectrum</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">spectrum_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">wlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">corr</span><span class="p">,</span> <span class="n">spec</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="c">#</span>
+    <span class="c"># setup the calcualtion</span>
+    <span class="c">#</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>              <span class="c"># number of cavity fock states</span>
+    <span class="n">wc</span> <span class="o">=</span> <span class="mf">1.00</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>  <span class="c"># cavity frequency</span>
+    <span class="n">wa</span> <span class="o">=</span> <span class="mf">1.00</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>  <span class="c"># atom frequency</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>  <span class="c"># coupling strength</span>
+    <span class="n">kappa</span> <span class="o">=</span> <span class="mf">1.0</span>         <span class="c"># cavity dissipation rate</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.2</span>         <span class="c"># atom dissipation rate</span>
+
+    <span class="n">wlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="n">tlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+    <span class="n">corr1</span><span class="p">,</span> <span class="n">spec1</span> <span class="o">=</span> <span class="n">calc_spectrum</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">wlist</span><span class="p">)</span>
+    <span class="n">corr2</span><span class="p">,</span> <span class="n">spec2</span> <span class="o">=</span> <span class="n">calc_spectrum</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">wlist</span><span class="p">)</span>
+
+    <span class="c"># plot results side-by-side</span>
+    <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">wlist</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">spec1</span><span class="p">),</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">wlist</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">spec2</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Power spectrum&#39;</span><span class="p">)</span>
+    <span class="n">legend</span><span class="p">((</span><span class="s">&quot;g = 0.1&quot;</span><span class="p">,</span> <span class="s">&quot;g = 0.0&quot;</span><span class="p">))</span>
+    <span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">corr1</span><span class="p">),</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">corr2</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Correlation&#39;</span><span class="p">)</span>
+    <span class="n">legend</span><span class="p">((</span><span class="s">&quot;g = 0.1&quot;</span><span class="p">,</span> <span class="s">&quot;g = 0.0&quot;</span><span class="p">))</span>
+    <span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../qutip/qutip/examples/ex_35.py">Source code</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_35.png">png</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_35.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../../_images/ex_35.png" src="../../_images/ex_35.png" />
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../ex-correlation.html"
+                        title="previous chapter">Correlation + Spectrum  Examples</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../ex-time-dependence.html"
+                        title="next chapter">Dynamics of time-dependent systems</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/examples/corr/ex-35.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>

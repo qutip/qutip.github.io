@@ -1,0 +1,425 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>Two-time correlation functions &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../_static/jquery.js"></script>
+            <script type="text/javascript" src="../_static/underscore.js"></script>
+            <script type="text/javascript" src="../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../index.html"/>
+            <link rel="up" title="QuTiP Users Guide" href="guide.html"/>
+            <link rel="next" title="Plotting on the Bloch Sphere" href="guide-bloch.html"/>
+            <link rel="prev" title="An Overview of the Eseries Class" href="guide-eseries.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../index.html">home</a></li>
+                <li>
+                    <a href="../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="guide-bloch.html"
+                       title="Plotting on the Bloch Sphere" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="guide-eseries.html"
+                       title="An Overview of the Eseries Class" accesskey="P">previous</a>
+                </li>
+                <li><a href="guide.html"
+                        accesskey="U">QuTiP Users Guide</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="two-time-correlation-functions">
+<span id="correlation"></span><h1>Two-time correlation functions<a class="headerlink" href="#two-time-correlation-functions" title="Permalink to this headline">¶</a></h1>
+<p>With the QuTiP time-evolution functions (for example <a class="reference internal" href="../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></tt></a>), a state vector or density matrix can be evolved from an initial state at <span class="math">\(t_0\)</span> to an arbitrary time <span class="math">\(t\)</span>, <span class="math">\(\rho(t)=V(t, t_0)\left\{\rho(t_0)\right\}\)</span>, where <span class="math">\(V(t, t_0)\)</span> is the propagator defined by the equation of motion. The resulting density matrix can then be used to evaluate the expectation values of arbitrary combinations of <em>same-time</em> operators.</p>
+<p>To calculate <em>two-time</em> correlation functions on the form <span class="math">\(\left&lt;A(t+\tau)B(t)\right&gt;\)</span>, we can use the quantum regression theorem [see, e.g., Gardineer and Zoller, <em>Quantum Noise</em>, Springer, 2004] to write</p>
+<div class="math">
+\[\begin{split}\left&lt;A(t+\tau)B(t)\right&gt; = {\rm Tr}\left[A V(t+\tau, t)\left\{B\rho(t)\right\}\right]
+                           = {\rm Tr}\left[A V(t+\tau, t)\left\{BV(t, 0)\left\{\rho(0)\right\}\right\}\right]\end{split}\]</div>
+<p>We therefore first calculate <span class="math">\(\rho(t)=V(t, 0)\left\{\rho(0)\right\}\)</span> using one of the QuTiP evolution solvers with <span class="math">\(\rho(0)\)</span> as initial state, and then again use the same solver to calculate <span class="math">\(V(t+\tau, t)\left\{B\rho(t)\right\}\)</span> using <span class="math">\(B\rho(t)\)</span> as initial state.</p>
+<p>Note that if the intial state is the steady state, then <span class="math">\(\rho(t)=V(t, 0)\left\{\rho_{\rm ss}\right\}=\rho_{\rm ss}\)</span> and</p>
+<div class="math">
+\[\begin{split}\left&lt;A(t+\tau)B(t)\right&gt; = {\rm Tr}\left[A V(t+\tau, t)\left\{B\rho_{\rm ss}\right\}\right]
+                           = {\rm Tr}\left[A V(\tau, 0)\left\{B\rho_{\rm ss}\right\}\right] = \left&lt;A(\tau)B(0)\right&gt;,\end{split}\]</div>
+<p>which is independent of <span class="math">\(t\)</span>, so that we only have one time coordinate <span class="math">\(\tau\)</span>.</p>
+<p>QuTiP provides a family of functions that assists in the process of calculating two-time correlation functions. The available functions and their usage is show in the table below. Each of these functions can use one of the following evolution solvers: Master-equation, Exponential series and the Monte-Carlo. The choice of solver is defined by the optional argument <tt class="docutils literal"><span class="pre">solver</span></tt>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">QuTiP function</th>
+<th class="head">Correlation function</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation" title="qutip.correlation.correlation"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation</span></tt></a> or
+<a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_2op_2t" title="qutip.correlation.correlation_2op_2t"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_2op_2t</span></tt></a></td>
+<td><span class="math">\(\left&lt;A(t+\tau)B(t)\right&gt;\)</span> or
+<span class="math">\(\left&lt;A(t)B(t+\tau)\right&gt;\)</span>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_ss" title="qutip.correlation.correlation_ss"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_ss</span></tt></a> or
+<a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_2op_1t" title="qutip.correlation.correlation_2op_1t"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_2op_1t</span></tt></a></td>
+<td><span class="math">\(\left&lt;A(\tau)B(0)\right&gt;\)</span> or
+<span class="math">\(\left&lt;A(0)B(\tau)\right&gt;\)</span>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_4op_1t" title="qutip.correlation.correlation_4op_1t"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_4op_1t</span></tt></a></td>
+<td><span class="math">\(\left&lt;A(0)B(\tau)C(\tau)D(0)\right&gt;\)</span>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_4op_2t" title="qutip.correlation.correlation_4op_2t"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_4op_2t</span></tt></a></td>
+<td><span class="math">\(\left&lt;A(t)B(t+\tau)C(t+\tau)D(t)\right&gt;\)</span>.</td>
+</tr>
+</tbody>
+</table>
+<p>The most common use-case is to calculate correlation functions of the kind <span class="math">\(\left&lt;A(\tau)B(0)\right&gt;\)</span>, in which case we use the correlation function solvers that start from the steady state, e.g., the <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_2op_1t" title="qutip.correlation.correlation_2op_1t"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_2op_1t</span></tt></a> function. These correlation function sovlers return a vector or matrix (in general complex) with the correlations as a function of the delays times.</p>
+<div class="section" id="steadystate-correlation-function">
+<span id="correlation-steady"></span><h2>Steadystate correlation function<a class="headerlink" href="#steadystate-correlation-function" title="Permalink to this headline">¶</a></h2>
+<p>The following code demonstrates how to calculate the <span class="math">\(\left&lt;x(t)x(0)\right&gt;\)</span> correlation for a leaky cavity with three different relaxation rates.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.0</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
+
+<span class="n">corr1</span> <span class="o">=</span> <span class="n">correlation_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">corr2</span> <span class="o">=</span> <span class="n">correlation_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">corr3</span> <span class="o">=</span> <span class="n">correlation_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">corr1</span><span class="p">),</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">corr2</span><span class="p">),</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">corr3</span><span class="p">))</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;Time $t$&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;Correlation $\left&lt;x(t)x(0)\right&gt;$&#39;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../guide/scripts/correlation_ex1.py">Source code</a>, <a class="reference external" href="../guide/scripts/correlation_ex1.png">png</a>, <a class="reference external" href="../guide/scripts/correlation_ex1.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../_images/correlation_ex1.png" src="../_images/correlation_ex1.png" style="width: 4.0in;" />
+</div>
+</div>
+<div class="section" id="emission-spectrum">
+<span id="correlation-nosteady"></span><h2>Emission spectrum<a class="headerlink" href="#emission-spectrum" title="Permalink to this headline">¶</a></h2>
+<p>Given a correlation function <span class="math">\(\left&lt;A(\tau)B(0)\right&gt;\)</span> we can define the corresponding power spectrum as</p>
+<div class="math">
+\[\begin{split}S(\omega) = \int_{-\infty}^{\infty} \left&lt;A(\tau)B(0)\right&gt; e^{-i\omega\tau} d\tau.\end{split}\]</div>
+<p>In QuTiP, we can calculate <span class="math">\(S(\omega)\)</span> using either <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.spectrum_ss" title="qutip.correlation.spectrum_ss"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.spectrum_ss</span></tt></a>, which first calculates the correlation function using the <a class="reference internal" href="../apidoc/functions.html#qutip.essolve.essolve" title="qutip.essolve.essolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.essolve.essolve</span></tt></a> solver and then performs the Fourier transform semi-analytically, or we can use the function <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.spectrum_correlation_fft" title="qutip.correlation.spectrum_correlation_fft"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.spectrum_correlation_fft</span></tt></a> to numerically calculate the Fourier transform of a given correlation data using FFT.</p>
+<p>The following example demonstrates how these two functions can be used to obtain the emission power spectrum.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>                   <span class="c"># number of cavity fock states</span>
+<span class="n">wc</span> <span class="o">=</span> <span class="n">wa</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>  <span class="c"># cavity and atom frequency</span>
+<span class="n">g</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>       <span class="c"># coupling strength</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.75</span>            <span class="c"># cavity dissipation rate</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.25</span>            <span class="c"># atom dissipation rate</span>
+
+<span class="c"># Jaynes-Cummings Hamiltonian</span>
+<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+
+<span class="c"># collapse operators</span>
+<span class="n">n_th</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_th</span><span class="p">))</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">n_th</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span>
+
+<span class="c"># calculate the correlation function using the mesolve solver, and then fft to</span>
+<span class="c"># obtain the spectrum. Here we need to make sure to evaluate the correlation</span>
+<span class="c"># function for a sufficient long time and sufficiently high sampling rate so</span>
+<span class="c"># that the discrete Fourier transform (FFT) captures all the features in the</span>
+<span class="c"># resulting spectrum.</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">correlation_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">wlist1</span><span class="p">,</span> <span class="n">spec1</span> <span class="o">=</span> <span class="n">spectrum_correlation_fft</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">corr</span><span class="p">)</span>
+
+
+<span class="c"># calculate the power spectrum using spectrum_ss, which internally uses essolve</span>
+<span class="c"># to solve for the dynamics</span>
+<span class="n">wlist2</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>
+<span class="n">spec2</span> <span class="o">=</span> <span class="n">spectrum_ss</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">wlist2</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="c"># plot the spectra</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wlist1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">),</span> <span class="n">spec1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;eseries method&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wlist2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">),</span> <span class="n">spec2</span><span class="p">,</span> <span class="s">&#39;r--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;me+fft method&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Power spectrum&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;Vacuum Rabi splitting&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">wlist2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">),</span> <span class="n">wlist2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../guide/scripts/spectrum_ex1.py">Source code</a>, <a class="reference external" href="../guide/scripts/spectrum_ex1.png">png</a>, <a class="reference external" href="../guide/scripts/spectrum_ex1.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../_images/spectrum_ex1.png" src="../_images/spectrum_ex1.png" style="width: 4.0in;" />
+</div>
+</div>
+<div class="section" id="non-steadystate-correlation-function">
+<span id="correlation-spectrum"></span><h2>Non-steadystate correlation function<a class="headerlink" href="#non-steadystate-correlation-function" title="Permalink to this headline">¶</a></h2>
+<p>More generally, we can also calculate correlation functions of the kind <span class="math">\(\left&lt;A(t_1+t_2)B(t_1)\right&gt;\)</span>, i.e., the correlation function of a system that is not in its steadystate. In QuTiP, we can evoluate such correlation functions using the function <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation" title="qutip.correlation.correlation"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation</span></tt></a>. The default behavior of this function is to return a matrix with the correlations as a function of the two time coordinates (<span class="math">\(t_1\)</span> and <span class="math">\(t_2\)</span>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.5</span>
+<span class="n">rho0</span> <span class="o">=</span> <span class="n">coherent_dm</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">correlation</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">pcolor</span><span class="p">(</span><span class="n">corr</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;Time $t_2$&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;Time $t_1$&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">r&#39;Correlation $\left&lt;x(t)x(0)\right&gt;$&#39;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../guide/scripts/correlation_ex2.py">Source code</a>, <a class="reference external" href="../guide/scripts/correlation_ex2.png">png</a>, <a class="reference external" href="../guide/scripts/correlation_ex2.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../_images/correlation_ex2.png" src="../_images/correlation_ex2.png" style="width: 4.0in;" />
+</div>
+<p>However, in some cases we might be interested in the correlation functions on the form <span class="math">\(\left&lt;A(t_1+t_2)B(t_1)\right&gt;\)</span>, but only as a function of time coordinate <span class="math">\(t_2\)</span>. In this case we can also use the <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation" title="qutip.correlation.correlation"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation</span></tt></a> function, if we pass the density matrix at time <span class="math">\(t_1\)</span> as second argument, and <cite>None</cite> as third argument. The <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation" title="qutip.correlation.correlation"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation</span></tt></a> function then returns a vector with the correlation values corresponding to the times in <cite>taulist</cite> (the fourth argument).</p>
+<div class="section" id="example-first-order-optical-coherence-function">
+<h3>Example: first-order optical coherence function<a class="headerlink" href="#example-first-order-optical-coherence-function" title="Permalink to this headline">¶</a></h3>
+<p>This example demonstrates how to calculate a correlation function on the form <span class="math">\(\left&lt;A(\tau)B(0)\right&gt;\)</span> for a non-steady initial state. Consider an oscillator that is interacting with a thermal environment. If the oscillator initially is in a coherent state, it will gradually decay to a thermal (incoherent) state. The amount of coherence can be quantified using the first-order optical coherence function <span class="math">\(g^{(1)}(\tau) = \frac{\left&lt;a^\dagger(\tau)a(0)\right&gt;}{\sqrt{\left&lt;a^\dagger(\tau)a(\tau)\right&gt;\left&lt;a^\dagger(0)a(0)\right&gt;}}\)</span>. For a coherent state <span class="math">\(|g^{(1)}(\tau)| = 1\)</span>, and for a completely incoherent (thermal) state <span class="math">\(g^{(1)}(\tau) = 0\)</span>. The following code calculates and plots <span class="math">\(g^{(1)}(\tau)\)</span> as a function of <span class="math">\(\tau\)</span>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">taulist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">10.0</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
+
+<span class="c"># collapse operator</span>
+<span class="n">G1</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="n">n_th</span> <span class="o">=</span> <span class="mf">2.00</span>  <span class="c"># bath temperature in terms of excitation number</span>
+<span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_th</span><span class="p">))</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">G1</span> <span class="o">*</span> <span class="n">n_th</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+
+<span class="c"># start with a coherent state</span>
+<span class="n">rho0</span> <span class="o">=</span> <span class="n">coherent_dm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+
+<span class="c"># first calculate the occupation number as a function of time</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c"># calculate the correlation function G1 and normalize with n to obtain g1</span>
+<span class="n">G1</span> <span class="o">=</span> <span class="n">correlation</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">g1</span> <span class="o">=</span> <span class="n">G1</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">taulist</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">taulist</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Decay of a coherent state to an incoherent (thermal) state&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;$\tau$&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="s">r&#39;First-order coherence function $g^{(1)}(\tau)$&#39;</span><span class="p">,</span>
+        <span class="s">r&#39;occupation number $n(\tau)$&#39;</span><span class="p">))</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../guide/scripts/correlation_ex3.py">Source code</a>, <a class="reference external" href="../guide/scripts/correlation_ex3.png">png</a>, <a class="reference external" href="../guide/scripts/correlation_ex3.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../_images/correlation_ex3.png" src="../_images/correlation_ex3.png" style="width: 4.0in;" />
+</div>
+<p>For convenience, the steps for calculating the first-order coherence function have been collected in the function <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.coherence_function_g1" title="qutip.correlation.coherence_function_g1"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.coherence_function_g1</span></tt></a>.</p>
+</div>
+<div class="section" id="example-second-order-optical-coherence-function">
+<h3>Example: second-order optical coherence function<a class="headerlink" href="#example-second-order-optical-coherence-function" title="Permalink to this headline">¶</a></h3>
+<p>The second-order optical coherence function, with time-delay <span class="math">\(\tau\)</span>, is defined as</p>
+<div class="math">
+\[\displaystyle g^{(2)}(\tau) = \frac{\langle a^\dagger(0)a^\dagger(\tau)a(\tau)a(0)\rangle}{\langle a^\dagger(0)a(0)\rangle^2}\]</div>
+<p>For a coherent state <span class="math">\(g^{(2)}(\tau) = 1\)</span>, for a thermal state <span class="math">\(g^{(2)}(\tau=0) = 2\)</span> and it decreases as a function of time (bunched photons, they tend to appear together), and for a Fock state with <span class="math">\(n\)</span> photons <span class="math">\(g^{(2)}(\tau = 0) = n(n - 1)/n^2 &lt; 1\)</span> and it increases with time (anti-bunched photons, more likely to arrive separated in time).</p>
+<p>To calculate this type of correlation function with QuTiP, we can use <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.correlation_4op_1t" title="qutip.correlation.correlation_4op_1t"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.correlation_4op_1t</span></tt></a>, which computes a correlation function on the form <span class="math">\(\left&lt;A(0)B(\tau)C(\tau)D(0)\right&gt;\)</span> (four operators, one delay-time vector).</p>
+<p>The following code calculates and plots <span class="math">\(g^{(2)}(\tau)\)</span> as a function of <span class="math">\(\tau\)</span> for a coherent, thermal and fock state.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="n">taulist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
+
+<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">n_th</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c"># bath temperature in terms of excitation number</span>
+<span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_th</span><span class="p">))</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">n_th</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="n">coherent_dm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)),</span> <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;coherent state&quot;</span><span class="p">},</span>
+          <span class="p">{</span><span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="n">thermal_dm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span> <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;thermal state&quot;</span><span class="p">},</span>
+          <span class="p">{</span><span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="n">fock_dm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Fock state&quot;</span><span class="p">}]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+    <span class="n">rho0</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s">&#39;state&#39;</span><span class="p">]</span>
+
+    <span class="c"># first calculate the occupation number as a function of time</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c"># calculate the correlation function G2 and normalize with n(0)n(t) to</span>
+    <span class="c"># obtain g2</span>
+    <span class="n">G2</span> <span class="o">=</span> <span class="n">correlation_4op_1t</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="n">G2</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">taulist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">g2</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">r&#39;$\tau$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$g^{(2)}(\tau)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../guide/scripts/correlation_ex4.py">Source code</a>, <a class="reference external" href="../guide/scripts/correlation_ex4.png">png</a>, <a class="reference external" href="../guide/scripts/correlation_ex4.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../_images/correlation_ex4.png" src="../_images/correlation_ex4.png" style="width: 4.0in;" />
+</div>
+<p>For convenience, the steps for calculating the second-order coherence function have been collected in the function <a class="reference internal" href="../apidoc/functions.html#qutip.correlation.coherence_function_g2" title="qutip.correlation.coherence_function_g2"><tt class="xref py py-func docutils literal"><span class="pre">qutip.correlation.coherence_function_g2</span></tt></a>.</p>
+</div>
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Two-time correlation functions</a><ul>
+<li><a class="reference internal" href="#steadystate-correlation-function">Steadystate correlation function</a></li>
+<li><a class="reference internal" href="#emission-spectrum">Emission spectrum</a></li>
+<li><a class="reference internal" href="#non-steadystate-correlation-function">Non-steadystate correlation function</a><ul>
+<li><a class="reference internal" href="#example-first-order-optical-coherence-function">Example: first-order optical coherence function</a></li>
+<li><a class="reference internal" href="#example-second-order-optical-coherence-function">Example: second-order optical coherence function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="guide-eseries.html"
+                        title="previous chapter">An Overview of the Eseries Class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="guide-bloch.html"
+                        title="next chapter">Plotting on the Bloch Sphere</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/guide/guide-correlation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>

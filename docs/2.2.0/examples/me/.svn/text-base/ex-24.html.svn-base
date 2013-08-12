@@ -1,0 +1,279 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>The Dynamics of a Heisenberg Spin-1/2 Chain &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../../_static/jquery.js"></script>
+            <script type="text/javascript" src="../../_static/underscore.js"></script>
+            <script type="text/javascript" src="../../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../../index.html"/>
+            <link rel="up" title="Master Equation Examples" href="../ex-master-equation.html"/>
+            <link rel="next" title="Steady state calculation for a sideband-cooled nanomechanical resonator" href="ex-25.html"/>
+            <link rel="prev" title="Dynamics of the Wigner distributions for the Jaynes-Cummings model" href="ex-23.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../../index.html">home</a></li>
+                <li>
+                    <a href="../../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="ex-25.html"
+                       title="Steady state calculation for a sideband-cooled nanomechanical resonator" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="ex-23.html"
+                       title="Dynamics of the Wigner distributions for the Jaynes-Cummings model" accesskey="P">previous</a>
+                </li>
+                <li><a href="../examples.html"
+                        >QuTiP Example Scripts</a>
+                </li>
+                <li><a href="../ex-master-equation.html"
+                        accesskey="U">Master Equation Examples</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="the-dynamics-of-a-heisenberg-spin-1-2-chain">
+<span id="exme23"></span><h1>The Dynamics of a Heisenberg Spin-1/2 Chain<a class="headerlink" href="#the-dynamics-of-a-heisenberg-spin-1-2-chain" title="Permalink to this headline">¶</a></h1>
+<p>This example demonstrates how to calculate the dynamics of a spin-1/2 Heisenberg chain, i.e., a sequence of two-level system (spin up or spin down) that are coupled to its nearest neighbors. The Hamiltonian for this system is</p>
+<div class="math" id="equation-ex_heisenberg_spin_chain_hamiltonian">
+<span class="eqno">(1)</span>\[H = - \frac{1}{2} \sum_n^N h_n \sigma_z^n - \frac{1}{2} \sum_n^{N-1} \left[ J_x^n \sigma_x^n \sigma_x^{n+1} + J_y^n \sigma_y^n \sigma_y^{n+1} + J_z^n \sigma_z^n \sigma_z^{n+1}\right],\]</div>
+<p>and the initial state used in the example is <span class="math">\(\left|\psi_0\right&gt; = \left|\uparrow\downarrow\cdots\downarrow\right&gt;\)</span>.</p>
+<p>This example is slightly more complicated than the previous in that it dynamically builds a composite Hamiltonian and initial state for a configurable number of two-level system (parameter <tt class="docutils literal"><span class="pre">N=4</span></tt> in the program).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
+<span class="c"># Dynamics of a Heisenberg spin 1/2 chain</span>
+<span class="c">#</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Jx</span><span class="p">,</span> <span class="n">Jy</span><span class="p">,</span> <span class="n">Jz</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">solver</span><span class="p">):</span>
+
+    <span class="c">#</span>
+    <span class="c"># Hamiltonian</span>
+    <span class="c">#</span>
+    <span class="c"># H = - 0.5 sum_n^N h_n sigma_z(n)</span>
+    <span class="c">#     - 0.5 sum_n^(N-1) [ Jx_n sigma_x(n) sigma_x(n+1) +</span>
+    <span class="c">#                         Jy_n sigma_y(n) sigma_y(n+1) +</span>
+    <span class="c">#                         Jz_n sigma_z(n) sigma_z(n+1)]</span>
+    <span class="c">#</span>
+    <span class="n">si</span> <span class="o">=</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">sx</span> <span class="o">=</span> <span class="n">sigmax</span><span class="p">()</span>
+    <span class="n">sy</span> <span class="o">=</span> <span class="n">sigmay</span><span class="p">()</span>
+    <span class="n">sz</span> <span class="o">=</span> <span class="n">sigmaz</span><span class="p">()</span>
+
+    <span class="n">sx_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sy_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sz_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">op_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">si</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span>
+        <span class="n">op_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">sx</span>
+        <span class="n">sx_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="n">op_list</span><span class="p">))</span>
+        <span class="n">op_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">sy</span>
+        <span class="n">sy_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="n">op_list</span><span class="p">))</span>
+        <span class="n">op_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">sz</span>
+        <span class="n">sz_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="n">op_list</span><span class="p">))</span>
+
+    <span class="c"># construct the hamiltonian</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c"># energy splitting terms</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">H</span> <span class="o">+=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">h</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sz_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+    <span class="c"># interaction terms</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">H</span> <span class="o">+=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Jx</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sx_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sx_list</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">H</span> <span class="o">+=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Jy</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sy_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sy_list</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">H</span> <span class="o">+=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Jz</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sz_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">sz_list</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c"># collapse operators</span>
+    <span class="n">c_op_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c"># spin dephasing</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">gamma</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">c_op_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="n">sz_list</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+
+    <span class="c"># evolve and calculate expectation values</span>
+    <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s">&quot;me&quot;</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">sz_list</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">solver</span> <span class="o">==</span> <span class="s">&quot;mc&quot;</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">sz_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">expect</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+
+    <span class="n">solver</span> <span class="o">=</span> <span class="s">&quot;me&quot;</span>   <span class="c"># select solver &quot;me&quot; or &quot;mc&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>           <span class="c"># number of spins</span>
+
+    <span class="c"># array of spin energy splittings and coupling strengths. here we use</span>
+    <span class="c"># uniform parameters, but in general we don&#39;t have too</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">Jz</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">Jx</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">Jy</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="c"># dephasing rate</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="c"># intial state, first spin in state |1&gt;, the rest in state |0&gt;</span>
+    <span class="n">psi_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">psi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">psi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">psi_list</span><span class="p">)</span>
+
+    <span class="n">tlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+
+    <span class="n">sz_expt</span> <span class="o">=</span> <span class="n">integrate</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Jx</span><span class="p">,</span> <span class="n">Jy</span><span class="p">,</span> <span class="n">Jz</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">solver</span><span class="p">)</span>
+
+    <span class="n">rc</span><span class="p">(</span><span class="s">&#39;font&#39;</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s">&#39;Bitstream Vera Sans&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">real</span><span class="p">(</span><span class="n">sz_expt</span><span class="p">[</span><span class="n">n</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s">r&#39;$\langle\sigma_z($&#39;</span> <span class="o">+</span>
+             <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">r&#39;$)\rangle$&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;Time [ns]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;$\langle\sigma_{z}\rangle$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="s">r&#39;Dynamics of a Heisenberg spin chain&#39;</span><span class="p">)</span>
+    <span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&quot;lower right&quot;</span><span class="p">)</span>
+
+    <span class="n">show</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../qutip/qutip/examples/ex_24.py">Source code</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_24.png">png</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_24.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../../_images/ex_24.png" src="../../_images/ex_24.png" />
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex-23.html"
+                        title="previous chapter">Dynamics of the Wigner distributions for the Jaynes-Cummings model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex-25.html"
+                        title="next chapter">Steady state calculation for a sideband-cooled nanomechanical resonator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/examples/me/ex-24.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>

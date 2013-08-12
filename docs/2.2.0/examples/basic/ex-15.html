@@ -1,0 +1,242 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>Energy-levels of a Coupled-Qubit System &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../../_static/jquery.js"></script>
+            <script type="text/javascript" src="../../_static/underscore.js"></script>
+            <script type="text/javascript" src="../../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../../index.html"/>
+            <link rel="up" title="Basic Examples" href="../ex-basic.html"/>
+            <link rel="next" title="Bell State" href="ex-16.html"/>
+            <link rel="prev" title="Density Matrix Metrics" href="ex-14.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../../index.html">home</a></li>
+                <li>
+                    <a href="../../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="ex-16.html"
+                       title="Bell State" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="ex-14.html"
+                       title="Density Matrix Metrics" accesskey="P">previous</a>
+                </li>
+                <li><a href="../examples.html"
+                        >QuTiP Example Scripts</a>
+                </li>
+                <li><a href="../ex-basic.html"
+                        accesskey="U">Basic Examples</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="energy-levels-of-a-coupled-qubit-system">
+<span id="exbasic15"></span><h1>Energy-levels of a Coupled-Qubit System<a class="headerlink" href="#energy-levels-of-a-coupled-qubit-system" title="Permalink to this headline">¶</a></h1>
+<p>Calculates the eigenenergies of a coupled three-qubit system.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
+<span class="c"># Energy spectrum of three coupled qubits.</span>
+<span class="c">#</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">w1list</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">w3</span><span class="p">,</span> <span class="n">g12</span><span class="p">,</span> <span class="n">g13</span><span class="p">):</span>
+    <span class="c"># Pre-compute operators for the hamiltonian</span>
+
+    <span class="c"># qubit 1 operators</span>
+    <span class="n">sz1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sx1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c"># qubit 2 operators</span>
+    <span class="n">sz2</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sx2</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c"># qubit 3 operators</span>
+    <span class="n">sz3</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">())</span>
+    <span class="n">sx3</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmax</span><span class="p">())</span>
+
+    <span class="c"># preallocate output array</span>
+    <span class="n">evals_mat</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">w1list</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">w1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">w1list</span><span class="p">):</span>
+
+        <span class="c"># evaluate the Hamiltonian</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">*</span> <span class="n">sz1</span> <span class="o">+</span> <span class="n">w2</span> <span class="o">*</span> <span class="n">sz2</span> <span class="o">+</span> <span class="n">w3</span> <span class="o">*</span> <span class="n">sz3</span> <span class="o">+</span> <span class="n">g12</span> <span class="o">*</span> <span class="n">sx1</span> <span class="o">*</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">g13</span> <span class="o">*</span> <span class="n">sx1</span> <span class="o">*</span> <span class="n">sx3</span>
+
+        <span class="c"># find the energy eigenvalues and vectors of the composite system</span>
+        <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
+        <span class="n">evals_mat</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">evals</span>
+
+    <span class="k">return</span> <span class="n">evals_mat</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="c">#</span>
+    <span class="c"># set up the calculation</span>
+    <span class="c">#</span>
+    <span class="n">w1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>   <span class="c"># atom 1 frequency: sweep this one</span>
+    <span class="n">w2</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>   <span class="c"># atom 2 frequency</span>
+    <span class="n">w3</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>   <span class="c"># atom 3 frequency</span>
+    <span class="n">g12</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>   <span class="c"># atom1-atom2 coupling strength</span>
+    <span class="n">g13</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>   <span class="c"># atom1-atom3 coupling strength</span>
+
+    <span class="c"># range of qubit 1 frequencies</span>
+    <span class="n">w1list</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>
+
+    <span class="c"># run computation</span>
+    <span class="n">evals_mat</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="n">w1list</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">w3</span><span class="p">,</span> <span class="n">g12</span><span class="p">,</span> <span class="n">g13</span><span class="p">)</span>
+
+    <span class="c">#</span>
+    <span class="c"># plot the energy eigenvalues</span>
+    <span class="c">#</span>
+    <span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">]</span>  <span class="c"># list of colors for plotting</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">w1list</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">),</span> <span class="p">(</span><span class="n">evals_mat</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="n">evals_mat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">),</span>
+             <span class="n">colors</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Energy Splitting of Qubit 1&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Eigenenergies&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="s">&#39;Energy Spectrum of Three Coupled Qubits&#39;</span><span class="p">)</span>
+
+    <span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../qutip/qutip/examples/ex_15.py">Source code</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_15.png">png</a>, <a class="reference external" href="../../../qutip/qutip/examples/ex_15.hires.png">hires.png</a>)</p>
+<div class="figure">
+<img alt="../../_images/ex_15.png" src="../../_images/ex_15.png" />
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex-14.html"
+                        title="previous chapter">Density Matrix Metrics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex-16.html"
+                        title="next chapter">Bell State</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/examples/basic/ex-15.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>

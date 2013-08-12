@@ -1,0 +1,365 @@
+
+<!DOCTYPE html><html>
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    
+        <title>Using Tensor Products and Partial Traces &mdash; QuTiP 2.2 Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../_static/sphinx-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <script type="text/javascript">
+            var DOCUMENTATION_OPTIONS = {
+                URL_ROOT:'../',
+                VERSION:'2.2.0',
+                COLLAPSE_INDEX:false,
+                FILE_SUFFIX:'.html',
+                HAS_SOURCE:  true
+            };
+        </script>
+            <script type="text/javascript" src="../_static/jquery.js"></script>
+            <script type="text/javascript" src="../_static/underscore.js"></script>
+            <script type="text/javascript" src="../_static/doctools.js"></script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            <script type="text/javascript" src="../_static/bootstrap-dropdown.js"></script>
+            <link rel="shortcut icon" href="../_static/favicon.ico"/>
+        <link rel="top" title="QuTiP 2.2 Documentation" href="../index.html"/>
+            <link rel="up" title="QuTiP Users Guide" href="guide.html"/>
+            <link rel="next" title="Time Evolution and Quantum System Dynamics" href="guide-dynamics.html"/>
+            <link rel="prev" title="Manipulating States and Operators" href="guide-states.html"/> 
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+        <!-- analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-16824831-3']);
+            
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    
+</head>
+<body>
+
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+
+<div style="background-color: #EBEBEB; text-align: left; padding: 0px 0px 15px 15px; -webkit-border-radius:14px; -moz-border-radius:14px; border-radius:14px; margin: 1em;">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="qutip"/></a>
+</div>
+
+
+    <div class="related">
+        <ul class="nav">
+                <li class=""><a href="../index.html">home</a></li>
+                <li>
+                    <a href="../genindex.html"
+                       title="General Index" accesskey="I">index</a>
+                </li>
+                <li>
+                    <a href="../py-modindex.html"
+                       title="Python Module Index" >modules</a>
+                </li>
+                <li>
+                    <a href="guide-dynamics.html"
+                       title="Time Evolution and Quantum System Dynamics" accesskey="N">next</a>
+                </li>
+                <li>
+                    <a href="guide-states.html"
+                       title="Manipulating States and Operators" accesskey="P">previous</a>
+                </li>
+                <li><a href="guide.html"
+                        accesskey="U">QuTiP Users Guide</a>
+                </li> 
+        </ul>
+    </div>
+
+                <div class="pull-right">
+                    
+        <form class="navbar-search" action="../search.html"
+              method="get">
+            <input type="text" name="q" placeholder="search"/>
+            <input type="hidden" name="check_keywords" value="yes"/>
+            <input type="hidden" name="area" value="default"/>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div class="content row">
+                <div class="span9">
+                    
+  <div class="section" id="using-tensor-products-and-partial-traces">
+<span id="tensor"></span><h1>Using Tensor Products and Partial Traces<a class="headerlink" href="#using-tensor-products-and-partial-traces" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tensor-products">
+<span id="id1"></span><h2>Tensor products<a class="headerlink" href="#tensor-products" title="Permalink to this headline">¶</a></h2>
+<p>To describe the states of multipartite quantum systems - such as two coupled qubits, a qubit coupled to an oscillator, etc. - we need to expand the Hilbert space by taking the tensor product of the state vectors for each of the system components. Similarly, the operators acting on the state vectors in the combined Hilbert space (describing the coupled system) are formed by taking the tensor product of the individual operators.</p>
+<p>In QuTiP the function <a class="reference internal" href="../apidoc/functions.html#qutip.tensor.tensor" title="qutip.tensor.tensor"><tt class="xref py py-func docutils literal"><span class="pre">qutip.tensor.tensor</span></tt></a> is used to accomplish this task. This function takes as argument a collection:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="p">(</span><span class="n">op1</span><span class="p">,</span> <span class="n">op2</span><span class="p">,</span> <span class="n">op3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or a <tt class="docutils literal"><span class="pre">list</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="p">([</span><span class="n">op1</span><span class="p">,</span> <span class="n">op2</span><span class="p">,</span> <span class="n">op3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>of state vectors <em>or</em> operators and returns a composite quantum object for the combined Hilbert space. The function accepts an arbitray number of states or operators as argument. The type returned quantum object is the same as that of the input(s).</p>
+<p>For example, the state vector describing two qubits in their ground states is formed by taking the tensor product of the two single-qubit ground state vectors:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">tensor</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="gr">Out[1]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [1, 1]], shape = [4, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>or equivalently using the <tt class="docutils literal"><span class="pre">list</span></tt> format:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">tensor</span><span class="p">([</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="gr">Out[1]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [1, 1]], shape = [4, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>This is straightforward to generalize to more qubits by adding more component state vectors in the argument list to the <a class="reference internal" href="../apidoc/functions.html#qutip.tensor.tensor" title="qutip.tensor.tensor"><tt class="xref py py-func docutils literal"><span class="pre">qutip.tensor.tensor</span></tt></a> function, as illustrated in the following example:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">tensor</span><span class="p">((</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">(),</span> <span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">(),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="gr">Out[1]: </span>
+<span class="go">Quantum object: dims = [[2, 2, 2], [1, 1, 1]], shape = [8, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.5]</span>
+<span class="go"> [ 0. ]</span>
+<span class="go"> [ 0.5]</span>
+<span class="go"> [ 0. ]</span>
+<span class="go"> [ 0.5]</span>
+<span class="go"> [ 0. ]</span>
+<span class="go"> [ 0.5]</span>
+<span class="go"> [ 0. ]]</span>
+</pre></div>
+</div>
+<p>This state is slightly more complicated, describing two qubits in a superposition between the up and down states, while the third qubit is in its ground state.</p>
+<p>To construct operators that act on an extended Hilbert space of a combined system, we similarly pass a list of operators for each component system to the <a class="reference internal" href="../apidoc/functions.html#qutip.tensor.tensor" title="qutip.tensor.tensor"><tt class="xref py py-func docutils literal"><span class="pre">qutip.tensor.tensor</span></tt></a> function. For example, to form the operator that represents the simultaneous action of the <span class="math">\(\sigma_x\)</span> operator on two qubits:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">tensor</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">())</span>
+<span class="gr">Out[1]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [2, 2]], shape = [4, 4], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.  0.  1.]</span>
+<span class="go"> [ 0.  0.  1.  0.]</span>
+<span class="go"> [ 0.  1.  0.  0.]</span>
+<span class="go"> [ 1.  0.  0.  0.]]</span>
+</pre></div>
+</div>
+<p>To create operators in a combined Hilbert space that only act only on a single component, we take the tensor product of the operator acting on the subspace of interest, with the identity operators corresponding to the components that are to be unchanged. For example, the operator that represents <span class="math">\(\sigma_z\)</span> on the first qubit in a two-qubit system, while leaving the second qubit unaffected:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gr">Out[1]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [2, 2]], shape = [4, 4], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.  0.  0.  0.]</span>
+<span class="go"> [ 0.  1.  0.  0.]</span>
+<span class="go"> [ 0.  0. -1.  0.]</span>
+<span class="go"> [ 0.  0.  0. -1.]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-constructing-composite-hamiltonians">
+<span id="tensor-product-example"></span><h2>Example: Constructing composite Hamiltonians<a class="headerlink" href="#example-constructing-composite-hamiltonians" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.tensor.tensor" title="qutip.tensor.tensor"><tt class="xref py py-func docutils literal"><span class="pre">qutip.tensor.tensor</span></tt></a> function is extensively used when constructing Hamiltonians for composite systems. Here we&#8217;ll look at some simple examples.</p>
+<div class="section" id="two-coupled-qubits">
+<span id="tensor-product-example-2qubits"></span><h3>Two coupled qubits<a class="headerlink" href="#two-coupled-qubits" title="Permalink to this headline">¶</a></h3>
+<p>First, let&#8217;s consider a system of two coupled qubits. Assume that both qubit has equal energy splitting, and that the qubits are coupled through a <span class="math">\(\sigma_x\otimes\sigma_x\)</span> interaction with strength g = 0.05 (in units where the bare qubit energy splitting is unity). The Hamiltonian describing this system is:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">())</span> <span class="o">+</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">())</span>
+
+<span class="gp">In [2]: </span><span class="n">H</span>
+<span class="gr">Out[2]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [2, 2]], shape = [4, 4], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 2.    0.    0.    0.05]</span>
+<span class="go"> [ 0.    0.    0.05  0.  ]</span>
+<span class="go"> [ 0.    0.05  0.    0.  ]</span>
+<span class="go"> [ 0.05  0.    0.   -2.  ]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="three-coupled-qubits">
+<span id="tensor-product-example-3qubits"></span><h3>Three coupled qubits<a class="headerlink" href="#three-coupled-qubits" title="Permalink to this headline">¶</a></h3>
+<p>The two-qubit example is easily generalized to three coupled qubits:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">())</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span>  <span class="mf">0.25</span> <span class="o">*</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">())</span>
+
+<span class="gp">In [2]: </span><span class="n">H</span>
+<span class="gr">Out[2]: </span>
+<span class="go">Quantum object: dims = [[2, 2, 2], [2, 2, 2]], shape = [8, 8], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 3.    0.    0.    0.25  0.    0.    0.5   0.  ]</span>
+<span class="go"> [ 0.    1.    0.25  0.    0.    0.    0.    0.5 ]</span>
+<span class="go"> [ 0.    0.25  1.    0.    0.5   0.    0.    0.  ]</span>
+<span class="go"> [ 0.25  0.    0.   -1.    0.    0.5   0.    0.  ]</span>
+<span class="go"> [ 0.    0.    0.5   0.    1.    0.    0.    0.25]</span>
+<span class="go"> [ 0.    0.    0.    0.5   0.   -1.    0.25  0.  ]</span>
+<span class="go"> [ 0.5   0.    0.    0.    0.    0.25 -1.    0.  ]</span>
+<span class="go"> [ 0.    0.5   0.    0.    0.25  0.    0.   -3.  ]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-two-level-system-coupled-to-a-cavity-the-jaynes-cummings-model">
+<span id="tensor-product-example-jcmodel"></span><h3>A two-level system coupled to a cavity: The Jaynes-Cummings model<a class="headerlink" href="#a-two-level-system-coupled-to-a-cavity-the-jaynes-cummings-model" title="Permalink to this headline">¶</a></h3>
+<p>The simplest possible quantum mechanical description for light-matter interaction is encapsulated in the Jaynes-Cummings model, which describes the coupling between a two-level atom and a single-mode electromagnetic field (a cavity mode). Denoting the energy splitting of the atom and cavity <tt class="docutils literal"><span class="pre">omega_a</span></tt> and <tt class="docutils literal"><span class="pre">omega_c</span></tt>, respectively, and the atom-cavity interaction strength <tt class="docutils literal"><span class="pre">g</span></tt>, the Jaynes-Cumming Hamiltonian can be constructed as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">omega_a</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">omega_c</span> <span class="o">=</span> <span class="mf">1.25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sz</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">omega_a</span> <span class="o">*</span> <span class="n">sz</span> <span class="o">+</span> <span class="n">omega_c</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Here <tt class="docutils literal"><span class="pre">N</span></tt> is the number of Fock states included in the cavity mode.</p>
+</div>
+</div>
+<div class="section" id="partial-trace">
+<span id="tensor-ptrace"></span><h2>Partial trace<a class="headerlink" href="#partial-trace" title="Permalink to this headline">¶</a></h2>
+<p>The partial trace is an operation that reduces the dimension of a Hilbert space by eliminating some degrees of freedom by averaging (tracing). In this sense it is therefore the converse of the tensor product. It is useful when one is interested in only a part of a coupled quantum system.  For open quantum systems, this typically involves tracing over the environment leaving only the system of interest.  In QuTiP the class method  <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj.ptrace" title="qutip.Qobj.ptrace"><tt class="xref py py-func docutils literal"><span class="pre">qutip.Qobj.ptrace</span></tt></a> is used to take partial traces. <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj.ptrace" title="qutip.Qobj.ptrace"><tt class="xref py py-func docutils literal"><span class="pre">qutip.Qobj.ptrace</span></tt></a> acts on the <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><tt class="xref py py-class docutils literal"><span class="pre">qutip.Qobj</span></tt></a> instance for which it is called, and it takes one argument <tt class="docutils literal"><span class="pre">sel</span></tt>, which is a <tt class="docutils literal"><span class="pre">list</span></tt> of integers that mark the component systems that should be <strong>kept</strong>. All other components are traced out.</p>
+<p>For example, the density matrix describing a single qubit obtained from a coupled two-qubit system is obtained via:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">psi</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="gp">In [2]: </span><span class="n">psi</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gr">Out[2]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 0.  0.]]</span>
+
+<span class="gp">In [3]: </span><span class="n">psi</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gr">Out[3]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.]</span>
+<span class="go"> [ 0.  1.]]</span>
+</pre></div>
+</div>
+<p>Note that the partial trace always results in a density matrix (mixed state), regardless of whether the composite system is a pure state (described by a state vector) or a mixed state (described by a density matrix):</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">psi</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">((</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">(),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="gp">In [2]: </span><span class="n">psi</span>
+<span class="gr">Out[2]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [1, 1]], shape = [4, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.70710678]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.70710678]</span>
+<span class="go"> [ 0.        ]]</span>
+
+<span class="gp">In [3]: </span><span class="n">psi</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gr">Out[3]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.5  0.5]</span>
+<span class="go"> [ 0.5  0.5]]</span>
+
+<span class="gp">In [4]: </span><span class="n">rho</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">ket2dm</span><span class="p">((</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">()),</span> <span class="n">fock_dm</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="gp">In [5]: </span><span class="n">rho</span>
+<span class="gr">Out[5]: </span>
+<span class="go">Quantum object: dims = [[2, 2], [2, 2]], shape = [4, 4], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.5  0.   0.5  0. ]</span>
+<span class="go"> [ 0.   0.   0.   0. ]</span>
+<span class="go"> [ 0.5  0.   0.5  0. ]</span>
+<span class="go"> [ 0.   0.   0.   0. ]]</span>
+
+<span class="gp">In [6]: </span><span class="n">rho</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gr">Out[6]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.5  0.5]</span>
+<span class="go"> [ 0.5  0.5]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+                    
+                </div>
+                <div class="span3">
+                    
+        <div class="sphinxsidebar">
+            <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using Tensor Products and Partial Traces</a><ul>
+<li><a class="reference internal" href="#tensor-products">Tensor products</a></li>
+<li><a class="reference internal" href="#example-constructing-composite-hamiltonians">Example: Constructing composite Hamiltonians</a><ul>
+<li><a class="reference internal" href="#two-coupled-qubits">Two coupled qubits</a></li>
+<li><a class="reference internal" href="#three-coupled-qubits">Three coupled qubits</a></li>
+<li><a class="reference internal" href="#a-two-level-system-coupled-to-a-cavity-the-jaynes-cummings-model">A two-level system coupled to a cavity: The Jaynes-Cummings model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#partial-trace">Partial trace</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="guide-states.html"
+                        title="previous chapter">Manipulating States and Operators</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="guide-dynamics.html"
+                        title="next chapter">Time Evolution and Quantum System Dynamics</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/guide/guide-tensor.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+            </div>
+        </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="footer">
+        
+        <div class="container">
+                    &copy;
+                        Copyright 2011-2013, P.D. Nation, J.R. Johansson.
+                Last updated
+                    on Mar 01, 2013.
+                Created using <a
+                        href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3
+                    .
+        </div>
+    </div>
+
+
+
+<script type="text/javascript">
+    $('.nav .active').on('click', function () {
+        e.preventDefault()
+        $(this).siblings().toggle()
+    });
+</script>
+
+
+
+</body>
+</html>
