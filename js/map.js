@@ -6,13 +6,13 @@
 		geographyConfig: {
 			highlightBorderColor: '#666666',
 			popupTemplate: function(geography, data) {
-				return "<div class='hoverinfo'>" + data.country+': '+data.visitors +'</div>'
+				if (data != null) return "<div class='hoverinfo'>" + geography.properties.name+': '+data.visitors +'</div>'
 		},
 		highlightBorderWidth: 1
 		},
 
 		fills: {
-			defaultFill: '#00ffff',
+			defaultFill: '#CCCCCC',
 			USA: '#ff00ff',
 			DEU: '#5fa0ff',
 			GBR: '#45baff',
@@ -39,7 +39,7 @@
 			SWE: '#09f6ff',
 			BEL: '#08f7ff',
 			SVK: '#03fcff',
-			CHN: '#07f8ff',
+			TWN: '#07f8ff',
 			ISR: '#06f9ff',
 			FIN: '#04fbff',
 			PAK: '#05faff',
@@ -157,7 +157,7 @@
 			SWE: {fillKey: 'SWE', visitors: 116, country: 'Sweden' },
 			BEL: {fillKey: 'BEL', visitors: 103, country: 'Belgium' },
 			SVK: {fillKey: 'SVK', visitors: 40, country: 'Slovakia' },
-			CHN: {fillKey: 'CHN', visitors: 91, country: 'Taiwan, Province Of China' },
+			TWN: {fillKey: 'TWN', visitors: 91, country: 'Taiwan' },
 			ISR: {fillKey: 'ISR', visitors: 86, country: 'Israel' },
 			FIN: {fillKey: 'FIN', visitors: 58, country: 'Finland' },
 			PAK: {fillKey: 'PAK', visitors: 64, country: 'Pakistan' },
