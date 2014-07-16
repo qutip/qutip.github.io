@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Saving QuTiP Objects and Data Sets &mdash; QuTiP 3.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../static/bootswatch-3.1.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.0 Documentation" href="../index.html" />
+    <link rel="up" title="Users Guide" href="guide.html" />
+    <link rel="next" title="Generating Random Quantum States &amp; Operators" href="guide-random.html" />
+    <link rel="prev" title="Running Problems in Parallel" href="guide-parfor.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-mac-os-x-10-6">Installation on Mac OS X (10.6+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Running Problems in Parallel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-3-0-0-july-x-2014">Version 3.0.0 (July X, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Saving QuTiP Objects and Data Sets</a><ul>
+<li><a class="reference internal" href="#storing-and-loading-qutip-objects">Storing and loading QuTiP objects</a></li>
+<li><a class="reference internal" href="#storing-and-loading-datasets">Storing and loading datasets</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="guide-parfor.html" title="Previous Chapter: Running Problems in Parallel"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Running Problems...</span>
+    </a>
+  </li>
+  <li>
+    <a href="guide-random.html" title="Next Chapter: Generating Random Quantum States & Operators"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Generating Rando... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="saving-qutip-objects-and-data-sets">
+<span id="saving"></span><h1>Saving QuTiP Objects and Data Sets<a class="headerlink" href="#saving-qutip-objects-and-data-sets" title="Permalink to this headline">¶</a></h1>
+<p>With time-consuming calculations it is often necessary to store the results to files on disk, so it can be post-processed and archived. In QuTiP there are two facilities for storing data: Quantum objects can be stored to files and later read back as python pickles, and numerical data (vectors and matrices) can be exported as plain text files in for example CSV (comma-separated values), TSV (tab-separated values), etc. The former method is preferred when further calculations will be performed with the data, and the latter when the calculations are completed and data is to be imported into a post-processing tool (e.g. for generating figures).</p>
+<div class="section" id="storing-and-loading-qutip-objects">
+<h2>Storing and loading QuTiP objects<a class="headerlink" href="#storing-and-loading-qutip-objects" title="Permalink to this headline">¶</a></h2>
+<p>To store and load arbitrary QuTiP related objects (<a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><tt class="xref py py-class docutils literal"><span class="pre">qutip.Qobj</span></tt></a>, <a class="reference internal" href="../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><tt class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></tt></a>, etc.) there are two functions: <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qsave" title="qutip.fileio.qsave"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qsave</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qload" title="qutip.fileio.qload"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qload</span></tt></a>. The function <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qsave" title="qutip.fileio.qsave"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qsave</span></tt></a> takes an arbitrary object as first parameter and an optional filename as second parameter (default filename is <cite>qutip_data.qu</cite>). The filename extension is always <cite>.qu</cite>. The function <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qload" title="qutip.fileio.qload"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qload</span></tt></a> takes a mandatory filename as first argument and loads and returns the objects in the file.</p>
+<p>To illustrate how these functions can be used, consider a simple calculation of the steadystate of the harmonic oscillator:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [2]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="p">;</span> <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+
+<span class="gp">In [3]: </span><span class="n">rho_ss</span> <span class="o">=</span> <span class="n">steadystate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The steadystate density matrix <cite>rho_ss</cite> is an instance of <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><tt class="xref py py-class docutils literal"><span class="pre">qutip.Qobj</span></tt></a>. It can be stored to a file <cite>steadystate.qu</cite> using</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">qsave</span><span class="p">(</span><span class="n">rho_ss</span><span class="p">,</span> <span class="s">&#39;steadystate&#39;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">ls</span> <span class="o">*.</span><span class="n">qu</span>
+<span class="go">density_matrix_vs_time.qu  steadystate.qu</span>
+</pre></div>
+</div>
+<p>and it can later be loaded again, and used in further calculations:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [6]: </span><span class="n">rho_ss_loaded</span> <span class="o">=</span> <span class="n">qload</span><span class="p">(</span><span class="s">&#39;steadystate&#39;</span><span class="p">)</span>
+<span class="go">Loaded Qobj object:</span>
+<span class="go">Quantum object: dims = [[10], [10]], shape = [10, 10], type = oper, isHerm = True</span>
+
+
+<span class="gp">In [7]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">expect</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">rho_ss_loaded</span><span class="p">)</span>
+<span class="gr">Out[8]: </span><span class="mf">0.9902248289345018</span>
+</pre></div>
+</div>
+<p>The nice thing about the <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qsave" title="qutip.fileio.qsave"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qsave</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qload" title="qutip.fileio.qload"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qload</span></tt></a> functions is that almost any object can be stored and load again later on. We can for example store a list of density matrices as returned by <a class="reference internal" href="../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [9]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="p">;</span> <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+
+<span class="gp">In [10]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">rand_ket</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [11]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">dm_list</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[])</span>
+
+<span class="gp">In [13]: </span><span class="n">qsave</span><span class="p">(</span><span class="n">dm_list</span><span class="p">,</span> <span class="s">&#39;density_matrix_vs_time&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And it can then be loaded and used again, for example in an other program:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [14]: </span><span class="n">dm_list_loaded</span> <span class="o">=</span> <span class="n">qload</span><span class="p">(</span><span class="s">&#39;density_matrix_vs_time&#39;</span><span class="p">)</span>
+<span class="go">Loaded Result object:</span>
+<span class="go">Result object with mesolve data.</span>
+<span class="go">--------------------------------</span>
+<span class="go">states = True</span>
+<span class="go">num_collapse = 0</span>
+
+<span class="gp">In [15]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [16]: </span><span class="n">expect</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">dm_list_loaded</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+<span class="gr">Out[16]: </span>
+<span class="go">array([ 4.81997281,  3.77854528,  3.04797417,  2.51947928,  2.1308422 ,</span>
+<span class="go">        1.84275476,  1.62825633,  1.46812597,  1.34838305,  1.25874318])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="storing-and-loading-datasets">
+<h2>Storing and loading datasets<a class="headerlink" href="#storing-and-loading-datasets" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qsave" title="qutip.fileio.qsave"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qsave</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qload" title="qutip.fileio.qload"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.qload</span></tt></a> are great, but the file format used is only understood by QuTiP (python) programs. When data must be exported to other programs the preferred method is to store the data in the commonly used plain-text file formats. With the QuTiP functions <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_store" title="qutip.fileio.file_data_store"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.file_data_store</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_read" title="qutip.fileio.file_data_read"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.file_data_read</span></tt></a> we can store and load <strong>numpy</strong> arrays and matrices to files on disk using a deliminator-separated value format (for example comma-separated values CSV). Almost any program can handle this file format.</p>
+<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_store" title="qutip.fileio.file_data_store"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.file_data_store</span></tt></a> takes two mandatory and three optional arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">file_data_store</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">numtype</span><span class="o">=</span><span class="s">&quot;complex&quot;</span><span class="p">,</span> <span class="n">numformat</span><span class="o">=</span><span class="s">&quot;decimal&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <cite>filename</cite> is the name of the file, <cite>data</cite> is the data to be written to the file (must be a <em>numpy</em> array), <cite>numtype</cite> (optional) is a flag indicating numerical type that can take values <cite>complex</cite> or <cite>real</cite>, <cite>numformat</cite> (optional) specifies the numerical format that can take the values <cite>exp</cite> for the format <cite>1.0e1</cite> and <cite>decimal</cite> for the format <cite>10.0</cite>, and <cite>sep</cite> (optional) is an arbitrary single-character field separator (usually a tab, space, comma, semicolon, etc.).</p>
+<p>A common use for the <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_store" title="qutip.fileio.file_data_store"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.file_data_store</span></tt></a> function is to store the expectation values of a set of operators for a sequence of times, e.g., as returned by the <a class="reference internal" href="../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a> function, which is what the following example does:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [17]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="p">;</span> <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+
+<span class="gp">In [18]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">rand_ket</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [19]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [20]: </span><span class="n">medata</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">())])</span>
+
+<span class="gp">In [21]: </span><span class="n">shape</span><span class="p">(</span><span class="n">medata</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
+<span class="gr">Out[21]: </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">shape</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+<span class="gr">Out[22]: </span><span class="p">(</span><span class="mi">100</span><span class="p">,)</span>
+
+<span class="gp">In [23]: </span><span class="n">output_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">times</span><span class="p">,</span> <span class="n">medata</span><span class="o">.</span><span class="n">expect</span><span class="p">))</span>   <span class="c"># join time and expt data</span>
+
+<span class="gp">In [24]: </span><span class="n">file_data_store</span><span class="p">(</span><span class="s">&#39;expect.dat&#39;</span><span class="p">,</span> <span class="n">output_data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c"># Note the .T for transpose!</span>
+
+<span class="gp">In [25]: </span><span class="n">ls</span> <span class="o">*.</span><span class="n">dat</span>
+<span class="go">expect.dat</span>
+
+<span class="gp">In [26]: </span><span class="err">!</span><span class="n">head</span> <span class="n">expect</span><span class="o">.</span><span class="n">dat</span>
+<span class="c"># Generated by QuTiP: 100x4 complex matrix in decimal format [&#39;,&#39; separated values].</span>
+<span class="go">0.0000000000+0.0000000000j,5.1096438408+0.0000000000j,2.1373624574+0.0000000000j,0.1028784580+0.0000000000j</span>
+<span class="go">1.0101010101+0.0000000000j,4.0044604180+0.0000000000j,0.8829948224+0.0000000000j,-1.2903971463+0.0000000000j</span>
+<span class="go">2.0202020202+0.0000000000j,3.2687259506+0.0000000000j,-0.5216791420+0.0000000000j,-1.1928584313+0.0000000000j</span>
+<span class="go">3.0303030303+0.0000000000j,2.7266324068+0.0000000000j,-1.1009931771+0.0000000000j,-0.1641167024+0.0000000000j</span>
+<span class="go">4.0404040404+0.0000000000j,2.3187109423+0.0000000000j,-0.6258234265+0.0000000000j,0.7301662539+0.0000000000j</span>
+<span class="go">5.0505050505+0.0000000000j,2.0089043839+0.0000000000j,0.2479639201+0.0000000000j,0.7974088451+0.0000000000j</span>
+<span class="go">6.0606060606+0.0000000000j,1.7724403677+0.0000000000j,0.7029663513+0.0000000000j,0.1864361181+0.0000000000j</span>
+<span class="go">7.0707070707+0.0000000000j,1.5914184607+0.0000000000j,0.4639198909+0.0000000000j,-0.4329017901+0.0000000000j</span>
+<span class="go">8.0808080808+0.0000000000j,1.4525765392+0.0000000000j,-0.1047356338+0.0000000000j,-0.5442819790+0.0000000000j</span>
+</pre></div>
+</div>
+<p>In this case we didn&#8217;t really need to store both the real and imaginary parts, so instead we could use the <cite>numtype=&#8221;real&#8221;</cite> option:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [27]: </span><span class="n">file_data_store</span><span class="p">(</span><span class="s">&#39;expect.dat&#39;</span><span class="p">,</span> <span class="n">output_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">numtype</span><span class="o">=</span><span class="s">&quot;real&quot;</span><span class="p">)</span>
+
+<span class="gp">In [28]: </span><span class="err">!</span><span class="n">head</span> <span class="o">-</span><span class="n">n5</span> <span class="n">expect</span><span class="o">.</span><span class="n">dat</span>
+<span class="c"># Generated by QuTiP: 100x4 real matrix in decimal format [&#39;,&#39; separated values].</span>
+<span class="go">0.0000000000,5.1096438408,2.1373624574,0.1028784580</span>
+<span class="go">1.0101010101,4.0044604180,0.8829948224,-1.2903971463</span>
+<span class="go">2.0202020202,3.2687259506,-0.5216791420,-1.1928584313</span>
+<span class="go">3.0303030303,2.7266324068,-1.1009931771,-0.1641167024</span>
+</pre></div>
+</div>
+<p>and if we prefer scientific notation we can request that using the <cite>numformat=&#8221;exp&#8221;</cite> option</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [29]: </span><span class="n">file_data_store</span><span class="p">(</span><span class="s">&#39;expect.dat&#39;</span><span class="p">,</span> <span class="n">output_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">numtype</span><span class="o">=</span><span class="s">&quot;real&quot;</span><span class="p">,</span> <span class="n">numformat</span><span class="o">=</span><span class="s">&quot;exp&quot;</span><span class="p">)</span>
+
+<span class="gp">In [30]: </span><span class="err">!</span><span class="n">head</span> <span class="o">-</span><span class="n">n</span> <span class="mi">5</span> <span class="n">expect</span><span class="o">.</span><span class="n">dat</span>
+<span class="c"># Generated by QuTiP: 100x4 real matrix in exp format [&#39;,&#39; separated values].</span>
+<span class="go">0.0000000000e+00,5.1096438408e+00,2.1373624574e+00,1.0287845802e-01</span>
+<span class="go">1.0101010101e+00,4.0044604180e+00,8.8299482245e-01,-1.2903971463e+00</span>
+<span class="go">2.0202020202e+00,3.2687259506e+00,-5.2167914200e-01,-1.1928584313e+00</span>
+<span class="go">3.0303030303e+00,2.7266324068e+00,-1.1009931771e+00,-1.6411670241e-01</span>
+</pre></div>
+</div>
+<p>Loading data previously stored using <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_store" title="qutip.fileio.file_data_store"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.file_data_store</span></tt></a> (or some other software) is a even easier. Regardless of which deliminator was used, if data was stored as complex or real numbers, if it is in decimal or exponential form, the data can be loaded using the <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_read" title="qutip.fileio.file_data_read"><tt class="xref py py-func docutils literal"><span class="pre">qutip.fileio.file_data_read</span></tt></a>, which only takes the filename as mandatory argument.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [31]: </span><span class="n">input_data</span> <span class="o">=</span> <span class="n">file_data_read</span><span class="p">(</span><span class="s">&#39;expect.dat&#39;</span><span class="p">)</span>
+
+<span class="gp">In [32]: </span><span class="n">shape</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+<span class="gr">Out[32]: </span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [33]: </span><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="gp">In [34]: </span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">input_data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]);</span>  <span class="c"># plot the data</span>
+<span class="gr">Out[34]: </span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x2b409c970e10</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../images/saving_ex.png"><img alt="../images/saving_ex.png" class="align-center" src="../images/saving_ex.png" style="width: 4in;" /></a>
+<p>(If a particularly obscure choice of deliminator was used it might be necessary to use the optional second argument, for example <cite>sep=&#8221;_&#8221;</cite> if _ is the deliminator).</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Jul 16, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

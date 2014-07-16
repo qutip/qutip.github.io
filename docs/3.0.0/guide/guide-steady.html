@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Solving for Steady-State Solutions &mdash; QuTiP 3.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../static/bootswatch-3.1.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.0 Documentation" href="../index.html" />
+    <link rel="up" title="Users Guide" href="guide.html" />
+    <link rel="next" title="An Overview of the Eseries Class" href="guide-eseries.html" />
+    <link rel="prev" title="Setting Options for the Dynamics Solvers" href="dynamics/dynamics-options.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-mac-os-x-10-6">Installation on Mac OS X (10.6+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Running Problems in Parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-3-0-0-july-x-2014">Version 3.0.0 (July X, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Solving for Steady-State Solutions</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-the-steadystate-solver">Using the Steadystate Solver</a></li>
+<li><a class="reference internal" href="#example-harmonic-oscillator-in-thermal-bath">Example: Harmonic Oscillator in Thermal Bath</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="dynamics/dynamics-options.html" title="Previous Chapter: Setting Options for the Dynamics Solvers"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Setting Options ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="guide-eseries.html" title="Next Chapter: An Overview of the Eseries Class"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">An Overview of t... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="solving-for-steady-state-solutions">
+<span id="steady"></span><h1>Solving for Steady-State Solutions<a class="headerlink" href="#solving-for-steady-state-solutions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<span id="steady-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>For open quantum systems with decay rates larger than the corresponding excitation rates, the system will tend toward a steady state as <span class="math">\(t\rightarrow\infty\)</span> that satisfies the equation</p>
+<p><span class="math">\(\frac{\partial\rho_{ss}}{\partial t}=\mathcal{L}\rho_{ss}=0\)</span>.</p>
+<p>For many these systems, solving for the asymptotic density matrix <span class="math">\(\rho_{ss}\)</span> can be achieved using a direct or iterative methods faster than master equation or Monte Carlo simulations. In QuTiP, the steady-state solution for a system Hamiltonian or Liouvillian is given by <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><tt class="xref py py-func docutils literal"><span class="pre">qutip.steadystate.steadystate</span></tt></a>.  This function implements a number of different methods for finding the steady state, and the method used can be chosen using the <cite>method</cite> keyword argument. Some of the implemented methods include <cite>direct</cite>, <cite>iterative</cite> and <cite>power</cite>. For details, see the API documentation for <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><tt class="xref py py-func docutils literal"><span class="pre">qutip.steadystate.steadystate</span></tt></a>. The <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><tt class="xref py py-func docutils literal"><span class="pre">qutip.steadystate.steadystate</span></tt></a> can take either a Hamiltonian and a list of collapse operators as input, or alternative a Liouvillian. When possible, we recommend passing the Hamiltonian and the collapse operators to <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><tt class="xref py py-func docutils literal"><span class="pre">qutip.steadystate.steadystate</span></tt></a>, and the function will then automatically build the Liouvillian for the system.</p>
+</div>
+<div class="section" id="using-the-steadystate-solver">
+<span id="steady-usage"></span><h2>Using the Steadystate Solver<a class="headerlink" href="#using-the-steadystate-solver" title="Permalink to this headline">¶</a></h2>
+<p>Solving for the steady state of a general system with <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><tt class="xref py py-func docutils literal"><span class="pre">qutip.steadystate.steadystate</span></tt></a> can be accomplished using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rho_ss</span> <span class="o">=</span> <span class="n">steadystate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">H</span></tt> is a quantum object representing the system Hamiltonian, and <tt class="docutils literal"><span class="pre">c_ops</span></tt> is a list of quantum objects for the system collapse operators. The output, labeled as <tt class="docutils literal"><span class="pre">rho_ss</span></tt>, is the steady-state solution for the systems. Although this method will produce the required solution in most situations, there are additional options that may be set if the algorithm does not converge properly.  These optional parameters may be used by calling the steady-state solver as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rho_ss</span> <span class="o">=</span> <span class="n">steadystate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">maxiter</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">use_umfpack</span><span class="p">,</span> <span class="n">use_precond</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">maxiter</span></tt> is the maximum number of iterations performed by the solver, <tt class="docutils literal"><span class="pre">tol</span></tt> is the requested solution tolerance, and <tt class="docutils literal"><span class="pre">method</span></tt> indicates whether the linear equation solver uses a direct solver &#8220;solve&#8221; or an iterative stabilized bi-conjugate gradient &#8220;bicg&#8221; solution method.  In general, the direct solver is faster, but takes more memory than the iterative method.  The advantage of the iterative method is the memory efficiency of this routine, allowing for extremely large system sizes. The downside is that it takes much longer than the direct method, especially when the condition number of the Liouvillian matrix is large, as typically occurs.  To overcome this, the steady state solvers also include a preconditioner that attempts to normalize the condition number of the system.  This incomplete LU preconditioner is invoked by using the &#8220;use_precond=True&#8221; flag in combination with the iterative solver.  As a first try, it is recommended to begin with the direct solver before using the <tt class="docutils literal"><span class="pre">direct</span></tt> method.  More information on these options may be found in the <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><tt class="xref py py-func docutils literal"><span class="pre">qutip.steadystate.steadystate</span></tt></a> section of the API documentation.</p>
+<p>This solver can also use a Liouvillian constructed from a Hamiltonian and collapse operators as input:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rho_ss</span> <span class="o">=</span> <span class="n">steadystate</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">L</span></tt> is the Louvillian.</p>
+</div>
+<div class="section" id="example-harmonic-oscillator-in-thermal-bath">
+<span id="steady-example"></span><h2>Example: Harmonic Oscillator in Thermal Bath<a class="headerlink" href="#example-harmonic-oscillator-in-thermal-bath" title="Permalink to this headline">¶</a></h2>
+<p>A simple example of a system that reaches a steady state is a harmonic oscillator coupled to a thermal environment.  Below we consider a harmonic oscillator, initially in a <span class="math">\(\left|10\right&gt;\)</span> number state, and weakly coupled to a thermal environment characterized by an average particle expectation value of <span class="math">\(\left&lt;n\right&gt;=2\)</span>.  We calculate the evolution via master equation and Monte Carlo methods, and see that they converge to the steady-state solution.  Here we choose to perform only a few Monte Carlo trajectories so we can distinguish this evolution from the master-equation solution.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># Define paramters</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c"># number of basis states to consider</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c"># initial state</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c"># coupling to oscillator</span>
+
+<span class="c"># collapse operators</span>
+<span class="n">c_op_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">n_th_a</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c"># temperature with average of 2 excitations</span>
+<span class="n">rate</span> <span class="o">=</span> <span class="n">kappa</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_th_a</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+    <span class="n">c_op_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>  <span class="c"># decay operators</span>
+<span class="n">rate</span> <span class="o">=</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">n_th_a</span>
+<span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+    <span class="n">c_op_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>  <span class="c"># excitation operators</span>
+
+<span class="c"># find steady-state solution</span>
+<span class="n">final_state</span> <span class="o">=</span> <span class="n">steadystate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">)</span>
+<span class="c"># find expectation value for particle number in steady state</span>
+<span class="n">fexpt</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">final_state</span><span class="p">)</span>
+
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c"># monte-carlo</span>
+<span class="n">mcdata</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="c"># master eq.</span>
+<span class="n">medata</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
+
+<span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">mcdata</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">medata</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c"># plot steady-state expt. value as horizontal line (should be = 2)</span>
+<span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">fexpt</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Number of excitations&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="s">&#39;Monte-Carlo&#39;</span><span class="p">,</span> <span class="s">&#39;Master Equation&#39;</span><span class="p">,</span> <span class="s">&#39;Steady State&#39;</span><span class="p">))</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Decay of Fock state $\left|10</span><span class="se">\\</span><span class="s">rangle</span><span class="se">\\</span><span class="s">right.$&#39;</span> <span class="o">+</span>
+      <span class="s">&#39; in a thermal environment with $\langle n</span><span class="se">\\</span><span class="s">rangle=2$&#39;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="steady-figure">
+<a class="reference internal image-reference" href="../images/guide-steady.png"><img alt="../images/guide-steady.png" src="../images/guide-steady.png" style="width: 4in;" /></a>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Jul 16, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
