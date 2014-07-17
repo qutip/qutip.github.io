@@ -1,0 +1,901 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Manipulating States and Operators &mdash; QuTiP 3.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../static/bootswatch-3.1.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.0 Documentation" href="../index.html" />
+    <link rel="up" title="Users Guide" href="guide.html" />
+    <link rel="next" title="Using Tensor Products and Partial Traces" href="guide-tensor.html" />
+    <link rel="prev" title="Basic Operations on Quantum Objects" href="guide-basics.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-mac-os-x-10-6">Installation on Mac OS X (10.6+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Running Problems in Parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-3-0-0-july-x-2014">Version 3.0.0 (July X, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Manipulating States and Operators</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#state-vectors-kets-or-bras">State Vectors (kets or bras)</a></li>
+<li><a class="reference internal" href="#density-matrices">Density matrices</a></li>
+<li><a class="reference internal" href="#qubit-two-level-systems">Qubit (two-level) systems</a></li>
+<li><a class="reference internal" href="#expectation-values">Expectation values</a></li>
+<li><a class="reference internal" href="#superoperators-and-vectorized-operators">Superoperators and Vectorized Operators</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="guide-basics.html" title="Previous Chapter: Basic Operations on Quantum Objects"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Basic Operations...</span>
+    </a>
+  </li>
+  <li>
+    <a href="guide-tensor.html" title="Next Chapter: Using Tensor Products and Partial Traces"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Using Tensor Pro... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="manipulating-states-and-operators">
+<span id="states"></span><h1>Manipulating States and Operators<a class="headerlink" href="#manipulating-states-and-operators" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<span id="states-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In the previous guide section <a class="reference internal" href="guide-basics.html#basics"><em>Basic Operations on Quantum Objects</em></a>, we saw how to create states and operators, using the functions built into QuTiP. In this portion of the guide, we will look at performing basic operations with states and operators.  For more detailed demonstrations on how to use and manipulate these objects, see the examples on the <a class="reference external" href="http://qutip.org/tutorials.html">tutorials</a> web page.</p>
+</div>
+<div class="section" id="state-vectors-kets-or-bras">
+<span id="states-vectors"></span><h2>State Vectors (kets or bras)<a class="headerlink" href="#state-vectors-kets-or-bras" title="Permalink to this headline">¶</a></h2>
+<p>Here we begin by creating a Fock <a class="reference internal" href="../apidoc/functions.html#qutip.states.basis" title="qutip.states.basis"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.basis</span></tt></a> vacuum state vector <span class="math">\(\left|0\right&gt;\)</span> with in a Hilbert space with 5 number states, from 0 to 4:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [2]: </span><span class="n">vac</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="k">print</span><span class="p">(</span><span class="n">vac</span><span class="p">)</span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>and then create a lowering operator <span class="math">\(\left(\hat{a}\right)\)</span> corresponding to 5 number states using the <a class="reference internal" href="../apidoc/functions.html#qutip.operators.destroy" title="qutip.operators.destroy"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.destroy</span></tt></a> function:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.          1.          0.          0.          0.        ]</span>
+<span class="go"> [ 0.          0.          1.41421356  0.          0.        ]</span>
+<span class="go"> [ 0.          0.          0.          1.73205081  0.        ]</span>
+<span class="go"> [ 0.          0.          0.          0.          2.        ]</span>
+<span class="go"> [ 0.          0.          0.          0.          0.        ]]</span>
+</pre></div>
+</div>
+<p>Now lets apply the destruction operator to our vacuum state <tt class="docutils literal"><span class="pre">vac</span></tt>,</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [6]: </span><span class="n">a</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="go"> Out[6]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>We see that, as expected, the vacuum is transformed to the zero vector.  A more interesting example comes from using the adjoint of the lowering operator, the raising operator <span class="math">\(\hat{a}^\dagger\)</span>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [7]: </span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="go"> Out[7]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>The raising operator has in indeed raised the state <cite>vec</cite> from the vacuum to the <span class="math">\(\left| 1\right&gt;\)</span> state.  Instead of using the dagger <tt class="docutils literal"><span class="pre">Qobj.dag()</span></tt> method to raise the state, we could have also used the built in <a class="reference internal" href="../apidoc/functions.html#qutip.operators.create" title="qutip.operators.create"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.create</span></tt></a> function to make a raising operator:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [8]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="go"> Out[9]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>which does the same thing.  We can raise the vacuum state more than once by successively apply the raising operator:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [10]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="gr">Out[10]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.        ]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 1.41421356]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]]</span>
+</pre></div>
+</div>
+<p>or just taking the square of the raising operator <span class="math">\(\left(\hat{a}^\dagger\right)^{2}\)</span>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [11]: </span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="gr">Out[11]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.        ]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 1.41421356]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]]</span>
+</pre></div>
+</div>
+<p>Applying the raising operator twice gives the expected <span class="math">\(\sqrt{n + 1}\)</span> dependence.  We can use the product of <span class="math">\(c * a\)</span> to also apply the number operator to the state vector <tt class="docutils literal"><span class="pre">vac</span></tt>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [12]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="gr">Out[12]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>or on the <span class="math">\(\left| 1\right&gt;\)</span> state:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [13]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">vac</span><span class="p">)</span>
+<span class="gr">Out[13]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>or the <span class="math">\(\left| 2\right&gt;\)</span> state:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [14]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">vac</span><span class="p">)</span>
+<span class="gr">Out[14]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.        ]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 2.82842712]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]]</span>
+</pre></div>
+</div>
+<p>Notice how in this last example, application of the number operator does not give the expected value <span class="math">\(n=2\)</span>, but rather <span class="math">\(2\sqrt{2}\)</span>.  This is because this last state is not normalized to unity as <span class="math">\(c\left| n\right&gt; = \sqrt{n+1}\left| n+1\right&gt;\)</span>.  Therefore, we should normalize our vector first:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [15]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">vac</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+<span class="gr">Out[15]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 2.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>Since we are giving a demonstration of using states and operators, we have done a lot more work than we should have.  For example, we do not need to operate on the vacuum state to generate a higher number Fock state.  Instead we can use the <a class="reference internal" href="../apidoc/functions.html#qutip.states.basis" title="qutip.states.basis"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.basis</span></tt></a> (or <a class="reference internal" href="../apidoc/functions.html#qutip.states.fock" title="qutip.states.fock"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.fock</span></tt></a>) function to directly obtain the required state:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [16]: </span><span class="n">ket</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [17]: </span><span class="k">print</span><span class="p">(</span><span class="n">ket</span><span class="p">)</span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>Notice how it is automatically normalized.  We can also use the built in <a class="reference internal" href="../apidoc/functions.html#qutip.operators.num" title="qutip.operators.num"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.num</span></tt></a> operator:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [18]: </span><span class="n">n</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [19]: </span><span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  1.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  2.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  3.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  4.]]</span>
+</pre></div>
+</div>
+<p>Therefore, instead of <tt class="docutils literal"><span class="pre">c</span> <span class="pre">*</span> <span class="pre">a</span> <span class="pre">*</span> <span class="pre">(c</span> <span class="pre">**</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">vac).unit()</span></tt> we have:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [20]: </span><span class="n">n</span> <span class="o">*</span> <span class="n">ket</span>
+<span class="gr">Out[20]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 2.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>We can also create superpositions of states:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">ket</span> <span class="o">=</span> <span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+
+<span class="gp">In [22]: </span><span class="k">print</span><span class="p">(</span><span class="n">ket</span><span class="p">)</span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.70710678]</span>
+<span class="go"> [ 0.70710678]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]]</span>
+</pre></div>
+</div>
+<p>where we have used the <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj.unit" title="qutip.Qobj.unit"><tt class="xref py py-func docutils literal"><span class="pre">qutip.Qobj.unit</span></tt></a> method to again normalize the state. Operating with the number function again:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="n">n</span> <span class="o">*</span> <span class="n">ket</span>
+<span class="gr">Out[23]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.        ]</span>
+<span class="go"> [ 0.70710678]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]</span>
+<span class="go"> [ 0.        ]]</span>
+</pre></div>
+</div>
+<p>We can also create coherent states and squeezed states by applying the <a class="reference internal" href="../apidoc/functions.html#qutip.operators.displace" title="qutip.operators.displace"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.displace</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.operators.squeeze" title="qutip.operators.squeeze"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.squeeze</span></tt></a> functions to the vacuum state:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [24]: </span><span class="n">vac</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [25]: </span><span class="n">d</span> <span class="o">=</span> <span class="n">displace</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1j</span><span class="p">)</span>
+
+<span class="gp">In [26]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">0.25</span> <span class="o">+</span> <span class="mf">0.25j</span><span class="p">)</span>
+
+<span class="gp">In [27]: </span><span class="n">d</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="gr">Out[27]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.60655682+0.j        ]</span>
+<span class="go"> [ 0.00000000+0.60628133j]</span>
+<span class="go"> [-0.43038740+0.j        ]</span>
+<span class="go"> [ 0.00000000-0.24104351j]</span>
+<span class="go"> [ 0.14552147+0.j        ]]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [28]: </span><span class="n">d</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="gr">Out[28]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = [5, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.65893786+0.08139381j]</span>
+<span class="go"> [ 0.10779462+0.51579735j]</span>
+<span class="go"> [-0.37567217-0.01326853j]</span>
+<span class="go"> [-0.02688063-0.23828775j]</span>
+<span class="go"> [ 0.26352814+0.11512178j]]</span>
+</pre></div>
+</div>
+<p>Of course, displacing the vacuum gives a coherent state, which can also be generated using the built in <a class="reference internal" href="../apidoc/functions.html#qutip.states.coherent" title="qutip.states.coherent"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.coherent</span></tt></a> function.</p>
+</div>
+<div class="section" id="density-matrices">
+<span id="states-dm"></span><h2>Density matrices<a class="headerlink" href="#density-matrices" title="Permalink to this headline">¶</a></h2>
+<p>One of the main purpose of QuTiP is to explore the dynamics of <strong>open</strong> quantum systems, where the most general state of a system is not longer a state vector, but rather a density matrix.  Since operations on density matrices operate identically to those of vectors, we will just briefly highlight creating and using these structures.</p>
+<p>The simplest density matrix is created by forming the outer-product <span class="math">\(\left|\psi\right&gt;\left&lt;\psi\right|\)</span> of a ket vector:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [29]: </span><span class="n">ket</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [30]: </span><span class="n">ket</span> <span class="o">*</span> <span class="n">ket</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="gr">Out[30]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  1.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]]</span>
+</pre></div>
+</div>
+<p>A similar task can also be accomplished via the <a class="reference internal" href="../apidoc/functions.html#qutip.states.fock_dm" title="qutip.states.fock_dm"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.fock_dm</span></tt></a> or <a class="reference internal" href="../apidoc/functions.html#qutip.states.ket2dm" title="qutip.states.ket2dm"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.ket2dm</span></tt></a> functions:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [31]: </span><span class="n">fock_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gr">Out[31]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  1.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [32]: </span><span class="n">ket2dm</span><span class="p">(</span><span class="n">ket</span><span class="p">)</span>
+<span class="gr">Out[32]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  1.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.]]</span>
+</pre></div>
+</div>
+<p>If we want to create a density matrix with equal classical probability of being found in the <span class="math">\(\left|2\right&gt;\)</span> or <span class="math">\(\left|4\right&gt;\)</span> number states we can do the following:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [33]: </span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gr">Out[33]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.   0.   0.   0.   0. ]</span>
+<span class="go"> [ 0.   0.   0.   0.   0. ]</span>
+<span class="go"> [ 0.   0.   0.5  0.   0. ]</span>
+<span class="go"> [ 0.   0.   0.   0.   0. ]</span>
+<span class="go"> [ 0.   0.   0.   0.   0.5]]</span>
+</pre></div>
+</div>
+<p>or use <tt class="docutils literal"><span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">fock_dm(5,</span> <span class="pre">2)</span> <span class="pre">+</span> <span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">fock_dm(5,</span> <span class="pre">4)</span></tt>. There are also several other built-in functions for creating predefined density matrices, for example <a class="reference internal" href="../apidoc/functions.html#qutip.states.coherent_dm" title="qutip.states.coherent_dm"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.coherent_dm</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.states.thermal_dm" title="qutip.states.thermal_dm"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.thermal_dm</span></tt></a> which create coherent state and thermal state density matrices, respectively.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [34]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="gr">Out[34]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.20980701  0.26141096  0.23509686  0.15572585  0.13390765]</span>
+<span class="go"> [ 0.26141096  0.32570738  0.29292109  0.19402805  0.16684347]</span>
+<span class="go"> [ 0.23509686  0.29292109  0.26343512  0.17449684  0.1500487 ]</span>
+<span class="go"> [ 0.15572585  0.19402805  0.17449684  0.11558499  0.09939079]</span>
+<span class="go"> [ 0.13390765  0.16684347  0.1500487   0.09939079  0.0854655 ]]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [35]: </span><span class="n">thermal_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="gr">Out[35]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = [5, 5], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.46927974  0.          0.          0.          0.        ]</span>
+<span class="go"> [ 0.          0.26071096  0.          0.          0.        ]</span>
+<span class="go"> [ 0.          0.          0.14483942  0.          0.        ]</span>
+<span class="go"> [ 0.          0.          0.          0.08046635  0.        ]</span>
+<span class="go"> [ 0.          0.          0.          0.          0.04470353]]</span>
+</pre></div>
+</div>
+<p>QuTiP also provides a set of distance metrics for determining how close two density matrix distributions are to each other. Included are the trace distance <a class="reference internal" href="../apidoc/functions.html#qutip.metrics.tracedist" title="qutip.metrics.tracedist"><tt class="xref py py-func docutils literal"><span class="pre">qutip.metrics.tracedist</span></tt></a> and the fidelity <a class="reference internal" href="../apidoc/functions.html#qutip.metrics.fidelity" title="qutip.metrics.fidelity"><tt class="xref py py-func docutils literal"><span class="pre">qutip.metrics.fidelity</span></tt></a>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [36]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+
+<span class="gp">In [37]: </span><span class="n">y</span> <span class="o">=</span> <span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.25j</span><span class="p">)</span>  <span class="c"># &lt;-- note the &#39;j&#39;</span>
+
+<span class="gp">In [38]: </span><span class="n">z</span> <span class="o">=</span> <span class="n">thermal_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">)</span>
+
+<span class="gp">In [39]: </span><span class="n">fidelity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gr">Out[39]: </span><span class="mf">1.000000024796918</span>
+
+<span class="gp">In [40]: </span><span class="n">tracedist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gr">Out[40]: </span><span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>We also know that for two pure states, the trace distance (T) and the fidelity (F) are related by <span class="math">\(T = \sqrt{1 - F^{2}}\)</span>.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [41]: </span><span class="n">tracedist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gr">Out[41]: </span><span class="mf">0.9771565834831235</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [42]: </span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fidelity</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gr">Out[42]: </span><span class="mf">0.97715657031452496</span>
+</pre></div>
+</div>
+<p>For a pure state and a mixed state, <span class="math">\(1 - F^{2} \le T\)</span> which can also be verified:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [43]: </span><span class="mi">1</span> <span class="o">-</span> <span class="n">fidelity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="gr">Out[43]: </span><span class="mf">0.7782890495537043</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [44]: </span><span class="n">tracedist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="gr">Out[44]: </span><span class="mf">0.8559028328862588</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qubit-two-level-systems">
+<span id="states-qubit"></span><h2>Qubit (two-level) systems<a class="headerlink" href="#qubit-two-level-systems" title="Permalink to this headline">¶</a></h2>
+<p>Having spent a fair amount of time on basis states that represent harmonic oscillator states, we now move on to qubit, or two-level quantum systems (for example a spin-1/2). To create a state vector corresponding to a qubit system, we use the same <a class="reference internal" href="../apidoc/functions.html#qutip.states.basis" title="qutip.states.basis"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.basis</span></tt></a>, or <a class="reference internal" href="../apidoc/functions.html#qutip.states.fock" title="qutip.states.fock"><tt class="xref py py-func docutils literal"><span class="pre">qutip.states.fock</span></tt></a>, function with only two levels:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [45]: </span><span class="n">spin</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now at this point one may ask how this state is different than that of a harmonic oscillator in the vacuum state truncated to two energy levels?</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [46]: </span><span class="n">vac</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>At this stage, there is no difference.  This should not be surprising as we called the exact same function twice.  The difference between the two comes from the action of the spin operators <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmax" title="qutip.operators.sigmax"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmax</span></tt></a>, <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmay" title="qutip.operators.sigmay"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmay</span></tt></a>, <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmaz" title="qutip.operators.sigmaz"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmaz</span></tt></a>, <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmap" title="qutip.operators.sigmap"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmap</span></tt></a>, and <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmam" title="qutip.operators.sigmam"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmam</span></tt></a> on these two-level states.  For example, if <tt class="docutils literal"><span class="pre">vac</span></tt> corresponds to the vacuum state of a harmonic oscillator, then, as we have already seen, we can use the raising operator to get the <span class="math">\(\left|1\right&gt;\)</span> state:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [47]: </span><span class="n">vac</span>
+<span class="gr">Out[47]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [48]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [49]: </span><span class="n">c</span> <span class="o">*</span> <span class="n">vac</span>
+<span class="gr">Out[49]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 1.]]</span>
+</pre></div>
+</div>
+<p>For a spin system, the operator analogous to the raising operator is the sigma-plus operator <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmap" title="qutip.operators.sigmap"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmap</span></tt></a>.  Operating on the <tt class="docutils literal"><span class="pre">spin</span></tt> state gives:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [50]: </span><span class="n">spin</span>
+<span class="gr">Out[50]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]]</span>
+
+<span class="gp">In [51]: </span><span class="n">sigmap</span><span class="p">()</span> <span class="o">*</span> <span class="n">spin</span>
+<span class="gr">Out[51]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>Now we see the difference!  The <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmap" title="qutip.operators.sigmap"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmap</span></tt></a> operator acting on the <tt class="docutils literal"><span class="pre">spin</span></tt> state returns the zero vector.  Why is this?  To see what happened, let us use the <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmaz" title="qutip.operators.sigmaz"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmaz</span></tt></a> operator:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [52]: </span><span class="n">sigmaz</span><span class="p">()</span>
+<span class="gr">Out[52]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 0. -1.]]</span>
+
+<span class="gp">In [53]: </span><span class="n">sigmaz</span><span class="p">()</span> <span class="o">*</span> <span class="n">spin</span>
+<span class="gr">Out[53]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]]</span>
+
+<span class="gp">In [54]: </span><span class="n">spin2</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [55]: </span><span class="n">spin2</span>
+<span class="gr">Out[55]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 1.]]</span>
+
+<span class="gp">In [56]: </span><span class="n">sigmaz</span><span class="p">()</span> <span class="o">*</span> <span class="n">spin2</span>
+<span class="gr">Out[56]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [-1.]]</span>
+</pre></div>
+</div>
+<p>The answer is now apparent.  Since the QuTiP <a class="reference internal" href="../apidoc/functions.html#qutip.operators.sigmaz" title="qutip.operators.sigmaz"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmaz</span></tt></a> function uses the standard z-basis representation of the sigma-z spin operator, the <tt class="docutils literal"><span class="pre">spin</span></tt> state corresponds to the <span class="math">\(\left|\mathrm{up}\right&gt;\)</span> state of a two-level spin system while <tt class="docutils literal"><span class="pre">spin2</span></tt> gives the <span class="math">\(\left|\mathrm{down}\right&gt;\)</span> state.  Therefore, in our previous example <tt class="docutils literal"><span class="pre">sigmap()</span> <span class="pre">*</span> <span class="pre">spin</span></tt>, we raised the qubit state out of the truncated two-level Hilbert space resulting in the zero state.</p>
+<p>While at first glance this convention might seem somewhat odd, it is in fact quite handy. For one, the spin operators remain in the conventional form. Second, when the spin system is in the <span class="math">\(\left|\mathrm{up}\right&gt;\)</span> state:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [57]: </span><span class="n">sigmaz</span><span class="p">()</span> <span class="o">*</span> <span class="n">spin</span>
+<span class="gr">Out[57]: </span>
+<span class="go">Quantum object: dims = [[2], [1]], shape = [2, 1], type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]]</span>
+</pre></div>
+</div>
+<p>the non-zero component is the zeroth-element of the underlying matrix (remember that python uses c-indexing, and matrices start with the zeroth element).  The <span class="math">\(\left|\mathrm{down}\right&gt;\)</span> state therefore has a non-zero entry in the first index position. This corresponds nicely with the quantum information definitions of qubit states, where the excited <span class="math">\(\left|\mathrm{up}\right&gt;\)</span> state is label as <span class="math">\(\left|0\right&gt;\)</span>, and the <span class="math">\(\left|\mathrm{down}\right&gt;\)</span> state by <span class="math">\(\left|1\right&gt;\)</span>.</p>
+<p>If one wants to create spin operators for higher spin systems, then the <a class="reference internal" href="../apidoc/functions.html#qutip.operators.jmat" title="qutip.operators.jmat"><tt class="xref py py-func docutils literal"><span class="pre">qutip.operators.jmat</span></tt></a> function comes in handy.</p>
+</div>
+<div class="section" id="expectation-values">
+<span id="states-expect"></span><h2>Expectation values<a class="headerlink" href="#expectation-values" title="Permalink to this headline">¶</a></h2>
+<p>Some of the most important information about quantum systems comes from calculating the expectation value of operators, both Hermitian and non-Hermitian, as the state or density matrix of the system varies in time.  Therefore, in this section we demonstrate the use of the <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><tt class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></tt></a> function.  To begin:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [58]: </span><span class="n">vac</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [59]: </span><span class="n">one</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [60]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [61]: </span><span class="n">N</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [62]: </span><span class="n">expect</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">vac</span><span class="p">)</span>
+<span class="gr">Out[62]: </span><span class="mf">0.0</span>
+
+<span class="gp">In [63]: </span><span class="n">expect</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">one</span><span class="p">)</span>
+<span class="gr">Out[63]: </span><span class="mf">1.0</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [64]: </span><span class="n">coh</span> <span class="o">=</span> <span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.0j</span><span class="p">)</span>
+
+<span class="gp">In [65]: </span><span class="n">expect</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">coh</span><span class="p">)</span>
+<span class="gr">Out[65]: </span><span class="mf">0.9970555745806599</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [66]: </span><span class="n">cat</span> <span class="o">=</span> <span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+
+<span class="gp">In [67]: </span><span class="n">expect</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">cat</span><span class="p">)</span>
+<span class="gr">Out[67]: </span><span class="o">-</span><span class="mf">0.9999999999999998j</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><tt class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></tt></a> function also accepts lists or arrays of state vectors or density matrices for the second input:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [68]: </span><span class="n">states</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c</span><span class="o">**</span><span class="n">k</span> <span class="o">*</span> <span class="n">vac</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>  <span class="c"># must normalize</span>
+
+<span class="gp">In [69]: </span><span class="n">expect</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">states</span><span class="p">)</span>
+<span class="gr">Out[69]: </span><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [70]: </span><span class="n">cat_list</span> <span class="o">=</span> <span class="p">[(</span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+<span class="gp">   ....:</span>              <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0j</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0j</span><span class="p">]]</span>
+<span class="gp">   ....:</span> 
+
+<span class="gp">In [71]: </span><span class="n">expect</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">cat_list</span><span class="p">)</span>
+<span class="gr">Out[71]: </span><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">-</span><span class="mf">1.j</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">+</span><span class="mf">1.j</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Notice how in this last example, all of the return values are complex numbers.  This is because the <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><tt class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></tt></a> function looks to see whether the operator is Hermitian or not.  If the operator is Hermitian, than the output will always be real.  In the case of non-Hermitian operators, the return values may be complex.  Therefore, the <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><tt class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></tt></a> function will return an array of complex values for non-Hermitian operators when the input is a list/array of states or density matrices.</p>
+<p>Of course, the <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><tt class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></tt></a> function works for spin states and operators:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [72]: </span><span class="n">up</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [73]: </span><span class="n">down</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [74]: </span><span class="n">expect</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">up</span><span class="p">)</span>
+<span class="gr">Out[74]: </span><span class="mf">1.0</span>
+
+<span class="gp">In [75]: </span><span class="n">expect</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">down</span><span class="p">)</span>
+<span class="gr">Out[75]: </span><span class="o">-</span><span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>as well as the composite objects discussed in the next section <a class="reference internal" href="guide-tensor.html#tensor"><em>Using Tensor Products and Partial Traces</em></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [76]: </span><span class="n">spin1</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [77]: </span><span class="n">spin2</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [78]: </span><span class="n">two_spins</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">spin1</span><span class="p">,</span> <span class="n">spin2</span><span class="p">)</span>
+
+<span class="gp">In [79]: </span><span class="n">sz1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="gp">In [80]: </span><span class="n">sz2</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">())</span>
+
+<span class="gp">In [81]: </span><span class="n">expect</span><span class="p">(</span><span class="n">sz1</span><span class="p">,</span> <span class="n">two_spins</span><span class="p">)</span>
+<span class="gr">Out[81]: </span><span class="mf">1.0</span>
+
+<span class="gp">In [82]: </span><span class="n">expect</span><span class="p">(</span><span class="n">sz2</span><span class="p">,</span> <span class="n">two_spins</span><span class="p">)</span>
+<span class="gr">Out[82]: </span><span class="o">-</span><span class="mf">1.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="superoperators-and-vectorized-operators">
+<span id="states-super"></span><h2>Superoperators and Vectorized Operators<a class="headerlink" href="#superoperators-and-vectorized-operators" title="Permalink to this headline">¶</a></h2>
+<p>In addition to state vectors and density operators, QuTiP allows for
+representing maps that act linearly on density operators using the Kraus,
+Liouville supermatrix and Choi matrix formalisms. This support is based on the
+correspondance between linear operators acting on a Hilbert space, and vectors
+in two copies of that Hilbert space,
+<span class="math">\(\mathrm{vec} : \mathcal{L}(\mathcal{H}) \to \mathcal{H} \otimes \mathcal{H}\)</span>
+<a class="reference internal" href="../biblio.html#hav03" id="id1">[Hav03]</a>, <a class="reference internal" href="../biblio.html#wat13" id="id2">[Wat13]</a>.</p>
+<p>This isomorphism is implemented in QuTiP by the
+<a class="reference internal" href="../apidoc/functions.html#qutip.superoperator.operator_to_vector" title="qutip.superoperator.operator_to_vector"><tt class="xref py py-obj docutils literal"><span class="pre">operator_to_vector</span></tt></a> and
+<a class="reference internal" href="../apidoc/functions.html#qutip.superoperator.vector_to_operator" title="qutip.superoperator.vector_to_operator"><tt class="xref py py-obj docutils literal"><span class="pre">vector_to_operator</span></tt></a> functions:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [83]: </span><span class="n">psi</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [84]: </span><span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+
+<span class="gp">In [85]: </span><span class="n">rho</span>
+<span class="gr">Out[85]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 0.  0.]]</span>
+
+<span class="gp">In [86]: </span><span class="n">vec_rho</span> <span class="o">=</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+
+<span class="gp">In [87]: </span><span class="n">vec_rho</span>
+<span class="gr">Out[87]: </span>
+<span class="go">Quantum object: dims = [[[2], [2]], [1]], shape = [4, 1], type = operator-ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]</span>
+<span class="go"> [ 0.]]</span>
+
+<span class="gp">In [88]: </span><span class="n">rho2</span> <span class="o">=</span> <span class="n">vector_to_operator</span><span class="p">(</span><span class="n">vec_rho</span><span class="p">)</span>
+
+<span class="gp">In [89]: </span><span class="p">(</span><span class="n">rho</span> <span class="o">-</span> <span class="n">rho2</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+<span class="gr">Out[89]: </span><span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">type</span></tt> attribute indicates whether a quantum object is
+a vector corresponding to an operator (<tt class="docutils literal"><span class="pre">operator-ket</span></tt>), or its Hermitian
+conjugate (<tt class="docutils literal"><span class="pre">operator-bra</span></tt>).</p>
+<p>Note that QuTiP uses the <em>column-stacking</em> convention for the isomorphism
+between <span class="math">\(\mathcal{L}(\mathcal{H})\)</span> and <span class="math">\(\mathcal{H} \otimes \mathcal{H}\)</span>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [90]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="gp">In [91]: </span><span class="n">A</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+
+<span class="gp">In [92]: </span><span class="n">A</span>
+<span class="gr">Out[92]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  1.]</span>
+<span class="go"> [ 2.  3.]]</span>
+
+<span class="gp">In [93]: </span><span class="n">operator_to_vector</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gr">Out[93]: </span>
+<span class="go">Quantum object: dims = [[[2], [2]], [1]], shape = [4, 1], type = operator-ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.]</span>
+<span class="go"> [ 2.]</span>
+<span class="go"> [ 1.]</span>
+<span class="go"> [ 3.]]</span>
+</pre></div>
+</div>
+<p>Since <span class="math">\(\mathcal{H} \otimes \mathcal{H}\)</span> is a vector space, linear maps
+on this space can be represented as matrices, often called <em>supermatrices</em>.
+Using the <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><tt class="xref py py-obj docutils literal"><span class="pre">Qobj</span></tt></a>, the <a class="reference internal" href="../apidoc/functions.html#qutip.superoperator.spre" title="qutip.superoperator.spre"><tt class="xref py py-obj docutils literal"><span class="pre">spre</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.superoperator.spost" title="qutip.superoperator.spost"><tt class="xref py py-obj docutils literal"><span class="pre">spost</span></tt></a> functions, supermatrices
+corresponding to left- and right-multiplication respectively can be quickly
+constructed.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [94]: </span><span class="n">X</span> <span class="o">=</span> <span class="n">sigmax</span><span class="p">()</span>
+
+<span class="gp">In [95]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">spre</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="c"># Represents conjugation by X.</span>
+</pre></div>
+</div>
+<p>Note that this is done automatically by the <a class="reference internal" href="../apidoc/functions.html#qutip.superop_reps.to_super" title="qutip.superop_reps.to_super"><tt class="xref py py-obj docutils literal"><span class="pre">to_super</span></tt></a> function when given
+<tt class="docutils literal"><span class="pre">type='oper'</span></tt> input.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [96]: </span><span class="n">S2</span> <span class="o">=</span> <span class="n">to_super</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="gp">In [97]: </span><span class="p">(</span><span class="n">S</span> <span class="o">-</span> <span class="n">S2</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+<span class="gr">Out[97]: </span><span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>Quantum objects representing superoperators are denoted by <tt class="docutils literal"><span class="pre">type='super'</span></tt>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [98]: </span><span class="n">S</span>
+<span class="gr">Out[98]: </span>
+<span class="go">Quantum object: dims = [[[2], [2]], [[2], [2]]], shape = [4, 4], type = super, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.  0.  1.]</span>
+<span class="go"> [ 0.  0.  1.  0.]</span>
+<span class="go"> [ 0.  1.  0.  0.]</span>
+<span class="go"> [ 1.  0.  0.  0.]]</span>
+</pre></div>
+</div>
+<p>Information about superoperators, such as whether they represent completely
+positive maps, is exposed through the <tt class="xref py py-attr docutils literal"><span class="pre">iscp</span></tt>, <tt class="xref py py-attr docutils literal"><span class="pre">istp</span></tt>
+and <tt class="xref py py-attr docutils literal"><span class="pre">iscptp</span></tt> attributes:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [99]: </span><span class="n">S</span><span class="o">.</span><span class="n">iscp</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">istp</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">iscptp</span>
+<span class="gr">Out[99]: </span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition, dynamical generators on this extended space, often called
+<em>Liouvillian superoperators</em>, can be created using the <a class="reference internal" href="../apidoc/functions.html#qutip.superoperator.liouvillian" title="qutip.superoperator.liouvillian"><tt class="xref py py-func docutils literal"><span class="pre">liouvillian</span></tt></a> function. Each of these takes a Hamilonian along with
+a list of collapse operators, and returns a <tt class="docutils literal"><span class="pre">type=&quot;super&quot;</span></tt> object that can
+be exponentiated to find the superoperator for that evolution.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [100]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">sigmaz</span><span class="p">()</span>
+
+<span class="gp">In [101]: </span><span class="n">c1</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [102]: </span><span class="n">L</span> <span class="o">=</span> <span class="n">liouvillian</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="p">[</span><span class="n">c1</span><span class="p">])</span>
+
+<span class="gp">In [103]: </span><span class="n">L</span>
+<span class="gr">Out[103]: </span>
+<span class="go">Quantum object: dims = [[[2], [2]], [[2], [2]]], shape = [4, 4], type = super, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.0 +0.j  0.0 +0.j  0.0 +0.j  1.0 +0.j]</span>
+<span class="go"> [ 0.0 +0.j -0.5+20.j  0.0 +0.j  0.0 +0.j]</span>
+<span class="go"> [ 0.0 +0.j  0.0 +0.j -0.5-20.j  0.0 +0.j]</span>
+<span class="go"> [ 0.0 +0.j  0.0 +0.j  0.0 +0.j -1.0 +0.j]]</span>
+
+<span class="gp">In [104]: </span><span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Once a superoperator has been obtained, it can be converted between the
+supermatrix, Kraus and Choi formalisms by using the <a class="reference internal" href="../apidoc/functions.html#qutip.superop_reps.to_super" title="qutip.superop_reps.to_super"><tt class="xref py py-func docutils literal"><span class="pre">to_super</span></tt></a>,
+<a class="reference internal" href="../apidoc/functions.html#qutip.superop_reps.to_kraus" title="qutip.superop_reps.to_kraus"><tt class="xref py py-func docutils literal"><span class="pre">to_kraus</span></tt></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.superop_reps.to_choi" title="qutip.superop_reps.to_choi"><tt class="xref py py-func docutils literal"><span class="pre">to_choi</span></tt></a> functions. The <tt class="xref py py-attr docutils literal"><span class="pre">superrep</span></tt>
+attribute keeps track of what reprsentation is a <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><tt class="xref py py-obj docutils literal"><span class="pre">Qobj</span></tt></a> is currently using.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [105]: </span><span class="n">J</span> <span class="o">=</span> <span class="n">to_choi</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+<span class="gp">In [106]: </span><span class="n">J</span>
+<span class="gr">Out[106]: </span>
+<span class="go">Quantum object: dims = [[[2], [2]], [[2], [2]]], shape = [4, 4], type = super, isherm = True, superrep = choi</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[  1.00000000e+00+0.j           0.00000000e+00+0.j           0.00000000e+00+0.j</span>
+<span class="go">    8.07531120e-04-0.00234352j]</span>
+<span class="go"> [  0.00000000e+00+0.j           0.00000000e+00+0.j           0.00000000e+00+0.j</span>
+<span class="go">    0.00000000e+00+0.j        ]</span>
+<span class="go"> [  0.00000000e+00+0.j           0.00000000e+00+0.j           9.99993856e-01+0.j</span>
+<span class="go">    0.00000000e+00+0.j        ]</span>
+<span class="go"> [  8.07531120e-04+0.00234352j   0.00000000e+00+0.j           0.00000000e+00+0.j</span>
+<span class="go">    6.14421235e-06+0.j        ]]</span>
+
+<span class="gp">In [107]: </span><span class="n">K</span> <span class="o">=</span> <span class="n">to_kraus</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+
+<span class="gp">In [108]: </span><span class="n">K</span>
+<span class="gr">Out[108]: </span>
+<span class="go">[Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[  1.00000000e+00 +5.37487094e-22j   0.00000000e+00 +0.00000000e+00j]</span>
+<span class="go"> [  0.00000000e+00 +0.00000000e+00j   8.07531120e-04 +2.34352424e-03j]],</span>
+<span class="go"> Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[  2.81046030e-14 +7.72131339e-14j   0.00000000e+00 +0.00000000e+00j]</span>
+<span class="go"> [  0.00000000e+00 +0.00000000e+00j   2.57568424e-11 -2.08677402e-11j]],</span>
+<span class="go"> Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.]</span>
+<span class="go"> [ 0.  0.]],</span>
+<span class="go"> Quantum object: dims = [[2], [2]], shape = [2, 2], type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.          0.99999693]</span>
+<span class="go"> [ 0.          0.        ]]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Jul 16, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

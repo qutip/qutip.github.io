@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Monte Carlo Solver &mdash; QuTiP 3.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/bootswatch-3.1.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.0 Documentation" href="../../index.html" />
+    <link rel="up" title="Time Evolution and Quantum System Dynamics" href="../guide-dynamics.html" />
+    <link rel="next" title="Bloch-Redfield master equation" href="dynamics-bloch-redfield.html" />
+    <link rel="prev" title="Lindblad Master Equation Solver" href="dynamics-master.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-mac-os-x-10-6">Installation on Mac OS X (10.6+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Running Problems in Parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-0-0-july-x-2014">Version 3.0.0 (July X, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Monte Carlo Solver</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#monte-carlo-in-qutip">Monte Carlo in QuTiP</a><ul>
+<li><a class="reference internal" href="#changing-the-number-of-trajectories">Changing the Number of Trajectories</a></li>
+<li><a class="reference internal" href="#reusing-hamiltonian-data">Reusing Hamiltonian Data</a></li>
+<li><a class="reference internal" href="#fortran-based-monte-carlo-solver">Fortran Based Monte Carlo Solver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="dynamics-master.html" title="Previous Chapter: Lindblad Master Equation Solver"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Lindblad Master ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="dynamics-bloch-redfield.html" title="Next Chapter: Bloch-Redfield master equation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Bloch-Redfield m... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="monte-carlo-solver">
+<span id="monte"></span><h1>Monte Carlo Solver<a class="headerlink" href="#monte-carlo-solver" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<span id="monte-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Where as the density matrix formalism describes the ensemble average over many identical realizations of a quantum system, the Monte Carlo (MC), or quantum-jump approach to wave function evolution, allows for simulating an individual realization of the system dynamics.  Here, the environment is continuously monitored, resulting in a series of quantum jumps in the system wave function, conditioned on the increase in information gained about the state of the system via the environmental measurements.  In general, this evolution is governed by the Schrödinger equation with a <strong>non-Hermitian</strong> effective Hamiltonian</p>
+<div class="math" id="equation-heff">
+<span class="eqno">(1)</span>\[H_{\rm eff}=H_{\rm sys}-\frac{i\hbar}{2}\sum_{i}C^{+}_{n}C_{n},\]</div>
+<p>where again, the <span class="math">\(C_{n}\)</span> are collapse operators, each corresponding to a separate irreversible process with rate <span class="math">\(\gamma_{n}\)</span>.  Here, the strictly negative non-Hermitian portion of Eq. <a href="#equation-heff">(1)</a> gives rise to a reduction in the norm of the wave function, that to first-order in a small time <span class="math">\(\delta t\)</span>, is given by <span class="math">\(\left&lt;\psi(t+\delta t)|\psi(t+\delta t)\right&gt;=1-\delta p\)</span> where</p>
+<div class="math" id="equation-jump">
+<span class="eqno">(2)</span>\[\begin{split}\delta p =\delta t \sum_{n}\left&lt;\psi(t)|C^{+}_{n}C_{n}|\psi(t)\right&gt;,\end{split}\]</div>
+<p>and <span class="math">\(\delta t\)</span> is such that <span class="math">\(\delta p \ll 1\)</span>.  With a probability of remaining in the state <span class="math">\(\left|\psi(t+\delta t)\right&gt;\)</span> given by <span class="math">\(1-\delta p\)</span>, the corresponding quantum jump probability is thus Eq. <a href="#equation-jump">(2)</a>.  If the environmental measurements register a quantum jump, say via the emission of a photon into the environment, or a change in the spin of a quantum dot, the wave function undergoes a jump into a state defined by projecting <span class="math">\(\left|\psi(t)\right&gt;\)</span> using the collapse operator <span class="math">\(C_{n}\)</span> corresponding to the measurement</p>
+<div class="math" id="equation-project">
+<span class="eqno">(3)</span>\[\begin{split}\left|\psi(t+\delta t)\right&gt;=C_{n}\left|\psi(t)\right&gt;/\left&lt;\psi(t)|C_{n}^{+}C_{n}|\psi(t)\right&gt;^{1/2}.\end{split}\]</div>
+<p>If more than a single collapse operator is present in Eq. <a href="#equation-heff">(1)</a>, the probability of collapse due to the <span class="math">\(i\mathrm{th}\)</span>-operator <span class="math">\(C_{i}\)</span> is given by</p>
+<div class="math" id="equation-pcn">
+<span class="eqno">(4)</span>\[\begin{split}P_{i}(t)=\left&lt;\psi(t)|C_{i}^{+}C_{i}|\psi(t)\right&gt;/\delta p.\end{split}\]</div>
+<p>Evaluating the MC evolution to first-order in time is quite tedious.  Instead, QuTiP uses the following algorithm to simulate a single realization of a quantum system.  Starting from a pure state <span class="math">\(\left|\psi(0)\right&gt;\)</span>:</p>
+<ul class="simple">
+<li><strong>I:</strong> Choose a random number <span class="math">\(r\)</span> between zero and one, representing the probability that a quantum jump occurs.</li>
+<li><strong>II:</strong> Integrate the Schrödinger equation, using the effective Hamiltonian <a href="#equation-heff">(1)</a> until a time <span class="math">\(\tau\)</span> such that the norm of the wave function satisfies <span class="math">\(\left&lt;\psi(\tau)\right.\left|\psi(\tau)\right&gt;=r\)</span>, at which point a jump occurs.</li>
+<li><strong>III:</strong> The resultant jump projects the system at time <span class="math">\(\tau\)</span> into one of the renormalized states given by Eq. <a href="#equation-project">(3)</a>.  The corresponding collapse operator <span class="math">\(C_{n}\)</span> is chosen such that <span class="math">\(n\)</span> is the smallest integer satisfying:</li>
+</ul>
+<div class="math" id="equation-mc3">
+<span class="eqno">(5)</span>\[\sum_{i=1}^{n} P_{n}(\tau) \ge r\]</div>
+<p>where the individual <span class="math">\(P_{n}\)</span> are given by Eq. <a href="#equation-pcn">(4)</a>.  Note that the left hand side of Eq. <a href="#equation-mc3">(5)</a> is, by definition, normalized to unity.</p>
+<ul class="simple">
+<li><strong>IV:</strong> Using the renormalized state from step III as the new initial condition at time <span class="math">\(\tau\)</span>, draw a new random number, and repeat the above procedure until the final simulation time is reached.</li>
+</ul>
+</div>
+<div class="section" id="monte-carlo-in-qutip">
+<span id="monte-qutip"></span><h2>Monte Carlo in QuTiP<a class="headerlink" href="#monte-carlo-in-qutip" title="Permalink to this headline">¶</a></h2>
+<p>In QuTiP, Monte Carlo evolution is implemented with the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></tt></a> function. It takes nearly the same arguments as the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a>
+function for master-equation evolution, except that the initial state must be a ket vector, as oppose to a density matrix, and there is an optional keyword parameter <tt class="docutils literal"><span class="pre">ntraj</span></tt> that defines the number of stochastic trajectories to be simulated.  By default, <tt class="docutils literal"><span class="pre">ntraj=500</span></tt> indicating that 500 Monte Carlo trajectories will be performed.</p>
+<p>To illustrate the use of the Monte Carlo evolution of quantum systems in QuTiP, let&#8217;s again consider the case of a two-level atom coupled to a leaky cavity. The only differences to the master-equation treatment is that in this case we invoke the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></tt></a> function instead of <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">times</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> \
+<span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="c"># run Monte Carlo solver</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Expectation values&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="s">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s">&quot;atom excitation probability&quot;</span><span class="p">))</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../images/guide-dynamics-mc.png"><img alt="../../images/guide-dynamics-mc.png" src="../../images/guide-dynamics-mc.png" style="width: 4in;" /></a>
+</div>
+<p>The advantage of the Monte Carlo method over the master equation approach is that only the state vector is required to be kept in the computers memory, as opposed to the entire density matrix. For large quantum system this becomes a significant advantage, and the Monte Carlo solver is therefore generally recommended for such systems. For example, simulating a Heisenberg spin-chain consisting of 10 spins with random parameters and initial states takes almost 7 times longer using the master equation rather than Monte Carlo approach with the default number of trajectories running on a quad-CPU machine.  Furthermore, it takes about 7 times the memory as well. However, for small systems, the added overhead of averaging a large number of stochastic trajectories to obtain the open system dynamics, as well as starting the multiprocessing functionality, outweighs the benefit of the minor (in this case) memory saving. Master equation methods are therefore generally more efficient when Hilbert space sizes are on the order of a couple of hundred states or smaller.</p>
+<p>Like the master equation solver <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></tt></a>, the Monte Carlo solver returns a <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><tt class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></tt></a> object consisting of expectation values, if the user has defined expectation value operators in the 5th argument to <tt class="docutils literal"><span class="pre">mcsolve</span></tt>, or state vectors if no expectation value operators are given.  If state vectors are returned, then the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><tt class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></tt></a> returned by <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><tt class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></tt></a> will be an array of length <tt class="docutils literal"><span class="pre">ntraj</span></tt>, with each element containing an array of ket-type qobjs with the same number of elements as <tt class="docutils literal"><span class="pre">times</span></tt>.  Furthermore, the output <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><tt class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></tt></a> object will also contain a list of times at which collapse occurred, and which collapse operators did the collapse, in the <tt class="docutils literal"><span class="pre">col_times</span></tt> and <tt class="docutils literal"><span class="pre">col_which</span></tt> properties, respectively.</p>
+<div class="section" id="changing-the-number-of-trajectories">
+<span id="monte-ntraj"></span><h3>Changing the Number of Trajectories<a class="headerlink" href="#changing-the-number-of-trajectories" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned earlier, by default, the <tt class="docutils literal"><span class="pre">mcsolve</span></tt> function runs 500 trajectories.  This value was chosen because it gives good accuracy, Monte Carlo errors scale as <span class="math">\(1/n\)</span> where <span class="math">\(n\)</span> is the number of trajectories, and simultaneously does not take an excessive amount of time to run.  However, like many other options in QuTiP you are free to change the number of trajectories to fit your needs.  If we want to run 1000 trajectories in the above example, we can simply modify the call to <tt class="docutils literal"><span class="pre">mcsolve</span></tt> like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where we have added the keyword argument <tt class="docutils literal"><span class="pre">ntraj=1000</span></tt> at the end of the inputs.  Now, the Monte Carlo solver will calculate expectation values for both operators, <tt class="docutils literal"><span class="pre">a.dag()</span> <span class="pre">*</span> <span class="pre">a,</span> <span class="pre">sm.dag()</span> <span class="pre">*</span> <span class="pre">sm</span></tt> averaging over 1000 trajectories.  Sometimes one is also interested in seeing how the Monte Carlo trajectories converge to the master equation solution by calculating expectation values over a range of trajectory numbers.  If, for example, we want to average over 1, 10, 100, and 1000 trajectories, then we can input this into the solver using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ntraj</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Keep in mind that the input list must be in ascending order since the total number of trajectories run by <tt class="docutils literal"><span class="pre">mcsolve</span></tt> will be calculated using the last element of <tt class="docutils literal"><span class="pre">ntraj</span></tt>.  In this case, we need to use an extra index when getting the expectation values from the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><tt class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></tt></a> object returned by <tt class="docutils literal"><span class="pre">mcsolve</span></tt>.  In the above example using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="n">ntraj</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>we can extract the relevant expectation values using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">expt1</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     <span class="c"># &lt;- expectation values for 1 trajectory</span>
+<span class="n">expt10</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    <span class="c"># &lt;- expectation values avg. over 10 trajectories</span>
+<span class="n">expt100</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>   <span class="c"># &lt;- expectation  values avg. over 100 trajectories</span>
+<span class="n">expt1000</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c"># &lt;- expectation values avg. over 1000 trajectories</span>
+</pre></div>
+</div>
+<p>The Monte Carlo solver also has many available options that can be set using the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Options" title="qutip.solver.Options"><tt class="xref py py-func docutils literal"><span class="pre">qutip.solver.Options</span></tt></a> class as discussed in <a class="reference internal" href="dynamics-options.html#options"><em>Setting Options for the Dynamics Solvers</em></a>.</p>
+</div>
+<div class="section" id="reusing-hamiltonian-data">
+<span id="monte-reuse"></span><h3>Reusing Hamiltonian Data<a class="headerlink" href="#reusing-hamiltonian-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section covers a specialized topic and may be skipped if you are new to QuTiP.</p>
+</div>
+<p>In order to solve a given simulation as fast as possible, the solvers in QuTiP take the given input operators and break them down into simpler components before passing them on to the ODE solvers.  Although these operations are reasonably fast, the time spent organizing data can become appreciable when repeatedly solving a system over, for example, many different initial conditions. In cases such as this, the Hamiltonian and other operators may be reused after the initial configuration, thus speeding up calculations.  Note that, unless you are planning to reuse the data many times, this functionality will not be very useful.</p>
+<p>To turn on the &#8220;reuse&#8221; functionality we must set the <tt class="docutils literal"><span class="pre">rhs_reuse=True</span></tt> flag in the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Options" title="qutip.solver.Options"><tt class="xref py py-func docutils literal"><span class="pre">qutip.solver.Options</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A full account of this feature is given in <a class="reference internal" href="dynamics-options.html#options"><em>Setting Options for the Dynamics Solvers</em></a>.  Using the previous example, we will calculate the dynamics for two different initial states, with the Hamiltonian data being reused on the second call:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">times</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> \
+<span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="c"># first run</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+
+<span class="c"># change initial state</span>
+<span class="n">psi1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">coherent</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1j</span><span class="p">))</span>
+
+<span class="c"># run again, reusing data</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">data2</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span>
+            <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="c"># plot both results</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Expectation values&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="s">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s">&quot;atom excitation probability&quot;</span><span class="p">))</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../images/guide-dynamics-mc2.png"><img alt="../../images/guide-dynamics-mc2.png" src="../../images/guide-dynamics-mc2.png" style="width: 4in;" /></a>
+</div>
+<p>In addition to the initial state, one may reuse the Hamiltonian data when changing the number of trajectories <tt class="docutils literal"><span class="pre">ntraj</span></tt> or simulation times <tt class="docutils literal"><span class="pre">times</span></tt>.  The reusing of Hamiltonian data is also supported for time-dependent Hamiltonians.  See <a class="reference internal" href="dynamics-time.html#time"><em>Solving Problems with Time-dependent Hamiltonians</em></a> for further details.</p>
+</div>
+<div class="section" id="fortran-based-monte-carlo-solver">
+<h3>Fortran Based Monte Carlo Solver<a class="headerlink" href="#fortran-based-monte-carlo-solver" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to use the Fortran Monte Carlo solver, you must have the blas development libraries, and installed QuTiP using the flag: <tt class="docutils literal"><span class="pre">--with-f90mc</span></tt>.</p>
+</div>
+<p>In performing time-independent Monte Carlo simulations with QuTiP, systems with small Hilbert spaces suffer from poor performance as the ODE solver must exit the ODE solver at each time step and check for the state vector norm.  To correct this, QuTiP now includes an optional Fortran based Monte Carlo solver that has markedly enhanced performance for smaller systems.  Using the Fortran based solver is extremely simple; one just needs to replace <tt class="docutils literal"><span class="pre">mcsolve</span></tt> with <tt class="docutils literal"><span class="pre">mcsolve_f90</span></tt>.  For example, from our previous demonstation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve_f90</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In using the Fortran solver, there are a few limitations that must be kept in mind.  First, this solver only works for time-independent systems.  Second, you can not pass a list of trajectories to <tt class="docutils literal"><span class="pre">ntraj</span></tt>.</p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Jul 16, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
