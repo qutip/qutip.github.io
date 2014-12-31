@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>qutip.superop_reps &mdash; QuTiP 3.1.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.1.0 Documentation" href="../../index.html" />
+    <link rel="up" title="qutip" href="../qutip.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="http://qutip.org">qutip.org</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-mac-os-x-10-8">Installation on Mac OS X (10.8+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#optional-installation-options">Optional Installation Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-1-0-january-1-2015">Version 3.1.0 (January 1, 2015):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-0-1-aug-5-2014">Version 3.0.1 (Aug 5, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-0-0-july-17-2014">Version 3.0.0 (July 17, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for qutip.superop_reps</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
+<span class="c">#    All rights reserved.</span>
+<span class="c">#</span>
+<span class="c">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c">#    modification, are permitted provided that the following conditions are</span>
+<span class="c">#    met:</span>
+<span class="c">#</span>
+<span class="c">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c">#       this list of conditions and the following disclaimer.</span>
+<span class="c">#</span>
+<span class="c">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c">#</span>
+<span class="c">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c">#       from this software without specific prior written permission.</span>
+<span class="c">#</span>
+<span class="c">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c">###############################################################################</span>
+<span class="c">#</span>
+<span class="c"># This module was initially contributed by Ben Criger.</span>
+<span class="c">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module implements transformations between superoperator representations,</span>
+<span class="sd">including supermatrix, Kraus, Choi and Chi (process) matrix formalisms.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;super_to_choi&#39;</span><span class="p">,</span> <span class="s">&#39;choi_to_super&#39;</span><span class="p">,</span> <span class="s">&#39;choi_to_kraus&#39;</span><span class="p">,</span> <span class="s">&#39;kraus_to_choi&#39;</span><span class="p">,</span>
+           <span class="s">&#39;kraus_to_super&#39;</span><span class="p">,</span> <span class="s">&#39;choi_to_chi&#39;</span><span class="p">,</span> <span class="s">&#39;chi_to_choi&#39;</span><span class="p">,</span> <span class="s">&#39;to_choi&#39;</span><span class="p">,</span>
+           <span class="s">&#39;to_chi&#39;</span><span class="p">,</span> <span class="s">&#39;to_super&#39;</span><span class="p">,</span> <span class="s">&#39;to_kraus&#39;</span><span class="p">]</span>
+
+<span class="c"># Python Standard Library</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">starmap</span><span class="p">,</span> <span class="n">product</span>
+
+<span class="c"># NumPy/SciPy</span>
+<span class="kn">from</span> <span class="nn">numpy.core.multiarray</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">zeros</span>
+<span class="kn">from</span> <span class="nn">numpy.core.shape_base</span> <span class="kn">import</span> <span class="n">hstack</span>
+<span class="kn">from</span> <span class="nn">numpy.matrixlib.defmatrix</span> <span class="kn">import</span> <span class="n">matrix</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">eig</span>
+
+<span class="c"># Other QuTiP functions and classes</span>
+<span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="kn">import</span> <span class="n">vec2mat</span><span class="p">,</span> <span class="n">spre</span><span class="p">,</span> <span class="n">spost</span><span class="p">,</span> <span class="n">operator_to_vector</span>
+<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">identity</span><span class="p">,</span> <span class="n">sigmax</span><span class="p">,</span> <span class="n">sigmay</span><span class="p">,</span> <span class="n">sigmaz</span>
+<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
+<span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
+
+
+<span class="c"># SPECIFIC SUPEROPERATORS -----------------------------------------------------</span>
+
+<span class="k">def</span> <span class="nf">_dep_super</span><span class="p">(</span><span class="n">pe</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the superoperator corresponding to qubit depolarization for a</span>
+<span class="sd">    given parameter pe.</span>
+
+<span class="sd">    TODO: if this is going into production (hopefully it isn&#39;t) then check</span>
+<span class="sd">    CPTP, expand to arbitrary dimensional systems, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">[[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]]],</span>
+                <span class="n">inpt</span><span class="o">=</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">]]))</span>
+
+
+<span class="k">def</span> <span class="nf">_dep_choi</span><span class="p">(</span><span class="n">pe</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the choi matrix corresponding to qubit depolarization for a</span>
+<span class="sd">    given parameter pe.</span>
+
+<span class="sd">    TODO: if this is going into production (hopefully it isn&#39;t) then check</span>
+<span class="sd">    CPTP, expand to arbitrary dimensional systems, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">[[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]]],</span>
+                <span class="n">inpt</span><span class="o">=</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">pe</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">]]),</span>
+                <span class="n">superrep</span><span class="o">=</span><span class="s">&#39;choi&#39;</span><span class="p">)</span>
+
+
+<span class="c"># CHANGE OF BASIS FUNCTIONS ---------------------------------------------------</span>
+<span class="c"># These functions find change of basis matrices, and are useful in converting</span>
+<span class="c"># between (for instance) Choi and chi matrices. At some point, these should</span>
+<span class="c"># probably be moved out to another module.</span>
+
+<span class="n">_SINGLE_QUBIT_PAULI_BASIS</span> <span class="o">=</span> <span class="p">(</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">(),</span> <span class="n">sigmaz</span><span class="p">())</span>
+
+
+<span class="k">def</span> <span class="nf">_pauli_basis</span><span class="p">(</span><span class="n">nq</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="c"># NOTE: This is slow as can be.</span>
+    <span class="c"># TODO: Make this sparse. CSR format was causing problems for the [idx, :]</span>
+    <span class="c">#       slicing below.</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">4</span> <span class="o">**</span> <span class="n">nq</span><span class="p">,</span> <span class="mi">4</span> <span class="o">**</span> <span class="n">nq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">nq</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">starmap</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span>
+                                     <span class="n">product</span><span class="p">(</span><span class="n">_SINGLE_QUBIT_PAULI_BASIS</span><span class="p">,</span>
+                                             <span class="n">repeat</span><span class="o">=</span><span class="n">nq</span><span class="p">))):</span>
+        <span class="n">B</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
+
+
+<span class="c"># PRIVATE CONVERSION FUNCTIONS ------------------------------------------------</span>
+<span class="c"># These functions handle the main work of converting between representations,</span>
+<span class="c"># and are exposed below by other functions that add postconditions about types.</span>
+<span class="c">#</span>
+<span class="c"># TODO: handle type=&#39;kraus&#39; as a three-index Qobj, rather than as a list?</span>
+
+<span class="k">def</span> <span class="nf">_super_tofrom_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    We exploit that the basis transformation between Choi and supermatrix</span>
+<span class="sd">    representations squares to the identity, so that if we munge Qobj.type,</span>
+<span class="sd">    we can use the same function.</span>
+
+<span class="sd">    Since this function doesn&#39;t respect :attr:`Qobj.type`, we mark it as</span>
+<span class="sd">    private; only those functions which wrap this in a way so as to preserve</span>
+<span class="sd">    type should be called externally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="n">sqrt_shape</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">inpt</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">sqrt_shape</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span>
+                <span class="n">transpose</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">super_to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="c"># TODO: deprecate and make private in favor of to_choi,</span>
+    <span class="c"># which looks at Qobj.type to determine the right conversion function.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a superoperator to a Choi matrix</span>
+<span class="sd">    TODO: Sanitize input, incorporate as method on Qobj if type==&#39;super&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q_oper</span> <span class="o">=</span> <span class="n">_super_tofrom_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+    <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s">&#39;choi&#39;</span>
+    <span class="k">return</span> <span class="n">q_oper</span>
+
+
+<span class="k">def</span> <span class="nf">choi_to_super</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="c"># TODO: deprecate and make private in favor of to_super,</span>
+    <span class="c"># which looks at Qobj.type to determine the right conversion function.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a Choi matrix to a superoperator</span>
+<span class="sd">    TODO: Sanitize input, Abstract-ify application of channels to states</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q_oper</span> <span class="o">=</span> <span class="n">super_to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+    <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s">&#39;super&#39;</span>
+    <span class="k">return</span> <span class="n">q_oper</span>
+
+
+<span class="k">def</span> <span class="nf">choi_to_kraus</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a Choi matrix and returns a list of Kraus operators.</span>
+<span class="sd">    TODO: Create a new class structure for quantum channels, perhaps as a</span>
+<span class="sd">    strict sub-class of Qobj.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+    <span class="n">vecs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vecs</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">inpt</span><span class="o">=</span><span class="n">x</span><span class="p">),</span>
+                    <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">vec2mat</span><span class="p">(</span><span class="n">vecs</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">))]))</span>
+
+
+<span class="k">def</span> <span class="nf">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a list of Kraus operators and returns the Choi matrix for the channel</span>
+<span class="sd">    represented by the Kraus operators in `kraus_list`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kraus_mat_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">matrix</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">()),</span> <span class="n">kraus_list</span><span class="p">))</span>
+    <span class="n">op_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kraus_mat_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">op_rng</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">op_len</span><span class="p">)</span>
+    <span class="n">choi_blocks</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="nb">sum</span><span class="p">([</span><span class="n">op</span><span class="p">[:,</span> <span class="n">c_ix</span><span class="p">]</span> <span class="o">*</span> <span class="n">array</span><span class="p">([</span><span class="n">op</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="n">r_ix</span><span class="p">,</span> <span class="p">:]])</span>
+                               <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">kraus_mat_list</span><span class="p">])</span>
+                          <span class="k">for</span> <span class="n">r_ix</span> <span class="ow">in</span> <span class="n">op_rng</span><span class="p">]</span>
+                         <span class="k">for</span> <span class="n">c_ix</span> <span class="ow">in</span> <span class="n">op_rng</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">inpt</span><span class="o">=</span><span class="n">hstack</span><span class="p">(</span><span class="n">hstack</span><span class="p">(</span><span class="n">choi_blocks</span><span class="p">)),</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">kraus_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">kraus_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;super&#39;</span><span class="p">,</span>
+                <span class="n">superrep</span><span class="o">=</span><span class="s">&#39;choi&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">kraus_to_super</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a list of Kraus operators and returns a super operator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">choi_to_super</span><span class="p">(</span><span class="n">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">choi_to_chi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a Choi matrix to a Chi matrix in the Pauli basis.</span>
+
+<span class="sd">    NOTE: this is only supported for qubits right now. Need to extend to</span>
+<span class="sd">    Heisenberg-Weyl for other subsystem dimensions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">_pauli_basis</span><span class="p">(</span><span class="n">nq</span><span class="p">)</span>
+    <span class="n">B</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s">&#39;choi&#39;</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">B</span> <span class="o">*</span> <span class="n">q_oper</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">superrep</span><span class="o">=</span><span class="s">&#39;chi&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">chi_to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a Choi matrix to a Chi matrix in the Pauli basis.</span>
+
+<span class="sd">    NOTE: this is only supported for qubits right now. Need to extend to</span>
+<span class="sd">    Heisenberg-Weyl for other subsystem dimensions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">_pauli_basis</span><span class="p">(</span><span class="n">nq</span><span class="p">)</span>
+
+    <span class="c"># The Chi matrix has tr(chi) == d², so we need to divide out</span>
+    <span class="c"># by that to get back to the Choi form.</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">((</span><span class="n">B</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">q_oper</span> <span class="o">*</span> <span class="n">B</span><span class="p">)</span> <span class="o">/</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">superrep</span><span class="o">=</span><span class="s">&#39;choi&#39;</span><span class="p">)</span>
+
+
+<span class="c"># PUBLIC CONVERSION FUNCTIONS -------------------------------------------------</span>
+<span class="c"># These functions handle superoperator conversions in a way that preserves the</span>
+<span class="c"># correctness of Qobj.type, and in a way that automatically branches based on</span>
+<span class="c"># the input Qobj.type.</span>
+
+<div class="viewcode-block" id="to_choi"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superop_reps.to_choi">[docs]</a><span class="k">def</span> <span class="nf">to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a Qobj representing a quantum map to the Choi representation,</span>
+<span class="sd">    such that the trace of the returned operator is equal to the dimension</span>
+<span class="sd">    of the system.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q_oper : Qobj</span>
+<span class="sd">        Superoperator to be converted to Choi representation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    choi : Qobj</span>
+<span class="sd">        A quantum object representing the same map as ``q_oper``, such that</span>
+<span class="sd">        ``choi.superrep == &quot;choi&quot;``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError: if the given quantum object is not a map, or cannot be converted</span>
+<span class="sd">        to Choi representation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;super&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;choi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">q_oper</span>
+        <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;super&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">super_to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;chi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">chi_to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;oper&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">super_to_choi</span><span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s">&quot;Conversion of Qobj with type = {0.type} &quot;</span>
+            <span class="s">&quot;and superrep = {0.choi} to Choi not supported.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="p">)</span>
+
+</div>
+<span class="k">def</span> <span class="nf">to_chi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a Qobj representing a quantum map to a representation as a chi</span>
+<span class="sd">    (process) matrix in the Pauli basis, such that the trace of the returned</span>
+<span class="sd">    operator is equal to the dimension of the system.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q_oper : Qobj</span>
+<span class="sd">        Superoperator to be converted to Choi representation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    choi : Qobj</span>
+<span class="sd">        A quantum object representing the same map as ``q_oper``, such that</span>
+<span class="sd">        ``choi.superrep == &quot;choi&quot;``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError: if the given quantum object is not a map, or cannot be converted</span>
+<span class="sd">        to Choi representation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;super&#39;</span><span class="p">:</span>
+        <span class="c"># Case 1: Already done.</span>
+        <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;chi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">q_oper</span>
+        <span class="c"># Case 2: Can directly convert.</span>
+        <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;choi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">choi_to_chi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="c"># Case 3: Need to go through Choi.</span>
+        <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;super&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">to_chi</span><span class="p">(</span><span class="n">to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;oper&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">super_to_choi</span><span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s">&quot;Conversion of Qobj with type = {0.type} &quot;</span>
+            <span class="s">&quot;and superrep = {0.choi} to Choi not supported.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="to_super"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superop_reps.to_super">[docs]</a><span class="k">def</span> <span class="nf">to_super</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a Qobj representing a quantum map to the supermatrix (Liouville)</span>
+<span class="sd">    representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q_oper : Qobj</span>
+<span class="sd">        Superoperator to be converted to supermatrix representation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    superop : Qobj</span>
+<span class="sd">        A quantum object representing the same map as ``q_oper``, such that</span>
+<span class="sd">        ``superop.superrep == &quot;super&quot;``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError: if the given quantum object is not a map, or cannot be converted</span>
+<span class="sd">        to supermatrix representation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;super&#39;</span><span class="p">:</span>
+        <span class="c"># Case 1: Already done.</span>
+        <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&quot;super&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">q_oper</span>
+        <span class="c"># Case 2: Can directly convert.</span>
+        <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;choi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">choi_to_super</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="c"># Case 3: Need to go through Choi.</span>
+        <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;chi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">to_super</span><span class="p">(</span><span class="n">to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">))</span>
+        <span class="c"># Case 4: Something went wrong.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;Unrecognized superrep &#39;{}&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;oper&#39;</span><span class="p">:</span>  <span class="c"># Assume unitary</span>
+        <span class="k">return</span> <span class="n">spre</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s">&quot;Conversion of Qobj with type = {0.type} &quot;</span>
+            <span class="s">&quot;and superrep = {0.superrep} to supermatrix not &quot;</span>
+            <span class="s">&quot;supported.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="to_kraus"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superop_reps.to_kraus">[docs]</a><span class="k">def</span> <span class="nf">to_kraus</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a Qobj representing a quantum map to a list of quantum objects,</span>
+<span class="sd">    each representing an operator in the Kraus decomposition of the given map.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q_oper : Qobj</span>
+<span class="sd">        Superoperator to be converted to Kraus representation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    kraus_ops : list of Qobj</span>
+<span class="sd">        A list of quantum objects, each representing a Kraus operator in the</span>
+<span class="sd">        decomposition of ``q_oper``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError: if the given quantum object is not a map, or cannot be</span>
+<span class="sd">        decomposed into Kraus operators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;super&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;super&quot;</span><span class="p">,</span> <span class="s">&quot;chi&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">to_kraus</span><span class="p">(</span><span class="n">to_choi</span><span class="p">(</span><span class="n">q_oper</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s">&#39;choi&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">choi_to_kraus</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;oper&#39;</span><span class="p">:</span>  <span class="c"># Assume unitary</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">q_oper</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s">&quot;Conversion of Qobj with type = {0.type} &quot;</span>
+            <span class="s">&quot;and superrep = {0.superrep} to Kraus decomposition not &quot;</span>
+            <span class="s">&quot;supported.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Dec 31, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

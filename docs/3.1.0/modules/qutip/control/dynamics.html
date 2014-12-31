@@ -1,0 +1,1045 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>qutip.control.dynamics &mdash; QuTiP 3.1.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../../../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '3.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.1.0 Documentation" href="../../../index.html" />
+    <link rel="up" title="qutip" href="../../qutip.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="http://qutip.org">qutip.org</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-on-mac-os-x-10-8">Installation on Mac OS X (10.8+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#optional-installation-options">Optional Installation Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-3-1-0-january-1-2015">Version 3.1.0 (January 1, 2015):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-3-0-1-aug-5-2014">Version 3.0.1 (Aug 5, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-3-0-0-july-17-2014">Version 3.0.0 (July 17, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for qutip.control.dynamics</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (c) 2014 and later, Alexander J G Pitchford</span>
+<span class="c">#    All rights reserved.</span>
+<span class="c">#</span>
+<span class="c">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c">#    modification, are permitted provided that the following conditions are</span>
+<span class="c">#    met:</span>
+<span class="c">#</span>
+<span class="c">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c">#       this list of conditions and the following disclaimer.</span>
+<span class="c">#</span>
+<span class="c">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c">#</span>
+<span class="c">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c">#       from this software without specific prior written permission.</span>
+<span class="c">#</span>
+<span class="c">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c">###############################################################################</span>
+
+<span class="c"># @author: Alexander Pitchford</span>
+<span class="c"># @email1: agp1@aber.ac.uk</span>
+<span class="c"># @email2: alex.pitchford@gmail.com</span>
+<span class="c"># @organization: Aberystwyth University</span>
+<span class="c"># @supervisor: Daniel Burgarth</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes that define the dynamics of the (quantum) system and target evolution</span>
+<span class="sd">to be optimised.</span>
+<span class="sd">The contols are also defined here, i.e. the dynamics generators (Hamiltonians,</span>
+<span class="sd">Limbladians etc). The dynamics for the time slices are calculated here, along</span>
+<span class="sd">with the evolution as determined by the control amplitudes.</span>
+
+<span class="sd">See the subclass descriptions and choose the appropriate class for the</span>
+<span class="sd">application. The choice depends on the type of matrix used to define</span>
+<span class="sd">the dynamics.</span>
+
+<span class="sd">These class implement functions for getting the dynamics generators for</span>
+<span class="sd">the combined (drift + ctrls) dynamics with the approriate operator applied</span>
+
+<span class="sd">Note the methods in these classes were inspired by:</span>
+<span class="sd">DYNAMO - Dynamic Framework for Quantum Optimal Control</span>
+<span class="sd">See Machnes et.al., arXiv.1011.4874</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
+<span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">string_types</span>
+<span class="c"># QuTiP logging</span>
+<span class="kn">import</span> <span class="nn">qutip.logging</span> <span class="kn">as</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
+<span class="c"># QuTiP control modules</span>
+<span class="kn">import</span> <span class="nn">qutip.control.errors</span> <span class="kn">as</span> <span class="nn">errors</span>
+<span class="kn">import</span> <span class="nn">qutip.control.tslotcomp</span> <span class="kn">as</span> <span class="nn">tslotcomp</span>
+<span class="kn">import</span> <span class="nn">qutip.control.fidcomp</span> <span class="kn">as</span> <span class="nn">fidcomp</span>
+<span class="kn">import</span> <span class="nn">qutip.control.propcomp</span> <span class="kn">as</span> <span class="nn">propcomp</span>
+<span class="kn">import</span> <span class="nn">qutip.control.symplectic</span> <span class="kn">as</span> <span class="nn">sympl</span>
+
+
+<div class="viewcode-block" id="Dynamics"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics">[docs]</a><span class="k">class</span> <span class="nc">Dynamics</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a base class only. See subclass descriptions and choose an</span>
+<span class="sd">    appropriate one for the application.</span>
+
+<span class="sd">    Note that initialize_controls must be called before any of the methods</span>
+<span class="sd">    can be used.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    log_level : integer</span>
+<span class="sd">        level of messaging output from the logger.</span>
+<span class="sd">        Options are attributes of qutip.logging,</span>
+<span class="sd">        in decreasing levels of messaging, are:</span>
+<span class="sd">        DEBUG_INTENSE, DEBUG_VERBOSE, DEBUG, INFO, WARN, ERROR, CRITICAL</span>
+<span class="sd">        Anything WARN or above is effectively &#39;quiet&#39; execution,</span>
+<span class="sd">        assuming everything runs as expected.</span>
+<span class="sd">        The default NOTSET implies that the level will be taken from</span>
+<span class="sd">        the QuTiP settings file, which by default is WARN</span>
+<span class="sd">        Note value should be set using set_log_level</span>
+
+<span class="sd">    stats : Stats</span>
+<span class="sd">        Attributes of which give performance stats for the optimisation</span>
+<span class="sd">        set to None to reduce overhead of calculating stats.</span>
+<span class="sd">        Note it is (usually) shared with the Optimizer object</span>
+
+<span class="sd">    tslot_computer : TimeslotComputer (subclass instance)</span>
+<span class="sd">        Used to manage when the timeslot dynamics</span>
+<span class="sd">        generators, propagators, gradients etc are updated</span>
+
+<span class="sd">    prop_computer : PropagatorComputer (subclass instance)</span>
+<span class="sd">        Used to compute the propagators and their gradients</span>
+
+<span class="sd">    fid_computer : FidelityComputer (subclass instance)</span>
+<span class="sd">        Used to computer the fidelity error and the fidelity error</span>
+<span class="sd">        gradient.</span>
+
+<span class="sd">    num_tslots : integer</span>
+<span class="sd">        Number of timeslots, aka timeslices</span>
+
+<span class="sd">    num_ctrls : integer</span>
+<span class="sd">        Number of controls.</span>
+<span class="sd">        Note this is set when get_num_ctrls is called based on the</span>
+<span class="sd">        length of ctrl_dyn_gen</span>
+
+<span class="sd">    evo_time : float</span>
+<span class="sd">        Total time for the evolution</span>
+
+<span class="sd">    tau : array[num_tslots] of float</span>
+<span class="sd">        Duration of each timeslot</span>
+<span class="sd">        Note that if this is set before initialize_controls is called</span>
+<span class="sd">        then num_tslots and evo_time are calculated from tau, otherwise</span>
+<span class="sd">        tau is generated from num_tslots and evo_time, that is</span>
+<span class="sd">        equal size time slices</span>
+
+<span class="sd">    time : array[num_tslots+1] of float</span>
+<span class="sd">        Cumulative time for the evolution, that is the time at the start</span>
+<span class="sd">        of each time slice</span>
+
+<span class="sd">    drift_dyn_gen : Qobj</span>
+<span class="sd">        Drift or system dynamics generator</span>
+<span class="sd">        Matrix defining the underlying dynamics of the system</span>
+
+<span class="sd">    ctrl_dyn_gen : List of Qobj</span>
+<span class="sd">        Control dynamics generator: ctrl_dyn_gen ()</span>
+<span class="sd">        List of matrices defining the control dynamics</span>
+
+<span class="sd">    initial : Qobj</span>
+<span class="sd">        Starting state / gate</span>
+<span class="sd">        The matrix giving the initial state / gate, i.e. at time 0</span>
+<span class="sd">        Typically the identity</span>
+
+<span class="sd">    target : Qobj</span>
+<span class="sd">        Target state / gate:</span>
+<span class="sd">        The matrix giving the desired state / gate for the evolution</span>
+
+<span class="sd">    ctrl_amps : array[num_tslots, num_ctrls] of float</span>
+<span class="sd">        Control amplitudes</span>
+<span class="sd">        The amplitude (scale factor) for each control in each timeslot</span>
+
+<span class="sd">    initial_ctrl_scaling : float</span>
+<span class="sd">        Scale factor applied to be applied the control amplitudes</span>
+<span class="sd">        when they are initialised</span>
+<span class="sd">        This is used by the PulseGens rather than in any fucntions in</span>
+<span class="sd">        this class</span>
+
+<span class="sd">    self.initial_ctrl_offset = 0.0</span>
+<span class="sd">        Linear offset applied to be applied the control amplitudes</span>
+<span class="sd">        when they are initialised</span>
+<span class="sd">        This is used by the PulseGens rather than in any fucntions in</span>
+<span class="sd">        this class</span>
+
+<span class="sd">    dyn_gen : List of Qobj</span>
+<span class="sd">        Dynamics generators</span>
+<span class="sd">        the combined drift and control dynamics generators</span>
+<span class="sd">        for each timeslot</span>
+
+<span class="sd">    prop : list of Qobj</span>
+<span class="sd">        Propagators - used to calculate time evolution from one</span>
+<span class="sd">        timeslot to the next</span>
+
+<span class="sd">    prop_grad : array[num_tslots, num_ctrls] of Qobj</span>
+<span class="sd">        Propagator gradient (exact gradients only)</span>
+<span class="sd">        Array  of matrices that give the gradient</span>
+<span class="sd">        with respect to the control amplitudes in a timeslot</span>
+<span class="sd">        Note this attribute is only created when the selected</span>
+<span class="sd">        PropagatorComputer is an exact gradient type.</span>
+
+<span class="sd">    evo_init2t : List of Qobj</span>
+<span class="sd">        Forward evolution (or propagation)</span>
+<span class="sd">        the time evolution operator from the initial state / gate to the</span>
+<span class="sd">        specified timeslot as generated by the dyn_gen</span>
+
+<span class="sd">    evo_t2end : List of Qobj</span>
+<span class="sd">        Onward evolution (or propagation)</span>
+<span class="sd">        the time evolution operator from the specified timeslot to</span>
+<span class="sd">        end of the evolution time as generated by the dyn_gen</span>
+
+<span class="sd">    evo_t2targ : List of Qobj</span>
+<span class="sd">        &#39;Backward&#39; List of Qobj propagation</span>
+<span class="sd">        the overlap of the onward propagation with the inverse of the</span>
+<span class="sd">        target.</span>
+<span class="sd">        Note this is only used (so far) by the unitary dynamics fidelity</span>
+
+<span class="sd">    evo_current : Boolean</span>
+<span class="sd">        Used to flag that the dynamics used to calculate the evolution</span>
+<span class="sd">        operators is current. It is set to False when the amplitudes</span>
+<span class="sd">        change</span>
+
+<span class="sd">    decomp_curr : List of boolean</span>
+<span class="sd">        Indicates whether the diagonalisation for the timeslot is fresh,</span>
+<span class="sd">        it is set to false when the dyn_gen for the timeslot is changed</span>
+<span class="sd">        Only used when the PropagatorComputer uses diagonalisation</span>
+
+<span class="sd">    dyn_gen_eigenvectors : List of array[drift_dyn_gen.shape]</span>
+<span class="sd">        Eigenvectors of the dynamics generators</span>
+<span class="sd">        Used for calculating the propagators and their gradients</span>
+<span class="sd">        Only used when the PropagatorComputer uses diagonalisation</span>
+
+<span class="sd">    prop_eigen : List of array[drift_dyn_gen.shape]</span>
+<span class="sd">        Propagator in diagonalised basis of the combined dynamics generator</span>
+<span class="sd">        Used for calculating the propagators and their gradients</span>
+<span class="sd">        Only used when the PropagatorComputer uses diagonalisation</span>
+
+<span class="sd">    dyn_gen_factormatrix : List of array[drift_dyn_gen.shape]</span>
+<span class="sd">        Matrix of scaling factors calculated duing the decomposition</span>
+<span class="sd">        Used for calculating the propagator gradients</span>
+<span class="sd">        Only used when the PropagatorComputer uses diagonalisation</span>
+
+<span class="sd">    fact_mat_round_prec : float</span>
+<span class="sd">        Rounding precision used when calculating the factor matrix</span>
+<span class="sd">        to determine if two eigenvalues are equivalent</span>
+<span class="sd">        Only used when the PropagatorComputer uses diagonalisation</span>
+
+<span class="sd">    def_amps_fname : string</span>
+<span class="sd">        Default name for the output used when save_amps is called</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimconfig</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">optimconfig</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Main functional attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_amps</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_ctrl_scaling</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_ctrl_offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_grad</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_init2t</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_t2end</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_t2targ</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c"># Atrributes used in diagonalisation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decomp_curr</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_eigen</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_eigenvectors</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_factormatrix</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fact_mat_round_prec</span> <span class="o">=</span> <span class="mf">1e-10</span>
+
+        <span class="c"># Debug and information attribs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_text</span> <span class="o">=</span> <span class="s">&#39;DYN_BASE&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">def_amps_fname</span> <span class="o">=</span> <span class="s">&quot;ctrl_amps.txt&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_log_level</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">log_level</span><span class="p">)</span>
+        <span class="c"># Internal flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_mapped</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ctrls_initialized</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="c"># Create the computing objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_computers</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Dynamics.set_log_level"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.set_log_level">[docs]</a>    <span class="k">def</span> <span class="nf">set_log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lvl</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the log_level attribute and set the level of the logger</span>
+<span class="sd">        that is call logger.setLevel(lvl)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="n">lvl</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">lvl</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_create_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the default timeslot, fidelity and propagator computers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># The time slot computer. By default it is set to UpdateAll</span>
+        <span class="c"># can be set to DynUpdate in the configuration</span>
+        <span class="c"># (see class file for details)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">amp_update_mode</span> <span class="o">==</span> <span class="s">&#39;DYNAMIC&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span> <span class="o">=</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TSlotCompDynUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span> <span class="o">=</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TSlotCompUpdateAll</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompFrechet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span> <span class="o">=</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_amps</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_current</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Dynamics.init_time_slots"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.init_time_slots">[docs]</a>    <span class="k">def</span> <span class="nf">init_time_slots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the timeslot duration array &#39;tau&#39; based on the evo_time</span>
+<span class="sd">        and num_tslots attributes, unless the tau attribute is already set</span>
+<span class="sd">        in which case this step in ignored</span>
+<span class="sd">        Generate the cumulative time array &#39;time&#39; based on the tau values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># set the time intervals to be equal timeslices of the total if</span>
+        <span class="c"># the have not been set already (as part of user config)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">)</span> <span class="o">*</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">evo_time</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="c"># set the cumulative time by summing the time intervals</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+</div>
+    <span class="k">def</span> <span class="nf">_init_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the container lists / arrays for the:</span>
+<span class="sd">        dynamics generations, propagators, and evolutions etc</span>
+<span class="sd">        Set the time slices and cumulative time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Create containers for control Hamiltonian etc</span>
+        <span class="n">shp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c"># set H to be just empty float arrays with the shape of H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">)]</span>
+        <span class="c"># the exponetiation of H. Just empty float arrays with the shape of H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+                     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="o">.</span><span class="n">grad_exact</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prop_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_ctrls</span><span class="p">()],</span>
+                                      <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+        <span class="c"># Time evolution operator (forward propagation)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_init2t</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+                           <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_init2t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">uses_evo_t2end</span><span class="p">:</span>
+            <span class="c"># Time evolution operator (onward propagation)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evo_t2end</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+                              <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">uses_evo_t2targ</span><span class="p">:</span>
+            <span class="c"># Onward propagation overlap with inverse target</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evo_t2targ</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+                               <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evo_t2targ</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_owd_evo_target</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_decomp_lists</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_create_decomp_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create lists that will hold the eigen decomposition</span>
+<span class="sd">        used in calculating propagators and gradients</span>
+<span class="sd">        Note: used with PropCompDiag propagator calcs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">n_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decomp_curr</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_eigen</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_eigenvectors</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_factormatrix</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">_check_test_out_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">any_test_files</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="o">.</span><span class="n">check_create_test_out_dir</span><span class="p">():</span>
+                <span class="n">cfg</span><span class="o">.</span><span class="n">reset_test_out_files</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Cannot output test files when stats&quot;</span>
+                                <span class="s">&quot; attribute is not set.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_amps</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_prop</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_prop_grad</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_evo</span> <span class="o">=</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="Dynamics.initialize_controls"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.initialize_controls">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amps</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the initial control amplitudes and time slices</span>
+<span class="sd">        Note this must be called after the configuration is complete</span>
+<span class="sd">        before any dynamics can be calculated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_test_out_files</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropagatorComputer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span>
+                <span class="s">&quot;No prop_computer (propagator computer) &quot;</span>
+                <span class="s">&quot;set. A default should be assigned by the Dynamics subclass&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span><span class="p">,</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TimeslotComputer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span>
+                <span class="s">&quot;No tslot_computer (Timeslot computer)&quot;</span>
+                <span class="s">&quot; set. A default should be assigned by the Dynamics class&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="p">,</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FideliyComputer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span>
+                <span class="s">&quot;No fid_computer (Fidelity computer)&quot;</span>
+                <span class="s">&quot; set. A default should be assigned by the Dynamics subclass&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_amps</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c"># Note this call is made just to initialise the num_ctrls attrib</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_num_ctrls</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">init_tslots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_time_slots</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_lists</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span><span class="o">.</span><span class="n">init_comp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">init_comp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ctrls_initialized</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_ctrl_amps</span><span class="p">(</span><span class="n">amps</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">check_ctrls_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrls_initialized</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span>
+                <span class="s">&quot;Controls not initialised. &quot;</span>
+                <span class="s">&quot;Ensure Dynamics.initialize_controls has been &quot;</span>
+                <span class="s">&quot;executed with the initial control amplitudes.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_amp_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Dynamics.save_amps"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.save_amps">[docs]</a>    <span class="k">def</span> <span class="nf">save_amps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">amps</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a file with the current control amplitudes in each timeslot</span>
+<span class="sd">        The first column in the file will be the start time of the slot</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name : string</span>
+<span class="sd">            Name of the file</span>
+<span class="sd">            If None given the def_amps_fname attribuite will be used</span>
+
+<span class="sd">        times : List type (or string)</span>
+<span class="sd">            List / array of the start times for each slot</span>
+<span class="sd">            If None given this will be retrieved through get_amp_times()</span>
+<span class="sd">            If &#39;exclude&#39; then times will not be saved in the file, just</span>
+<span class="sd">            the amplitudes</span>
+
+<span class="sd">        amps : Array[num_tslots, num_ctrls]</span>
+<span class="sd">            Amplitudes to be saved</span>
+<span class="sd">            If None given the ctrl_amps attribute will be used</span>
+
+<span class="sd">        verbose : Boolean</span>
+<span class="sd">            If True then an info message will be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_ctrls_initialized</span><span class="p">()</span>
+
+        <span class="n">inctimes</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">def_amps_fname</span>
+        <span class="k">if</span> <span class="n">amps</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">amps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_amps</span>
+        <span class="k">if</span> <span class="n">times</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_amp_times</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">times</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;exclude&#39;</span><span class="p">:</span>
+                    <span class="n">inctimes</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Unknown option for times &#39;{}&#39; &quot;</span>
+                                <span class="s">&quot;when saving amplitudes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+                    <span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_amp_times</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inctimes</span><span class="p">:</span>
+                <span class="n">shp</span> <span class="o">=</span> <span class="n">amps</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">shp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">times</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">amps</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">amps</span>
+
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%14.6g</span><span class="s">&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Amplitudes saved to file: &quot;</span> <span class="o">+</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to save amplitudes due to underling &quot;</span>
+                         <span class="s">&quot;error: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Dynamics.update_ctrl_amps"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.update_ctrl_amps">[docs]</a>    <span class="k">def</span> <span class="nf">update_ctrl_amps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_amps</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if any amplitudes have changed. If so, then mark the</span>
+<span class="sd">        timeslots as needing recalculation</span>
+<span class="sd">        The actual work is completed by the compare_amps method of the</span>
+<span class="sd">        timeslot computer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG_INTENSE</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG_INTENSE</span><span class="p">,</span> <span class="s">&quot;Updating amplitudes...</span><span class="se">\n</span><span class="s">&quot;</span>
+                       <span class="s">&quot;Current control amplitudes:</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_amps</span><span class="p">)</span> <span class="o">+</span>
+                       <span class="s">&quot;</span><span class="se">\n</span><span class="s">(potenially) new amplitudes:</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_amps</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span><span class="o">.</span><span class="n">compare_amps</span><span class="p">(</span><span class="n">new_amps</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_amps</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="s">&quot;amps_{}_{}_{}_call{}{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">id_text</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="o">.</span><span class="n">id_text</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">id_text</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">num_ctrl_amp_updates</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_f_ext</span><span class="p">)</span>
+
+                <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">test_out_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_amps</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Dynamics.flag_system_changed"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.flag_system_changed">[docs]</a>    <span class="k">def</span> <span class="nf">flag_system_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flag eveolution, fidelity and gradients as needing recalculation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evo_current</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">flag_system_changed</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Dynamics.get_drift_dim"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_drift_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_drift_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the size of the matrix that defines the drift dynamics</span>
+<span class="sd">        that is assuming the drift is NxN, then this returns N</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Cannot get drift dimension, &quot;</span>
+                            <span class="s">&quot;as drift not set (correctly).&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Dynamics.get_num_ctrls"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_num_ctrls">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_ctrls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculate the of controls from the length of the control list</span>
+<span class="sd">        sets the num_ctrls property, which can be used alternatively</span>
+<span class="sd">        subsequently</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_ctrls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_ctrls</span>
+</div>
+<div class="viewcode-block" id="Dynamics.get_owd_evo_target"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_owd_evo_target">[docs]</a>    <span class="k">def</span> <span class="nf">get_owd_evo_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the inverse of the target.</span>
+<span class="sd">        Used for calculating the &#39;backward&#39; evolution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">la</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Dynamics.combine_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.combine_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">combine_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the dynamics generator for a given timeslot</span>
+<span class="sd">        The is the combined Hamiltion for unitary systems</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_num_ctrls</span><span class="p">()):</span>
+            <span class="n">dg</span> <span class="o">=</span> <span class="n">dg</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_amps</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dg</span>
+</div>
+<div class="viewcode-block" id="Dynamics.get_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the combined dynamics generator for the timeslot</span>
+<span class="sd">        Not implemented in the base class. Choose a subclass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;Not implemented in the baseclass.&quot;</span>
+                                <span class="s">&quot; Choose a subclass&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Dynamics.get_ctrl_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_ctrl_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_ctrl_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the dynamics generator for the control</span>
+<span class="sd">        Not implemented in the base class. Choose a subclass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;Not implemented in the baseclass.&quot;</span>
+                                <span class="s">&quot; Choose a subclass&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Dynamics.compute_evolution"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.compute_evolution">[docs]</a>    <span class="k">def</span> <span class="nf">compute_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recalculate the time evolution operators</span>
+<span class="sd">        Dynamics generators (e.g. Hamiltonian) and</span>
+<span class="sd">        prop (propagators) are calculated as necessary</span>
+<span class="sd">        Actual work is completed by the recompute_evolution method</span>
+<span class="sd">        of the timeslot computer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Check if values are already current, otherwise calculate all values</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">evo_current</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG_VERBOSE</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG_VERBOSE</span><span class="p">,</span> <span class="s">&quot;Computing evolution&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span><span class="o">.</span><span class="n">recompute_evolution</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evo_current</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Dynamics.ensure_decomp_curr"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.ensure_decomp_curr">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_decomp_curr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks to see if the diagonalisation has been completed since</span>
+<span class="sd">        the last update of the dynamics generators</span>
+<span class="sd">        (after the amplitude update)</span>
+<span class="sd">        If not then the diagonlisation is completed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">decomp_curr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;Decomp lists have not been created&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">decomp_curr</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spectral_decomp</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Dynamics.spectral_decomp"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.spectral_decomp">[docs]</a>    <span class="k">def</span> <span class="nf">spectral_decomp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the diagonalization of the dynamics generator</span>
+<span class="sd">        generating lists of eigenvectors, propagators in the diagonalised</span>
+<span class="sd">        basis, and the &#39;factormatrix&#39; used in calculating the propagator</span>
+<span class="sd">        gradient</span>
+<span class="sd">        Not implemented in this base class, because the method is specific</span>
+<span class="sd">        to the matrix type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;Decomposition cannot be completed by &quot;</span>
+                                <span class="s">&quot;this class. Try a(nother) subclass&quot;</span><span class="p">)</span>
+
+</div></div>
+<span class="k">class</span> <span class="nc">DynamicsGenMat</span><span class="p">(</span><span class="n">Dynamics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This sub class can be used for any system where no additional</span>
+<span class="sd">    operator is applied to the dynamics generator before calculating</span>
+<span class="sd">    the propagator, e.g. classical dynamics, Limbladian</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Dynamics</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_text</span> <span class="o">=</span> <span class="s">&#39;GEN_MAT&#39;</span>
+
+    <span class="k">def</span> <span class="nf">get_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the combined dynamics generator for the timeslot</span>
+<span class="sd">        This base class method simply returns dyn_gen[k]</span>
+<span class="sd">        other subclass methods will include some factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_ctrl_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the dynamics generator for the control</span>
+<span class="sd">        This base class method simply returns ctrl_dyn_gen[j]</span>
+<span class="sd">        other subclass methods will include some factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="DynamicsUnitary"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsUnitary">[docs]</a><span class="k">class</span> <span class="nc">DynamicsUnitary</span><span class="p">(</span><span class="n">Dynamics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the subclass to use for systems with dynamics described by</span>
+<span class="sd">    unitary matrices. E.g. closed systems with Hermitian Hamiltonians</span>
+<span class="sd">    Note a matrix diagonalisation is used to compute the exponent</span>
+<span class="sd">    The eigen decomposition is also used to calculate the propagator gradient.</span>
+<span class="sd">    The method is taken from DYNAMO (see file header)</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    drift_ham : Qobj</span>
+<span class="sd">        This is the drift Hamiltonian for unitary dynamics</span>
+<span class="sd">        It is mapped to drift_dyn_gen during initialize_controls</span>
+
+<span class="sd">    ctrl_ham : List of Qobj</span>
+<span class="sd">        These are the control Hamiltonians for unitary dynamics</span>
+<span class="sd">        It is mapped to ctrl_dyn_gen during initialize_controls</span>
+
+<span class="sd">    H : List of Qobj</span>
+<span class="sd">        The combined drift and control Hamiltonians for each timeslot</span>
+<span class="sd">        These are the dynamics generators for unitary dynamics.</span>
+<span class="sd">        It is mapped to dyn_gen during initialize_controls</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Dynamics</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_text</span> <span class="o">=</span> <span class="s">&#39;UNIT&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drift_ham</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_ham</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_create_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the default timeslot, fidelity and propagator computers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># The time slot computer. By default it is set to _UpdateAll</span>
+        <span class="c"># can be set to _DynUpdate in the configuration</span>
+        <span class="c"># (see class file for details)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">amp_update_mode</span> <span class="o">==</span> <span class="s">&#39;DYNAMIC&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span> <span class="o">=</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TSlotCompDynUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span> <span class="o">=</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TSlotCompUpdateAll</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c"># set the default fidelity computer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span> <span class="o">=</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompUnitary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c"># set the default propagator computer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="c"># Either the _dyn_gen or _ham names can be used</span>
+        <span class="c"># This assumes that one or other has been set in the configuration</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_map_dyn_gen_to_ham</span><span class="p">()</span>
+        <span class="n">Dynamics</span><span class="o">.</span><span class="n">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="n">init_tslots</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen</span>
+
+    <span class="k">def</span> <span class="nf">_map_dyn_gen_to_ham</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_ham</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drift_ham</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_ham</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_ham</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_mapped</span> <span class="o">=</span> <span class="bp">True</span>
+
+<div class="viewcode-block" id="DynamicsUnitary.get_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsUnitary.get_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the combined dynamics generator for the timeslot</span>
+<span class="sd">        including the -i factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="DynamicsUnitary.get_ctrl_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsUnitary.get_ctrl_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_ctrl_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the dynamics generator for the control</span>
+<span class="sd">        including the -i factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+</div>
+    <span class="k">def</span> <span class="nf">get_num_ctrls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_mapped</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_map_dyn_gen_to_ham</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Dynamics</span><span class="o">.</span><span class="n">get_num_ctrls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_owd_evo_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+<div class="viewcode-block" id="DynamicsUnitary.spectral_decomp"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsUnitary.spectral_decomp">[docs]</a>    <span class="k">def</span> <span class="nf">spectral_decomp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the diagonalization of the dynamics generator</span>
+<span class="sd">        generating lists of eigenvectors, propagators in the diagonalised</span>
+<span class="sd">        basis, and the &#39;factormatrix&#39; used in calculating the propagator</span>
+<span class="sd">        gradient</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="c"># assuming H is an nxn matrix, find n</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c"># returns row vector of eigen values,</span>
+        <span class="c"># columns with the eigenvectors</span>
+        <span class="n">eig_val</span><span class="p">,</span> <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+
+        <span class="c"># Calculate the propagator in the diagonalised basis</span>
+        <span class="n">eig_val_tau</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="n">eig_val</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">prop_eig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">eig_val_tau</span><span class="p">)</span>
+
+        <span class="c"># Generate the factor matrix through the differences</span>
+        <span class="c"># between each of the eigenvectors and the exponentiations</span>
+        <span class="c"># create nxn matrix where each eigen val is repeated n times</span>
+        <span class="c"># down the columns</span>
+        <span class="n">o</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+        <span class="n">eig_val_cols</span> <span class="o">=</span> <span class="n">eig_val_tau</span><span class="o">*</span><span class="n">o</span>
+        <span class="c"># calculate all the differences by subtracting it from its transpose</span>
+        <span class="n">eig_val_diffs</span> <span class="o">=</span> <span class="n">eig_val_cols</span> <span class="o">-</span> <span class="n">eig_val_cols</span><span class="o">.</span><span class="n">T</span>
+        <span class="c"># repeat for the propagator</span>
+        <span class="n">prop_eig_cols</span> <span class="o">=</span> <span class="n">prop_eig</span><span class="o">*</span><span class="n">o</span>
+        <span class="n">prop_eig_diffs</span> <span class="o">=</span> <span class="n">prop_eig_cols</span> <span class="o">-</span> <span class="n">prop_eig_cols</span><span class="o">.</span><span class="n">T</span>
+        <span class="c"># the factor matrix is the elementwise quotient of the</span>
+        <span class="c"># differeneces between the exponentiated eigen vals and the</span>
+        <span class="c"># differences between the eigen vals</span>
+        <span class="c"># need to avoid division by zero that would arise due to denegerate</span>
+        <span class="c"># eigenvalues and the diagonals</span>
+        <span class="n">degen_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eig_val_diffs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">fact_mat_round_prec</span>
+        <span class="n">eig_val_diffs</span><span class="p">[</span><span class="n">degen_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">factors</span> <span class="o">=</span> <span class="n">prop_eig_diffs</span> <span class="o">/</span> <span class="n">eig_val_diffs</span>
+        <span class="c"># for degenerate eigenvalues the factor is just the exponent</span>
+        <span class="n">factors</span><span class="p">[</span><span class="n">degen_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_eig_cols</span><span class="p">[</span><span class="n">degen_mask</span><span class="p">]</span>
+
+        <span class="c"># Store eigenvals and eigenvectors for use by other functions, e.g.</span>
+        <span class="c"># gradient_exact</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decomp_curr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_eigen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_eig</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_eigenvectors</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">eig_vec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_factormatrix</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">factors</span>
+
+</div></div>
+<div class="viewcode-block" id="DynamicsSymplectic"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsSymplectic">[docs]</a><span class="k">class</span> <span class="nc">DynamicsSymplectic</span><span class="p">(</span><span class="n">Dynamics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Symplectic systems</span>
+<span class="sd">    This is the subclass to use for systems where the dynamics is described</span>
+<span class="sd">    by symplectic matrices, e.g. coupled oscillators, quantum optics</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    omega : array[drift_dyn_gen.shape]</span>
+<span class="sd">        matrix used in the calculation of propagators (time evolution)</span>
+<span class="sd">        with symplectic systems.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Dynamics</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_text</span> <span class="o">=</span> <span class="s">&#39;SYMPL&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">omega</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grad_exact</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">_create_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the default timeslot, fidelity and propagator computers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># The time slot computer. By default it is set to _UpdateAll</span>
+        <span class="c"># can be set to _DynUpdate in the configuration</span>
+        <span class="c"># (see class file for details)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">amp_update_mode</span> <span class="o">==</span> <span class="s">&#39;DYNAMIC&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span> <span class="o">=</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TSlotCompDynUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tslot_computer</span> <span class="o">=</span> <span class="n">tslotcomp</span><span class="o">.</span><span class="n">TSlotCompUpdateAll</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompFrechet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fid_computer</span> <span class="o">=</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_omega</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">omega</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">omega</span> <span class="o">=</span> <span class="n">sympl</span><span class="o">.</span><span class="n">calc_omega</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">omega</span>
+
+<div class="viewcode-block" id="DynamicsSymplectic.get_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsSymplectic.get_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the combined dynamics generator for the timeslot</span>
+<span class="sd">        multiplied by omega</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_omega</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DynamicsSymplectic.get_ctrl_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsSymplectic.get_ctrl_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_ctrl_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the dynamics generator for the control</span>
+<span class="sd">        multiplied by omega</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_omega</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">o</span><span class="p">)</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Dec 31, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
