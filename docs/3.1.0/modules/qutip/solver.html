@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>qutip.solver &mdash; QuTiP 3.1.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.1.0 Documentation" href="../../index.html" />
+    <link rel="up" title="qutip" href="../qutip.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="http://qutip.org">qutip.org</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-mac-os-x-10-8">Installation on Mac OS X (10.8+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#optional-installation-options">Optional Installation Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-1-0-january-1-2015">Version 3.1.0 (January 1, 2015):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-0-1-aug-5-2014">Version 3.0.1 (Aug 5, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-3-0-0-july-17-2014">Version 3.0.0 (July 17, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for qutip.solver</h1><div class="highlight"><pre>
+<span class="c"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
+<span class="c">#    All rights reserved.</span>
+<span class="c">#</span>
+<span class="c">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c">#    modification, are permitted provided that the following conditions are</span>
+<span class="c">#    met:</span>
+<span class="c">#</span>
+<span class="c">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c">#       this list of conditions and the following disclaimer.</span>
+<span class="c">#</span>
+<span class="c">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c">#</span>
+<span class="c">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c">#       from this software without specific prior written permission.</span>
+<span class="c">#</span>
+<span class="c">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c">###############################################################################</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Options&#39;</span><span class="p">,</span> <span class="s">&#39;Odeoptions&#39;</span><span class="p">,</span> <span class="s">&#39;Odedata&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">__version__</span>
+
+
+<div class="viewcode-block" id="Options"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.solver.Options">[docs]</a><span class="k">class</span> <span class="nc">Options</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class of options for evolution solvers such as :func:`qutip.mesolve` and</span>
+<span class="sd">    :func:`qutip.mcsolve`. Options can be specified either as arguments to the</span>
+<span class="sd">    constructor::</span>
+
+<span class="sd">        opts = Options(order=10, ...)</span>
+
+<span class="sd">    or by changing the class attributes after creation::</span>
+
+<span class="sd">        opts = Options()</span>
+<span class="sd">        opts.order = 10</span>
+
+<span class="sd">    Returns options class to be used as options in evolution solvers.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    atol : float {1e-8}</span>
+<span class="sd">        Absolute tolerance.</span>
+<span class="sd">    rtol : float {1e-6}</span>
+<span class="sd">        Relative tolerance.</span>
+<span class="sd">    method : str {&#39;adams&#39;,&#39;bdf&#39;}</span>
+<span class="sd">        Integration method.</span>
+<span class="sd">    order : int {12}</span>
+<span class="sd">        Order of integrator (&lt;=12 &#39;adams&#39;, &lt;=5 &#39;bdf&#39;)</span>
+<span class="sd">    nsteps : int {2500}</span>
+<span class="sd">        Max. number of internal steps/call.</span>
+<span class="sd">    first_step : float {0}</span>
+<span class="sd">        Size of initial step (0 = automatic).</span>
+<span class="sd">    min_step : float {0}</span>
+<span class="sd">        Minimum step size (0 = automatic).</span>
+<span class="sd">    max_step : float {0}</span>
+<span class="sd">        Maximum step size (0 = automatic)</span>
+<span class="sd">    tidy : bool {True,False}</span>
+<span class="sd">        Tidyup Hamiltonian and initial state by removing small terms.</span>
+<span class="sd">    num_cpus : int</span>
+<span class="sd">        Number of cpus used by mcsolver (default = # of cpus).</span>
+<span class="sd">    norm_tol : float</span>
+<span class="sd">        Tolerance used when finding wavefunction norm in mcsolve.</span>
+<span class="sd">    norm_steps : int</span>
+<span class="sd">        Max. number of steps used to find wavefunction norm to within norm_tol</span>
+<span class="sd">        in mcsolve.</span>
+<span class="sd">    average_states : bool {False}</span>
+<span class="sd">        Average states values over trajectories in stochastic solvers.</span>
+<span class="sd">    average_expect : bool {True}</span>
+<span class="sd">        Average expectation values over trajectories for stochastic solvers.</span>
+<span class="sd">    mc_corr_eps : float {1e-10}</span>
+<span class="sd">        Arbitrarily small value for eliminating any divide-by-zero errors in</span>
+<span class="sd">        correlation calculations when using mcsolve.</span>
+<span class="sd">    ntraj : int {500}</span>
+<span class="sd">        Number of trajectories in stochastic solvers.</span>
+<span class="sd">    rhs_reuse : bool {False,True}</span>
+<span class="sd">        Reuse Hamiltonian data.</span>
+<span class="sd">    rhs_with_state : bool {False,True}</span>
+<span class="sd">        Whether or not to include the state in the Hamiltonian function</span>
+<span class="sd">        callback signature.</span>
+<span class="sd">    rhs_filename : str</span>
+<span class="sd">        Name for compiled Cython file.</span>
+<span class="sd">    seeds : ndarray</span>
+<span class="sd">        Array containing random number seeds for mcsolver.</span>
+<span class="sd">    store_final_state : bool {False, True}</span>
+<span class="sd">        Whether or not to store the final state of the evolution in the</span>
+<span class="sd">        result class.</span>
+<span class="sd">    store_states : bool {False, True}</span>
+<span class="sd">        Whether or not to store the state vectors or density matrices in the</span>
+<span class="sd">        result class, even if expectation values operators are given. If no</span>
+<span class="sd">        expectation are provided, then states are stored by default and this</span>
+<span class="sd">        option has no effect.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;adams&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                 <span class="n">nsteps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">first_step</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_step</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_step</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">average_expect</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">average_states</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">tidy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                 <span class="n">num_cpus</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">norm_tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">norm_steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">rhs_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">rhs_with_state</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">store_final_state</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">steady_state_average</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="c"># Absolute tolerance (default = 1e-8)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atol</span> <span class="o">=</span> <span class="n">atol</span>
+        <span class="c"># Relative tolerance (default = 1e-6)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rtol</span> <span class="o">=</span> <span class="n">rtol</span>
+        <span class="c"># Integration method (default = &#39;adams&#39;, for stiff &#39;bdf&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="c"># Max. number of internal steps/call</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsteps</span> <span class="o">=</span> <span class="n">nsteps</span>
+        <span class="c"># Size of initial step (0 = determined by solver)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_step</span> <span class="o">=</span> <span class="n">first_step</span>
+        <span class="c"># Minimal step size (0 = determined by solver)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_step</span> <span class="o">=</span> <span class="n">min_step</span>
+        <span class="c"># Max step size (0 = determined by solver)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_step</span> <span class="o">=</span> <span class="n">max_step</span>
+        <span class="c"># Maximum order used by integrator (&lt;=12 for &#39;adams&#39;, &lt;=5 for &#39;bdf&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="c"># Average expectation values over trajectories (default = True)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_states</span> <span class="o">=</span> <span class="n">average_states</span>
+        <span class="c"># average expectation values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_expect</span> <span class="o">=</span> <span class="n">average_expect</span>
+        <span class="c"># Number of trajectories (default = 500)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ntraj</span> <span class="o">=</span> <span class="n">ntraj</span>
+        <span class="c"># Holds seeds for rand num gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="n">seeds</span>
+        <span class="c"># tidyup Hamiltonian before calculation (default = True)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tidy</span> <span class="o">=</span> <span class="n">tidy</span>
+        <span class="c"># include the state in the function callback signature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rhs_with_state</span> <span class="o">=</span> <span class="n">rhs_with_state</span>
+        <span class="c"># Use preexisting RHS function for time-dependent solvers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rhs_reuse</span> <span class="o">=</span> <span class="n">rhs_reuse</span>
+        <span class="c"># Use filename for preexisting RHS function (will default to last</span>
+        <span class="c"># compiled function if None &amp; rhs_exists=True)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rhs_filename</span> <span class="o">=</span> <span class="n">rhs_filename</span>
+        <span class="c"># small value in mc solver for computing correlations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mc_corr_eps</span> <span class="o">=</span> <span class="mf">1e-10</span>
+        <span class="c"># Number of processors to use (mcsolve only)</span>
+        <span class="k">if</span> <span class="n">num_cpus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_cpus</span> <span class="o">=</span> <span class="n">num_cpus</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_cpus</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c"># Tolerance for wavefunction norm (mcsolve only)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_tol</span> <span class="o">=</span> <span class="n">norm_tol</span>
+        <span class="c"># Max. number of steps taken to find wavefunction norm to within</span>
+        <span class="c"># norm_tol (mcsolve only)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_steps</span> <span class="o">=</span> <span class="n">norm_steps</span>
+        <span class="c"># store final state?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_final_state</span> <span class="o">=</span> <span class="n">store_final_state</span>
+        <span class="c"># store states even if expectation operators are given?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_states</span> <span class="o">=</span> <span class="n">store_states</span>
+        <span class="c"># average mcsolver density matricies assuming steady state evolution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">steady_state_average</span> <span class="o">=</span> <span class="n">steady_state_average</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">seed_length</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seed_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;Options:</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;-----------</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;atol:              &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atol</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;rtol:              &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;method:            &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;order:             &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;nsteps:            &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsteps</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;first_step:        &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_step</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;min_step:          &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_step</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;max_step:          &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_step</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;tidy:              &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tidy</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;num_cpus:          &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_cpus</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;norm_tol:          &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_tol</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;norm_steps:        &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_steps</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;rhs_filename:      &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs_filename</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;rhs_reuse:         &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs_reuse</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;seeds:             &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed_length</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;rhs_with_state:    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs_with_state</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;average_expect:    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_expect</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;average_states:    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_states</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;ntraj:             &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ntraj</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;store_states:      &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store_states</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;store_final_state: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store_final_state</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+
+        <span class="k">return</span> <span class="n">s</span>
+
+</div>
+<div class="viewcode-block" id="Result"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.solver.Result">[docs]</a><span class="k">class</span> <span class="nc">Result</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Class for storing simulation results from any of the dynamics solvers.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    solver : str</span>
+<span class="sd">        Which solver was used [e.g., &#39;mesolve&#39;, &#39;mcsolve&#39;, &#39;brmesolve&#39;, ...]</span>
+<span class="sd">    times : list/array</span>
+<span class="sd">        Times at which simulation data was collected.</span>
+<span class="sd">    expect : list/array</span>
+<span class="sd">        Expectation values (if requested) for simulation.</span>
+<span class="sd">    states : array</span>
+<span class="sd">        State of the simulation (density matrix or ket) evaluated at ``times``.</span>
+<span class="sd">    num_expect : int</span>
+<span class="sd">        Number of expectation value operators in simulation.</span>
+<span class="sd">    num_collapse : int</span>
+<span class="sd">        Number of collapse operators in simualation.</span>
+<span class="sd">    ntraj : int/list</span>
+<span class="sd">        Number of trajectories (for stochastic solvers). A list indicates</span>
+<span class="sd">        that averaging of expectation values was done over a subset of total</span>
+<span class="sd">        number of trajectories.</span>
+<span class="sd">    col_times : list</span>
+<span class="sd">        Times at which state collpase occurred. Only for Monte Carlo solver.</span>
+<span class="sd">    col_which : list</span>
+<span class="sd">        Which collapse operator was responsible for each collapse in</span>
+<span class="sd">        ``col_times``. Only for Monte Carlo solver.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_expect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_collapse</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ntraj</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_times</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_which</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Result object &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;with &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">+</span> <span class="s">&quot; data.</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;missing solver information.</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;-&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;states = True</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">expect</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;expect = True</span><span class="se">\n</span><span class="s">num_expect = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_expect</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;states = True, expect = True</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> \
+                <span class="s">&quot;num_expect = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_expect</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;num_collapse = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_collapse</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">==</span> <span class="s">&#39;mcsolve&#39;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;, ntraj = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ntraj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__str__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># defines what happens when Qobj object gets pickled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;qutip_version&#39;</span><span class="p">:</span> <span class="n">__version__</span><span class="p">[:</span><span class="mi">5</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="c"># defines what happens when loading a pickled Qobj</span>
+        <span class="k">if</span> <span class="s">&#39;qutip_version&#39;</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s">&#39;qutip_version&#39;</span><span class="p">]</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+</div>
+<span class="k">class</span> <span class="nc">SolverConfiguration</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cgen_num</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c"># General stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="bp">None</span>       <span class="c"># evaluations times</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ntraj</span> <span class="o">=</span> <span class="bp">None</span>       <span class="c"># number / list of trajectories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="bp">None</span>     <span class="c"># options for solvers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_tol</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c"># tolerance for wavefunction norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_steps</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># max. number of steps to take in finding</span>
+        <span class="c"># Initial state stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span> <span class="o">=</span> <span class="bp">None</span>        <span class="c"># initial state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi0_dims</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c"># initial state dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi0_shape</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># initial state shape</span>
+
+        <span class="c"># flags for setting time-dependence, collapse ops, and number of times</span>
+        <span class="c"># codegen has been run</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cflag</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c"># Flag signaling collapse operators</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tflag</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c"># Flag signaling time-dependent problem</span>
+
+        <span class="c"># time-dependent (TD) function stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tdfunc</span> <span class="o">=</span> <span class="bp">None</span>     <span class="c"># Placeholder for TD RHS function.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tdname</span> <span class="o">=</span> <span class="bp">None</span>     <span class="c"># Name of td .pyx file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colspmv</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c"># Placeholder for TD col-spmv function.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colexpect</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># Placeholder for TD col_expect function.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="bp">None</span>     <span class="c"># Holds string of variables passed to td solver</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">soft_reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">soft_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c"># Hamiltonian stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_td_inds</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># indicies of time-dependent Hamiltonian operators</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_data</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c"># List of sparse matrix data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_ind</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c"># List of sparse matrix indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_ptr</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c"># List of sparse matrix ptrs</span>
+
+        <span class="c"># Expectation operator stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_num</span> <span class="o">=</span> <span class="mi">0</span>        <span class="c"># number of expect ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops_data</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># expect op data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops_ind</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c"># expect op indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops_ptr</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c"># expect op indptrs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops_isherm</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># expect op isherm</span>
+
+        <span class="c"># Collapse operator stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_num</span> <span class="o">=</span> <span class="mi">0</span>          <span class="c"># number of collapse ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_const_inds</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># indicies of constant collapse operators</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_td_inds</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c"># indicies of time-dependent collapse operators</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_ops_data</span> <span class="o">=</span> <span class="p">[]</span>    <span class="c"># collapse op data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_ops_ind</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c"># collapse op indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_ops_ptr</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c"># collapse op indptrs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_args</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c"># store args for time-dependent collapse func.</span>
+
+        <span class="c"># Norm collapse operator stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_ops_data</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># norm collapse op data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_ops_ind</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c"># norm collapse op indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_ops_ptr</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c"># norm collapse op indptrs</span>
+
+        <span class="c"># holds executable strings for time-dependent collapse evaluation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_expect_code</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_spmv_code</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># hold stuff for function list based time dependence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_td_inds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_td_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_td_ind</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_td_ptr</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_funcs</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_func_args</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_funcs</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_func_args</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<span class="c">#</span>
+<span class="c"># create a global instance of the SolverConfiguration class</span>
+<span class="c">#</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">SolverConfiguration</span><span class="p">()</span>
+
+<span class="c"># for backwards compatibility</span>
+<span class="n">Odeoptions</span> <span class="o">=</span> <span class="n">Options</span>
+<span class="n">Odedata</span> <span class="o">=</span> <span class="n">Result</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Dec 31, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

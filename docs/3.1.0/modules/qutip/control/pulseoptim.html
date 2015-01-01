@@ -1,0 +1,1084 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>qutip.control.pulseoptim &mdash; QuTiP 3.1.0 Documentation</title>
+    
+    <link rel="stylesheet" href="../../../static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/bootswatch-3.2.0/flatly/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '3.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../../static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+    <link rel="top" title="QuTiP 3.1.0 Documentation" href="../../../index.html" />
+    <link rel="up" title="qutip" href="../../qutip.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          QuTiP</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="http://qutip.org">qutip.org</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Docs <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#about-this-documentation">About This Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#citing-this-project">Citing This Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#about-qutip">About QuTiP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frontmatter.html#contributing-to-qutip">Contributing to QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#general-requirements">General Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#platform-independent-installation">Platform-independent installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#get-the-source-code">Get the source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-on-ubuntu-linux">Installation on Ubuntu Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-on-mac-os-x-10-8">Installation on Mac OS X (10.8+)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-on-windows">Installation on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#optional-installation-options">Optional Installation Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#checking-version-information-using-the-about-function">Checking Version Information using the About Function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../apidoc/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../apidoc/functions.html">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-3-1-0-january-1-2015">Version 3.1.0 (January 1, 2015):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-3-0-1-aug-5-2014">Version 3.0.1 (Aug 5, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-3-0-0-july-17-2014">Version 3.0.0 (July 17, 2014):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-2-2-0-march-01-2013">Version 2.2.0 (March 01, 2013):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-2-1-0-october-05-2012">Version 2.1.0 (October 05, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-2-0-0-june-01-2012">Version 2.0.0 (June 01, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-4-may-28-2012">Version 1.1.4 (May 28, 2012):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-3-november-21-2011">Version 1.1.3 (November 21, 2011):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-2-october-27-2011">Version 1.1.2 (October 27, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-1-october-25-2011">Version 1.1.1 (October 25, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-1-0-october-04-2011">Version 1.1.0 (October 04, 2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#version-1-0-0-july-29-2011">Version 1.0.0 (July 29, 2011)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributors.html#lead-developers">Lead Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for qutip.control.pulseoptim</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (c) 2014 and later, Alexander J G Pitchford</span>
+<span class="c">#    All rights reserved.</span>
+<span class="c">#</span>
+<span class="c">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c">#    modification, are permitted provided that the following conditions are</span>
+<span class="c">#    met:</span>
+<span class="c">#</span>
+<span class="c">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c">#       this list of conditions and the following disclaimer.</span>
+<span class="c">#</span>
+<span class="c">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c">#</span>
+<span class="c">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c">#       from this software without specific prior written permission.</span>
+<span class="c">#</span>
+<span class="c">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c">###############################################################################</span>
+
+<span class="c"># @author: Alexander Pitchford</span>
+<span class="c"># @email1: agp1@aber.ac.uk</span>
+<span class="c"># @email2: alex.pitchford@gmail.com</span>
+<span class="c"># @organization: Aberystwyth University</span>
+<span class="c"># @supervisor: Daniel Burgarth</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Wrapper functions that will manage the creation of the objects,</span>
+<span class="sd">build the configuration, and execute the algorithm required to optimise</span>
+<span class="sd">a set of ctrl pulses for a given (quantum) system.</span>
+<span class="sd">The fidelity error is some measure of distance of the system evolution</span>
+<span class="sd">from the given target evolution in the time allowed for the evolution.</span>
+<span class="sd">The functions minimise this fidelity error wrt the piecewise control</span>
+<span class="sd">amplitudes in the timeslots</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="c"># QuTiP</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">Qobj</span>
+<span class="kn">import</span> <span class="nn">qutip.logging</span> <span class="kn">as</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
+<span class="c"># QuTiP control modules</span>
+<span class="kn">import</span> <span class="nn">qutip.control.optimconfig</span> <span class="kn">as</span> <span class="nn">optimconfig</span>
+<span class="kn">import</span> <span class="nn">qutip.control.dynamics</span> <span class="kn">as</span> <span class="nn">dynamics</span>
+<span class="kn">import</span> <span class="nn">qutip.control.termcond</span> <span class="kn">as</span> <span class="nn">termcond</span>
+<span class="kn">import</span> <span class="nn">qutip.control.optimizer</span> <span class="kn">as</span> <span class="nn">optimizer</span>
+<span class="kn">import</span> <span class="nn">qutip.control.stats</span> <span class="kn">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">qutip.control.errors</span> <span class="kn">as</span> <span class="nn">errors</span>
+<span class="kn">import</span> <span class="nn">qutip.control.fidcomp</span> <span class="kn">as</span> <span class="nn">fidcomp</span>
+<span class="kn">import</span> <span class="nn">qutip.control.propcomp</span> <span class="kn">as</span> <span class="nn">propcomp</span>
+<span class="kn">import</span> <span class="nn">qutip.control.pulsegen</span> <span class="kn">as</span> <span class="nn">pulsegen</span>
+
+
+<div class="viewcode-block" id="optimize_pulse"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.control.pulseoptim.optimize_pulse">[docs]</a><span class="k">def</span> <span class="nf">optimize_pulse</span><span class="p">(</span>
+        <span class="n">drift</span><span class="p">,</span> <span class="n">ctrls</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+        <span class="n">num_tslots</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">evo_time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">amp_lbound</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">Inf</span><span class="p">,</span> <span class="n">amp_ubound</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">Inf</span><span class="p">,</span>
+        <span class="n">fid_err_targ</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">min_grad</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_wall_time</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+        <span class="n">optim_alg</span><span class="o">=</span><span class="s">&#39;LBFGSB&#39;</span><span class="p">,</span> <span class="n">max_metric_corr</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">accuracy_factor</span><span class="o">=</span><span class="mf">1e7</span><span class="p">,</span>
+        <span class="n">dyn_type</span><span class="o">=</span><span class="s">&#39;GEN_MAT&#39;</span><span class="p">,</span> <span class="n">prop_type</span><span class="o">=</span><span class="s">&#39;DEF&#39;</span><span class="p">,</span>
+        <span class="n">fid_type</span><span class="o">=</span><span class="s">&#39;DEF&#39;</span><span class="p">,</span> <span class="n">phase_option</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fid_err_scale_factor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">amp_update_mode</span><span class="o">=</span><span class="s">&#39;ALL&#39;</span><span class="p">,</span>
+        <span class="n">init_pulse_type</span><span class="o">=</span><span class="s">&#39;RND&#39;</span><span class="p">,</span> <span class="n">pulse_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">pulse_offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">,</span> <span class="n">out_file_ext</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">gen_stats</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Optimise a control pulse to minimise the fidelity error.</span>
+<span class="sd">    The dynamics of the system in any given timeslot are governed</span>
+<span class="sd">    by the combined dynamics generator,</span>
+<span class="sd">    i.e. the sum of the drift+ctrl_amp[j]*ctrls[j]</span>
+<span class="sd">    The control pulse is an [n_ts, len(ctrls)] array of piecewise amplitudes</span>
+<span class="sd">    Starting from an intital (typically random) pulse,</span>
+<span class="sd">    a multivariable optimisation algorithm attempts to determines the</span>
+<span class="sd">    optimal values for the control pulse to minimise the fidelity error</span>
+<span class="sd">    The fidelity error is some measure of distance of the system evolution</span>
+<span class="sd">    from the given target evolution in the time allowed for the evolution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    drift : Qobj</span>
+<span class="sd">        the underlying dynamics generator of the system</span>
+
+<span class="sd">    ctrls : List of Qobj</span>
+<span class="sd">        a list of control dynamics generators. These are scaled by</span>
+<span class="sd">        the amplitudes to alter the overall dynamics</span>
+
+<span class="sd">    initial : Qobj</span>
+<span class="sd">        starting point for the evolution.</span>
+<span class="sd">        Typically the identity matrix</span>
+
+<span class="sd">    target : Qobj</span>
+<span class="sd">        target transformation, e.g. gate or state, for the time evolution</span>
+
+<span class="sd">    num_tslots : integer or None</span>
+<span class="sd">        number of timeslots.</span>
+<span class="sd">        None implies that timeslots will be given in the tau array</span>
+
+<span class="sd">    evo_time : float or None</span>
+<span class="sd">        total time for the evolution</span>
+<span class="sd">        None implies that timeslots will be given in the tau array</span>
+
+<span class="sd">    tau : array[num_tslots] of floats or None</span>
+<span class="sd">        durations for the timeslots.</span>
+<span class="sd">        if this is given then num_tslots and evo_time are dervived</span>
+<span class="sd">        from it</span>
+<span class="sd">        None implies that timeslot durations will be equal and</span>
+<span class="sd">        calculated as evo_time/num_tslots</span>
+
+<span class="sd">    amp_lbound : float or list of floats</span>
+<span class="sd">        lower boundaries for the control amplitudes</span>
+<span class="sd">        Can be a scalar value applied to all controls</span>
+<span class="sd">        or a list of bounds for each control</span>
+
+<span class="sd">    amp_ubound : float or list of floats</span>
+<span class="sd">        upper boundaries for the control amplitudes</span>
+<span class="sd">        Can be a scalar value applied to all controls</span>
+<span class="sd">        or a list of bounds for each control</span>
+
+<span class="sd">    fid_err_targ : float</span>
+<span class="sd">        Fidelity error target. Pulse optimisation will</span>
+<span class="sd">        terminate when the fidelity error falls below this value</span>
+
+<span class="sd">    mim_grad : float</span>
+<span class="sd">        Minimum gradient. When the sum of the squares of the</span>
+<span class="sd">        gradients wrt to the control amplitudes falls below this</span>
+<span class="sd">        value, the optimisation terminates, assuming local minima</span>
+
+<span class="sd">    max_iter : integer</span>
+<span class="sd">        Maximum number of iterations of the optimisation algorithm</span>
+
+<span class="sd">    max_wall_time : float</span>
+<span class="sd">        Maximum allowed elapsed time for the  optimisation algorithm</span>
+
+<span class="sd">    optim_alg : string</span>
+<span class="sd">        Multi-variable optimisation algorithm</span>
+<span class="sd">        options are BFGS, LBFGSB</span>
+<span class="sd">        (see Optimizer classes for details)</span>
+
+<span class="sd">    max_metric_corr : integer</span>
+<span class="sd">        The maximum number of variable metric corrections used to define</span>
+<span class="sd">        the limited memory matrix. That is the number of previous</span>
+<span class="sd">        gradient values that are used to approximate the Hessian</span>
+<span class="sd">        see the scipy.optimize.fmin_l_bfgs_b documentation for description</span>
+<span class="sd">        of m argument</span>
+<span class="sd">        (used only in L-BFGS-B)</span>
+
+<span class="sd">    accuracy_factor : float</span>
+<span class="sd">        Determines the accuracy of the result.</span>
+<span class="sd">        Typical values for accuracy_factor are: 1e12 for low accuracy;</span>
+<span class="sd">        1e7 for moderate accuracy; 10.0 for extremely high accuracy</span>
+<span class="sd">        scipy.optimize.fmin_l_bfgs_b factr argument.</span>
+<span class="sd">        (used only in L-BFGS-B)</span>
+
+<span class="sd">    dyn_type : string</span>
+<span class="sd">        Dynamics type, i.e. the type of matrix used to describe</span>
+<span class="sd">        the dynamics. Options are UNIT, GEN_MAT, SYMPL</span>
+<span class="sd">        (see Dynamics classes for details)</span>
+
+<span class="sd">    prop_type : string</span>
+<span class="sd">        Propagator type i.e. the method used to calculate the</span>
+<span class="sd">        propagtors and propagtor gradient for each timeslot</span>
+<span class="sd">        options are DEF, APPROX, DIAG, FRECHET, AUG_MAT</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (see PropagatorComputer classes for details)</span>
+
+<span class="sd">    fid_type : string</span>
+<span class="sd">        Fidelity error (and fidelity error gradient) computation method</span>
+<span class="sd">        Options are DEF, UNIT, TRACEDIFF, TD_APPROX</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (See FideliyComputer classes for details)</span>
+
+<span class="sd">    phase_option : string</span>
+<span class="sd">        determines how global phase is treated in fidelity</span>
+<span class="sd">        calculations (fid_type=&#39;UNIT&#39; only). Options:</span>
+<span class="sd">            PSU - global phase ignored</span>
+<span class="sd">            SU - global phase included</span>
+
+<span class="sd">    fid_err_scale_factor : float</span>
+<span class="sd">        (used in TRACEDIFF FidelityComputer and subclasses only)</span>
+<span class="sd">        The fidelity error calculated is of some arbitary scale. This</span>
+<span class="sd">        factor can be used to scale the fidelity error such that it may</span>
+<span class="sd">        represent some physical measure</span>
+<span class="sd">        If None is given then it is caculated as 1/2N, where N</span>
+<span class="sd">        is the dimension of the drift.</span>
+
+<span class="sd">    amp_update_mode : string</span>
+<span class="sd">        determines whether propagators are calculated</span>
+<span class="sd">        Options: DEF, ALL, DYNAMIC (needs work)</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (See TimeslotComputer classes for details)</span>
+
+<span class="sd">    init_pulse_type : string</span>
+<span class="sd">        type / shape of pulse(s) used to initialise the</span>
+<span class="sd">        the control amplitudes. Options include:</span>
+<span class="sd">            RND, LIN, ZERO, SINE, SQUARE, TRIANGLE, SAW</span>
+<span class="sd">        (see PulseGen classes for details)</span>
+
+<span class="sd">    pulse_scaling : float</span>
+<span class="sd">        Linear scale factor for generated pulses</span>
+<span class="sd">        By default initial pulses are generated with amplitudes in the</span>
+<span class="sd">        range (-1.0, 1.0). These will be scaled by this parameter</span>
+
+<span class="sd">    pulse_offset : float</span>
+<span class="sd">        Line offset for the pulse. That is this value will be added</span>
+<span class="sd">        to any initial pulses generated.</span>
+
+<span class="sd">    log_level : integer</span>
+<span class="sd">        level of messaging output from the logger.</span>
+<span class="sd">        Options are attributes of qutip.logging,</span>
+<span class="sd">        in decreasing levels of messaging, are:</span>
+<span class="sd">        DEBUG_INTENSE, DEBUG_VERBOSE, DEBUG, INFO, WARN, ERROR, CRITICAL</span>
+<span class="sd">        Anything WARN or above is effectively &#39;quiet&#39; execution,</span>
+<span class="sd">        assuming everything runs as expected.</span>
+<span class="sd">        The default NOTSET implies that the level will be taken from</span>
+<span class="sd">        the QuTiP settings file, which by default is WARN</span>
+
+<span class="sd">    out_file_ext : string or None</span>
+<span class="sd">        files containing the initial and final control pulse</span>
+<span class="sd">        amplitudes are saved to the current directory.</span>
+<span class="sd">        The default name will be postfixed with this extension</span>
+<span class="sd">        Setting this to None will suppress the output of files</span>
+
+<span class="sd">    gen_stats : boolean</span>
+<span class="sd">        if set to True then statistics for the optimisation</span>
+<span class="sd">        run will be generated - accessible through attributes</span>
+<span class="sd">        of the stats object</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Returns instance of OptimResult, which has attributes giving the</span>
+<span class="sd">        reason for termination, final fidelity error, final evolution</span>
+<span class="sd">        final amplitudes, statistics etc</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># The parameters are checked in create_pulse_optimizer</span>
+    <span class="c"># so no need to do so here</span>
+
+    <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">:</span>
+        <span class="n">log_level</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+
+    <span class="n">optim</span> <span class="o">=</span> <span class="n">create_pulse_optimizer</span><span class="p">(</span>
+        <span class="n">drift</span><span class="p">,</span> <span class="n">ctrls</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+        <span class="n">num_tslots</span><span class="o">=</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">evo_time</span><span class="o">=</span><span class="n">evo_time</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span>
+        <span class="n">amp_lbound</span><span class="o">=</span><span class="n">amp_lbound</span><span class="p">,</span> <span class="n">amp_ubound</span><span class="o">=</span><span class="n">amp_ubound</span><span class="p">,</span>
+        <span class="n">fid_err_targ</span><span class="o">=</span><span class="n">fid_err_targ</span><span class="p">,</span> <span class="n">min_grad</span><span class="o">=</span><span class="n">min_grad</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">max_wall_time</span><span class="o">=</span><span class="n">max_wall_time</span><span class="p">,</span>
+        <span class="n">optim_alg</span><span class="o">=</span><span class="n">optim_alg</span><span class="p">,</span> <span class="n">max_metric_corr</span><span class="o">=</span><span class="n">max_metric_corr</span><span class="p">,</span>
+        <span class="n">accuracy_factor</span><span class="o">=</span><span class="n">accuracy_factor</span><span class="p">,</span>
+        <span class="n">dyn_type</span><span class="o">=</span><span class="n">dyn_type</span><span class="p">,</span> <span class="n">prop_type</span><span class="o">=</span><span class="n">prop_type</span><span class="p">,</span>
+        <span class="n">fid_type</span><span class="o">=</span><span class="n">fid_type</span><span class="p">,</span> <span class="n">phase_option</span><span class="o">=</span><span class="n">phase_option</span><span class="p">,</span>
+        <span class="n">fid_err_scale_factor</span><span class="o">=</span><span class="n">fid_err_scale_factor</span><span class="p">,</span>
+        <span class="n">amp_update_mode</span><span class="o">=</span><span class="n">amp_update_mode</span><span class="p">,</span> <span class="n">init_pulse_type</span><span class="o">=</span><span class="n">init_pulse_type</span><span class="p">,</span>
+        <span class="n">pulse_scaling</span><span class="o">=</span><span class="n">pulse_scaling</span><span class="p">,</span> <span class="n">pulse_offset</span><span class="o">=</span><span class="n">pulse_offset</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span> <span class="n">gen_stats</span><span class="o">=</span><span class="n">gen_stats</span><span class="p">)</span>
+
+    <span class="n">dyn</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">dynamics</span>
+    <span class="n">p_gen</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">pulse_generator</span>
+
+    <span class="k">if</span> <span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;System configuration:</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">dg_name</span> <span class="o">=</span> <span class="s">&quot;dynamics generator&quot;</span>
+        <span class="k">if</span> <span class="n">dyn_type</span> <span class="o">==</span> <span class="s">&#39;UNIT&#39;</span><span class="p">:</span>
+            <span class="n">dg_name</span> <span class="o">=</span> <span class="s">&quot;Hamiltonian&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;Drift {}:</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dg_name</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">num_ctrls</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Control {} {}:</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dg_name</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Initial operator:</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">initial</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Target operator:</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c"># Generate pulses for each control</span>
+    <span class="n">init_amps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">dyn</span><span class="o">.</span><span class="n">num_ctrls</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">num_ctrls</span><span class="p">):</span>
+        <span class="n">init_amps</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_gen</span><span class="o">.</span><span class="n">gen_pulse</span><span class="p">()</span>
+
+    <span class="c"># Initialise the starting amplitudes</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">initialize_controls</span><span class="p">(</span><span class="n">init_amps</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">out_file_ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># Save initial amplitudes to a text file</span>
+        <span class="n">pulsefile</span> <span class="o">=</span> <span class="s">&quot;ctrl_amps_initial_&quot;</span> <span class="o">+</span> <span class="n">out_file_ext</span>
+        <span class="n">dyn</span><span class="o">.</span><span class="n">save_amps</span><span class="p">(</span><span class="n">pulsefile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Initial amplitudes output to file: &quot;</span> <span class="o">+</span> <span class="n">pulsefile</span><span class="p">)</span>
+
+    <span class="c"># Start the optimisation</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">run_optimization</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">out_file_ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># Save final amplitudes to a text file</span>
+        <span class="n">pulsefile</span> <span class="o">=</span> <span class="s">&quot;ctrl_amps_final_&quot;</span> <span class="o">+</span> <span class="n">out_file_ext</span>
+        <span class="n">dyn</span><span class="o">.</span><span class="n">save_amps</span><span class="p">(</span><span class="n">pulsefile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Final amplitudes output to file: &quot;</span> <span class="o">+</span> <span class="n">pulsefile</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<div class="viewcode-block" id="optimize_pulse_unitary"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.control.pulseoptim.optimize_pulse_unitary">[docs]</a><span class="k">def</span> <span class="nf">optimize_pulse_unitary</span><span class="p">(</span>
+        <span class="n">H_d</span><span class="p">,</span> <span class="n">H_c</span><span class="p">,</span> <span class="n">U_0</span><span class="p">,</span> <span class="n">U_targ</span><span class="p">,</span>
+        <span class="n">num_tslots</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">evo_time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">amp_lbound</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">Inf</span><span class="p">,</span> <span class="n">amp_ubound</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">Inf</span><span class="p">,</span>
+        <span class="n">fid_err_targ</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">min_grad</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_wall_time</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+        <span class="n">optim_alg</span><span class="o">=</span><span class="s">&#39;LBFGSB&#39;</span><span class="p">,</span> <span class="n">max_metric_corr</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">accuracy_factor</span><span class="o">=</span><span class="mf">1e7</span><span class="p">,</span>
+        <span class="n">phase_option</span><span class="o">=</span><span class="s">&#39;PSU&#39;</span><span class="p">,</span>
+        <span class="n">amp_update_mode</span><span class="o">=</span><span class="s">&#39;ALL&#39;</span><span class="p">,</span>
+        <span class="n">init_pulse_type</span><span class="o">=</span><span class="s">&#39;RND&#39;</span><span class="p">,</span> <span class="n">pulse_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">pulse_offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">,</span> <span class="n">out_file_ext</span><span class="o">=</span><span class="s">&#39;.txt&#39;</span><span class="p">,</span> <span class="n">gen_stats</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Optimise a control pulse to minimise the fidelity error, assuming that</span>
+<span class="sd">    the dynamics of the system are generated by unitary operators.</span>
+<span class="sd">    This function is simply a wrapper for optimize_pulse, where the</span>
+<span class="sd">    appropriate options for unitary dynamics are chosen and the parameter</span>
+<span class="sd">    names are in the format familiar to unitary dynamics</span>
+<span class="sd">    The dynamics of the system  in any given timeslot are governed</span>
+<span class="sd">    by the combined Hamiltonian,</span>
+<span class="sd">    i.e. the sum of the H_d + ctrl_amp[j]*H_c[j]</span>
+<span class="sd">    The control pulse is an [n_ts, len(ctrls)] array of piecewise amplitudes</span>
+<span class="sd">    Starting from an intital (typically random) pulse,</span>
+<span class="sd">    a multivariable optimisation algorithm attempts to determines the</span>
+<span class="sd">    optimal values for the control pulse to minimise the fidelity error</span>
+<span class="sd">    The maximum fidelity for a unitary system is 1, i.e. when the</span>
+<span class="sd">    time evolution resulting from the pulse is equivalent to the target.</span>
+<span class="sd">    And therefore the fidelity error is 1 - fidelity</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    H_d : Qobj</span>
+<span class="sd">        Drift (aka system) the underlying Hamiltonian of the system</span>
+
+<span class="sd">    H_c : Qobj</span>
+<span class="sd">        a list of control Hamiltonians. These are scaled by</span>
+<span class="sd">        the amplitudes to alter the overall dynamics</span>
+
+<span class="sd">    U_0 : Qobj</span>
+<span class="sd">        starting point for the evolution.</span>
+<span class="sd">        Typically the identity matrix</span>
+
+<span class="sd">    U_targ : Qobj</span>
+<span class="sd">        target transformation, e.g. gate or state, for the time evolution</span>
+
+<span class="sd">    num_tslots : integer or None</span>
+<span class="sd">        number of timeslots.</span>
+<span class="sd">        None implies that timeslots will be given in the tau array</span>
+
+<span class="sd">    evo_time : float or None</span>
+<span class="sd">        total time for the evolution</span>
+<span class="sd">        None implies that timeslots will be given in the tau array</span>
+
+<span class="sd">    tau : array[num_tslots] of floats or None</span>
+<span class="sd">        durations for the timeslots.</span>
+<span class="sd">        if this is given then num_tslots and evo_time are dervived</span>
+<span class="sd">        from it</span>
+<span class="sd">        None implies that timeslot durations will be equal and</span>
+<span class="sd">        calculated as evo_time/num_tslots</span>
+
+<span class="sd">    amp_lbound : float or list of floats</span>
+<span class="sd">        lower boundaries for the control amplitudes</span>
+<span class="sd">        Can be a scalar value applied to all controls</span>
+<span class="sd">        or a list of bounds for each control</span>
+
+<span class="sd">    amp_ubound : float or list of floats</span>
+<span class="sd">        upper boundaries for the control amplitudes</span>
+<span class="sd">        Can be a scalar value applied to all controls</span>
+<span class="sd">        or a list of bounds for each control</span>
+
+<span class="sd">    fid_err_targ : float</span>
+<span class="sd">        Fidelity error target. Pulse optimisation will</span>
+<span class="sd">        terminate when the fidelity error falls below this value</span>
+
+<span class="sd">    mim_grad : float</span>
+<span class="sd">        Minimum gradient. When the sum of the squares of the</span>
+<span class="sd">        gradients wrt to the control amplitudes falls below this</span>
+<span class="sd">        value, the optimisation terminates, assuming local minima</span>
+
+<span class="sd">    max_iter : integer</span>
+<span class="sd">        Maximum number of iterations of the optimisation algorithm</span>
+
+<span class="sd">    max_wall_time : float</span>
+<span class="sd">        Maximum allowed elapsed time for the  optimisation algorithm</span>
+
+<span class="sd">    optim_alg : string</span>
+<span class="sd">        Multi-variable optimisation algorithm</span>
+<span class="sd">        options are BFGS, LBFGSB</span>
+<span class="sd">        (see Optimizer classes for details)</span>
+
+<span class="sd">    max_metric_corr : integer</span>
+<span class="sd">        The maximum number of variable metric corrections used to define</span>
+<span class="sd">        the limited memory matrix. That is the number of previous</span>
+<span class="sd">        gradient values that are used to approximate the Hessian</span>
+<span class="sd">        see the scipy.optimize.fmin_l_bfgs_b documentation for description</span>
+<span class="sd">        of m argument</span>
+<span class="sd">        (used only in L-BFGS-B)</span>
+
+<span class="sd">    accuracy_factor : float</span>
+<span class="sd">        Determines the accuracy of the result.</span>
+<span class="sd">        Typical values for accuracy_factor are: 1e12 for low accuracy;</span>
+<span class="sd">        1e7 for moderate accuracy; 10.0 for extremely high accuracy</span>
+<span class="sd">        scipy.optimize.fmin_l_bfgs_b factr argument.</span>
+<span class="sd">        (used only in L-BFGS-B)</span>
+
+<span class="sd">    phase_option : string</span>
+<span class="sd">        determines how global phase is treated in fidelity</span>
+<span class="sd">        calculations (fid_type=&#39;UNIT&#39; only). Options:</span>
+<span class="sd">            PSU - global phase ignored</span>
+<span class="sd">            SU - global phase included</span>
+
+<span class="sd">    amp_update_mode : string</span>
+<span class="sd">        determines whether propagators are calculated</span>
+<span class="sd">        Options: DEF, ALL, DYNAMIC (needs work)</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (See TimeslotComputer classes for details)</span>
+
+<span class="sd">    init_pulse_type : string</span>
+<span class="sd">        type / shape of pulse(s) used to initialise the</span>
+<span class="sd">        the control amplitudes. Options include:</span>
+<span class="sd">            RND, LIN, ZERO, SINE, SQUARE, TRIANGLE, SAW</span>
+<span class="sd">        (see PulseGen classes for details)</span>
+
+<span class="sd">    pulse_scaling : float</span>
+<span class="sd">        Linear scale factor for generated pulses</span>
+<span class="sd">        By default initial pulses are generated with amplitudes in the</span>
+<span class="sd">        range (-1.0, 1.0). These will be scaled by this parameter</span>
+
+<span class="sd">    pulse_offset : float</span>
+<span class="sd">        Line offset for the pulse. That is this value will be added</span>
+<span class="sd">        to any initial pulses generated.</span>
+
+<span class="sd">    log_level : integer</span>
+<span class="sd">        level of messaging output from the logger.</span>
+<span class="sd">        Options are attributes of qutip.logging,</span>
+<span class="sd">        in decreasing levels of messaging, are:</span>
+<span class="sd">        DEBUG_INTENSE, DEBUG_VERBOSE, DEBUG, INFO, WARN, ERROR, CRITICAL</span>
+<span class="sd">        Anything WARN or above is effectively &#39;quiet&#39; execution,</span>
+<span class="sd">        assuming everything runs as expected.</span>
+<span class="sd">        The default NOTSET implies that the level will be taken from</span>
+<span class="sd">        the QuTiP settings file, which by default is WARN</span>
+
+<span class="sd">    out_file_ext : string or None</span>
+<span class="sd">        files containing the initial and final control pulse</span>
+<span class="sd">        amplitudes are saved to the current directory.</span>
+<span class="sd">        The default name will be postfixed with this extension</span>
+<span class="sd">        Setting this to None will suppress the output of files</span>
+
+<span class="sd">    gen_stats : boolean</span>
+<span class="sd">        if set to True then statistics for the optimisation</span>
+<span class="sd">        run will be generated - accessible through attributes</span>
+<span class="sd">        of the stats object</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Returns instance of OptimResult, which has attributes giving the</span>
+<span class="sd">        reason for termination, final fidelity error, final evolution</span>
+<span class="sd">        final amplitudes, statistics etc</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># check parameters here, as names are different than in</span>
+    <span class="c"># create_pulse_optimizer, so TypeErrors would be confusing</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H_d</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;H_d must be a Qobj&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H_c</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;H_c should be a list of Qobj&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">H_c</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;H_c should be a list of Qobj&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">U_0</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;U_0 must be a Qobj&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">U_targ</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;U_targ must be a Qobj&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optimize_pulse</span><span class="p">(</span><span class="n">drift</span><span class="o">=</span><span class="n">H_d</span><span class="p">,</span> <span class="n">ctrls</span><span class="o">=</span><span class="n">H_c</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="n">U_0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">U_targ</span><span class="p">,</span>
+                          <span class="n">num_tslots</span><span class="o">=</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">evo_time</span><span class="o">=</span><span class="n">evo_time</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span>
+                          <span class="n">amp_lbound</span><span class="o">=</span><span class="n">amp_lbound</span><span class="p">,</span> <span class="n">amp_ubound</span><span class="o">=</span><span class="n">amp_ubound</span><span class="p">,</span>
+                          <span class="n">fid_err_targ</span><span class="o">=</span><span class="n">fid_err_targ</span><span class="p">,</span> <span class="n">min_grad</span><span class="o">=</span><span class="n">min_grad</span><span class="p">,</span>
+                          <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">max_wall_time</span><span class="o">=</span><span class="n">max_wall_time</span><span class="p">,</span>
+                          <span class="n">optim_alg</span><span class="o">=</span><span class="n">optim_alg</span><span class="p">,</span> <span class="n">max_metric_corr</span><span class="o">=</span><span class="n">max_metric_corr</span><span class="p">,</span>
+                          <span class="n">accuracy_factor</span><span class="o">=</span><span class="n">accuracy_factor</span><span class="p">,</span>
+                          <span class="n">dyn_type</span><span class="o">=</span><span class="s">&#39;UNIT&#39;</span><span class="p">,</span> <span class="n">phase_option</span><span class="o">=</span><span class="n">phase_option</span><span class="p">,</span>
+                          <span class="n">amp_update_mode</span><span class="o">=</span><span class="n">amp_update_mode</span><span class="p">,</span>
+                          <span class="n">init_pulse_type</span><span class="o">=</span><span class="n">init_pulse_type</span><span class="p">,</span>
+                          <span class="n">pulse_scaling</span><span class="o">=</span><span class="n">pulse_scaling</span><span class="p">,</span>
+                          <span class="n">pulse_offset</span><span class="o">=</span><span class="n">pulse_offset</span><span class="p">,</span>
+                          <span class="n">log_level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span> <span class="n">out_file_ext</span><span class="o">=</span><span class="n">out_file_ext</span><span class="p">,</span>
+                          <span class="n">gen_stats</span><span class="o">=</span><span class="n">gen_stats</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="create_pulse_optimizer"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.control.pulseoptim.create_pulse_optimizer">[docs]</a><span class="k">def</span> <span class="nf">create_pulse_optimizer</span><span class="p">(</span>
+        <span class="n">drift</span><span class="p">,</span> <span class="n">ctrls</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+        <span class="n">num_tslots</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">evo_time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">amp_lbound</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">Inf</span><span class="p">,</span> <span class="n">amp_ubound</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">Inf</span><span class="p">,</span>
+        <span class="n">fid_err_targ</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">min_grad</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_wall_time</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+        <span class="n">optim_alg</span><span class="o">=</span><span class="s">&#39;LBFGSB&#39;</span><span class="p">,</span> <span class="n">max_metric_corr</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">accuracy_factor</span><span class="o">=</span><span class="mf">1e7</span><span class="p">,</span>
+        <span class="n">dyn_type</span><span class="o">=</span><span class="s">&#39;GEN_MAT&#39;</span><span class="p">,</span> <span class="n">prop_type</span><span class="o">=</span><span class="s">&#39;DEF&#39;</span><span class="p">,</span>
+        <span class="n">fid_type</span><span class="o">=</span><span class="s">&#39;DEF&#39;</span><span class="p">,</span> <span class="n">phase_option</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fid_err_scale_factor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">amp_update_mode</span><span class="o">=</span><span class="s">&#39;ALL&#39;</span><span class="p">,</span>
+        <span class="n">init_pulse_type</span><span class="o">=</span><span class="s">&#39;RND&#39;</span><span class="p">,</span> <span class="n">pulse_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">pulse_offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">,</span> <span class="n">gen_stats</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the objects of the appropriate subclasses</span>
+<span class="sd">    required for the pulse optmisation based on the parameters given</span>
+<span class="sd">    Note this method may be preferable to calling optimize_pulse</span>
+<span class="sd">    if more detailed configuration is required before running the</span>
+<span class="sd">    optmisation algorthim, or the algorithm will be run many times,</span>
+<span class="sd">    for instances when trying to finding global the optimum or</span>
+<span class="sd">    minimum time optimisation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    drift : Qobj</span>
+<span class="sd">        the underlying dynamics generator of the system</span>
+
+<span class="sd">    ctrls : List of Qobj</span>
+<span class="sd">        a list of control dynamics generators. These are scaled by</span>
+<span class="sd">        the amplitudes to alter the overall dynamics</span>
+
+<span class="sd">    initial : Qobj</span>
+<span class="sd">        starting point for the evolution.</span>
+<span class="sd">        Typically the identity matrix</span>
+
+<span class="sd">    target : Qobj</span>
+<span class="sd">        target transformation, e.g. gate or state, for the time evolution</span>
+
+<span class="sd">    num_tslots : integer or None</span>
+<span class="sd">        number of timeslots.</span>
+<span class="sd">        None implies that timeslots will be given in the tau array</span>
+
+<span class="sd">    evo_time : float or None</span>
+<span class="sd">        total time for the evolution</span>
+<span class="sd">        None implies that timeslots will be given in the tau array</span>
+
+<span class="sd">    tau : array[num_tslots] of floats or None</span>
+<span class="sd">        durations for the timeslots.</span>
+<span class="sd">        if this is given then num_tslots and evo_time are dervived</span>
+<span class="sd">        from it</span>
+<span class="sd">        None implies that timeslot durations will be equal and</span>
+<span class="sd">        calculated as evo_time/num_tslots</span>
+
+<span class="sd">    amp_lbound : float or list of floats</span>
+<span class="sd">        lower boundaries for the control amplitudes</span>
+<span class="sd">        Can be a scalar value applied to all controls</span>
+<span class="sd">        or a list of bounds for each control</span>
+
+<span class="sd">    amp_ubound : float or list of floats</span>
+<span class="sd">        upper boundaries for the control amplitudes</span>
+<span class="sd">        Can be a scalar value applied to all controls</span>
+<span class="sd">        or a list of bounds for each control</span>
+
+<span class="sd">    fid_err_targ : float</span>
+<span class="sd">        Fidelity error target. Pulse optimisation will</span>
+<span class="sd">        terminate when the fidelity error falls below this value</span>
+
+<span class="sd">    mim_grad : float</span>
+<span class="sd">        Minimum gradient. When the sum of the squares of the</span>
+<span class="sd">        gradients wrt to the control amplitudes falls below this</span>
+<span class="sd">        value, the optimisation terminates, assuming local minima</span>
+
+<span class="sd">    max_iter : integer</span>
+<span class="sd">        Maximum number of iterations of the optimisation algorithm</span>
+
+<span class="sd">    max_wall_time : float</span>
+<span class="sd">        Maximum allowed elapsed time for the  optimisation algorithm</span>
+
+<span class="sd">    optim_alg : string</span>
+<span class="sd">        Multi-variable optimisation algorithm</span>
+<span class="sd">        options are BFGS, LBFGSB</span>
+<span class="sd">        (see Optimizer classes for details)</span>
+
+<span class="sd">    max_metric_corr : integer</span>
+<span class="sd">        The maximum number of variable metric corrections used to define</span>
+<span class="sd">        the limited memory matrix. That is the number of previous</span>
+<span class="sd">        gradient values that are used to approximate the Hessian</span>
+<span class="sd">        see the scipy.optimize.fmin_l_bfgs_b documentation for description</span>
+<span class="sd">        of m argument</span>
+<span class="sd">        (used only in L-BFGS-B)</span>
+
+<span class="sd">    accuracy_factor : float</span>
+<span class="sd">        Determines the accuracy of the result.</span>
+<span class="sd">        Typical values for accuracy_factor are: 1e12 for low accuracy;</span>
+<span class="sd">        1e7 for moderate accuracy; 10.0 for extremely high accuracy</span>
+<span class="sd">        scipy.optimize.fmin_l_bfgs_b factr argument.</span>
+<span class="sd">        (used only in L-BFGS-B)</span>
+
+<span class="sd">    dyn_type : string</span>
+<span class="sd">        Dynamics type, i.e. the type of matrix used to describe</span>
+<span class="sd">        the dynamics. Options are UNIT, GEN_MAT, SYMPL</span>
+<span class="sd">        (see Dynamics classes for details)</span>
+
+<span class="sd">    prop_type : string</span>
+<span class="sd">        Propagator type i.e. the method used to calculate the</span>
+<span class="sd">        propagtors and propagtor gradient for each timeslot</span>
+<span class="sd">        options are DEF, APPROX, DIAG, FRECHET, AUG_MAT</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (see PropagatorComputer classes for details)</span>
+
+<span class="sd">    fid_type : string</span>
+<span class="sd">        Fidelity error (and fidelity error gradient) computation method</span>
+<span class="sd">        Options are DEF, UNIT, TRACEDIFF, TD_APPROX</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (See FideliyComputer classes for details)</span>
+
+<span class="sd">    phase_option : string</span>
+<span class="sd">        determines how global phase is treated in fidelity</span>
+<span class="sd">        calculations (fid_type=&#39;UNIT&#39; only). Options:</span>
+<span class="sd">            PSU - global phase ignored</span>
+<span class="sd">            SU - global phase included</span>
+
+<span class="sd">    fid_err_scale_factor : float</span>
+<span class="sd">        (used in TRACEDIFF FidelityComputer and subclasses only)</span>
+<span class="sd">        The fidelity error calculated is of some arbitary scale. This</span>
+<span class="sd">        factor can be used to scale the fidelity error such that it may</span>
+<span class="sd">        represent some physical measure</span>
+<span class="sd">        If None is given then it is caculated as 1/2N, where N</span>
+<span class="sd">        is the dimension of the drift.</span>
+
+<span class="sd">    amp_update_mode : string</span>
+<span class="sd">        determines whether propagators are calculated</span>
+<span class="sd">        Options: DEF, ALL, DYNAMIC (needs work)</span>
+<span class="sd">        DEF will use the default for the specific dyn_type</span>
+<span class="sd">        (See TimeslotComputer classes for details)</span>
+
+<span class="sd">    init_pulse_type : string</span>
+<span class="sd">        type / shape of pulse(s) used to initialise the</span>
+<span class="sd">        the control amplitudes. Options include:</span>
+<span class="sd">            RND, LIN, ZERO, SINE, SQUARE, TRIANGLE, SAW</span>
+<span class="sd">        (see PulseGen classes for details)</span>
+
+<span class="sd">    pulse_scaling : float</span>
+<span class="sd">        Linear scale factor for generated pulses</span>
+<span class="sd">        By default initial pulses are generated with amplitudes in the</span>
+<span class="sd">        range (-1.0, 1.0). These will be scaled by this parameter</span>
+
+<span class="sd">    pulse_offset : float</span>
+<span class="sd">        Line offset for the pulse. That is this value will be added</span>
+<span class="sd">        to any initial pulses generated.</span>
+
+<span class="sd">    log_level : integer</span>
+<span class="sd">        level of messaging output from the logger.</span>
+<span class="sd">        Options are attributes of qutip.logging,</span>
+<span class="sd">        in decreasing levels of messaging, are:</span>
+<span class="sd">        DEBUG_INTENSE, DEBUG_VERBOSE, DEBUG, INFO, WARN, ERROR, CRITICAL</span>
+<span class="sd">        Anything WARN or above is effectively &#39;quiet&#39; execution,</span>
+<span class="sd">        assuming everything runs as expected.</span>
+<span class="sd">        The default NOTSET implies that the level will be taken from</span>
+<span class="sd">        the QuTiP settings file, which by default is WARN</span>
+<span class="sd">        Note value should be set using set_log_level</span>
+
+<span class="sd">    gen_stats : boolean</span>
+<span class="sd">        if set to True then statistics for the optimisation</span>
+<span class="sd">        run will be generated - accessible through attributes</span>
+<span class="sd">        of the stats object</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        Instance of an Optimizer, through which the</span>
+<span class="sd">        Config, Dynamics, PulseGen, and TerminationConditions objects</span>
+<span class="sd">        can be accessed as attributes.</span>
+<span class="sd">        The PropagatorComputer, FidelityComputer and TimeslotComputer objects</span>
+<span class="sd">        can be accessed as attributes of the Dynamics object, e.g.</span>
+<span class="sd">            optimizer.dynamics.fid_computer</span>
+<span class="sd">        The optimisation can be run through the optimizer.run_optimization</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># check parameters</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drift</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;drift must be a Qobj&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">drift</span> <span class="o">=</span> <span class="n">drift</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;ctrls should be a list of Qobj&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">ctrls</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;ctrls should be a list of Qobj&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ctrls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;initial must be a Qobj&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">initial</span> <span class="o">=</span> <span class="n">initial</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;target must be a Qobj&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">optimconfig</span><span class="o">.</span><span class="n">OptimConfig</span><span class="p">()</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">optim_alg</span> <span class="o">=</span> <span class="n">optim_alg</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">max_metric_corr</span> <span class="o">=</span> <span class="n">max_metric_corr</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">accuracy_factor</span> <span class="o">=</span> <span class="n">accuracy_factor</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">amp_update_mode</span> <span class="o">=</span> <span class="n">amp_update_mode</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">dyn_type</span> <span class="o">=</span> <span class="n">dyn_type</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">prop_type</span> <span class="o">=</span> <span class="n">prop_type</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">fid_type</span> <span class="o">=</span> <span class="n">fid_type</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">pulse_type</span> <span class="o">=</span> <span class="n">init_pulse_type</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">phase_option</span> <span class="o">=</span> <span class="n">phase_option</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">amp_lbound</span> <span class="o">=</span> <span class="n">amp_lbound</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">amp_ubound</span> <span class="o">=</span> <span class="n">amp_ubound</span>
+
+    <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">:</span>
+        <span class="n">log_level</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+
+    <span class="n">cfg</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="n">log_level</span>
+
+    <span class="c"># Create the Dynamics instance</span>
+    <span class="k">if</span> <span class="n">dyn_type</span> <span class="o">==</span> <span class="s">&#39;GEN_MAT&#39;</span> <span class="ow">or</span> <span class="n">dyn_type</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">dyn_type</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="n">dyn</span> <span class="o">=</span> <span class="n">dynamics</span><span class="o">.</span><span class="n">DynamicsGenMat</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dyn_type</span> <span class="o">==</span> <span class="s">&#39;UNIT&#39;</span><span class="p">:</span>
+        <span class="n">dyn</span> <span class="o">=</span> <span class="n">dynamics</span><span class="o">.</span><span class="n">DynamicsUnitary</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dyn_type</span> <span class="o">==</span> <span class="s">&#39;SYMPL&#39;</span><span class="p">:</span>
+        <span class="n">dyn</span> <span class="o">=</span> <span class="n">dynamics</span><span class="o">.</span><span class="n">DynamicsSymplectic</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;No option for dyn_type: &quot;</span> <span class="o">+</span> <span class="n">dyn_type</span><span class="p">)</span>
+
+    <span class="c"># Create the PropagatorComputer instance</span>
+    <span class="c"># The default will be typically be the best option</span>
+    <span class="k">if</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s">&#39;DEF&#39;</span> <span class="ow">or</span> <span class="n">prop_type</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="c"># Do nothing use the default for the Dynamics</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s">&#39;APPROX&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompApproxGrad</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompApproxGrad</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s">&#39;DIAG&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s">&#39;AUG_MAT&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompAugMat</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompAugMat</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s">&#39;FRECHET&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompFrechet</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompFrechet</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;No option for prop_type: &quot;</span> <span class="o">+</span> <span class="n">prop_type</span><span class="p">)</span>
+
+    <span class="c"># Create the FideliyComputer instance</span>
+    <span class="c"># The default will be typically be the best option</span>
+    <span class="c"># Note: the FidCompTraceDiffApprox is a subclass of FidCompTraceDiff</span>
+    <span class="c"># so need to check this type first</span>
+    <span class="k">if</span> <span class="n">fid_type</span> <span class="o">==</span> <span class="s">&#39;DEF&#39;</span> <span class="ow">or</span> <span class="n">fid_type</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">fid_type</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="c"># None given, use the default for the Dynamics</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">fid_type</span> <span class="o">==</span> <span class="s">&#39;TDAPPROX&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="p">,</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiffApprox</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span> <span class="o">=</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiffApprox</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">fid_type</span> <span class="o">==</span> <span class="s">&#39;TRACEDIFF&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="p">,</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiff</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span> <span class="o">=</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiff</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">fid_type</span> <span class="o">==</span> <span class="s">&#39;UNIT&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="p">,</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompUnitary</span><span class="p">):</span>
+            <span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span> <span class="o">=</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompUnitary</span><span class="p">(</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;No option for fid_type: &quot;</span> <span class="o">+</span> <span class="n">fid_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="p">,</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompUnitary</span><span class="p">):</span>
+        <span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">set_phase_option</span><span class="p">(</span><span class="n">phase_option</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="p">,</span> <span class="n">fidcomp</span><span class="o">.</span><span class="n">FidCompTraceDiff</span><span class="p">):</span>
+        <span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="n">fid_err_scale_factor</span>
+
+    <span class="c"># Create the Optimiser instance</span>
+    <span class="c"># The class of the object will determine which multivar optimisation</span>
+    <span class="c"># algorithm is used</span>
+    <span class="k">if</span> <span class="n">optim_alg</span> <span class="o">==</span> <span class="s">&#39;BFGS&#39;</span><span class="p">:</span>
+        <span class="n">optim</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">OptimizerBFGS</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">optim_alg</span> <span class="o">==</span> <span class="s">&#39;LBFGSB&#39;</span><span class="p">:</span>
+        <span class="n">optim</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">OptimizerLBFGSB</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dyn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">optim_alg</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;Optimisation algorithm must be specified &quot;</span>
+                                <span class="s">&quot;via &#39;optim_alg&#39; parameter&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s">&quot;No option for optim_alg: &quot;</span> <span class="o">+</span> <span class="n">optim_alg</span><span class="p">)</span>
+
+    <span class="c"># Create the TerminationConditions instance</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">termcond</span><span class="o">.</span><span class="n">TerminationConditions</span><span class="p">()</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">fid_err_targ</span> <span class="o">=</span> <span class="n">fid_err_targ</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">min_gradient_norm</span> <span class="o">=</span> <span class="n">min_grad</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">=</span> <span class="n">max_iter</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">max_wall_time</span> <span class="o">=</span> <span class="n">max_wall_time</span>
+    <span class="n">optim</span><span class="o">.</span><span class="n">termination_conditions</span> <span class="o">=</span> <span class="n">tc</span>
+
+    <span class="k">if</span> <span class="n">gen_stats</span><span class="p">:</span>
+        <span class="c"># Create a stats object</span>
+        <span class="c"># Note that stats object is optional</span>
+        <span class="c"># if the Dynamics and Optimizer stats attribute is not set</span>
+        <span class="c"># then no stats will be collected, which could improve performance</span>
+        <span class="k">if</span> <span class="n">amp_update_mode</span> <span class="o">==</span> <span class="s">&#39;DYNAMIC&#39;</span><span class="p">:</span>
+            <span class="n">sts</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">StatsDynTsUpdate</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sts</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">Stats</span><span class="p">()</span>
+
+        <span class="n">dyn</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">sts</span>
+        <span class="n">optim</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">sts</span>
+
+    <span class="c"># Configure the dynamics</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">drift_dyn_gen</span> <span class="o">=</span> <span class="n">drift</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">ctrls</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">initial</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+    <span class="k">if</span> <span class="n">tau</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># Check that parameters have been supplied to generate the</span>
+        <span class="c"># timeslot durations</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">evo_time</span> <span class="o">/</span> <span class="n">num_tslots</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span>
+                <span class="s">&quot;Either the timeslot durations should be supplied as an &quot;</span>
+                <span class="s">&quot;array &#39;tau&#39; or the number of timeslots &#39;num_tslots&#39; &quot;</span>
+                <span class="s">&quot;and the evolution time &#39;evo_time&#39; must be given.&quot;</span><span class="p">)</span>
+
+        <span class="n">dyn</span><span class="o">.</span><span class="n">num_tslots</span> <span class="o">=</span> <span class="n">num_tslots</span>
+        <span class="n">dyn</span><span class="o">.</span><span class="n">evo_time</span> <span class="o">=</span> <span class="n">evo_time</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dyn</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span>
+
+    <span class="c"># this function is called, so that the num_ctrls attribute will be set</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">get_num_ctrls</span><span class="p">()</span>
+
+    <span class="c"># Create a pulse generator of the type specified</span>
+    <span class="n">p_gen</span> <span class="o">=</span> <span class="n">pulsegen</span><span class="o">.</span><span class="n">create_pulse_gen</span><span class="p">(</span><span class="n">pulse_type</span><span class="o">=</span><span class="n">init_pulse_type</span><span class="p">,</span> <span class="n">dyn</span><span class="o">=</span><span class="n">dyn</span><span class="p">)</span>
+    <span class="n">p_gen</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="n">pulse_scaling</span>
+    <span class="n">p_gen</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">pulse_offset</span>
+    <span class="n">p_gen</span><span class="o">.</span><span class="n">lbound</span> <span class="o">=</span> <span class="n">amp_lbound</span>
+    <span class="n">p_gen</span><span class="o">.</span><span class="n">ubound</span> <span class="o">=</span> <span class="n">amp_ubound</span>
+
+    <span class="c"># If the pulse is a periodic type, then set the pulse to be one complete</span>
+    <span class="c"># wave</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_gen</span><span class="p">,</span> <span class="n">pulsegen</span><span class="o">.</span><span class="n">PulseGenPeriodic</span><span class="p">):</span>
+        <span class="n">p_gen</span><span class="o">.</span><span class="n">num_waves</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">optim</span><span class="o">.</span><span class="n">pulse_generator</span> <span class="o">=</span> <span class="n">p_gen</span>
+
+    <span class="k">if</span> <span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s">&quot;Optimisation config summary...</span><span class="se">\n</span><span class="s">&quot;</span>
+            <span class="s">&quot;  object classes:</span><span class="se">\n</span><span class="s">&quot;</span>
+            <span class="s">&quot;    optimizer: &quot;</span> <span class="o">+</span> <span class="n">optim</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">    dynamics: &quot;</span> <span class="o">+</span> <span class="n">dyn</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">    tslotcomp: &quot;</span> <span class="o">+</span> <span class="n">dyn</span><span class="o">.</span><span class="n">tslot_computer</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">    fidcomp: &quot;</span> <span class="o">+</span> <span class="n">dyn</span><span class="o">.</span><span class="n">fid_computer</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">    propcomp: &quot;</span> <span class="o">+</span> <span class="n">dyn</span><span class="o">.</span><span class="n">prop_computer</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span>
+            <span class="s">&quot;</span><span class="se">\n</span><span class="s">    pulsegen: &quot;</span> <span class="o">+</span> <span class="n">p_gen</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optim</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson.<br/>
+      Last updated on Dec 31, 2014.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
