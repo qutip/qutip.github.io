@@ -144,7 +144,6 @@ var map = new Datamap({
 		SYR: '#00ffff',
 		TZA: '#00ffff',
 		UGA: '#00ffff',
-		U.S. Virgin Islands: '#00ffff',
 		ZMB: '#00ffff',
 		ZWE: '#00ffff',
 	},
@@ -281,7 +280,6 @@ var map = new Datamap({
 		SYR: {fillKey: 'SYR', visitors: 1, country: 'Syrian Arab Republic' },
 		TZA: {fillKey: 'TZA', visitors: 1, country: 'Tanzania, United Republic Of' },
 		UGA: {fillKey: 'UGA', visitors: 1, country: 'Uganda' },
-		U.S. Virgin Islands: {fillKey: 'U.S. Virgin Islands', visitors: 1, country: 'U.S. Virgin Islands' },
 		ZMB: {fillKey: 'ZMB', visitors: 1, country: 'Zambia' },
 		ZWE: {fillKey: 'ZWE', visitors: 1, country: 'Zimbabwe' },
 	}
