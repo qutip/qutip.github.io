@@ -1,0 +1,478 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Monte Carlo Solver &mdash; QuTiP 4.0 Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="QuTiP 4.0 Documentation" href="../../index.html"/>
+        <link rel="up" title="Time Evolution and Quantum System Dynamics" href="../guide-dynamics.html"/>
+        <link rel="next" title="Bloch-Redfield master equation" href="dynamics-bloch-redfield.html"/>
+        <link rel="prev" title="Lindblad Master Equation Solver" href="dynamics-master.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-master.html">Lindblad Master Equation Solver</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Monte Carlo Solver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#monte-carlo-in-qutip">Monte Carlo in QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+      
+          <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
+      
+    <li>Monte Carlo Solver</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="monte-carlo-solver">
+<span id="monte"></span><h1>Monte Carlo Solver<a class="headerlink" href="#monte-carlo-solver" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<span id="monte-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Where as the density matrix formalism describes the ensemble average over many identical realizations of a quantum system, the Monte Carlo (MC), or quantum-jump approach to wave function evolution, allows for simulating an individual realization of the system dynamics.  Here, the environment is continuously monitored, resulting in a series of quantum jumps in the system wave function, conditioned on the increase in information gained about the state of the system via the environmental measurements.  In general, this evolution is governed by the Schrödinger equation with a <strong>non-Hermitian</strong> effective Hamiltonian</p>
+<div class="math" id="equation-heff">
+<span class="eqno">(1)<a class="headerlink" href="#equation-heff" title="Permalink to this equation">¶</a></span>\[H_{\rm eff}=H_{\rm sys}-\frac{i\hbar}{2}\sum_{i}C^{+}_{n}C_{n},\]</div>
+<p>where again, the <span class="math">\(C_{n}\)</span> are collapse operators, each corresponding to a separate irreversible process with rate <span class="math">\(\gamma_{n}\)</span>.  Here, the strictly negative non-Hermitian portion of Eq. <a class="reference internal" href="#equation-heff">(1)</a> gives rise to a reduction in the norm of the wave function, that to first-order in a small time <span class="math">\(\delta t\)</span>, is given by <span class="math">\(\left&lt;\psi(t+\delta t)|\psi(t+\delta t)\right&gt;=1-\delta p\)</span> where</p>
+<div class="math" id="equation-jump">
+<span class="eqno">(2)<a class="headerlink" href="#equation-jump" title="Permalink to this equation">¶</a></span>\[\delta p =\delta t \sum_{n}\left&lt;\psi(t)|C^{+}_{n}C_{n}|\psi(t)\right&gt;,\]</div>
+<p>and <span class="math">\(\delta t\)</span> is such that <span class="math">\(\delta p \ll 1\)</span>.  With a probability of remaining in the state <span class="math">\(\left|\psi(t+\delta t)\right&gt;\)</span> given by <span class="math">\(1-\delta p\)</span>, the corresponding quantum jump probability is thus Eq. <a class="reference internal" href="#equation-jump">(2)</a>.  If the environmental measurements register a quantum jump, say via the emission of a photon into the environment, or a change in the spin of a quantum dot, the wave function undergoes a jump into a state defined by projecting <span class="math">\(\left|\psi(t)\right&gt;\)</span> using the collapse operator <span class="math">\(C_{n}\)</span> corresponding to the measurement</p>
+<div class="math" id="equation-project">
+<span class="eqno">(3)<a class="headerlink" href="#equation-project" title="Permalink to this equation">¶</a></span>\[\left|\psi(t+\delta t)\right&gt;=C_{n}\left|\psi(t)\right&gt;/\left&lt;\psi(t)|C_{n}^{+}C_{n}|\psi(t)\right&gt;^{1/2}.\]</div>
+<p>If more than a single collapse operator is present in Eq. <a class="reference internal" href="#equation-heff">(1)</a>, the probability of collapse due to the <span class="math">\(i\mathrm{th}\)</span>-operator <span class="math">\(C_{i}\)</span> is given by</p>
+<div class="math" id="equation-pcn">
+<span class="eqno">(4)<a class="headerlink" href="#equation-pcn" title="Permalink to this equation">¶</a></span>\[P_{i}(t)=\left&lt;\psi(t)|C_{i}^{+}C_{i}|\psi(t)\right&gt;/\delta p.\]</div>
+<p>Evaluating the MC evolution to first-order in time is quite tedious.  Instead, QuTiP uses the following algorithm to simulate a single realization of a quantum system.  Starting from a pure state <span class="math">\(\left|\psi(0)\right&gt;\)</span>:</p>
+<ul class="simple">
+<li><strong>I:</strong> Choose a random number <span class="math">\(r\)</span> between zero and one, representing the probability that a quantum jump occurs.</li>
+<li><strong>II:</strong> Integrate the Schrödinger equation, using the effective Hamiltonian <a class="reference internal" href="#equation-heff">(1)</a> until a time <span class="math">\(\tau\)</span> such that the norm of the wave function satisfies <span class="math">\(\left&lt;\psi(\tau)\right.\left|\psi(\tau)\right&gt;=r\)</span>, at which point a jump occurs.</li>
+<li><strong>III:</strong> The resultant jump projects the system at time <span class="math">\(\tau\)</span> into one of the renormalized states given by Eq. <a class="reference internal" href="#equation-project">(3)</a>.  The corresponding collapse operator <span class="math">\(C_{n}\)</span> is chosen such that <span class="math">\(n\)</span> is the smallest integer satisfying:</li>
+</ul>
+<div class="math" id="equation-mc3">
+<span class="eqno">(5)<a class="headerlink" href="#equation-mc3" title="Permalink to this equation">¶</a></span>\[\sum_{i=1}^{n} P_{n}(\tau) \ge r\]</div>
+<p>where the individual <span class="math">\(P_{n}\)</span> are given by Eq. <a class="reference internal" href="#equation-pcn">(4)</a>.  Note that the left hand side of Eq. <a class="reference internal" href="#equation-mc3">(5)</a> is, by definition, normalized to unity.</p>
+<ul class="simple">
+<li><strong>IV:</strong> Using the renormalized state from step III as the new initial condition at time <span class="math">\(\tau\)</span>, draw a new random number, and repeat the above procedure until the final simulation time is reached.</li>
+</ul>
+</div>
+<div class="section" id="monte-carlo-in-qutip">
+<span id="monte-qutip"></span><h2>Monte Carlo in QuTiP<a class="headerlink" href="#monte-carlo-in-qutip" title="Permalink to this headline">¶</a></h2>
+<p>In QuTiP, Monte Carlo evolution is implemented with the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></code></a> function. It takes nearly the same arguments as the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>
+function for master-equation evolution, except that the initial state must be a ket vector, as oppose to a density matrix, and there is an optional keyword parameter <code class="docutils literal"><span class="pre">ntraj</span></code> that defines the number of stochastic trajectories to be simulated.  By default, <code class="docutils literal"><span class="pre">ntraj=500</span></code> indicating that 500 Monte Carlo trajectories will be performed.</p>
+<p>To illustrate the use of the Monte Carlo evolution of quantum systems in QuTiP, let&#8217;s again consider the case of a two-level atom coupled to a leaky cavity. The only differences to the master-equation treatment is that in this case we invoke the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></code></a> function instead of <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+<span class="gp">In [2]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="gp">In [3]: </span><span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [4]: </span><span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [5]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+<span class="go">10.0%. Run time:   5.58s. Est. time left: 00:00:00:50</span>
+<span class="go">20.0%. Run time:  10.97s. Est. time left: 00:00:00:43</span>
+<span class="go">30.0%. Run time:  16.00s. Est. time left: 00:00:00:37</span>
+<span class="go">40.0%. Run time:  21.07s. Est. time left: 00:00:00:31</span>
+<span class="go">50.0%. Run time:  26.12s. Est. time left: 00:00:00:26</span>
+<span class="go">60.0%. Run time:  31.12s. Est. time left: 00:00:00:20</span>
+<span class="go">70.0%. Run time:  36.10s. Est. time left: 00:00:00:15</span>
+<span class="go">80.0%. Run time:  41.23s. Est. time left: 00:00:00:10</span>
+<span class="go">90.0%. Run time:  46.66s. Est. time left: 00:00:00:05</span>
+<span class="go">100.0%. Run time:  51.74s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:  51.78s</span>
+
+<span class="gp">In [7]: </span><span class="n">figure</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Out[7]: &lt;matplotlib.figure.Figure at 0x2af2681d00f0&gt;</span>
+
+<span class="gp">In [8]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Out[8]: </span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x2af268a7a160&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x2af268a7a3c8&gt;]</span>
+
+<span class="gp">In [9]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Out[9]: &lt;matplotlib.text.Text at 0x2af268a96ac8&gt;</span>
+
+<span class="gp">In [10]: </span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Out[10]: &lt;matplotlib.text.Text at 0x2af268436588&gt;</span>
+
+<span class="gp">In [11]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Out[11]: &lt;matplotlib.text.Text at 0x2af268404d68&gt;</span>
+
+<span class="gp">In [12]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Out[12]: &lt;matplotlib.legend.Legend at 0x2af2683ffdd8&gt;</span>
+
+<span class="gp">In [13]: </span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/guide-monte1.png"><img alt="../../_images/guide-monte1.png" class="align-center" src="../../_images/guide-monte1.png" style="width: 5.0in;" /></a>
+<p>The advantage of the Monte Carlo method over the master equation approach is that only the state vector is required to be kept in the computers memory, as opposed to the entire density matrix. For large quantum system this becomes a significant advantage, and the Monte Carlo solver is therefore generally recommended for such systems. For example, simulating a Heisenberg spin-chain consisting of 10 spins with random parameters and initial states takes almost 7 times longer using the master equation rather than Monte Carlo approach with the default number of trajectories running on a quad-CPU machine.  Furthermore, it takes about 7 times the memory as well. However, for small systems, the added overhead of averaging a large number of stochastic trajectories to obtain the open system dynamics, as well as starting the multiprocessing functionality, outweighs the benefit of the minor (in this case) memory saving. Master equation methods are therefore generally more efficient when Hilbert space sizes are on the order of a couple of hundred states or smaller.</p>
+<p>Like the master equation solver <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>, the Monte Carlo solver returns a <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></code></a> object consisting of expectation values, if the user has defined expectation value operators in the 5th argument to <code class="docutils literal"><span class="pre">mcsolve</span></code>, or state vectors if no expectation value operators are given.  If state vectors are returned, then the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></code></a> returned by <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mcsolve</span></code></a> will be an array of length <code class="docutils literal"><span class="pre">ntraj</span></code>, with each element containing an array of ket-type qobjs with the same number of elements as <code class="docutils literal"><span class="pre">times</span></code>.  Furthermore, the output <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></code></a> object will also contain a list of times at which collapse occurred, and which collapse operators did the collapse, in the <code class="docutils literal"><span class="pre">col_times</span></code> and <code class="docutils literal"><span class="pre">col_which</span></code> properties, respectively.</p>
+<div class="section" id="changing-the-number-of-trajectories">
+<span id="monte-ntraj"></span><h3>Changing the Number of Trajectories<a class="headerlink" href="#changing-the-number-of-trajectories" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned earlier, by default, the <code class="docutils literal"><span class="pre">mcsolve</span></code> function runs 500 trajectories.  This value was chosen because it gives good accuracy, Monte Carlo errors scale as <span class="math">\(1/n\)</span> where <span class="math">\(n\)</span> is the number of trajectories, and simultaneously does not take an excessive amount of time to run.  However, like many other options in QuTiP you are free to change the number of trajectories to fit your needs.  If we want to run 1000 trajectories in the above example, we can simply modify the call to <code class="docutils literal"><span class="pre">mcsolve</span></code> like:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">10.0%. Run time:  15.97s. Est. time left: 00:00:02:23</span>
+<span class="go">20.0%. Run time:  34.17s. Est. time left: 00:00:02:16</span>
+<span class="go">30.0%. Run time:  44.63s. Est. time left: 00:00:01:44</span>
+<span class="go">40.0%. Run time:  55.03s. Est. time left: 00:00:01:22</span>
+<span class="go">50.0%. Run time:  65.26s. Est. time left: 00:00:01:05</span>
+<span class="go">60.0%. Run time:  75.43s. Est. time left: 00:00:00:50</span>
+<span class="go">70.0%. Run time:  85.47s. Est. time left: 00:00:00:36</span>
+<span class="go">80.0%. Run time:  96.08s. Est. time left: 00:00:00:24</span>
+<span class="go">90.0%. Run time: 107.14s. Est. time left: 00:00:00:11</span>
+<span class="go">100.0%. Run time: 117.63s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time: 117.73s</span>
+</pre></div>
+</div>
+<p>where we have added the keyword argument <code class="docutils literal"><span class="pre">ntraj=1000</span></code> at the end of the inputs.  Now, the Monte Carlo solver will calculate expectation values for both operators, <code class="docutils literal"><span class="pre">a.dag()</span> <span class="pre">*</span> <span class="pre">a,</span> <span class="pre">sm.dag()</span> <span class="pre">*</span> <span class="pre">sm</span></code> averaging over 1000 trajectories.  Sometimes one is also interested in seeing how the Monte Carlo trajectories converge to the master equation solution by calculating expectation values over a range of trajectory numbers.  If, for example, we want to average over 1, 10, 100, and 1000 trajectories, then we can input this into the solver using:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">ntraj</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Keep in mind that the input list must be in ascending order since the total number of trajectories run by <code class="docutils literal"><span class="pre">mcsolve</span></code> will be calculated using the last element of <code class="docutils literal"><span class="pre">ntraj</span></code>.  In this case, we need to use an extra index when getting the expectation values from the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></code></a> object returned by <code class="docutils literal"><span class="pre">mcsolve</span></code>.  In the above example using:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+<span class="go">10.0%. Run time:  10.21s. Est. time left: 00:00:01:31</span>
+<span class="go">20.0%. Run time:  20.16s. Est. time left: 00:00:01:20</span>
+<span class="go">30.0%. Run time:  30.43s. Est. time left: 00:00:01:11</span>
+<span class="go">40.0%. Run time:  40.76s. Est. time left: 00:00:01:01</span>
+<span class="go">50.0%. Run time:  50.92s. Est. time left: 00:00:00:50</span>
+<span class="go">60.0%. Run time:  60.90s. Est. time left: 00:00:00:40</span>
+<span class="go">70.0%. Run time:  71.09s. Est. time left: 00:00:00:30</span>
+<span class="go">80.0%. Run time:  81.30s. Est. time left: 00:00:00:20</span>
+<span class="go">90.0%. Run time:  91.70s. Est. time left: 00:00:00:10</span>
+<span class="go">100.0%. Run time: 101.63s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time: 101.66s</span>
+</pre></div>
+</div>
+<p>we can extract the relevant expectation values using:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [17]: </span><span class="n">expt10</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    <span class="c1"># &lt;- expectation values avg. over 10 trajectories</span>
+
+<span class="gp">In [18]: </span><span class="n">expt100</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>   <span class="c1"># &lt;- expectation  values avg. over 100 trajectories</span>
+
+<span class="gp">In [19]: </span><span class="n">expt1000</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># &lt;- expectation values avg. over 1000 trajectories</span>
+</pre></div>
+</div>
+<p>The Monte Carlo solver also has many available options that can be set using the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Options" title="qutip.solver.Options"><code class="xref py py-func docutils literal"><span class="pre">qutip.solver.Options</span></code></a> class as discussed in <a class="reference internal" href="dynamics-options.html#options"><span class="std std-ref">Setting Options for the Dynamics Solvers</span></a>.</p>
+</div>
+<div class="section" id="reusing-hamiltonian-data">
+<span id="monte-reuse"></span><h3>Reusing Hamiltonian Data<a class="headerlink" href="#reusing-hamiltonian-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section covers a specialized topic and may be skipped if you are new to QuTiP.</p>
+</div>
+<p>In order to solve a given simulation as fast as possible, the solvers in QuTiP take the given input operators and break them down into simpler components before passing them on to the ODE solvers.  Although these operations are reasonably fast, the time spent organizing data can become appreciable when repeatedly solving a system over, for example, many different initial conditions. In cases such as this, the Hamiltonian and other operators may be reused after the initial configuration, thus speeding up calculations.  Note that, unless you are planning to reuse the data many times, this functionality will not be very useful.</p>
+<p>To turn on the &#8220;reuse&#8221; functionality we must set the <code class="docutils literal"><span class="pre">rhs_reuse=True</span></code> flag in the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Options" title="qutip.solver.Options"><code class="xref py py-func docutils literal"><span class="pre">qutip.solver.Options</span></code></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A full account of this feature is given in <a class="reference internal" href="dynamics-options.html#options"><span class="std std-ref">Setting Options for the Dynamics Solvers</span></a>.  Using the previous example, we will calculate the dynamics for two different initial states, with the Hamiltonian data being reused on the second call</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="gp">In [22]: </span><span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [23]: </span><span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [24]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> \
+<span class="gp">   ....: </span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [25]: </span><span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+<span class="go">10.0%. Run time:   9.28s. Est. time left: 00:00:01:23</span>
+<span class="go">20.0%. Run time:  18.35s. Est. time left: 00:00:01:13</span>
+<span class="go">30.0%. Run time:  27.51s. Est. time left: 00:00:01:04</span>
+<span class="go">40.0%. Run time:  36.57s. Est. time left: 00:00:00:54</span>
+<span class="go">50.0%. Run time:  45.54s. Est. time left: 00:00:00:45</span>
+<span class="go">60.0%. Run time:  54.76s. Est. time left: 00:00:00:36</span>
+<span class="go">70.0%. Run time:  64.17s. Est. time left: 00:00:00:27</span>
+<span class="go">80.0%. Run time:  73.63s. Est. time left: 00:00:00:18</span>
+<span class="go">90.0%. Run time:  83.05s. Est. time left: 00:00:00:09</span>
+<span class="go">100.0%. Run time:  92.04s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:  92.12s</span>
+
+<span class="gp">In [26]: </span><span class="n">psi1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">coherent</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1j</span><span class="p">))</span>
+
+<span class="gp">In [27]: </span><span class="n">opts</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c1"># Run a second time, reusing RHS</span>
+
+<span class="gp">In [28]: </span><span class="n">data2</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="n">opts</span><span class="p">)</span>
+<span class="go">10.0%. Run time:  17.65s. Est. time left: 00:00:02:38</span>
+<span class="go">20.0%. Run time:  32.36s. Est. time left: 00:00:02:09</span>
+<span class="go">30.0%. Run time:  41.76s. Est. time left: 00:00:01:37</span>
+<span class="go">40.0%. Run time:  53.80s. Est. time left: 00:00:01:20</span>
+<span class="go">50.0%. Run time:  70.57s. Est. time left: 00:00:01:10</span>
+<span class="go">60.0%. Run time:  87.56s. Est. time left: 00:00:00:58</span>
+<span class="go">70.0%. Run time:  98.71s. Est. time left: 00:00:00:42</span>
+<span class="go">80.0%. Run time: 108.04s. Est. time left: 00:00:00:27</span>
+<span class="go">90.0%. Run time: 117.54s. Est. time left: 00:00:00:13</span>
+<span class="go">100.0%. Run time: 126.87s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time: 126.96s</span>
+
+<span class="gp">In [29]: </span><span class="n">figure</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Out[29]: &lt;matplotlib.figure.Figure at 0x2af2675e7438&gt;</span>
+
+<span class="gp">In [30]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Out[30]: </span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x2af2675d3400&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x2af2675d3048&gt;]</span>
+
+<span class="gp">In [31]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Out[31]: </span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x2af2676104e0&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x2af267610c18&gt;]</span>
+
+<span class="gp">In [32]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Out[32]: &lt;matplotlib.text.Text at 0x2af2677caf60&gt;</span>
+
+<span class="gp">In [33]: </span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Out[33]: &lt;matplotlib.text.Text at 0x2af2675737f0&gt;</span>
+
+<span class="gp">In [34]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Out[34]: &lt;matplotlib.text.Text at 0x2af2675a53c8&gt;</span>
+
+<span class="gp">In [35]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Out[35]: &lt;matplotlib.legend.Legend at 0x2af26783f898&gt;</span>
+
+<span class="gp">In [36]: </span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/guide-monte2.png"><img alt="../../_images/guide-monte2.png" class="align-center" src="../../_images/guide-monte2.png" style="width: 5.0in;" /></a>
+<p>In addition to the initial state, one may reuse the Hamiltonian data when changing the number of trajectories <code class="docutils literal"><span class="pre">ntraj</span></code> or simulation times <code class="docutils literal"><span class="pre">times</span></code>.  The reusing of Hamiltonian data is also supported for time-dependent Hamiltonians.  See <a class="reference internal" href="dynamics-time.html#time"><span class="std std-ref">Solving Problems with Time-dependent Hamiltonians</span></a> for further details.</p>
+</div>
+<div class="section" id="fortran-based-monte-carlo-solver">
+<h3>Fortran Based Monte Carlo Solver<a class="headerlink" href="#fortran-based-monte-carlo-solver" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to use the Fortran Monte Carlo solver, you must have the blas development libraries, and installed QuTiP using the flag: <code class="docutils literal"><span class="pre">--with-f90mc</span></code>.</p>
+</div>
+<p>In performing time-independent Monte Carlo simulations with QuTiP, systems with small Hilbert spaces suffer from poor performance as the ODE solver must exit the ODE solver at each time step and check for the state vector norm.  To correct this, QuTiP now includes an optional Fortran based Monte Carlo solver that has enhanced performance for systems with small Hilbert space dimensionality.  Using the Fortran based solver is extremely simple; one just needs to replace <code class="docutils literal"><span class="pre">mcsolve</span></code> with <code class="docutils literal"><span class="pre">mcsolve_f90</span></code>.  For example, from our previous demonstration</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [37]: </span><span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve_f90</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-37-f664f76fd9fd&gt;</span> in <span class="ni">&lt;module&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve_f90</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
+
+<span class="ne">NameError</span>: name &#39;mcsolve_f90&#39; is not defined
+</pre></div>
+</div>
+<p>In using the Fortran solver, there are a few limitations that must be kept in mind.  First, this solver only works for time-independent systems.  Second, you can not pass a list of trajectories to <code class="docutils literal"><span class="pre">ntraj</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dynamics-bloch-redfield.html" class="btn btn-neutral float-right" title="Bloch-Redfield master equation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dynamics-master.html" class="btn btn-neutral" title="Lindblad Master Equation Solver" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
+      Last updated on Jan 09, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
