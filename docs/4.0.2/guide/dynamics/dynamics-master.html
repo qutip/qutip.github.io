@@ -1,0 +1,440 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lindblad Master Equation Solver &mdash; QuTiP 4.0 Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="QuTiP 4.0 Documentation" href="../../index.html"/>
+        <link rel="up" title="Time Evolution and Quantum System Dynamics" href="../guide-dynamics.html"/>
+        <link rel="next" title="Monte Carlo Solver" href="dynamics-monte.html"/>
+        <link rel="prev" title="Dynamics Simulation Results" href="dynamics-data.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Lindblad Master Equation Solver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#unitary-evolution">Unitary evolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#non-unitary-evolution">Non-unitary evolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-lindblad-master-equation">The Lindblad Master equation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+      
+          <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
+      
+    <li>Lindblad Master Equation Solver</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lindblad-master-equation-solver">
+<span id="master"></span><h1>Lindblad Master Equation Solver<a class="headerlink" href="#lindblad-master-equation-solver" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="unitary-evolution">
+<span id="master-unitary"></span><h2>Unitary evolution<a class="headerlink" href="#unitary-evolution" title="Permalink to this headline">¶</a></h2>
+<p>The dynamics of a closed (pure) quantum system is governed by the Schrödinger equation</p>
+<div class="math" id="equation-schrodinger">
+<span class="eqno">(1)<a class="headerlink" href="#equation-schrodinger" title="Permalink to this equation">¶</a></span>\[     i\hbar\frac{\partial}{\partial t}\Psi = \hat H \Psi,\]</div>
+<p>where <span class="math">\(\Psi\)</span> is the wave function, <span class="math">\(\hat H\)</span> the Hamiltonian, and <span class="math">\(\hbar\)</span> is Planck&#8217;s constant. In general, the Schrödinger equation is a partial differential equation (PDE) where both <span class="math">\(\Psi\)</span> and <span class="math">\(\hat H\)</span> are functions of space and time. For computational purposes it is useful to expand the PDE in a set of basis functions that span the Hilbert space of the Hamiltonian, and to write the equation in matrix and vector form</p>
+<div class="math">
+\[i\hbar\frac{d}{dt}\left|\psi\right&gt; = H \left|\psi\right&gt;\]</div>
+<p>where <span class="math">\(\left|\psi\right&gt;\)</span> is the state vector and <span class="math">\(H\)</span> is the matrix representation of the Hamiltonian. This matrix equation can, in principle, be solved by diagonalizing the Hamiltonian matrix <span class="math">\(H\)</span>. In practice, however, it is difficult to perform this diagonalization unless the size of the Hilbert space (dimension of the matrix <span class="math">\(H\)</span>) is small. Analytically, it is a formidable task to calculate the dynamics for systems with more than two states. If, in addition, we consider dissipation due to the inevitable interaction with a surrounding environment, the computational complexity grows even larger, and we have to resort to numerical calculations in all realistic situations. This illustrates the importance of numerical calculations in describing the dynamics of open quantum systems, and the need for efficient and accessible tools for this task.</p>
+<p>The Schrödinger equation, which governs the time-evolution of closed quantum systems, is defined by its Hamiltonian and state vector. In the previous section, <a class="reference internal" href="../guide-tensor.html#tensor"><span class="std std-ref">Using Tensor Products and Partial Traces</span></a>, we showed how Hamiltonians and state vectors are constructed in QuTiP. Given a Hamiltonian, we can calculate the unitary (non-dissipative) time-evolution of an arbitrary state vector <span class="math">\(\left|\psi_0\right&gt;\)</span> (<code class="docutils literal"><span class="pre">psi0</span></code>) using the QuTiP function <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>. It evolves the state vector and evaluates the expectation values for a set of operators <code class="docutils literal"><span class="pre">expt_ops</span></code> at the points in time in the list <code class="docutils literal"><span class="pre">times</span></code>, using an ordinary differential equation solver. Alternatively, we can use the function <a class="reference internal" href="../../apidoc/functions.html#module-qutip.essolve" title="qutip.essolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.essolve</span></code></a>, which uses the exponential-series technique to calculate the time evolution of a system. The <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> and <a class="reference internal" href="../../apidoc/functions.html#module-qutip.essolve" title="qutip.essolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.essolve</span></code></a> functions take the same arguments and it is therefore easy switch between the two solvers.</p>
+<p>For example, the time evolution of a quantum spin-1/2 system with tunneling rate 0.1 that initially is in the up state is calculated, and the  expectation values of the <span class="math">\(\sigma_z\)</span> operator evaluated, with the following code</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">()</span>
+
+<span class="gp">In [2]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="n">sigmaz</span><span class="p">()])</span>
+</pre></div>
+</div>
+<p>The brackets in the fourth argument is an empty list of collapse operators, since we consider unitary evolution in this example. See the next section for examples on how dissipation is included by defining a list of collapse operators.</p>
+<p>The function returns an instance of <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></code></a>, as described in the previous section <a class="reference internal" href="dynamics-data.html#solver-result"><span class="std std-ref">Dynamics Simulation Results</span></a>. The attribute <code class="docutils literal"><span class="pre">expect</span></code> in <code class="docutils literal"><span class="pre">result</span></code> is a list of expectation values for the operators that are included in the list in the fifth argument. Adding operators to this list results in a larger output list returned by the function (one array of numbers, corresponding to the times in times, for each operator)</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">()])</span>
+
+<span class="gp">In [6]: </span><span class="n">result</span><span class="o">.</span><span class="n">expect</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">[array([ 1.        ,  0.78914057,  0.24548559, -0.40169513, -0.8794735 ,</span>
+<span class="go">        -0.98636142, -0.67728219, -0.08258023,  0.54694721,  0.94581685,</span>
+<span class="go">         0.94581769,  0.54694945, -0.08257765, -0.67728015, -0.98636097,</span>
+<span class="go">        -0.87947476, -0.40169736,  0.24548326,  0.78913896,  1.        ]),</span>
+<span class="go"> array([  0.00000000e+00,  -6.14212640e-01,  -9.69400240e-01,</span>
+<span class="go">         -9.15773457e-01,  -4.75947849e-01,   1.64593874e-01,</span>
+<span class="go">          7.35723339e-01,   9.96584419e-01,   8.37167094e-01,</span>
+<span class="go">          3.24700624e-01,  -3.24698160e-01,  -8.37165632e-01,</span>
+<span class="go">         -9.96584633e-01,  -7.35725221e-01,  -1.64596567e-01,</span>
+<span class="go">          4.75945525e-01,   9.15772479e-01,   9.69400830e-01,</span>
+<span class="go">          6.14214701e-01,   2.77159958e-06])]</span>
+</pre></div>
+</div>
+<p>The resulting list of expectation values can easily be visualized using matplotlib&#8217;s plotting functions:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">()</span>
+
+<span class="gp">In [8]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">()])</span>
+
+<span class="gp">In [11]: </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">subplots</span><span class="p">()</span>
+
+<span class="gp">In [12]: </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+<span class="gp">In [13]: </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+<span class="gp">In [14]: </span><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">);</span>
+
+<span class="gp">In [15]: </span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">);</span>
+
+<span class="gp">In [16]: </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;Sigma-Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Sigma-Y&quot;</span><span class="p">));</span>
+
+<span class="gp">In [17]: </span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/guide-dynamics-qubit.png"><img alt="../../_images/guide-dynamics-qubit.png" class="align-center" src="../../_images/guide-dynamics-qubit.png" style="width: 5.0in;" /></a>
+<p>If an empty list of operators is passed as fifth parameter, the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function returns a <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal"><span class="pre">qutip.solver.Result</span></code></a> instance that contains a list of state vectors for the times specified in <code class="docutils literal"><span class="pre">times</span></code></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">times</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+
+<span class="gp">In [19]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[])</span>
+
+<span class="gp">In [20]: </span><span class="n">result</span><span class="o">.</span><span class="n">states</span>
+<span class="gh">Out[20]: </span><span class="go"></span>
+<span class="go">[Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket</span>
+<span class="go"> Qobj data =</span>
+<span class="go"> [[ 1.]</span>
+<span class="go">  [ 0.]], Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket</span>
+<span class="go"> Qobj data =</span>
+<span class="go"> [[ 0.80901699+0.j        ]</span>
+<span class="go">  [ 0.00000000-0.58778526j]]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="non-unitary-evolution">
+<span id="master-nonunitary"></span><h2>Non-unitary evolution<a class="headerlink" href="#non-unitary-evolution" title="Permalink to this headline">¶</a></h2>
+<p>While the evolution of the state vector in a closed quantum system is deterministic, open quantum systems are stochastic in nature. The effect of an environment on the system of interest is to induce stochastic transitions between energy levels, and to introduce uncertainty in the phase difference between states of the system. The state of an open quantum system is therefore described in terms of ensemble averaged states using the density matrix formalism. A density matrix <span class="math">\(\rho\)</span> describes a probability distribution of quantum states <span class="math">\(\left|\psi_n\right&gt;\)</span>, in a matrix representation <span class="math">\(\rho = \sum_n p_n \left|\psi_n\right&gt;\left&lt;\psi_n\right|\)</span>, where <span class="math">\(p_n\)</span> is the classical probability that the system is in the quantum state <span class="math">\(\left|\psi_n\right&gt;\)</span>. The time evolution of a density matrix <span class="math">\(\rho\)</span> is the topic of the remaining portions of this section.</p>
+</div>
+<div class="section" id="the-lindblad-master-equation">
+<span id="master-master"></span><h2>The Lindblad Master equation<a class="headerlink" href="#the-lindblad-master-equation" title="Permalink to this headline">¶</a></h2>
+<p>The standard approach for deriving the equations of motion for a system interacting with its environment is to expand the scope of the system to include the environment. The combined quantum system is then closed, and its evolution is governed by the von Neumann equation</p>
+<div class="math" id="equation-neumann_total">
+<span class="eqno">(2)<a class="headerlink" href="#equation-neumann_total" title="Permalink to this equation">¶</a></span>\[\dot \rho_{\rm tot}(t) = -\frac{i}{\hbar}[H_{\rm tot}, \rho_{\rm tot}(t)],\]</div>
+<p>the equivalent of the Schrödinger equation <a class="reference internal" href="#equation-schrodinger">(1)</a> in the density matrix formalism. Here, the total Hamiltonian</p>
+<div class="math">
+\[H_{\rm tot} = H_{\rm sys} + H_{\rm env} + H_{\rm int},\]</div>
+<p>includes the original system Hamiltonian <span class="math">\(H_{\rm sys}\)</span>, the Hamiltonian for the environment <span class="math">\(H_{\rm env}\)</span>, and a term representing the interaction between the system and its environment <span class="math">\(H_{\rm int}\)</span>. Since we are only interested in the dynamics of the system, we can at this point perform a partial trace over the environmental degrees of freedom in Eq. <a class="reference internal" href="#equation-neumann_total">(2)</a>, and thereby obtain a master equation for the motion of the original system density matrix. The most general trace-preserving and completely positive form of this evolution is the Lindblad master equation for the reduced density matrix <span class="math">\(\rho = {\rm Tr}_{\rm env}[\rho_{\rm tot}]\)</span></p>
+<div class="math" id="equation-master_equation">
+<span class="eqno">(3)<a class="headerlink" href="#equation-master_equation" title="Permalink to this equation">¶</a></span>\[\dot\rho(t)=-\frac{i}{\hbar}[H(t),\rho(t)]+\sum_n \frac{1}{2} \left[2 C_n \rho(t) C_n^{+} - \rho(t) C_n^{+} C_n - C_n^{+} C_n \rho(t)\right]\]</div>
+<p>where the <span class="math">\(C_n = \sqrt{\gamma_n} A_n\)</span> are collapse operators, and <span class="math">\(A_n\)</span> are the operators through which the environment couples to the system in <span class="math">\(H_{\rm int}\)</span>, and <span class="math">\(\gamma_n\)</span> are the corresponding rates.  The derivation of Eq. <a class="reference internal" href="#equation-master_equation">(3)</a> may be found in several sources, and will not be reproduced here.  Instead, we emphasize the approximations that are required to arrive at the master equation in the form of Eq. <a class="reference internal" href="#equation-master_equation">(3)</a> from physical arguments, and hence perform a calculation in QuTiP:</p>
+<ul class="simple">
+<li><strong>Separability:</strong> At <span class="math">\(t=0\)</span> there are no correlations between the system and its environment such that the total density matrix can be written as a tensor product <span class="math">\(\rho^I_{\rm tot}(0) = \rho^I(0) \otimes \rho^I_{\rm env}(0)\)</span>.</li>
+<li><strong>Born approximation:</strong> Requires: (1) that the state of the environment does not significantly change as a result of the interaction with the system;  (2) The system and the environment remain separable throughout the evolution. These assumptions are justified if the interaction is weak, and if the environment is much larger than the system. In summary, <span class="math">\(\rho_{\rm tot}(t) \approx \rho(t)\otimes\rho_{\rm env}\)</span>.</li>
+<li><strong>Markov approximation</strong> The time-scale of decay for the environment <span class="math">\(\tau_{\rm env}\)</span> is much shorter than the smallest time-scale of the system dynamics <span class="math">\(\tau_{\rm sys} \gg \tau_{\rm env}\)</span>. This approximation is often deemed a &#8220;short-memory environment&#8221; as it requires that environmental correlation functions decay on a time-scale fast compared to those of the system.</li>
+<li><strong>Secular approximation</strong> Stipulates that elements in the master equation corresponding to transition frequencies satisfy <span class="math">\(|\omega_{ab}-\omega_{cd}| \ll 1/\tau_{\rm sys}\)</span>, i.e., all fast rotating terms in the interaction picture can be neglected. It also ignores terms that lead to a small renormalization of the system energy levels. This approximation is not strictly necessary for all master-equation formalisms (e.g., the Block-Redfield master equation), but it is required for arriving at the Lindblad form <a class="reference internal" href="#equation-master_equation">(3)</a> which is used in <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>.</li>
+</ul>
+<p>For systems with environments satisfying the conditions outlined above, the Lindblad master equation <a class="reference internal" href="#equation-master_equation">(3)</a> governs the time-evolution of the system density matrix, giving an ensemble average of the system dynamics. In order to ensure that these approximations are not violated, it is important that the decay rates <span class="math">\(\gamma_n\)</span> be smaller than the minimum energy splitting in the system Hamiltonian. Situations that demand special attention therefore include, for example, systems strongly coupled to their environment, and systems with degenerate or nearly degenerate energy levels.</p>
+<p>For non-unitary evolution of a quantum systems, i.e., evolution that includes
+incoherent processes such as relaxation and dephasing, it is common to use
+master equations. In QuTiP, the same function (<a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>) is used for
+evolution both according to the Schrödinger equation and to the master equation,
+even though these two equations of motion are very different. The <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>
+function automatically determines if it is sufficient to use the Schrödinger
+equation (if no collapse operators were given) or if it has to use the
+master equation (if collapse operators were given). Note that to calculate
+the time evolution according to the Schrödinger equation is easier and much
+faster (for large systems) than using the master equation, so if possible the
+solver will fall back on using the Schrödinger equation.</p>
+<p>What is new in the master equation compared to the Schrödinger equation are
+processes that describe dissipation in the quantum system due to its interaction
+with an environment. These environmental interactions are defined by the
+operators through which the system couples to the environment, and rates that
+describe the strength of the processes.</p>
+<p>In QuTiP, the product of the square root of the rate and the operator that
+describe the dissipation process is called a collapse operator. A list of
+collapse operators (<code class="docutils literal"><span class="pre">c_ops</span></code>) is passed as the fourth argument to the
+<a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function in order to define the dissipation processes in the master
+equation. When the <code class="docutils literal"><span class="pre">c_ops</span></code> isn&#8217;t empty, the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function will use
+the master equation instead of the unitary Schrödinger equation.</p>
+<p>Using the example with the spin dynamics from the previous section, we can
+easily add a relaxation process (describing the dissipation of energy from the
+spin to its environment), by adding <code class="docutils literal"><span class="pre">np.sqrt(0.05)</span> <span class="pre">*</span> <span class="pre">sigmax()</span></code> to
+the previously empty list in the fourth parameter to the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">()],</span> <span class="p">[</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">()])</span>
+
+<span class="gp">In [23]: </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">subplots</span><span class="p">()</span>
+
+<span class="gp">In [24]: </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+<span class="gp">In [25]: </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+<span class="gp">In [26]: </span><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">);</span>
+
+<span class="gp">In [27]: </span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">);</span>
+
+<span class="gp">In [28]: </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;Sigma-Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Sigma-Y&quot;</span><span class="p">));</span>
+
+<span class="gp">In [29]: </span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/guide-qubit-dynamics-dissip.png"><img alt="../../_images/guide-qubit-dynamics-dissip.png" class="align-center" src="../../_images/guide-qubit-dynamics-dissip.png" style="width: 5.0in;" /></a>
+<p>Here, 0.05 is the rate and the operator <span class="math">\(\sigma_x\)</span> (<a class="reference internal" href="../../apidoc/functions.html#qutip.operators.sigmax" title="qutip.operators.sigmax"><code class="xref py py-func docutils literal"><span class="pre">qutip.operators.sigmax</span></code></a>) describes the dissipation
+process.</p>
+<p>Now a slightly more complex example: Consider a two-level atom coupled to a leaky single-mode cavity through a dipole-type interaction, which supports a coherent exchange of quanta between the two systems. If the atom initially is in its groundstate and the cavity in a 5-photon Fock state, the dynamics is calculated with the lines following code</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+<span class="gp">In [31]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="gp">In [32]: </span><span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [33]: </span><span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [34]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> \
+<span class="gp">   ....: </span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [35]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span><span class="o">*</span><span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">sm</span><span class="p">])</span>
+
+<span class="gp">In [36]: </span><span class="n">figure</span><span class="p">()</span>
+<span class="gh">Out[36]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x2af268140c88&gt;</span>
+
+<span class="gp">In [37]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">                                                      Out[37]: [&lt;matplotlib.lines.Line2D at 0x2af26817c0b8&gt;]</span>
+
+<span class="gp">In [38]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">                                                                                                             Out[38]: [&lt;matplotlib.lines.Line2D at 0x2af26817cb00&gt;]</span>
+
+<span class="gp">In [39]: </span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                    Out[39]: &lt;matplotlib.text.Text at 0x2af26814c438&gt;</span>
+
+<span class="gp">In [40]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                      Out[40]: &lt;matplotlib.text.Text at 0x2af268153710&gt;</span>
+
+<span class="gp">In [41]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
+<span class="go">                                                                                                                                                                                                                                                                        Out[41]: &lt;matplotlib.legend.Legend at 0x2af268180470&gt;</span>
+
+<span class="gp">In [42]: </span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/guide-dynamics-jc.png"><img alt="../../_images/guide-dynamics-jc.png" class="align-center" src="../../_images/guide-dynamics-jc.png" style="width: 5.0in;" /></a>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dynamics-monte.html" class="btn btn-neutral float-right" title="Monte Carlo Solver" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dynamics-data.html" class="btn btn-neutral" title="Dynamics Simulation Results" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
+      Last updated on Jan 09, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.0.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
