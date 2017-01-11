@@ -14,7 +14,7 @@
 
   
   
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
   
 
   
@@ -27,7 +27,7 @@
 
   
   
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
   
 
   
@@ -39,7 +39,7 @@
     <link rel="top" title="QuTiP 4.0 Documentation" href="index.html"/> 
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  <script src="static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -243,13 +243,12 @@ This is to avoid the egg-info being included in the gztar / zip, which otherwise
 </div>
 <div class="section" id="documentation-build">
 <span id="docbuild"></span><h2>Documentation build<a class="headerlink" href="#documentation-build" title="Permalink to this headline">¶</a></h2>
-<p>Documentation should be rebuilt for a minor or major release.
-If there have been any documentation updates as part of a micro release,
-then it should also be built for this.</p>
+<p>Documentation should be rebuilt for a minor or major release. If there have been any documentation updates as part of a micro release, then it should also be built for this.</p>
 <p>First:</p>
 <ul class="simple">
 <li>The version should be changed in <code class="docutils literal"><span class="pre">conf.py</span></code>.</li>
 <li>Update <code class="docutils literal"><span class="pre">api_doc/classes.rst</span></code> for any new / deleted classes.</li>
+<li>Update <code class="docutils literal"><span class="pre">api_doc/functions.rst</span></code> for any new / deleted functions.</li>
 </ul>
 <p>Rebuilding of the QuTiP documentation is fully documented in:
 <a class="reference external" href="https://github.com/qutip/qutip-doc/README.md">https://github.com/qutip/qutip-doc/README.md</a></p>
@@ -257,7 +256,10 @@ then it should also be built for this.</p>
 <div class="section" id="website">
 <span id="web"></span><h2>Website<a class="headerlink" href="#website" title="Permalink to this headline">¶</a></h2>
 <p>This assumes that qutip.github.io has already been forked and familiarity with the website updating workflow.
-All released versions will be saved in a subfolder like</p>
+The documentation may not be updated for every micro release.</p>
+<div class="section" id="copying-new-files">
+<h3>Copying new files<a class="headerlink" href="#copying-new-files" title="Permalink to this headline">¶</a></h3>
+<p>All released versions will be saved in a subfolder like</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">downloads</span><span class="o">/&lt;</span><span class="n">MAJOR</span><span class="o">&gt;.&lt;</span><span class="n">MINOR</span><span class="o">&gt;.&lt;</span><span class="n">MICRO</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -265,15 +267,46 @@ All released versions will be saved in a subfolder like</p>
 For a micro release the qutip.github.io will need to be updated as follows:</p>
 <ul class="simple">
 <li>copy the <code class="docutils literal"><span class="pre">.tar.gz</span></code> and <code class="docutils literal"><span class="pre">.zip</span></code> created using <a class="reference internal" href="#sdist">sdist</a> into the downloads folder.</li>
-<li>Edit <code class="docutils literal"><span class="pre">download.html</span></code> page such that the &#8216;Latest release&#8217; version and date are correct.</li>
+<li>alse copy the <code class="docutils literal"><span class="pre">qutip-&lt;version&gt;.pdf</span></code> into this folder.</li>
 </ul>
-<p>The gztar and zip links will need the micro release number updating in the tractEvent, file name and label.
-For a minor or major release links to the last micro release of the previous version
-will need to be moved (copied) to the &#8216;Previous releases&#8217; section.</p>
+<p>The html documentation will be in a subfolder like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">docs</span><span class="o">/&lt;</span><span class="n">MAJOR</span><span class="o">&gt;.&lt;</span><span class="n">MINOR</span><span class="o">&gt;.&lt;</span><span class="n">MICRO</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <ul class="simple">
-<li>Edit the _includes/sidebar.html such that the &#8216;Latest release&#8217; version and date are correct.</li>
+<li>copy the contents <code class="docutils literal"><span class="pre">qutip-doc/_build/html</span></code> into this folder. <strong>Note that the underscores at start of the subfolder names will need to be removed, otherwise Jekyll will ignore the folders</strong>. There is a script in qutip-docs for this.</li>
 </ul>
-<p>The gztar link will need the micro release number updating in the traceEvent and file name.</p>
+</div>
+<div class="section" id="html-file-updates">
+<h3>HTML file updates<a class="headerlink" href="#html-file-updates" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Edit <code class="docutils literal"><span class="pre">download.html</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li>The &#8216;Latest release&#8217; version and date should be updated.</li>
+<li>The gztar and zip links will need the micro release number updating in the tractEvent, file name and label.</li>
+<li>For a minor or major release links to the last micro release of the previous version will need to be moved (copied) to the &#8216;Previous releases&#8217; section.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Edit <code class="docutils literal"><span class="pre">_includes/sidebar.html</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li>The &#8216;Latest release&#8217; version should be updated. The gztar link will need the micro release number updating in the traceEvent and file name.</li>
+<li>The link to the documentation folder and PDF file (if created) should be updated.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Edit <code class="docutils literal"><span class="pre">documentation.html</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li>The previous release tags should be moved (copied) to the &#8216;Previous releases&#8217; section.</li>
+<li>The &#8216;Current release&#8217; tags and links should be updated.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
 </div>
 <div class="section" id="conda-forge">
 <span id="cforge"></span><h2>Conda-forge<a class="headerlink" href="#conda-forge" title="Permalink to this headline">¶</a></h2>
@@ -343,7 +376,7 @@ as no more changes can be made to this micro version.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jan 09, 2017.
+      Last updated on Jan 11, 2017.
 
     </p>
   </div>
@@ -371,16 +404,16 @@ as no more changes can be made to this micro version.</p>
             HAS_SOURCE:  true
         };
     </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="static/jquery.js"></script>
+      <script type="text/javascript" src="static/underscore.js"></script>
+      <script type="text/javascript" src="static/doctools.js"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
   
   
-    <script type="text/javascript" src="_static/js/theme.js"></script>
+    <script type="text/javascript" src="static/js/theme.js"></script>
   
 
   
