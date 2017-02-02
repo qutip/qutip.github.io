@@ -62,7 +62,8 @@ replace_countries={
     'Tanzania' : 'Tanzania, United Republic of',
     'Trinidad & Tobago' : 'Trinidad and Tobago',
     'Vietnam' : 'Viet Nam',
-    'Venezuela': 'Venezuela, Bolivarian Republic of'  
+    'Venezuela': 'Venezuela, Bolivarian Republic of',
+    'Palestine': 'Palestine, State of'  
     }
 
 header_string = """
@@ -87,15 +88,18 @@ footer_string="""
 max_users = 0
 total_users = 0
 countries = {}
-with open('2015.csv', 'rt') as csvfile:
+with open('2016.csv', 'rt') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='"')
     for row in reader:
         name = row[0]
         if name in replace_countries.keys():
             name = replace_countries[name]
-        country = pc.countries.get(name=name)
+        try:
+            country = pc.countries.get(official_name=name)
+        except:
+            country = pc.countries.get(name=name)
         country_users = int(row[1].replace(',', ''))
-        countries[country.alpha3] = country_users
+        countries[country.alpha_3] = country_users
         total_users += country_users
         max_users = max(max_users,country_users)
 
@@ -111,14 +115,14 @@ map_color = cm.ScalarMappable(norm=norm, cmap=cmap)
 fills = ["fills: { \n","defaultFill: '#CCCCCC', \n"]
 for item in countries:
     rgb_color = map_color.to_rgba(countries[item])[:3]
-    fills += [item+": '" + str(colors.rgb2hex(rgb_color))+"',"+"\n"]
+    fills += [item+": '" + str(mpl.colors.rgb2hex(rgb_color))+"',"+"\n"]
 fills += ["},"]
 
 
 # build_data
 data = ["data: { \n"]
 for item in countries:
-    item_str = item+": "+"{fillKey: '"+item+"', visitors: "+str(countries[item])+""", country: " """+pc.countries.get(alpha3=item).name+""" " },"""+"\n"
+    item_str = item+": "+"{fillKey: '"+item+"', visitors: "+str(countries[item])+""", country: " """+pc.countries.get(alpha_3=item).name+""" " },"""+"\n"
     data += [item_str]
 data += ["}"]
 
