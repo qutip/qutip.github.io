@@ -16,8 +16,6 @@
   
     <link rel="shortcut icon" href="../static/favicon.ico"/>
   
-  
-  
 
   
 
@@ -50,7 +48,6 @@
 
 <body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -91,10 +88,7 @@
           
             
             
-              
-            
-            
-              <ul class="current">
+                <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
@@ -144,10 +138,8 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
-        
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
       </nav>
 
 
@@ -156,40 +148,23 @@
         <div class="rst-content">
           
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="guide.html">Users Guide</a> &raquo;</li>
-        
-      <li>Visualization of quantum states and processes</li>
-    
-    
+      
+    <li>Visualization of quantum states and processes</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -347,6 +322,19 @@ this function in your Wigner figures:</p>
 <span class="gp">In [39]: </span><span class="n">W</span> <span class="o">=</span> <span class="n">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">xvec</span><span class="p">)</span>
 
 <span class="gp">In [40]: </span><span class="n">wmap</span> <span class="o">=</span> <span class="n">wigner_cmap</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>  <span class="c1"># Generate Wigner colormap</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-40-1a5fc3698163&gt;</span> in <span class="ni">&lt;module&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">wmap</span> <span class="o">=</span> <span class="n">wigner_cmap</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>  <span class="c1"># Generate Wigner colormap</span>
+
+<span class="nn">/home/agp1/GitHub/qutip/qutip/matplotlib_utilities.py</span> in <span class="ni">wigner_cmap</span><span class="nt">(W, levels, shift, max_color, mid_color, min_color, neg_color, invert)</span>
+<span class="g g-Whitespace">    </span><span class="mi">112</span>     <span class="n">num_neg</span> <span class="o">=</span> <span class="n">zero_pos</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">113</span>     <span class="c1"># set zero values to mid_color</span>
+<span class="ne">--&gt; </span><span class="mi">114</span>     <span class="n">adjust_RGBA</span><span class="p">[</span><span class="n">zero_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">mid_color</span>
+<span class="g g-Whitespace">    </span><span class="mi">115</span>     <span class="c1"># interpolate colors</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">levels</span><span class="p">):</span>
+
+<span class="ne">IndexError</span>: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
 
 <span class="gp">In [41]: </span><span class="n">nrm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="o">-</span><span class="n">W</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">W</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
@@ -359,10 +347,22 @@ this function in your Wigner figures:</p>
 <span class="gp">In [45]: </span><span class="n">cb1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plt1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
 <span class="gp">In [46]: </span><span class="n">plt2</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">wmap</span><span class="p">)</span>  <span class="c1"># Apply Wigner colormap</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-46-6e526efa5dc4&gt;</span> in <span class="ni">&lt;module&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">plt2</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">wmap</span><span class="p">)</span>  <span class="c1"># Apply Wigner colormap</span>
+
+<span class="ne">NameError</span>: name &#39;wmap&#39; is not defined
 
 <span class="gp">In [47]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Wigner Colormap&quot;</span><span class="p">);</span>
 
 <span class="gp">In [48]: </span><span class="n">cb2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plt2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-48-66395675b173&gt;</span> in <span class="ni">&lt;module&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">cb2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plt2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="ne">NameError</span>: name &#39;plt2&#39; is not defined
 
 <span class="gp">In [49]: </span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
@@ -523,18 +523,15 @@ used below to visualize the corresponding steadystate density matrix:</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="guide-parfor.html" class="btn btn-neutral float-right" title="Parallel computation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="guide-parfor.html" class="btn btn-neutral float-right" title="Parallel computation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="guide-bloch.html" class="btn btn-neutral" title="Plotting on the Bloch Sphere" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="guide-bloch.html" class="btn btn-neutral" title="Plotting on the Bloch Sphere" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -544,7 +541,7 @@ used below to visualize the corresponding steadystate density matrix:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Mar 12, 2017.
+      Last updated on Mar 28, 2017.
 
     </p>
   </div>
