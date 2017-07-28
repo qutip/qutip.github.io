@@ -1,6 +1,6 @@
-import os
+import os, shutil
 
-curr_vers_dir = '4.1'
+curr_vers_dir = '4.2'
 
 dirs = {'_static' : 'static', '_modules' : 'modules',
         '_images' : 'images', '_sources' : 'sources'}
@@ -8,7 +8,7 @@ dirs = {'_static' : 'static', '_modules' : 'modules',
 for dirpath, subdirs, files in os.walk(curr_vers_dir):
     for d in subdirs:
         if d in dirs.keys():
-            os.rename(os.path.join(dirpath,d),os.path.join(dirpath,dirs[d]))
+            shutil.move(os.path.join(dirpath,d),os.path.join(dirpath,dirs[d]))
             
     for f in files:
         if f.lower().endswith('.html'):

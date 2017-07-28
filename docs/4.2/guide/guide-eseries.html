@@ -1,0 +1,428 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>An Overview of the Eseries Class &mdash; QuTiP 4.2 Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="QuTiP 4.2 Documentation" href="../index.html"/>
+        <link rel="up" title="Users Guide" href="guide.html"/>
+        <link rel="next" title="Two-time correlation functions" href="guide-correlation.html"/>
+        <link rel="prev" title="Solving for Steady-State Solutions" href="guide-steady.html"/> 
+
+  
+  <script src="../static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">An Overview of the Eseries Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#exponential-series-representation-of-time-dependent-quantum-objects">Exponential-series representation of time-dependent quantum objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#applications-of-exponential-series">Applications of exponential series</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="guide.html">Users Guide</a> &raquo;</li>
+        
+      <li>An Overview of the Eseries Class</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="an-overview-of-the-eseries-class">
+<span id="eseries"></span><h1>An Overview of the Eseries Class<a class="headerlink" href="#an-overview-of-the-eseries-class" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="exponential-series-representation-of-time-dependent-quantum-objects">
+<span id="eseries-rep"></span><h2>Exponential-series representation of time-dependent quantum objects<a class="headerlink" href="#exponential-series-representation-of-time-dependent-quantum-objects" title="Permalink to this headline">¶</a></h2>
+<p>The eseries object in QuTiP is a representation of an exponential-series expansion of time-dependent quantum objects (a concept borrowed from the quantum optics toolbox).</p>
+<p>An exponential series is parameterized by its amplitude coefficients <span class="math">\(c_i\)</span> and rates <span class="math">\(r_i\)</span>, so that the series takes the form <span class="math">\(E(t) = \sum_i c_i e^{r_it}\)</span>. The coefficients are typically quantum objects (type Qobj: states, operators, etc.), so that the value of the eseries also is a quantum object, and the rates can be either real or complex numbers (describing decay rates and oscillation frequencies, respectively). Note that all amplitude coefficients in an exponential series must be of the same dimensions and composition.</p>
+<p>In QuTiP, an exponential series object is constructed by creating an instance of the class <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">es1</span> <span class="o">=</span> <span class="n">eseries</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="mi">1j</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the first argument is the amplitude coefficient (here, the sigma-X operator), and the second argument is the rate. The eseries in this example represents the time-dependent operator <span class="math">\(\sigma_x e^{i t}\)</span>.</p>
+<p>To add more terms to an <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> object we simply add objects using the <code class="docutils literal"><span class="pre">+</span></code> operator:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="n">omega</span><span class="o">=</span><span class="mf">1.0</span>
+
+<span class="gp">In [3]: </span><span class="n">es2</span> <span class="o">=</span> <span class="p">(</span><span class="n">eseries</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">omega</span><span class="p">)</span> <span class="o">+</span>
+<span class="gp">   ...: </span>      <span class="n">eseries</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">omega</span><span class="p">))</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> in this example represents the operator <span class="math">\(0.5 \sigma_x e^{i\omega t} + 0.5 \sigma_x e^{-i\omega t}\)</span>, which is the exponential series representation of <span class="math">\(\sigma_x \cos(\omega t)\)</span>. Alternatively, we can also specify a list of amplitudes and rates when the <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> is created:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">es2</span> <span class="o">=</span> <span class="n">eseries</span><span class="p">([</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">()],</span> <span class="p">[</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">omega</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">omega</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>We can inspect the structure of an <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> object by printing it to the standard output console:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">es2</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">ESERIES object: 2 terms</span>
+<span class="go">Hilbert space dimensions: [[2], [2]]</span>
+<span class="go">Exponent #0 = -1j</span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.   0.5]</span>
+<span class="go"> [ 0.5  0. ]]</span>
+<span class="go">Exponent #1 = 1j</span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.   0.5]</span>
+<span class="go"> [ 0.5  0. ]]</span>
+</pre></div>
+</div>
+<p>and we can evaluate it at time <cite>t</cite> by using the <code class="xref py py-func docutils literal"><span class="pre">qutip.eseries.esval</span></code> function:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">esval</span><span class="p">(</span><span class="n">es2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>     <span class="c1"># equivalent to es2.value(0.0)</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  1.]</span>
+<span class="go"> [ 1.  0.]]</span>
+</pre></div>
+</div>
+<p>or for a list of times <code class="docutils literal"><span class="pre">[0.0,</span> <span class="pre">1.0</span> <span class="pre">*</span> <span class="pre">pi,</span> <span class="pre">2.0</span> <span class="pre">*</span> <span class="pre">pi]</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">times</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">pi</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">pi</span><span class="p">]</span>
+
+<span class="gp">In [8]: </span><span class="n">esval</span><span class="p">(</span><span class="n">es2</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>    <span class="c1"># equivalent to es2.value(times)</span>
+<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="go">array([ Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  1.]</span>
+<span class="go"> [ 1.  0.]],</span>
+<span class="go">       Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0. -1.]</span>
+<span class="go"> [-1.  0.]],</span>
+<span class="go">       Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  1.]</span>
+<span class="go"> [ 1.  0.]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>To calculate the expectation value of an time-dependent operator represented by an <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a>, we use the <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><code class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></code></a> function. For example, consider the operator <span class="math">\(\sigma_x \cos(\omega t) + \sigma_z\sin(\omega t)\)</span>, and say we would like to know the expectation value of this operator for a spin in its excited state (<code class="docutils literal"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">fock_dm(2,1)</span></code> produce this state):</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">es3</span> <span class="o">=</span> <span class="p">(</span><span class="n">eseries</span><span class="p">([</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sigmaz</span><span class="p">()],</span> <span class="p">[</span><span class="mi">1j</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span><span class="p">])</span> <span class="o">+</span>
+<span class="gp">   ...: </span>      <span class="n">eseries</span><span class="p">([</span><span class="o">-</span><span class="mf">0.5j</span><span class="o">*</span><span class="n">sigmax</span><span class="p">(),</span> <span class="mf">0.5j</span><span class="o">*</span><span class="n">sigmax</span><span class="p">()],</span> <span class="p">[</span><span class="mi">1j</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span><span class="p">]))</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [10]: </span><span class="n">rho</span> <span class="o">=</span> <span class="n">fock_dm</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [11]: </span><span class="n">es3_expect</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">es3</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">es3_expect</span>
+<span class="gh">Out[12]: </span><span class="go"></span>
+<span class="go">ESERIES object: 2 terms</span>
+<span class="go">Hilbert space dimensions: [[1, 1]]</span>
+<span class="go">Exponent #0 = (-0-1j)</span>
+<span class="go">(-0.5+0j)</span>
+<span class="go">Exponent #1 = 1j</span>
+<span class="go">(-0.5+0j)</span>
+
+<span class="gp">In [13]: </span><span class="n">es3_expect</span><span class="o">.</span><span class="n">value</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">                                                                                                                                Out[13]: array([ -1.00000000e+00,  -6.12323400e-17])</span>
+</pre></div>
+</div>
+<p>Note the expectation value of the <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> object, <code class="docutils literal"><span class="pre">expect(rho,</span> <span class="pre">es3)</span></code>, itself is an <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a>, but with amplitude coefficients that are C-numbers instead of quantum operators. To evaluate the C-number <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> at the times <cite>times</cite> we use <code class="docutils literal"><span class="pre">esval(es3_expect,</span> <span class="pre">times)</span></code>, or, equivalently, <code class="docutils literal"><span class="pre">es3_expect.value(times)</span></code>.</p>
+</div>
+<div class="section" id="applications-of-exponential-series">
+<span id="eseries-applications"></span><h2>Applications of exponential series<a class="headerlink" href="#applications-of-exponential-series" title="Permalink to this headline">¶</a></h2>
+<p>The exponential series formalism can be useful for the time-evolution of quantum systems. One approach to calculating the time evolution of a quantum system is to diagonalize its Hamiltonian (or Liouvillian, for dissipative systems) and to express the propagator (e.g., <span class="math">\(\exp(-iHt) \rho \exp(iHt)\)</span>) as an exponential series.</p>
+<p>The QuTiP function <a class="reference internal" href="../apidoc/functions.html#qutip.essolve.ode2es" title="qutip.essolve.ode2es"><code class="xref py py-func docutils literal"><span class="pre">qutip.essolve.ode2es</span></code></a> and <a class="reference internal" href="../apidoc/functions.html#module-qutip.essolve" title="qutip.essolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.essolve</span></code></a> use this method to evolve quantum systems in time. The exponential series approach is particularly suitable for cases when the same system is to be evolved for many different initial states, since the diagonalization only needs to be performed once (as opposed to e.g. the ode solver that would need to be ran independently for each initial state).</p>
+<p>As an example, consider a spin-1/2 with a Hamiltonian pointing in the <span class="math">\(\sigma_z\)</span> direction, and that is subject to noise causing relaxation. For a spin originally is in the up state, we can create an <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> object describing its dynamics by using the <code class="xref py py-func docutils literal"><span class="pre">qutip.es2ode</span></code> function:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [15]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">sigmaz</span><span class="p">()</span>
+
+<span class="gp">In [16]: </span><span class="n">L</span> <span class="o">=</span> <span class="n">liouvillian</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
+
+<span class="gp">In [17]: </span><span class="n">es</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">psi0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.essolve.ode2es" title="qutip.essolve.ode2es"><code class="xref py py-func docutils literal"><span class="pre">qutip.essolve.ode2es</span></code></a> function diagonalizes the Liouvillian <span class="math">\(L\)</span> and creates an exponential series with the correct eigenfrequencies and amplitudes for the initial state <span class="math">\(\psi_0\)</span> (<cite>psi0</cite>).</p>
+<p>We can examine the resulting <a class="reference internal" href="../apidoc/classes.html#qutip.eseries" title="qutip.eseries"><code class="xref py py-class docutils literal"><span class="pre">qutip.eseries</span></code></a> object by printing a text representation:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">es</span>
+<span class="gh">Out[18]: </span><span class="go"></span>
+<span class="go">ESERIES object: 2 terms</span>
+<span class="go">Hilbert space dimensions: [[2], [2]]</span>
+<span class="go">Exponent #0 = (-1+0j)</span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[-1.  0.]</span>
+<span class="go"> [ 0.  1.]]</span>
+<span class="go">Exponent #1 = 0j</span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 0.  0.]]</span>
+</pre></div>
+</div>
+<p>or by evaluating it and arbitrary points in time (here at 0.0 and 1.0):</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="n">es</span><span class="o">.</span><span class="n">value</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gh">Out[19]: </span><span class="go"></span>
+<span class="go">array([ Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.  0.]</span>
+<span class="go"> [ 0.  1.]],</span>
+<span class="go">       Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.63212056  0.        ]</span>
+<span class="go"> [ 0.          0.36787944]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>and the expectation value of the exponential series can be calculated using the <a class="reference internal" href="../apidoc/functions.html#module-qutip.expect" title="qutip.expect"><code class="xref py py-func docutils literal"><span class="pre">qutip.expect</span></code></a> function:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="n">es_expect</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">es</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result <cite>es_expect</cite> is now an exponential series with c-numbers as amplitudes, which easily can be evaluated at arbitrary times:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">es_expect</span><span class="o">.</span><span class="n">value</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gh">Out[21]: </span><span class="go">array([-1.        ,  0.26424112,  0.72932943,  0.90042586])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [23]: </span><span class="n">sz_expect</span> <span class="o">=</span> <span class="n">es_expect</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+<span class="gp">In [24]: </span><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="gp">In [25]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">sz_expect</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
+
+<span class="gp">In [26]: </span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="gp">   ....: </span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Expectation value of sigma-z&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">);</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [28]: </span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;The expectation value of the $\sigma_{z}$ operator&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">);</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../images/eseries_example.png"><img alt="../images/eseries_example.png" class="align-center" src="../images/eseries_example.png" style="width: 4in;" /></a>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="guide-correlation.html" class="btn btn-neutral float-right" title="Two-time correlation functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="guide-steady.html" class="btn btn-neutral" title="Solving for Steady-State Solutions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
+      Last updated on Jul 28, 2017.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../static/jquery.js"></script>
+      <script type="text/javascript" src="../static/underscore.js"></script>
+      <script type="text/javascript" src="../static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
