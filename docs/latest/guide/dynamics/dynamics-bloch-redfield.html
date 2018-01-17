@@ -16,8 +16,6 @@
   
     <link rel="shortcut icon" href="../../static/favicon.ico"/>
   
-  
-  
 
   
 
@@ -50,7 +48,6 @@
 
 <body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -91,10 +88,7 @@
           
             
             
-              
-            
-            
-              <ul class="current">
+                <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
@@ -146,10 +140,8 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
-        
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
       </nav>
 
 
@@ -158,42 +150,25 @@
         <div class="rst-content">
           
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../guide.html">Users Guide</a> &raquo;</li>
-        
+      
           <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
-        
-      <li>Bloch-Redfield master equation</li>
-    
-    
+      
+    <li>Bloch-Redfield master equation</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -205,7 +180,7 @@
 <span id="bloch-redfield-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The Lindblad master equation introduced earlier is constructed so that it describes a physical evolution of the density matrix (i.e., trace and positivity preserving), but it does not provide a connection to any underlaying microscopic physical model. The Lindblad operators (collapse operators) describe phenomenological processes, such as for example dephasing and spin flips, and the rates of these processes are arbitrary parameters in the model. In many situations the collapse operators and their corresponding rates have clear physical interpretation, such as dephasing and relaxation rates, and in those cases the Lindblad master equation is usually the method of choice.</p>
 <p>However, in some cases, for example systems with varying energy biases and eigenstates and that couple to an environment in some well-defined manner (through a physically motivated system-environment interaction operator), it is often desirable to derive the master equation from more fundamental physical principles, and relate it to for example the noise-power spectrum of the environment.</p>
-<p>The Bloch-Redfield formalism is one such approach to derive a master equation from a microscopic system. It starts from a combined system-environment perspective, and derives a perturbative master equation for the system alone, under the assumption of weak system-environment coupling. One advantage of this approach is that the dissipation processes and rates are obtained directly from the properties of the environment. On the downside, it does not intrinsically guarantee that the resulting master equation unconditionally preserves the physical properties of the density matrix (because it is a perturbative method). The Bloch-Redfield master equation must therefore be used with care, and the assumptions made in the derivation must be honored. (The Lindblad master equation is in a sense more robust – it always results in a physical density matrix – although some collapse operators might not be physically justified). For a full derivation of the Bloch Redfield master equation, see e.g. <a class="reference internal" href="../../biblio.html#coh92" id="id1">[Coh92]</a> or <a class="reference internal" href="../../biblio.html#bre02" id="id2">[Bre02]</a>. Here we present only a brief version of the derivation, with the intention of introducing the notation and how it relates to the implementation in QuTiP.</p>
+<p>The Bloch-Redfield formalism is one such approach to derive a master equation from a microscopic system. It starts from a combined system-environment perspective, and derives a perturbative master equation for the system alone, under the assumption of weak system-environment coupling. One advantage of this approach is that the dissipation processes and rates are obtained directly from the properties of the environment. On the downside, it does not intrinsically guarantee that the resulting master equation unconditionally preserves the physical properties of the density matrix (because it is a perturbative method). The Bloch-Redfield master equation must therefore be used with care, and the assumptions made in the derivation must be honored. (The Lindblad master equation is in a sense more robust &#8211; it always results in a physical density matrix &#8211; although some collapse operators might not be physically justified). For a full derivation of the Bloch Redfield master equation, see e.g. <a class="reference internal" href="../../biblio.html#coh92" id="id1">[Coh92]</a> or <a class="reference internal" href="../../biblio.html#bre02" id="id2">[Bre02]</a>. Here we present only a brief version of the derivation, with the intention of introducing the notation and how it relates to the implementation in QuTiP.</p>
 </div>
 <div class="section" id="brief-derivation-and-definitions">
 <span id="bloch-redfield-derivation"></span><h2>Brief Derivation and Definitions<a class="headerlink" href="#brief-derivation-and-definitions" title="Permalink to this headline">¶</a></h2>
@@ -220,7 +195,7 @@
 <p>which is local in time with respect the density matrix, but still not Markovian since it contains an implicit dependence on the initial state. By extending the integration to infinity and substituting <span class="math">\(\tau \rightarrow t-\tau\)</span>, a fully Markovian master equation is obtained:</p>
 <div class="math" id="equation-br-markovian-form">
 <span class="eqno">(3)<a class="headerlink" href="#equation-br-markovian-form" title="Permalink to this equation">¶</a></span>\[ \frac{d}{dt}\rho_S(t) = - \hbar^{-2}\int_0^\infty d\tau\; {\rm Tr}_B [H_I(t), [H_I(t-\tau), \rho_S(t)\otimes\rho_B]].\]</div>
-<p>The two Markovian approximations introduced above are valid if the time-scale with which the system dynamics changes is large compared to the time-scale with which correlations in the bath decays (corresponding to a “short-memory” bath, which results in Markovian system dynamics).</p>
+<p>The two Markovian approximations introduced above are valid if the time-scale with which the system dynamics changes is large compared to the time-scale with which correlations in the bath decays (corresponding to a &#8220;short-memory&#8221; bath, which results in Markovian system dynamics).</p>
 <p>The master equation <a class="reference internal" href="#equation-br-markovian-form">(3)</a> is still on a too general form to be suitable for numerical implementation. We therefore assume that the system-bath interaction takes the form <span class="math">\(H_I = \sum_\alpha A_\alpha \otimes B_\alpha\)</span> and where <span class="math">\(A_\alpha\)</span> are system operators and <span class="math">\(B_\alpha\)</span> are bath operators. This allows us to write master equation in terms of system operators and bath correlation functions:</p>
 <div class="math">
 \[\begin{split}\frac{d}{dt}\rho_S(t) =
@@ -259,7 +234,7 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 \right]
 \right\} \rho_{cd}(t),
 \nonumber\\\end{split}\]</div>
-<p>where the “sec” above the summation symbol indicate summation of the secular terms which satisfy <span class="math">\(|\omega_{ab}-\omega_{cd}| \ll \tau_ {\rm decay}\)</span>. This is an almost-useful form of the master equation. The final step before arriving at the form of the Bloch-Redfield master equation that is implemented in QuTiP, involves rewriting the bath correlation function <span class="math">\(g(\tau)\)</span> in terms of the noise-power spectrum of the environment <span class="math">\(S(\omega) = \int_{-\infty}^\infty d\tau e^{i\omega\tau} g(\tau)\)</span>:</p>
+<p>where the &#8220;sec&#8221; above the summation symbol indicate summation of the secular terms which satisfy <span class="math">\(|\omega_{ab}-\omega_{cd}| \ll \tau_ {\rm decay}\)</span>. This is an almost-useful form of the master equation. The final step before arriving at the form of the Bloch-Redfield master equation that is implemented in QuTiP, involves rewriting the bath correlation function <span class="math">\(g(\tau)\)</span> in terms of the noise-power spectrum of the environment <span class="math">\(S(\omega) = \int_{-\infty}^\infty d\tau e^{i\omega\tau} g(\tau)\)</span>:</p>
 <div class="math" id="equation-br-nonmarkovian-form-four">
 <span class="eqno">(4)<a class="headerlink" href="#equation-br-nonmarkovian-form-four" title="Permalink to this equation">¶</a></span>\[ \int_0^\infty d\tau\; g_{\alpha\beta}(\tau) e^{i\omega\tau} = \frac{1}{2}S_{\alpha\beta}(\omega) + i\lambda_{\alpha\beta}(\omega),\]</div>
 <p>where <span class="math">\(\lambda_{ab}(\omega)\)</span> is an energy shift that is neglected here. The final form of the Bloch-Redfield master equation is</p>
@@ -303,7 +278,7 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 <div class="section" id="bloch-redfield-master-equation-in-qutip">
 <span id="bloch-redfield-qutip"></span><h2>Bloch-Redfield master equation in QuTiP<a class="headerlink" href="#bloch-redfield-master-equation-in-qutip" title="Permalink to this headline">¶</a></h2>
 <p>In QuTiP, the Bloch-Redfield tensor Eq. <a class="reference internal" href="#equation-br-tensor">(7)</a> can be calculated using the function <a class="reference internal" href="../../apidoc/functions.html#qutip.bloch_redfield.bloch_redfield_tensor" title="qutip.bloch_redfield.bloch_redfield_tensor"><code class="xref py py-func docutils literal"><span class="pre">qutip.bloch_redfield.bloch_redfield_tensor</span></code></a>. It takes two mandatory arguments: The system Hamiltonian <span class="math">\(H\)</span>, a nested list of operator  <span class="math">\(A_\alpha\)</span>, spectral density functions <span class="math">\(S_\alpha(\omega)\)</span> pairs that characterize the coupling between system and bath. The spectral density functions are Python callback functions that takes the (angular) frequency as a single argument.</p>
-<p>To illustrate how to calculate the Bloch-Redfield tensor, let’s consider a two-level atom</p>
+<p>To illustrate how to calculate the Bloch-Redfield tensor, let&#8217;s consider a two-level atom</p>
 <div class="math" id="equation-qubit">
 <span class="eqno">(8)<a class="headerlink" href="#equation-qubit" title="Permalink to this equation">¶</a></span>\[ H = -\frac{1}{2}\Delta\sigma_x - \frac{1}{2}\epsilon_0\sigma_z\]</div>
 <p>that couples to an Ohmic bath through the <span class="math">\(\sigma_x\)</span> operator. The corresponding Bloch-Redfield tensor can be calculated in QuTiP using the following code</p>
@@ -372,6 +347,12 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 <p class="first admonition-title">Note</p>
 <p class="last">New in QuTiP 4.2.</p>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It takes ~3-5 seconds (~30 if using Visual Studio) to compile a time-dependent Bloch-Redfield problem.  Therefore,
+if you are doing repeated simulations by varying parameters, then it is best to pass
+<code class="docutils literal"><span class="pre">options</span> <span class="pre">=</span> <span class="pre">Options(rhs_reuse=True)</span></code> to the solver.</p>
+</div>
 <p>If you have not done so already, please read the section: <a class="reference internal" href="dynamics-time.html#time"><span class="std std-ref">Solving Problems with Time-dependent Hamiltonians</span></a>.</p>
 <p>As we have already discussed, the Bloch-Redfield master equation requires transforming into the eigenbasis of the system Hamiltonian.  For time-independent systems, this transformation need only be done once.  However, for time-dependent systems, one must move to the instantaneous eigenbasis at each time-step in the evolution, thus greatly increasing the computational complexity of the dynamics.  In addition, the requirement for computing all the eigenvalues severely limits the scalability of the method.  Fortunately, this eigen decomposition occurs at the Hamiltonian level, as opposed to the super-operator level, and thus, with efficient programming, one can tackle many systems that are commonly encountered.</p>
 <p>The time-dependent Bloch-Redfield solver in QuTiP relies on the efficient numerical computations afforded by the string-based time-dependent format, and Cython compilation.  As such, all the time-dependent terms, and noise power spectra must be expressed in the string format.  To begin, lets consider the previous example, but formatted to call the time-dependent solver:</p>
@@ -401,13 +382,13 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 <span class="gp">In [28]: </span><span class="n">actual_answer</span> <span class="o">=</span> <span class="mf">9.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">kappa</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tlist</span><span class="p">)))</span>
 
 <span class="gp">In [29]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gh">Out[29]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x124e045f8&gt;</span>
+<span class="gh">Out[29]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x2b4e7dd74b38&gt;</span>
 
 <span class="gp">In [30]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="go">                                                   Out[30]: [&lt;matplotlib.lines.Line2D at 0x124b7f3c8&gt;]</span>
+<span class="go">                                                      Out[30]: [&lt;matplotlib.lines.Line2D at 0x2b4e7eb36ac8&gt;]</span>
 
 <span class="gp">In [31]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">actual_answer</span><span class="p">)</span>
-<span class="go">                                                                                                       Out[31]: [&lt;matplotlib.lines.Line2D at 0x124a47128&gt;]</span>
+<span class="go">                                                                                                             Out[31]: [&lt;matplotlib.lines.Line2D at 0x2b4e7eb85470&gt;]</span>
 
 <span class="gp">In [32]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -441,16 +422,16 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 <span class="gp">In [44]: </span><span class="n">res_brme</span> <span class="o">=</span> <span class="n">brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">a_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
 
 <span class="gp">In [45]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gh">Out[45]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x12050c1d0&gt;</span>
+<span class="gh">Out[45]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x2b4e7ea755f8&gt;</span>
 
 <span class="gp">In [46]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">res_brme</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$a^{+}a$&#39;</span><span class="p">)</span>
-<span class="go">                                                   Out[46]: [&lt;matplotlib.lines.Line2D at 0x12418d6d8&gt;]</span>
+<span class="go">                                                      Out[46]: [&lt;matplotlib.lines.Line2D at 0x2b4e7d58c5f8&gt;]</span>
 
 <span class="gp">In [47]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">res_brme</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$a+a^{+}$&#39;</span><span class="p">)</span>
-<span class="go">                                                                                                       Out[47]: [&lt;matplotlib.lines.Line2D at 0x1251d6a90&gt;]</span>
+<span class="go">                                                                                                             Out[47]: [&lt;matplotlib.lines.Line2D at 0x2b4e7d054cc0&gt;]</span>
 
 <span class="gp">In [48]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="go">                                                                                                                                                           Out[48]: &lt;matplotlib.legend.Legend at 0x124df9b70&gt;</span>
+<span class="go">                                                                                                                                                                    Out[48]: &lt;matplotlib.legend.Legend at 0x2b4e7e9b6cc0&gt;</span>
 
 <span class="gp">In [49]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -462,18 +443,15 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dynamics-floquet.html" class="btn btn-neutral float-right" title="Floquet Formalism" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dynamics-floquet.html" class="btn btn-neutral float-right" title="Floquet Formalism" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dynamics-time.html" class="btn btn-neutral" title="Solving Problems with Time-dependent Hamiltonians" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dynamics-time.html" class="btn btn-neutral" title="Solving Problems with Time-dependent Hamiltonians" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -483,7 +461,7 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jul 28, 2017.
+      Last updated on Jan 17, 2018.
 
     </p>
   </div>
@@ -515,7 +493,7 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
       <script type="text/javascript" src="../../static/jquery.js"></script>
       <script type="text/javascript" src="../../static/underscore.js"></script>
       <script type="text/javascript" src="../../static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

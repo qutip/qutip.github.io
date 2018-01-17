@@ -9,14 +9,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.control.propcomp &mdash; QuTiP 4.1 Documentation</title>
+  <title>qutip.control.propcomp &mdash; QuTiP 4.2 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
-  
-  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
   
 
   
@@ -29,7 +27,7 @@
 
   
   
-    <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   
 
   
@@ -38,17 +36,16 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="QuTiP 4.1 Documentation" href="../../../index.html"/>
+    <link rel="top" title="QuTiP 4.2 Documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
-  <script src="../../../static/js/modernizr.min.js"></script>
+  <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -68,7 +65,7 @@
             
             
               <div class="version">
-                4.1
+                4.2
               </div>
             
           
@@ -89,10 +86,7 @@
           
             
             
-              
-            
-            
-              <ul>
+                <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
@@ -112,10 +106,8 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
-        
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
       </nav>
 
 
@@ -128,36 +120,19 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>qutip.control.propcomp</li>
-    
-    
+      
+    <li>qutip.control.propcomp</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -382,7 +357,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dyn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
         <span class="n">dgt_eps</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span>
-                <span class="n">epsilon</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">epsilon</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
             <span class="n">prop_eps</span> <span class="o">=</span> <span class="n">dgt_eps</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span>
@@ -443,7 +418,7 @@
         <span class="k">if</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
             <span class="c1"># put control dyn_gen in combined dg diagonal basis</span>
             <span class="n">cdg</span> <span class="o">=</span>  <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_dyn_gen_eigenvectors_adj</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span>
-                        <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span>
+                        <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span>
                         <span class="n">dyn</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             <span class="c1"># multiply (elementwise) by timeslice and factor matrix</span>
             <span class="n">cdg</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">cdg</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
@@ -454,7 +429,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># put control dyn_gen in combined dg diagonal basis</span>
             <span class="n">cdg</span> <span class="o">=</span>  <span class="n">dyn</span><span class="o">.</span><span class="n">_get_dyn_gen_eigenvectors_adj</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-                        <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                        <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
                         <span class="n">dyn</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             <span class="c1"># multiply (elementwise) by timeslice and factor matrix</span>
             <span class="n">cdg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">cdg</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_dyn_gen_factormatrix</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -502,17 +477,17 @@
 
         <span class="k">if</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">data</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">dg</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">aug</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">]),</span> <span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Z</span><span class="p">,</span> <span class="n">A</span><span class="p">])]))</span>
         <span class="k">elif</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">aug</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Z</span><span class="p">,</span> <span class="n">A</span><span class="p">])])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="mf">0.0</span>
             <span class="n">aug</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">]),</span> <span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Z</span><span class="p">,</span> <span class="n">A</span><span class="p">])])</span>
         <span class="k">return</span> <span class="n">aug</span>
@@ -578,7 +553,7 @@
 
         <span class="k">if</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">compute_prop</span><span class="p">:</span>
                 <span class="n">prop_dense</span><span class="p">,</span> <span class="n">prop_grad_dense</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
                 <span class="n">prop</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">prop_dense</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dyn</span><span class="o">.</span><span class="n">dyn_dims</span><span class="p">)</span>
@@ -590,7 +565,7 @@
                                             <span class="n">dims</span><span class="o">=</span><span class="n">dyn</span><span class="o">.</span><span class="n">dyn_dims</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">compute_prop</span><span class="p">:</span>
                 <span class="n">prop</span><span class="p">,</span> <span class="n">prop_grad</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -600,7 +575,7 @@
             <span class="c1"># Assuming some sparse matrix</span>
             <span class="n">spcls</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
             <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">compute_prop</span><span class="p">:</span>
                 <span class="n">prop_dense</span><span class="p">,</span> <span class="n">prop_grad_dense</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
                 <span class="n">prop</span> <span class="o">=</span> <span class="n">spcls</span><span class="p">(</span><span class="n">prop_dense</span><span class="p">)</span>
@@ -616,9 +591,6 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
   
@@ -628,7 +600,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Mar 12, 2017.
+      Last updated on Jan 17, 2018.
 
     </p>
   </div>
@@ -650,23 +622,23 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'4.1.0',
+            VERSION:'4.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-      <script type="text/javascript" src="../../../static/jquery.js"></script>
-      <script type="text/javascript" src="../../../static/underscore.js"></script>
-      <script type="text/javascript" src="../../../static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
   
   
-    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
   

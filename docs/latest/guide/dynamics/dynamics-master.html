@@ -16,8 +16,6 @@
   
     <link rel="shortcut icon" href="../../static/favicon.ico"/>
   
-  
-  
 
   
 
@@ -50,7 +48,6 @@
 
 <body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -91,10 +88,7 @@
           
             
             
-              
-            
-            
-              <ul class="current">
+                <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
@@ -145,10 +139,8 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
-        
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
       </nav>
 
 
@@ -157,42 +149,25 @@
         <div class="rst-content">
           
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../guide.html">Users Guide</a> &raquo;</li>
-        
+      
           <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
-        
-      <li>Lindblad Master Equation Solver</li>
-    
-    
+      
+    <li>Lindblad Master Equation Solver</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -205,7 +180,7 @@
 <p>The dynamics of a closed (pure) quantum system is governed by the Schrödinger equation</p>
 <div class="math" id="equation-schrodinger">
 <span class="eqno">(1)<a class="headerlink" href="#equation-schrodinger" title="Permalink to this equation">¶</a></span>\[     i\hbar\frac{\partial}{\partial t}\Psi = \hat H \Psi,\]</div>
-<p>where <span class="math">\(\Psi\)</span> is the wave function, <span class="math">\(\hat H\)</span> the Hamiltonian, and <span class="math">\(\hbar\)</span> is Planck’s constant. In general, the Schrödinger equation is a partial differential equation (PDE) where both <span class="math">\(\Psi\)</span> and <span class="math">\(\hat H\)</span> are functions of space and time. For computational purposes it is useful to expand the PDE in a set of basis functions that span the Hilbert space of the Hamiltonian, and to write the equation in matrix and vector form</p>
+<p>where <span class="math">\(\Psi\)</span> is the wave function, <span class="math">\(\hat H\)</span> the Hamiltonian, and <span class="math">\(\hbar\)</span> is Planck&#8217;s constant. In general, the Schrödinger equation is a partial differential equation (PDE) where both <span class="math">\(\Psi\)</span> and <span class="math">\(\hat H\)</span> are functions of space and time. For computational purposes it is useful to expand the PDE in a set of basis functions that span the Hilbert space of the Hamiltonian, and to write the equation in matrix and vector form</p>
 <div class="math">
 \[i\hbar\frac{d}{dt}\left|\psi\right&gt; = H \left|\psi\right&gt;\]</div>
 <p>where <span class="math">\(\left|\psi\right&gt;\)</span> is the state vector and <span class="math">\(H\)</span> is the matrix representation of the Hamiltonian. This matrix equation can, in principle, be solved by diagonalizing the Hamiltonian matrix <span class="math">\(H\)</span>. In practice, however, it is difficult to perform this diagonalization unless the size of the Hilbert space (dimension of the matrix <span class="math">\(H\)</span>) is small. Analytically, it is a formidable task to calculate the dynamics for systems with more than two states. If, in addition, we consider dissipation due to the inevitable interaction with a surrounding environment, the computational complexity grows even larger, and we have to resort to numerical calculations in all realistic situations. This illustrates the importance of numerical calculations in describing the dynamics of open quantum systems, and the need for efficient and accessible tools for this task.</p>
@@ -239,7 +214,7 @@
 <span class="go">          6.14214701e-01,   2.77159958e-06])]</span>
 </pre></div>
 </div>
-<p>The resulting list of expectation values can easily be visualized using matplotlib’s plotting functions:</p>
+<p>The resulting list of expectation values can easily be visualized using matplotlib&#8217;s plotting functions:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">()</span>
 
 <span class="gp">In [8]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -300,7 +275,7 @@
 <ul class="simple">
 <li><strong>Separability:</strong> At <span class="math">\(t=0\)</span> there are no correlations between the system and its environment such that the total density matrix can be written as a tensor product <span class="math">\(\rho^I_{\rm tot}(0) = \rho^I(0) \otimes \rho^I_{\rm env}(0)\)</span>.</li>
 <li><strong>Born approximation:</strong> Requires: (1) that the state of the environment does not significantly change as a result of the interaction with the system;  (2) The system and the environment remain separable throughout the evolution. These assumptions are justified if the interaction is weak, and if the environment is much larger than the system. In summary, <span class="math">\(\rho_{\rm tot}(t) \approx \rho(t)\otimes\rho_{\rm env}\)</span>.</li>
-<li><strong>Markov approximation</strong> The time-scale of decay for the environment <span class="math">\(\tau_{\rm env}\)</span> is much shorter than the smallest time-scale of the system dynamics <span class="math">\(\tau_{\rm sys} \gg \tau_{\rm env}\)</span>. This approximation is often deemed a “short-memory environment” as it requires that environmental correlation functions decay on a time-scale fast compared to those of the system.</li>
+<li><strong>Markov approximation</strong> The time-scale of decay for the environment <span class="math">\(\tau_{\rm env}\)</span> is much shorter than the smallest time-scale of the system dynamics <span class="math">\(\tau_{\rm sys} \gg \tau_{\rm env}\)</span>. This approximation is often deemed a &#8220;short-memory environment&#8221; as it requires that environmental correlation functions decay on a time-scale fast compared to those of the system.</li>
 <li><strong>Secular approximation</strong> Stipulates that elements in the master equation corresponding to transition frequencies satisfy <span class="math">\(|\omega_{ab}-\omega_{cd}| \ll 1/\tau_{\rm sys}\)</span>, i.e., all fast rotating terms in the interaction picture can be neglected. It also ignores terms that lead to a small renormalization of the system energy levels. This approximation is not strictly necessary for all master-equation formalisms (e.g., the Block-Redfield master equation), but it is required for arriving at the Lindblad form <a class="reference internal" href="#equation-master_equation">(3)</a> which is used in <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a>.</li>
 </ul>
 <p>For systems with environments satisfying the conditions outlined above, the Lindblad master equation <a class="reference internal" href="#equation-master_equation">(3)</a> governs the time-evolution of the system density matrix, giving an ensemble average of the system dynamics. In order to ensure that these approximations are not violated, it is important that the decay rates <span class="math">\(\gamma_n\)</span> be smaller than the minimum energy splitting in the system Hamiltonian. Situations that demand special attention therefore include, for example, systems strongly coupled to their environment, and systems with degenerate or nearly degenerate energy levels.</p>
@@ -324,7 +299,7 @@ describe the strength of the processes.</p>
 describe the dissipation process is called a collapse operator. A list of
 collapse operators (<code class="docutils literal"><span class="pre">c_ops</span></code>) is passed as the fourth argument to the
 <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function in order to define the dissipation processes in the master
-equation. When the <code class="docutils literal"><span class="pre">c_ops</span></code> isn’t empty, the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function will use
+equation. When the <code class="docutils literal"><span class="pre">c_ops</span></code> isn&#8217;t empty, the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal"><span class="pre">qutip.mesolve</span></code></a> function will use
 the master equation instead of the unitary Schrödinger equation.</p>
 <p>Using the example with the spin dynamics from the previous section, we can
 easily add a relaxation process (describing the dissipation of energy from the
@@ -368,22 +343,22 @@ process.</p>
 <span class="gp">In [35]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span><span class="o">*</span><span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">sm</span><span class="p">])</span>
 
 <span class="gp">In [36]: </span><span class="n">figure</span><span class="p">()</span>
-<span class="gh">Out[36]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x123db2be0&gt;</span>
+<span class="gh">Out[36]: </span><span class="go">&lt;matplotlib.figure.Figure at 0x2b4e7e783a90&gt;</span>
 
 <span class="gp">In [37]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="go">                                                   Out[37]: [&lt;matplotlib.lines.Line2D at 0x1241f9d68&gt;]</span>
+<span class="go">                                                      Out[37]: [&lt;matplotlib.lines.Line2D at 0x2b4e7e79c9e8&gt;]</span>
 
 <span class="gp">In [38]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="go">                                                                                                       Out[38]: [&lt;matplotlib.lines.Line2D at 0x123c31470&gt;]</span>
+<span class="go">                                                                                                             Out[38]: [&lt;matplotlib.lines.Line2D at 0x2b4e7e79cc88&gt;]</span>
 
 <span class="gp">In [39]: </span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
-<span class="go">                                                                                                                                                           Out[39]: &lt;matplotlib.text.Text at 0x12471f780&gt;</span>
+<span class="go">                                                                                                                                                                    Out[39]: &lt;matplotlib.text.Text at 0x2b4e7e858198&gt;</span>
 
 <span class="gp">In [40]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">)</span>
-<span class="go">                                                                                                                                                                                                          Out[40]: &lt;matplotlib.text.Text at 0x123c57f28&gt;</span>
+<span class="go">                                                                                                                                                                                                                      Out[40]: &lt;matplotlib.text.Text at 0x2b4e7e7e1710&gt;</span>
 
 <span class="gp">In [41]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
-<span class="go">                                                                                                                                                                                                                                                         Out[41]: &lt;matplotlib.legend.Legend at 0x1250ca8d0&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                        Out[41]: &lt;matplotlib.legend.Legend at 0x2b4e7e7a9438&gt;</span>
 
 <span class="gp">In [42]: </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -394,18 +369,15 @@ process.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dynamics-monte.html" class="btn btn-neutral float-right" title="Monte Carlo Solver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dynamics-monte.html" class="btn btn-neutral float-right" title="Monte Carlo Solver" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dynamics-data.html" class="btn btn-neutral" title="Dynamics Simulation Results" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dynamics-data.html" class="btn btn-neutral" title="Dynamics Simulation Results" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -415,7 +387,7 @@ process.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jul 28, 2017.
+      Last updated on Jan 17, 2018.
 
     </p>
   </div>
@@ -447,7 +419,7 @@ process.</p>
       <script type="text/javascript" src="../../static/jquery.js"></script>
       <script type="text/javascript" src="../../static/underscore.js"></script>
       <script type="text/javascript" src="../../static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
