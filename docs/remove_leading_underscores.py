@@ -1,6 +1,6 @@
 import os, shutil
 
-curr_vers_dir = '4.2'
+curr_vers_dir = 'latest'
 
 dirs = {'_static' : 'static', '_modules' : 'modules',
         '_images' : 'images', '_sources' : 'sources'}

@@ -9,14 +9,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.mesolve &mdash; QuTiP 4.1 Documentation</title>
+  <title>qutip.mesolve &mdash; QuTiP 4.2 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
-  
-  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
 
   
@@ -29,7 +27,7 @@
 
   
   
-    <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   
 
   
@@ -38,17 +36,16 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="QuTiP 4.1 Documentation" href="../../index.html"/>
+    <link rel="top" title="QuTiP 4.2 Documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
-  <script src="../../static/js/modernizr.min.js"></script>
+  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -68,7 +65,7 @@
             
             
               <div class="version">
-                4.1
+                4.2
               </div>
             
           
@@ -89,10 +86,7 @@
           
             
             
-              
-            
-            
-              <ul>
+                <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
@@ -112,10 +106,8 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
-        
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
       </nav>
 
 
@@ -128,36 +120,19 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>qutip.mesolve</li>
-    
-    
+      
+    <li>qutip.mesolve</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -215,7 +190,7 @@
 <span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="k">import</span> <span class="n">spre</span><span class="p">,</span> <span class="n">spost</span><span class="p">,</span> <span class="n">liouvillian</span><span class="p">,</span> <span class="n">mat2vec</span><span class="p">,</span> <span class="n">vec2mat</span>
 <span class="kn">from</span> <span class="nn">qutip.expect</span> <span class="k">import</span> <span class="n">expect_rho_vec</span>
 <span class="kn">from</span> <span class="nn">qutip.solver</span> <span class="k">import</span> <span class="n">Options</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">_solver_safety_check</span>
-<span class="kn">from</span> <span class="nn">qutip.cy.spmatfuncs</span> <span class="k">import</span> <span class="n">cy_ode_rhs</span><span class="p">,</span> <span class="n">cy_ode_rho_func_td</span>
+<span class="kn">from</span> <span class="nn">qutip.cy.spmatfuncs</span> <span class="k">import</span> <span class="n">cy_ode_rhs</span><span class="p">,</span> <span class="n">cy_ode_rho_func_td</span><span class="p">,</span> <span class="n">spmvpy_csr</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.spconvert</span> <span class="k">import</span> <span class="n">dense2D_to_fastcsr_fmode</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.codegen</span> <span class="k">import</span> <span class="n">Codegen</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.utilities</span> <span class="k">import</span> <span class="n">_cython_build_cleanup</span>
@@ -357,13 +332,12 @@
 <span class="sd">    options : :class:`qutip.Options`</span>
 <span class="sd">        with options for the solver.</span>
 
-<span class="sd">    progress_bar: BaseProgressBar</span>
+<span class="sd">    progress_bar : BaseProgressBar</span>
 <span class="sd">        Optional instance of BaseProgressBar, or a subclass thereof, for</span>
 <span class="sd">        showing the progress of the simulation.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-
 <span class="sd">    result: :class:`qutip.Result`</span>
 
 <span class="sd">        An instance of the class :class:`qutip.Result`, which contains</span>
@@ -629,35 +603,49 @@
 <span class="c1"># [Qobj, function] style time dependence API</span>
 <span class="c1">#</span>
 <span class="k">def</span> <span class="nf">drho_list_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">L_list</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-
-    <span class="n">L</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">L_td</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">spmvpy_csr</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span>
+                <span class="n">rho</span><span class="p">,</span> <span class="n">L_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_list</span><span class="p">)):</span>
         <span class="c1">#</span>
         <span class="c1"># L_args[n][0] = the sparse data for a Qobj in super-operator form</span>
         <span class="c1"># L_args[n][1] = function callback giving the coefficient</span>
         <span class="c1">#</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">L_td</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">spmvpy_csr</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span>
+                        <span class="n">rho</span><span class="p">,</span> <span class="n">L_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">L</span> <span class="o">*</span> <span class="n">rho</span>
+            <span class="n">spmvpy_csr</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span>
+                        <span class="n">rho</span><span class="p">,</span> <span class="n">L_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
 
 
 <span class="k">def</span> <span class="nf">drho_list_td_with_state</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">L_list</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
 
-    <span class="n">L</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">L_td</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">spmvpy_csr</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span>
+                <span class="n">rho</span><span class="p">,</span> <span class="n">L_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_list</span><span class="p">)):</span>
         <span class="c1">#</span>
         <span class="c1"># L_args[n][0] = the sparse data for a Qobj in super-operator form</span>
         <span class="c1"># L_args[n][1] = function callback giving the coefficient</span>
         <span class="c1">#</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">L_td</span> <span class="o">=</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">spmvpy_csr</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span>
+                        <span class="n">rho</span><span class="p">,</span> <span class="n">L_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">L_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+            <span class="n">spmvpy_csr</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span>
+                        <span class="n">rho</span><span class="p">,</span> <span class="n">L_td</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">L</span> <span class="o">*</span> <span class="n">rho</span>
+    <span class="k">return</span> <span class="n">out</span>
 
 <span class="c1">#</span>
 <span class="c1"># evaluate dE(t)/dt according to the master equation using the</span>
@@ -1417,9 +1405,6 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
   
@@ -1429,7 +1414,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Mar 12, 2017.
+      Last updated on Jan 17, 2018.
 
     </p>
   </div>
@@ -1451,23 +1436,23 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'4.1.0',
+            VERSION:'4.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-      <script type="text/javascript" src="../../static/jquery.js"></script>
-      <script type="text/javascript" src="../../static/underscore.js"></script>
-      <script type="text/javascript" src="../../static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
   
   
-    <script type="text/javascript" src="../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
   

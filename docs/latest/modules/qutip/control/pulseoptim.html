@@ -9,14 +9,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.control.pulseoptim &mdash; QuTiP 4.1 Documentation</title>
+  <title>qutip.control.pulseoptim &mdash; QuTiP 4.2 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
-  
-  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
   
 
   
@@ -29,7 +27,7 @@
 
   
   
-    <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   
 
   
@@ -38,17 +36,16 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="QuTiP 4.1 Documentation" href="../../../index.html"/>
+    <link rel="top" title="QuTiP 4.2 Documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
-  <script src="../../../static/js/modernizr.min.js"></script>
+  <script src="../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -68,7 +65,7 @@
             
             
               <div class="version">
-                4.1
+                4.2
               </div>
             
           
@@ -89,10 +86,7 @@
           
             
             
-              
-            
-            
-              <ul>
+                <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
@@ -112,10 +106,8 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
-        
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
       </nav>
 
 
@@ -128,36 +120,19 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>qutip.control.pulseoptim</li>
-    
-    
+      
+    <li>qutip.control.pulseoptim</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -313,7 +288,7 @@
 <span class="sd">    The dynamics of the system in any given timeslot are governed</span>
 <span class="sd">    by the combined dynamics generator,</span>
 <span class="sd">    i.e. the sum of the drift+ctrl_amp[j]*ctrls[j]</span>
-<span class="sd">    The control pulse is an [n_ts, len(ctrls)] array of piecewise amplitudes</span>
+<span class="sd">    The control pulse is an [n_ts, n_ctrls)] array of piecewise amplitudes</span>
 <span class="sd">    Starting from an intital (typically random) pulse,</span>
 <span class="sd">    a multivariable optimisation algorithm attempts to determines the</span>
 <span class="sd">    optimal values for the control pulse to minimise the fidelity error</span>
@@ -326,9 +301,10 @@
 <span class="sd">        the underlying dynamics generator of the system</span>
 <span class="sd">        can provide list (of length num_tslots) for time dependent drift</span>
 
-<span class="sd">    ctrls : List of Qobj</span>
+<span class="sd">    ctrls : List of Qobj or array like [num_tslots, evo_time]</span>
 <span class="sd">        a list of control dynamics generators. These are scaled by</span>
 <span class="sd">        the amplitudes to alter the overall dynamics</span>
+<span class="sd">        Array like imput can be provided for time dependent control generators</span>
 
 <span class="sd">    initial : Qobj</span>
 <span class="sd">        starting point for the evolution.</span>
@@ -710,7 +686,7 @@
 <span class="sd">    The dynamics of the system  in any given timeslot are governed</span>
 <span class="sd">    by the combined Hamiltonian,</span>
 <span class="sd">    i.e. the sum of the H_d + ctrl_amp[j]*H_c[j]</span>
-<span class="sd">    The control pulse is an [n_ts, len(ctrls)] array of piecewise amplitudes</span>
+<span class="sd">    The control pulse is an [n_ts, n_ctrls] array of piecewise amplitudes</span>
 <span class="sd">    Starting from an intital (typically random) pulse,</span>
 <span class="sd">    a multivariable optimisation algorithm attempts to determines the</span>
 <span class="sd">    optimal values for the control pulse to minimise the fidelity error</span>
@@ -724,9 +700,10 @@
 <span class="sd">        Drift (aka system) the underlying Hamiltonian of the system</span>
 <span class="sd">        can provide list (of length num_tslots) for time dependent drift</span>
 <span class="sd">        </span>
-<span class="sd">    H_c : Qobj</span>
+<span class="sd">    H_c : List of Qobj or array like [num_tslots, evo_time]</span>
 <span class="sd">        a list of control Hamiltonians. These are scaled by</span>
 <span class="sd">        the amplitudes to alter the overall dynamics</span>
+<span class="sd">        Array like imput can be provided for time dependent control generators</span>
 
 <span class="sd">    U_0 : Qobj</span>
 <span class="sd">        starting point for the evolution.</span>
@@ -924,29 +901,7 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># check parameters here, as names are different than in</span>
-    <span class="c1"># create_pulse_optimizer, so TypeErrors would be confusing</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H_d</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H_d</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;H_d should be a Qobj or a list of Qobj&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="n">H_d</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;H_d should be a Qobj or a list of Qobj&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H_c</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;H_c should be a list of Qobj&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">H_c</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;H_c should be a list of Qobj&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">U_0</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;U_0 must be a Qobj&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">U_targ</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;U_targ must be a Qobj&quot;</span><span class="p">)</span>
+    <span class="c1"># parameters are checked in create pulse optimiser</span>
         
     <span class="c1"># The deprecation management is repeated here</span>
     <span class="c1"># so that the stack level is correct</span>
@@ -1037,7 +992,7 @@
 <span class="sd">    The dynamics of the system in any given timeslot are governed</span>
 <span class="sd">    by the combined dynamics generator,</span>
 <span class="sd">    i.e. the sum of the drift+ctrl_amp[j]*ctrls[j]</span>
-<span class="sd">    The control pulse is an [n_ts, len(ctrls)] array of piecewise amplitudes.</span>
+<span class="sd">    The control pulse is an [n_ts, n_ctrls] array of piecewise amplitudes.</span>
 <span class="sd">    The CRAB algorithm uses basis function coefficents as the variables to</span>
 <span class="sd">    optimise. It does NOT use any gradient function.</span>
 <span class="sd">    A multivariable optimisation algorithm attempts to determines the</span>
@@ -1051,9 +1006,10 @@
 <span class="sd">        the underlying dynamics generator of the system</span>
 <span class="sd">        can provide list (of length num_tslots) for time dependent drift</span>
 
-<span class="sd">    ctrls : List of Qobj</span>
+<span class="sd">    ctrls : List of Qobj or array like [num_tslots, evo_time]</span>
 <span class="sd">        a list of control dynamics generators. These are scaled by</span>
 <span class="sd">        the amplitudes to alter the overall dynamics</span>
+<span class="sd">        Array like imput can be provided for time dependent control generators</span>
 
 <span class="sd">    initial : Qobj</span>
 <span class="sd">        starting point for the evolution.</span>
@@ -1330,7 +1286,7 @@
 <span class="sd">    The dynamics of the system  in any given timeslot are governed</span>
 <span class="sd">    by the combined Hamiltonian,</span>
 <span class="sd">    i.e. the sum of the H_d + ctrl_amp[j]*H_c[j]</span>
-<span class="sd">    The control pulse is an [n_ts, len(ctrls)] array of piecewise amplitudes</span>
+<span class="sd">    The control pulse is an [n_ts, n_ctrls] array of piecewise amplitudes</span>
 <span class="sd">    </span>
 <span class="sd">    The CRAB algorithm uses basis function coefficents as the variables to</span>
 <span class="sd">    optimise. It does NOT use any gradient function.</span>
@@ -1346,9 +1302,10 @@
 <span class="sd">        Drift (aka system) the underlying Hamiltonian of the system</span>
 <span class="sd">        can provide list (of length num_tslots) for time dependent drift</span>
 
-<span class="sd">    H_c : Qobj</span>
+<span class="sd">    H_c : List of Qobj or array like [num_tslots, evo_time]</span>
 <span class="sd">        a list of control Hamiltonians. These are scaled by</span>
 <span class="sd">        the amplitudes to alter the overall dynamics</span>
+<span class="sd">        Array like imput can be provided for time dependent control generators</span>
 
 <span class="sd">    U_0 : Qobj</span>
 <span class="sd">        starting point for the evolution.</span>
@@ -1621,9 +1578,10 @@
 <span class="sd">        the underlying dynamics generator of the system</span>
 <span class="sd">        can provide list (of length num_tslots) for time dependent drift</span>
 
-<span class="sd">    ctrls : List of Qobj</span>
+<span class="sd">    ctrls : List of Qobj or array like [num_tslots, evo_time]</span>
 <span class="sd">        a list of control dynamics generators. These are scaled by</span>
 <span class="sd">        the amplitudes to alter the overall dynamics</span>
+<span class="sd">        Array like imput can be provided for time dependent control generators</span>
 
 <span class="sd">    initial : Qobj</span>
 <span class="sd">        starting point for the evolution.</span>
@@ -1835,20 +1793,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># check parameters</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drift</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drift</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;drift should be a Qobj or a list of Qobj&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">drift</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;drift should be a Qobj or a list of Qobj&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;ctrls should be a list of Qobj&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">ctrls</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;ctrls should be a list of Qobj&quot;</span><span class="p">)</span>
+    <span class="n">ctrls</span> <span class="o">=</span> <span class="n">dynamics</span><span class="o">.</span><span class="n">_check_ctrls_container</span><span class="p">(</span><span class="n">ctrls</span><span class="p">)</span>
+    <span class="n">dynamics</span><span class="o">.</span><span class="n">_check_drift_dyn_gen</span><span class="p">(</span><span class="n">drift</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;initial must be a Qobj&quot;</span><span class="p">)</span>
@@ -1961,6 +1907,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">UsageError</span><span class="p">(</span><span class="s2">&quot;No option for dyn_type: &quot;</span> <span class="o">+</span> <span class="n">dyn_type</span><span class="p">)</span>
     <span class="n">dyn</span><span class="o">.</span><span class="n">apply_params</span><span class="p">(</span><span class="n">dyn_params</span><span class="p">)</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">_drift_dyn_gen_checked</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">dyn</span><span class="o">.</span><span class="n">_ctrl_dyn_gen_checked</span> <span class="o">=</span> <span class="kc">True</span>
     
     <span class="c1"># Create the PropagatorComputer instance</span>
     <span class="c1"># The default will be typically be the best option</span>
@@ -2047,7 +1995,6 @@
     <span class="n">tc</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">=</span> <span class="n">max_iter</span>
     <span class="n">tc</span><span class="o">.</span><span class="n">max_wall_time</span> <span class="o">=</span> <span class="n">max_wall_time</span>
     <span class="n">optim</span><span class="o">.</span><span class="n">termination_conditions</span> <span class="o">=</span> <span class="n">tc</span>
-    
     
     <span class="n">optim</span><span class="o">.</span><span class="n">apply_method_params</span><span class="p">(</span><span class="n">method_params</span><span class="p">)</span>
 
@@ -2187,9 +2134,6 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
   
@@ -2199,7 +2143,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Mar 12, 2017.
+      Last updated on Jan 17, 2018.
 
     </p>
   </div>
@@ -2221,23 +2165,23 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'4.1.0',
+            VERSION:'4.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-      <script type="text/javascript" src="../../../static/jquery.js"></script>
-      <script type="text/javascript" src="../../../static/underscore.js"></script>
-      <script type="text/javascript" src="../../../static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
   
   
-    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
   
 
   
