@@ -9,12 +9,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.mesolve &mdash; QuTiP 4.2 Documentation</title>
+  <title>qutip.mesolve &mdash; QuTiP 4.3 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+  
   
 
   
@@ -25,27 +27,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="QuTiP 4.2 Documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
+  <script src="../../static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -65,7 +59,7 @@
             
             
               <div class="version">
-                4.2
+                4.3
               </div>
             
           
@@ -86,7 +80,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
@@ -105,34 +102,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      
-    <li>qutip.mesolve</li>
+        
+      <li>qutip.mesolve</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -710,11 +725,14 @@
     <span class="n">Lptrs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">Lcoeff</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">Lobj</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">me_cops_coeff</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">me_cops_obj</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">me_cops_obj_flags</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># loop over all hamiltonian terms, convert to superoperator form and</span>
     <span class="c1"># add the data of sparse matrix representation to</span>
+    <span class="n">n_not_const_terms</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">h_spec</span> <span class="ow">in</span> <span class="n">H_list</span><span class="p">:</span>
-
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_spec</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">h_spec</span>
 
@@ -728,6 +746,7 @@
                                 <span class="s2">&quot;superoperator)&quot;</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">n_not_const_terms</span> <span class="o">+=</span><span class="mi">1</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">h_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">h_coeff</span> <span class="o">=</span> <span class="n">h_spec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -751,9 +770,10 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incorrect specification of time-dependent &quot;</span> <span class="o">+</span>
                             <span class="s2">&quot;Hamiltonian (expected string format)&quot;</span><span class="p">)</span>
 
+
+    
     <span class="c1"># loop over all collapse operators</span>
     <span class="k">for</span> <span class="n">c_spec</span> <span class="ow">in</span> <span class="n">c_list</span><span class="p">:</span>
-
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_spec</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">c_spec</span>
 
@@ -769,16 +789,29 @@
                                 <span class="s2">&quot;superoperator)&quot;</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">n_not_const_terms</span> <span class="o">+=</span><span class="mi">1</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">c_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">c_coeff</span> <span class="o">=</span> <span class="n">c_spec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
+            
             <span class="k">if</span> <span class="n">isoper</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
                 <span class="n">cdc</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c</span>
                 <span class="n">L</span> <span class="o">=</span> <span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span> \
                                              <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span>
-                <span class="n">c_coeff</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">c_coeff</span> <span class="o">+</span> <span class="s2">&quot;)**2&quot;</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">,</span> <span class="n">Cubic_Spline</span><span class="p">):</span>
+                    <span class="n">me_cops_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span>
+                    <span class="n">me_cops_obj_flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_not_const_terms</span><span class="p">)</span>
+                    <span class="n">me_cops_coeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">c_coeff</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">c_coeff</span> <span class="o">+</span> <span class="s2">&quot;)**2&quot;</span>
+                    <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">issuper</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
                 <span class="n">L</span> <span class="o">=</span> <span class="n">c</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">,</span> <span class="n">Cubic_Spline</span><span class="p">):</span>
+                    <span class="n">me_cops_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span>
+                    <span class="n">me_cops_obj_flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">n_not_const_terms</span><span class="p">)</span>
+                    <span class="n">me_cops_coeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incorrect specification of time-dependent &quot;</span> <span class="o">+</span>
                                 <span class="s2">&quot;Liouvillian (expected operator or &quot;</span> <span class="o">+</span>
@@ -787,22 +820,26 @@
             <span class="n">Ldata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
             <span class="n">Linds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
             <span class="n">Lptrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
-            <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">)</span>
+            <span class="c1">#Lcoeff.append(c_coeff)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incorrect specification of time-dependent &quot;</span> <span class="o">+</span>
                             <span class="s2">&quot;collapse operators (expected string format)&quot;</span><span class="p">)</span>
-
-    <span class="c1"># add the constant part of the lagrangian</span>
+    
+    
+    <span class="c1">#prepend the constant part of the liouvillian</span>
     <span class="k">if</span> <span class="n">Lconst</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">Ldata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">Linds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-        <span class="n">Lptrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
-        <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span>
-
+       <span class="n">Ldata</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">]</span><span class="o">+</span><span class="n">Ldata</span>
+       <span class="n">Linds</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span><span class="o">+</span><span class="n">Linds</span>
+       <span class="n">Lptrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">]</span><span class="o">+</span><span class="n">Lptrs</span>
+       <span class="n">Lcoeff</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1.0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">Lcoeff</span>
+       
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">me_cops_obj_flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">kk</span><span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">me_cops_obj_flags</span><span class="p">]</span>
     <span class="c1"># the total number of liouvillian terms (hamiltonian terms +</span>
     <span class="c1"># collapse operators)</span>
     <span class="n">n_L_terms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ldata</span><span class="p">)</span>
+    <span class="n">n_td_cops</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">me_cops_obj</span><span class="p">)</span>
     
     <span class="c1"># Check which components should use OPENMP</span>
     <span class="n">omp_components</span> <span class="o">=</span> <span class="kc">None</span>
@@ -817,16 +854,22 @@
     <span class="n">string_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_L_terms</span><span class="p">):</span>
         <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Ldata[</span><span class="si">%d</span><span class="s2">], Linds[</span><span class="si">%d</span><span class="s2">], Lptrs[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
-    <span class="c1"># Add object terms to end of ode args string</span>
+    
+    <span class="c1"># Add H object terms to ode args string</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Lobj</span><span class="p">)):</span>
         <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Lobj[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+        
+    <span class="c1"># Add cop object terms to end of ode args string</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">me_cops_obj</span><span class="p">)):</span>
+        <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;me_cops_obj[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>    
+    
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
     <span class="n">parameter_string</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">string_list</span><span class="p">)</span>
-
+    
     <span class="c1">#</span>
     <span class="c1"># generate and compile new cython code if necessary</span>
     <span class="c1">#</span>
@@ -835,7 +878,9 @@
             <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">=</span> <span class="s2">&quot;rhs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">cgen_num</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">rhs_filename</span>
-        <span class="n">cgen</span> <span class="o">=</span> <span class="n">Codegen</span><span class="p">(</span><span class="n">h_terms</span><span class="o">=</span><span class="n">n_L_terms</span><span class="p">,</span> <span class="n">h_tdterms</span><span class="o">=</span><span class="n">Lcoeff</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">cgen</span> <span class="o">=</span> <span class="n">Codegen</span><span class="p">(</span><span class="n">h_terms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Lcoeff</span><span class="p">),</span> <span class="n">h_tdterms</span><span class="o">=</span><span class="n">Lcoeff</span><span class="p">,</span> 
+                       <span class="n">c_td_splines</span><span class="o">=</span><span class="n">me_cops_coeff</span><span class="p">,</span> 
+                       <span class="n">c_td_spline_flags</span><span class="o">=</span><span class="n">me_cops_obj_flags</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
                        <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">use_openmp</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">use_openmp</span><span class="p">,</span>
                        <span class="n">omp_components</span><span class="o">=</span><span class="n">omp_components</span><span class="p">,</span>
                        <span class="n">omp_threads</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">openmp_threads</span><span class="p">)</span>
@@ -1405,6 +1450,7 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1413,12 +1459,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jan 17, 2018.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
+      Last updated on Feb 26, 2019.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1433,36 +1479,34 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'4.2.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'4.3.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../static/jquery.js"></script>
+        <script type="text/javascript" src="../../static/underscore.js"></script>
+        <script type="text/javascript" src="../../static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
