@@ -9,12 +9,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.control.dynamics &mdash; QuTiP 4.2 Documentation</title>
+  <title>qutip.control.dynamics &mdash; QuTiP 4.3 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+  
+  
   
 
   
@@ -25,27 +27,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
+  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 
   
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="QuTiP 4.2 Documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
+  <script src="../../../static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -65,7 +59,7 @@
             
             
               <div class="version">
-                4.2
+                4.3
               </div>
             
           
@@ -86,7 +80,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
@@ -105,34 +102,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      
-    <li>qutip.control.dynamics</li>
+        
+      <li>qutip.control.dynamics</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -563,6 +578,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initial</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="kc">None</span>
@@ -599,6 +615,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">log_level</span>
         <span class="c1"># Internal flags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_mapped</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evo_initialized</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeslots_initialized</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ctrls_initialized</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen_checked</span> <span class="o">=</span> <span class="kc">False</span>
@@ -786,7 +803,7 @@
 <span class="sd">        Set various memory optimisation attributes based on the </span>
 <span class="sd">        memory_optimization attribute</span>
 <span class="sd">        If they have been set already, e.g. in apply_params</span>
-<span class="sd">        then they will not be overidden here</span>
+<span class="sd">        then they will not be overridden here</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting memory optimisations for level </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">memory_optimization</span><span class="p">))</span>
@@ -888,9 +905,11 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;target must be a Qobj&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_drift_attribs</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_optimizations</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sys_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="o">.</span><span class="n">dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sys_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># Set the phase application method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_phase</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_optimizations</span><span class="p">()</span>
         <span class="n">n_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span>
         <span class="n">n_ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_ctrls</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
@@ -934,8 +953,8 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown option &#39;</span><span class="si">{}</span><span class="s2">&#39; for oper_dtype. &quot;</span>
                 <span class="s2">&quot;Assuming that internal drift, ctrls, initial and target &quot;</span>
                 <span class="s2">&quot;have been set correctly&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="p">))</span>
-            
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">n_ts</span><span class="p">,</span> <span class="n">n_ctrls</span><span class="p">],</span> 
                                                      <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
@@ -964,7 +983,7 @@
             <span class="c1"># Onward propagation overlap with inverse target</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo</span> <span class="o">=</span> <span class="p">[</span><span class="nb">object</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_onto_evo_target</span><span class="p">()</span>
-
+            
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_decomp_lists</span><span class="p">()</span>
 
@@ -979,7 +998,110 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="o">.</span><span class="n">create_dump_dir</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dynamics dump will be written to:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="o">.</span><span class="n">dump_dir</span><span class="p">))</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evo_initialized</span> <span class="o">=</span> <span class="kc">True</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Some op that is applied to the dyn_gen before expontiating to</span>
+<span class="sd">        get the propagator.</span>
+<span class="sd">        See `phase_application` for how this is applied</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Note that if this returns None then _apply_phase will never be</span>
+        <span class="c1"># called</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span>
+    
+    <span class="nd">@dyn_gen_phase</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        phase_application : scalar(string), default=&#39;preop&#39;</span>
+<span class="sd">        Determines how the phase is applied to the dynamics generators</span>
+<span class="sd">         - &#39;preop&#39;  : P = expm(phase*dyn_gen)</span>
+<span class="sd">         - &#39;postop&#39; : P = expm(dyn_gen*phase)</span>
+<span class="sd">         - &#39;custom&#39; : Customised phase application</span>
+<span class="sd">        The &#39;custom&#39; option assumes that the _apply_phase method has been</span>
+<span class="sd">        set to a custom function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span>
+
+    <span class="nd">@phase_application</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_phase_application</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_phase_application</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_config_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ph_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the appropriate function for the phase application</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Invalid value &#39;</span><span class="si">{}</span><span class="s2">&#39; for phase application. Must be either &quot;</span>
+                   <span class="s2">&quot;&#39;preop&#39;, &#39;postop&#39; or &#39;custom&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ph_app</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">ph_app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ph_app</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ph_app</span> <span class="o">=</span> <span class="n">ph_app</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ph_app</span> <span class="o">==</span> <span class="s1">&#39;preop&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase_preop</span>
+        <span class="k">elif</span> <span class="n">ph_app</span> <span class="o">==</span> <span class="s1">&#39;postop&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase_postop</span>
+        <span class="k">elif</span> <span class="n">ph_app</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
+            <span class="c1"># Do nothing, assume _apply_phase set elsewhere</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_init_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_config_phase_application</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span> <span class="o">=</span> <span class="kc">False</span>
+            
+    <span class="k">def</span> <span class="nf">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This default method does nothing.</span>
+<span class="sd">        It will be set to another method automatically if `phase_application`</span>
+<span class="sd">        is &#39;preop&#39; or &#39;postop&#39;. It should be overridden repointed if</span>
+<span class="sd">        `phase_application` is &#39;custom&#39;</span>
+<span class="sd">        It will never be called if `dyn_gen_phase` is None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">dg</span>
+            
+    <span class="k">def</span> <span class="nf">_apply_phase_preop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply phasing operator to dynamics generator.</span>
+<span class="sd">        This called during the propagator calculation.</span>
+<span class="sd">        In this case it will be applied as phase*dg</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">):</span>
+            <span class="n">phased_dg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phased_dg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span><span class="o">*</span><span class="n">dg</span>
+        <span class="k">return</span> <span class="n">phased_dg</span>
+
+    <span class="k">def</span> <span class="nf">_apply_phase_postop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply phasing operator to dynamics generator.</span>
+<span class="sd">        This called during the propagator calculation.</span>
+<span class="sd">        In this case it will be applied as dg*phase</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">):</span>
+            <span class="n">phased_dg</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phased_dg</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span>
+        <span class="k">return</span> <span class="n">phased_dg</span>
+        
     <span class="k">def</span> <span class="nf">_create_decomp_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create lists that will hold the eigen decomposition</span>
@@ -1260,28 +1382,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dg</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_phased_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Some preop that is applied to the dyn_gen before expontiating to</span>
-<span class="sd">        get the propagator</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span>
-    
-    <span class="k">def</span> <span class="nf">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Apply some phase factor or operator</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">phased_dg</span> <span class="o">=</span> <span class="n">dg</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">):</span>
-                <span class="n">phased_dg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">phased_dg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="o">*</span><span class="n">dg</span>
-        <span class="k">return</span> <span class="n">phased_dg</span>
-
+   
 <div class="viewcode-block" id="Dynamics.get_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the combined dynamics generator for the timeslot</span>
@@ -1317,9 +1418,15 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1571,6 +1678,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_ham</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">=</span> <span class="s1">&#39;preop&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_params</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_create_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1590,12 +1698,12 @@
         <span class="c1"># set the default propagator computer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span> <span class="o">=</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicsUnitary.initialize_controls"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.DynamicsUnitary.initialize_controls">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="c1"># Either the _dyn_gen or _ham names can be used</span>
         <span class="c1"># This assumes that one or other has been set in the configuration</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_map_dyn_gen_to_ham</span><span class="p">()</span>
-        <span class="n">Dynamics</span><span class="o">.</span><span class="n">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="n">init_tslots</span><span class="p">)</span>
+        <span class="n">Dynamics</span><span class="o">.</span><span class="n">initialize_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">init_tslots</span><span class="o">=</span><span class="n">init_tslots</span><span class="p">)</span></div>
         <span class="c1">#self.H = self._dyn_gen</span>
 
     <span class="k">def</span> <span class="nf">_map_dyn_gen_to_ham</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1777,6 +1885,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">id_text</span> <span class="o">=</span> <span class="s1">&#39;SYMPL&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_omega_qobj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">=</span> <span class="s1">&#39;postop&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grad_exact</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_params</span><span class="p">()</span>
 
@@ -1815,35 +1924,44 @@
             <span class="k">else</span><span class="p">:</span>
                  <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">omg</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span>
-    
+        
+    <span class="k">def</span> <span class="nf">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">Dynamics</span><span class="o">.</span><span class="n">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evo_initialized</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dyn_gen_phase</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">phase</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="n">phase</span>
+
+    <span class="k">def</span> <span class="nf">_get_dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">==</span> <span class="s1">&#39;postop&#39;</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_omega</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">==</span> <span class="s1">&#39;preop&#39;</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_omega</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># Assume phase set by user</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No option for phase_application &quot;</span>
+                             <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">phase</span>
+                
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The prephasing operator for the symplectic group generators</span>
+<span class="sd">        The phasing operator for the symplectic group generators</span>
 <span class="sd">        usually refered to as \Omega</span>
+<span class="sd">        By default this is applied as &#39;postop&#39; dyn_gen*-\Omega</span>
+<span class="sd">        If phase_application is &#39;preop&#39; it is applied as \Omega*dyn_gen</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Cannot be calculated until the dyn_shape is set</span>
-        <span class="c1"># that is after the drift Hamitonan has been set.</span>
+        <span class="c1"># that is after the drift dyn gen has been set.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_omega</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span>
-
-    <span class="k">def</span> <span class="nf">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Apply some phase factor or operator</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">phased_dg</span> <span class="o">=</span> <span class="n">dg</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">):</span>
-                <span class="n">phased_dg</span> <span class="o">=</span> <span class="o">-</span><span class="n">dg</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">phased_dg</span> <span class="o">=</span> <span class="o">-</span><span class="n">dg</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_gen_phase</span>
-        <span class="k">return</span> <span class="n">phased_dg</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dyn_gen_phase</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span></div>
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1852,12 +1970,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jan 17, 2018.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
+      Last updated on Feb 26, 2019.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1872,36 +1990,34 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'4.2.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'4.3.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../static/jquery.js"></script>
+        <script type="text/javascript" src="../../../static/underscore.js"></script>
+        <script type="text/javascript" src="../../../static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../../static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
