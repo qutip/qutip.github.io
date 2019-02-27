@@ -9,12 +9,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parallel computation &mdash; QuTiP 4.2 Documentation</title>
+  <title>Parallel computation &mdash; QuTiP 4.3 Documentation</title>
   
 
   
   
     <link rel="shortcut icon" href="../static/favicon.ico"/>
+  
+  
   
 
   
@@ -25,29 +27,21 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="QuTiP 4.2 Documentation" href="../index.html"/>
-        <link rel="up" title="Users Guide" href="guide.html"/>
-        <link rel="next" title="Saving QuTiP Objects and Data Sets" href="guide-saving.html"/>
-        <link rel="prev" title="Visualization of quantum states and processes" href="guide-visualization.html"/> 
+  <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Saving QuTiP Objects and Data Sets" href="guide-saving.html" />
+    <link rel="prev" title="Visualization of quantum states and processes" href="guide-visualization.html" /> 
 
   
   <script src="../static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -67,7 +61,7 @@
             
             
               <div class="version">
-                4.2
+                4.3
               </div>
             
           
@@ -88,7 +82,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
@@ -128,34 +125,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="guide.html">Users Guide</a> &raquo;</li>
-      
-    <li>Parallel computation</li>
+        
+      <li>Parallel computation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -165,9 +182,9 @@
 <span id="parfor"></span><h1>Parallel computation<a class="headerlink" href="#parallel-computation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="parallel-map-and-parallel-for-loop">
 <h2>Parallel map and parallel for-loop<a class="headerlink" href="#parallel-map-and-parallel-for-loop" title="Permalink to this headline">¶</a></h2>
-<p>Often one is interested in the output of a given function as a single-parameter is varied. For instance, we can calculate the steady-state response of our system as the driving frequency is varied.  In cases such as this, where each iteration is independent of the others, we can speedup the calculation by performing the iterations in parallel. In QuTiP, parallel computations may be performed using the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> function or the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parfor</span></code></a> (parallel-for-loop) function.</p>
+<p>Often one is interested in the output of a given function as a single-parameter is varied. For instance, we can calculate the steady-state response of our system as the driving frequency is varied.  In cases such as this, where each iteration is independent of the others, we can speedup the calculation by performing the iterations in parallel. In QuTiP, parallel computations may be performed using the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> function or the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parfor</span></code></a> (parallel-for-loop) function.</p>
 <p>To use the these functions we need to define a function of one or more variables, and the range over which one of these variables are to be evaluated. For example:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span>
 
 <span class="gp">In [2]: </span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">parfor</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 
@@ -182,7 +199,7 @@
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">parallel_map</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">parallel_map</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 
 <span class="gp">In [7]: </span><span class="n">result_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
@@ -196,8 +213,8 @@
 <span class="go">                                                      [  0   1   8  27  64 125 216 343 512 729]</span>
 </pre></div>
 </div>
-<p>Note that the return values are arranged differently for the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> and the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parfor</span></code></a> functions, as illustrated below. In particular, the return value of <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> is not enforced to be NumPy arrays, which can avoid unnecessary copying if all that is needed is to iterate over the resulting list:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">parfor</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<p>Note that the return values are arranged differently for the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> and the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parfor</span></code></a> functions, as illustrated below. In particular, the return value of <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> is not enforced to be NumPy arrays, which can avoid unnecessary copying if all that is needed is to iterate over the resulting list:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">parfor</span><span class="p">(</span><span class="n">func1</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 
 <span class="gp">In [12]: </span><span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="go">[array([0, 1, 2, 3, 4]), array([ 0,  1,  4,  9, 16]), array([ 0,  1,  8, 27, 64])]</span>
@@ -208,8 +225,8 @@
 <span class="go">[(0, 0, 0), (1, 1, 1), (2, 4, 8), (3, 9, 27), (4, 16, 64)]</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parfor</span></code></a> functions are not limited to just numbers, but also works for a variety of outputs:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="k">def</span> <span class="nf">func2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span> <span class="o">*</span> <span class="n">x</span>
+<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parfor</span></code></a> functions are not limited to just numbers, but also works for a variety of outputs:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="k">def</span> <span class="nf">func2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span> <span class="o">*</span> <span class="n">x</span>
 
 <span class="gp">In [16]: </span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">parfor</span><span class="p">(</span><span class="n">func2</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 
@@ -217,62 +234,62 @@
 <span class="go">[0 1 2 3 4]</span>
 
 <span class="gp">In [18]: </span><span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="go">            [ Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
+<span class="go">            [Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
 <span class="go">Qobj data =</span>
-<span class="go">[[ 0.]]</span>
+<span class="go">[[0.]]</span>
 <span class="go"> Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
 <span class="go">Qobj data =</span>
-<span class="go">[[ 1.]]</span>
+<span class="go">[[1.]]</span>
 <span class="go"> Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
 <span class="go">Qobj data =</span>
-<span class="go">[[ 2.]]</span>
+<span class="go">[[2.]]</span>
 <span class="go"> Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
 <span class="go">Qobj data =</span>
-<span class="go">[[ 3.]]</span>
+<span class="go">[[3.]]</span>
 <span class="go"> Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
 <span class="go">Qobj data =</span>
-<span class="go">[[ 4.]]]</span>
+<span class="go">[[4.]]]</span>
 
 <span class="gp">In [19]: </span><span class="k">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                             [&#39;&#39; &#39;a&#39; &#39;aa&#39; &#39;aaa&#39; &#39;aaaa&#39;]</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                       [&#39;&#39; &#39;a&#39; &#39;aa&#39; &#39;aaa&#39; &#39;aaaa&#39;]</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">New in QuTiP 3.</p>
 </div>
-<p>One can also define functions with <strong>multiple</strong> input arguments and even keyword arguments. Here the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parfor</span></code></a> functions behaves differently:
-While <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> only iterate over the values <cite>arguments</cite>, the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parfor</span></code></a> function simultaneously iterates over all arguments:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="k">def</span> <span class="nf">sum_diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+<p>One can also define functions with <strong>multiple</strong> input arguments and even keyword arguments. Here the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parfor</span></code></a> functions behaves differently:
+While <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> only iterate over the values <cite>arguments</cite>, the <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parfor" title="qutip.parallel.parfor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parfor</span></code></a> function simultaneously iterates over all arguments:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="k">def</span> <span class="nf">sum_diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 
 <span class="gp">In [21]: </span><span class="n">parfor</span><span class="p">(</span><span class="n">sum_diff</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
-<span class="gh">Out[21]: </span><span class="go">[array([5, 7, 9]), array([-3, -3, -3]), array([ 5.,  5.,  5.])]</span>
+<span class="gh">Out[21]: </span><span class="go">[array([5, 7, 9]), array([-3, -3, -3]), array([5., 5., 5.])]</span>
 
 <span class="gp">In [22]: </span><span class="n">parallel_map</span><span class="p">(</span><span class="n">sum_diff</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">task_args</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),),</span> <span class="n">task_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mf">5.0</span><span class="p">))</span>
-<span class="go">                                                                         Out[22]: </span>
+<span class="go">                                                                      Out[22]: </span>
 <span class="go">[(array([5, 6, 7]), array([-3, -4, -5]), 5.0),</span>
 <span class="go"> (array([6, 7, 8]), array([-2, -3, -4]), 5.0),</span>
 <span class="go"> (array([7, 8, 9]), array([-1, -2, -3]), 5.0)]</span>
 </pre></div>
 </div>
-<p>Note that the keyword arguments can be anything you like, but the keyword values are <strong>not</strong> iterated over. The keyword argument <em>num_cpus</em> is reserved as it sets the number of CPU&#8217;s used by parfor. By default, this value is set to the total number of physical processors on your system. You can change this number to a lower value, however setting it higher than the number of CPU&#8217;s will cause a drop in performance. In <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a>, keyword arguments to the task function are specified using <cite>task_kwargs</cite> argument, so there is no special reserved keyword arguments.</p>
-<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a> function also supports progressbar, using the keyword argument <cite>progress_bar</cite> which can be set to <cite>True</cite> or to an instance of <code class="xref py py-class docutils literal"><span class="pre">qutip.ui.progressbar.BaseProgressBar</span></code>. There is a function called <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.serial_map" title="qutip.parallel.serial_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.serial_map</span></code></a> that works as a non-parallel drop-in replacement for <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.parallel.parallel_map</span></code></a>, which allows easy switching between serial and parallel computation.</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="kn">import</span> <span class="nn">time</span>
+<p>Note that the keyword arguments can be anything you like, but the keyword values are <strong>not</strong> iterated over. The keyword argument <em>num_cpus</em> is reserved as it sets the number of CPU’s used by parfor. By default, this value is set to the total number of physical processors on your system. You can change this number to a lower value, however setting it higher than the number of CPU’s will cause a drop in performance. In <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a>, keyword arguments to the task function are specified using <cite>task_kwargs</cite> argument, so there is no special reserved keyword arguments.</p>
+<p>The <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a> function also supports progressbar, using the keyword argument <cite>progress_bar</cite> which can be set to <cite>True</cite> or to an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.ui.progressbar.BaseProgressBar</span></code>. There is a function called <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.serial_map" title="qutip.parallel.serial_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.serial_map</span></code></a> that works as a non-parallel drop-in replacement for <a class="reference internal" href="../apidoc/functions.html#qutip.parallel.parallel_map" title="qutip.parallel.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.parallel.parallel_map</span></code></a>, which allows easy switching between serial and parallel computation.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [24]: </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="gp">In [25]: </span><span class="n">result</span> <span class="o">=</span> <span class="n">parallel_map</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">progress_bar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="go">10.0%. Run time:   2.02s. Est. time left: 00:00:00:18</span>
-<span class="go">20.0%. Run time:   3.03s. Est. time left: 00:00:00:12</span>
-<span class="go">30.0%. Run time:   4.03s. Est. time left: 00:00:00:09</span>
-<span class="go">40.0%. Run time:   5.03s. Est. time left: 00:00:00:07</span>
-<span class="go">50.0%. Run time:   7.03s. Est. time left: 00:00:00:07</span>
-<span class="go">60.0%. Run time:   8.03s. Est. time left: 00:00:00:05</span>
-<span class="go">70.0%. Run time:   9.03s. Est. time left: 00:00:00:03</span>
-<span class="go">80.0%. Run time:  10.04s. Est. time left: 00:00:00:02</span>
-<span class="go">90.0%. Run time:  12.04s. Est. time left: 00:00:00:01</span>
-<span class="go">100.0%. Run time:  13.04s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:  13.06s</span>
+<span class="go">10.0%. Run time:   3.01s. Est. time left: 00:00:00:27</span>
+<span class="go">20.0%. Run time:   5.01s. Est. time left: 00:00:00:20</span>
+<span class="go">30.0%. Run time:   8.02s. Est. time left: 00:00:00:18</span>
+<span class="go">40.0%. Run time:  10.02s. Est. time left: 00:00:00:15</span>
+<span class="go">50.0%. Run time:  13.02s. Est. time left: 00:00:00:13</span>
+<span class="go">60.0%. Run time:  15.03s. Est. time left: 00:00:00:10</span>
+<span class="go">70.0%. Run time:  18.03s. Est. time left: 00:00:00:07</span>
+<span class="go">80.0%. Run time:  20.03s. Est. time left: 00:00:00:05</span>
+<span class="go">90.0%. Run time:  23.04s. Est. time left: 00:00:00:02</span>
+<span class="go">100.0%. Run time:  25.04s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:  25.07s</span>
 </pre></div>
 </div>
 <p>Parallel processing is useful for repeated tasks such as generating plots corresponding to the dynamical evolution of your system, or simultaneously simulating different parameter configurations.</p>
@@ -283,21 +300,22 @@ While <a class="reference internal" href="../apidoc/functions.html#qutip.paralle
 <p class="first admonition-title">Note</p>
 <p class="last">New in QuTiP 3.</p>
 </div>
-<p>When QuTiP is used with IPython interpreter, there is an alternative parallel for-loop implementation in the QuTiP  module <a class="reference internal" href="../apidoc/functions.html#module-qutip.ipynbtools" title="qutip.ipynbtools"><code class="xref py py-func docutils literal"><span class="pre">qutip.ipynbtools</span></code></a>, see <a class="reference internal" href="../apidoc/functions.html#qutip.ipynbtools.parallel_map" title="qutip.ipynbtools.parallel_map"><code class="xref py py-func docutils literal"><span class="pre">qutip.ipynbtools.parallel_map</span></code></a>. The advantage of this parallel_map implementation is based on IPythons powerful framework for parallelization, so the compute processes are not confined to run on the same host as the main process.</p>
+<p>When QuTiP is used with IPython interpreter, there is an alternative parallel for-loop implementation in the QuTiP  module <a class="reference internal" href="../apidoc/functions.html#module-qutip.ipynbtools" title="qutip.ipynbtools"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.ipynbtools</span></code></a>, see <a class="reference internal" href="../apidoc/functions.html#qutip.ipynbtools.parallel_map" title="qutip.ipynbtools.parallel_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.ipynbtools.parallel_map</span></code></a>. The advantage of this parallel_map implementation is based on IPythons powerful framework for parallelization, so the compute processes are not confined to run on the same host as the main process.</p>
 </div>
 </div>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="guide-saving.html" class="btn btn-neutral float-right" title="Saving QuTiP Objects and Data Sets" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="guide-saving.html" class="btn btn-neutral float-right" title="Saving QuTiP Objects and Data Sets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="guide-visualization.html" class="btn btn-neutral" title="Visualization of quantum states and processes" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="guide-visualization.html" class="btn btn-neutral" title="Visualization of quantum states and processes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -306,12 +324,12 @@ While <a class="reference internal" href="../apidoc/functions.html#qutip.paralle
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jan 17, 2018.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
+      Last updated on Feb 26, 2019.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -326,36 +344,34 @@ While <a class="reference internal" href="../apidoc/functions.html#qutip.paralle
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'4.2.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../static/jquery.js"></script>
-      <script type="text/javascript" src="../static/underscore.js"></script>
-      <script type="text/javascript" src="../static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'4.3.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../static/jquery.js"></script>
+        <script type="text/javascript" src="../static/underscore.js"></script>
+        <script type="text/javascript" src="../static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -9,12 +9,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.solver &mdash; QuTiP 4.2 Documentation</title>
+  <title>qutip.solver &mdash; QuTiP 4.3 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+  
   
 
   
@@ -25,27 +27,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="QuTiP 4.2 Documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
+  <script src="../../static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -65,7 +59,7 @@
             
             
               <div class="version">
-                4.2
+                4.3
               </div>
             
           
@@ -86,7 +80,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
@@ -105,34 +102,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      
-    <li>qutip.solver</li>
+        
+      <li>qutip.solver</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -930,7 +945,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_solver_safety_check</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
+<span class="k">def</span> <span class="nf">_solver_safety_check</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
     <span class="c1"># Input is std Qobj (Hamiltonian or Liouvillian)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="n">Hdims</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dims</span>
@@ -1005,28 +1020,29 @@
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid e_ops specification.&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_structure_check</span><span class="p">(</span><span class="n">Hdims</span><span class="p">,</span> <span class="n">Htype</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-    <span class="c1"># Input state is a ket vector</span>
-    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span><span class="p">:</span>
-        <span class="c1"># Input is Hamiltonian</span>
-        <span class="k">if</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operator and ket do not share same structure.&#39;</span><span class="p">)</span>
-        <span class="c1"># Input is super and state is ket</span>
-        <span class="k">elif</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operator and ket do not share same structure.&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid input operator.&#39;</span><span class="p">)</span>
-    <span class="c1"># Input state is a density matrix</span>
-    <span class="k">elif</span> <span class="n">state</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
-        <span class="c1"># Input is Hamiltonian and state is density matrix</span>
-        <span class="k">if</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operators do not share same structure.&#39;</span><span class="p">)</span>
-        <span class="c1"># Input is super op. and state is density matrix</span>
-        <span class="k">elif</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operators do not share same structure.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Input state is a ket vector</span>
+        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span><span class="p">:</span>
+            <span class="c1"># Input is Hamiltonian</span>
+            <span class="k">if</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operator and ket do not share same structure.&#39;</span><span class="p">)</span>
+            <span class="c1"># Input is super and state is ket</span>
+            <span class="k">elif</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operator and ket do not share same structure.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid input operator.&#39;</span><span class="p">)</span>
+        <span class="c1"># Input state is a density matrix</span>
+        <span class="k">elif</span> <span class="n">state</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
+            <span class="c1"># Input is Hamiltonian and state is density matrix</span>
+            <span class="k">if</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operators do not share same structure.&#39;</span><span class="p">)</span>
+            <span class="c1"># Input is super op. and state is density matrix</span>
+            <span class="k">elif</span> <span class="n">Htype</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">Hdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input operators do not share same structure.&#39;</span><span class="p">)</span>
 
  
 <span class="c1">#</span>
@@ -1040,6 +1056,7 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1048,12 +1065,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo.
-      Last updated on Jan 17, 2018.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
+      Last updated on Feb 26, 2019.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1068,36 +1085,34 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'4.2.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'4.3.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../static/jquery.js"></script>
+        <script type="text/javascript" src="../../static/underscore.js"></script>
+        <script type="text/javascript" src="../../static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
