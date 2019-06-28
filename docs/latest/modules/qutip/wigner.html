@@ -9,43 +9,46 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.wigner &mdash; QuTiP 4.3 Documentation</title>
+  <title>qutip.wigner &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -187,7 +190,7 @@
 <span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <span class="c1">###############################################################################</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;qfunc&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_q_function&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_wigner&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;qfunc&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_q_function&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;wigner_transform&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="p">(</span><span class="n">zeros</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">conj</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span>
@@ -204,12 +207,152 @@
 <span class="kn">from</span> <span class="nn">qutip.states</span> <span class="k">import</span> <span class="n">ket2dm</span>
 <span class="kn">from</span> <span class="nn">qutip.parallel</span> <span class="k">import</span> <span class="n">parfor</span>
 <span class="kn">from</span> <span class="nn">qutip.utilities</span> <span class="k">import</span> <span class="n">clebsch</span>
+<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="k">import</span> <span class="n">jmat</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">factorial</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.sparse_utils</span> <span class="k">import</span> <span class="n">_csr_get_diag</span>
+<span class="kn">import</span> <span class="nn">qutip</span> <span class="k">as</span> <span class="nn">qt</span>
 
 
-<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> 
-            <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">wigner_transform</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">fullparity</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">slicearray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;takes the density matrix or state vector of any finite state and</span>
+<span class="sd">    generates the Wigner function for that state on a sphere, generating a spin</span>
+<span class="sd">    Wigner function useful for displaying the quasi-probability for a qubit or</span>
+<span class="sd">    any qudit. For the standard, continuous-variable Wigner function for</span>
+<span class="sd">    position and momentum variables, wigner() should be used.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">        psi : qobj</span>
+<span class="sd">              a state vector or density matrix.</span>
+<span class="sd">        j : int</span>
+<span class="sd">            the total angular momentum of the quantum state.</span>
+<span class="sd">        fullparity : bool</span>
+<span class="sd">                     should the parity of the full SU space be used?</span>
+<span class="sd">        steps : int</span>
+<span class="sd">                number of points at which the Wigner transform is calculated.</span>
+<span class="sd">        slicearray : list of str</span>
+<span class="sd">                     the angle slice to be used for each particle in case of a</span>
+<span class="sd">                     multi-particle quantum state. &#39;l&#39; yields an equal angle</span>
+<span class="sd">                     slice. &#39;x&#39;, &#39;y&#39; and &#39;z&#39; angle slices can also be chosen.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">        wigner : list of float</span>
+<span class="sd">                 the wigner transformation at `steps` different theta and phi.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ComplexWarning</span>
+<span class="sd">        This can be ignored as it is caused due to rounding errors.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    See example notebook wigner_visualisation.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ------</span>
+<span class="sd">    [1] T. Tilma, M. J. Everitt, J. H. Samson, W. J. Munro,</span>
+<span class="sd">        and K. Nemoto, Phys. Rev. Lett. 117, 180401 (2016).</span>
+<span class="sd">    [2] R. P. Rundle, P. W. Mills, T. Tilma, J. H. Samson, and</span>
+<span class="sd">        M. J. Everitt, Phys. Rev. A 96, 022117 (2017).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;operator&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input state is not a valid operator.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">psi</span>
+
+    <span class="n">sun</span> <span class="o">=</span> <span class="mi">2</span>   <span class="c1"># The order of the SU group</span>
+
+    <span class="c1"># calculate total number of particles in quantum state:</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">rho</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">steps</span><span class="p">))</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">steps</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+
+    <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">_angle_slice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slicearray</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+
+    <span class="n">wigner</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">steps</span><span class="p">,</span> <span class="n">steps</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">fullparity</span><span class="p">:</span>
+        <span class="n">pari</span> <span class="o">=</span> <span class="n">_parity</span><span class="p">(</span><span class="n">sun</span><span class="o">**</span><span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pari</span> <span class="o">=</span> <span class="n">_parity</span><span class="p">(</span><span class="n">sun</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="n">wigner</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span> <span class="o">@</span> <span class="n">_kernelsu2</span><span class="p">(</span>
+                <span class="n">theta</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">phi</span><span class="p">[:,</span> <span class="n">p</span><span class="p">],</span> <span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">pari</span><span class="p">,</span> <span class="n">fullparity</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">wigner</span>
+
+
+<span class="k">def</span> <span class="nf">_parity</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function to calculate the parity of the quantum system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">_lambda_f</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="k">elif</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="n">mult</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">mult</span><span class="p">,</span> <span class="n">mult</span><span class="p">))</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mult</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">foo</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">qt</span><span class="o">.</span><span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">matrix</span> <span class="o">/</span> <span class="n">mult</span>
+
+
+<span class="k">def</span> <span class="nf">_lambda_f</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function needed for the calculation of the parity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">matrix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">matrix</span>
+
+
+<span class="k">def</span> <span class="nf">_kernelsu2</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">parity</span><span class="p">,</span> <span class="n">fullparity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function that calculates the kernel for the SU2 unitary group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># calculate the total rotation matrix (tensor product for each particle):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">_rotation_matrix</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">j</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fullparity</span><span class="p">:</span>
+        <span class="n">op_parity</span> <span class="o">=</span> <span class="n">parity</span>   <span class="c1"># The parity for a one particle system</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">parity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">parity</span><span class="p">,</span> <span class="n">op_parity</span><span class="p">)</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">parity</span> <span class="o">@</span> <span class="n">U</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">matrix</span>
+
+
+<span class="k">def</span> <span class="nf">_rotation_matrix</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function to calculate the rotation operator for the SU2 kernel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">la</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span> <span class="o">*</span> <span class="n">jmat</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">())</span> <span class="o">@</span> \
+           <span class="n">la</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">jmat</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+
+
+<span class="k">def</span> <span class="nf">_angle_slice</span><span class="p">(</span><span class="n">slicearray</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function to modify theta and phi for angle slicing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slicearray</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">theta</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">theta</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">phi</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">yind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slicearray</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">theta</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">theta</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">phi</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">phi</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">zind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slicearray</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">)</span>
+    <span class="n">phi</span><span class="p">[</span><span class="n">zind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">zind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">return</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span>
+
+
+<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+           <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wigner function for a state vector or density matrix at points</span>
 <span class="sd">    `xvec + i * yvec`.</span>
 
@@ -749,8 +892,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jun 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -767,36 +912,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

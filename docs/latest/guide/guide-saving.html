@@ -9,45 +9,48 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Saving QuTiP Objects and Data Sets &mdash; QuTiP 4.3 Documentation</title>
+  <title>Saving QuTiP Objects and Data Sets &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Generating Random Quantum States &amp; Operators" href="guide-random.html" />
     <link rel="prev" title="Parallel computation" href="guide-parfor.html" /> 
-
-  
-  <script src="../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -206,7 +209,7 @@
 <span class="gp">In [6]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">expect</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">rho_ss_loaded</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">0.9902248289345061</span>
+<span class="gh">Out[7]: </span><span class="go">0.9902248289345063</span>
 </pre></div>
 </div>
 <p>The nice thing about the <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qsave" title="qutip.fileio.qsave"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.fileio.qsave</span></code></a> and <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.qload" title="qutip.fileio.qload"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.fileio.qload</span></code></a> functions is that almost any object can be stored and load again later on. We can for example store a list of density matrices as returned by <a class="reference internal" href="../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></a>:</p>
@@ -233,8 +236,8 @@
 
 <span class="gp">In [15]: </span><span class="n">expect</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">dm_list_loaded</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
 <span class="gh">Out[15]: </span><span class="go"></span>
-<span class="go">array([4.40942767, 3.44132235, 2.80622054, 2.3433275 , 2.00107858,</span>
-<span class="go">       1.74653819, 1.55662702, 1.41466358, 1.30841238, 1.22882551])</span>
+<span class="go">array([4.81668221, 3.77473943, 3.04913311, 2.5220805 , 2.13353331,</span>
+<span class="go">       1.84510335, 1.63017229, 1.46963801, 1.34955453, 1.25964082])</span>
 </pre></div>
 </div>
 </div>
@@ -255,7 +258,7 @@
 
 <span class="gp">In [19]: </span><span class="n">medata</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">())])</span>
 
-<span class="gp">In [20]: </span><span class="n">shape</span><span class="p">(</span><span class="n">medata</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
+<span class="gp">In [20]: </span>   <span class="n">shape</span><span class="p">(</span><span class="n">medata</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
 <span class="gh">Out[20]: </span><span class="go">(3, 100)</span>
 
 <span class="gp">In [21]: </span><span class="n">shape</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
@@ -270,15 +273,15 @@
 
 <span class="gp">In [25]: </span><span class="o">!</span>head expect.dat
 <span class="go">            # Generated by QuTiP: 100x4 complex matrix in decimal format [&#39;,&#39; separated values].</span>
-<span class="go">0.0000000000+0.0000000000j,3.6870391934+0.0000000000j,1.1374497054+0.0000000000j,-0.2951078367+0.0000000000j</span>
-<span class="go">1.0101010101+0.0000000000j,2.9640773506+0.0000000000j,0.1508687185+0.0000000000j,-0.7403170813+0.0000000000j</span>
-<span class="go">2.0202020202+0.0000000000j,2.4767636492+0.0000000000j,-0.4453067188+0.0000000000j,-0.3988135953+0.0000000000j</span>
-<span class="go">3.0303030303+0.0000000000j,2.1208678804+0.0000000000j,-0.4752005651+0.0000000000j,0.1465727136+0.0000000000j</span>
-<span class="go">4.0404040404+0.0000000000j,1.8542562943+0.0000000000j,-0.1037777044+0.0000000000j,0.4096213665+0.0000000000j</span>
-<span class="go">5.0505050505+0.0000000000j,1.6522766730+0.0000000000j,0.2531244551+0.0000000000j,0.2602772957+0.0000000000j</span>
-<span class="go">6.0606060606+0.0000000000j,1.4983484986+0.0000000000j,0.3065614684+0.0000000000j,-0.0677773736+0.0000000000j</span>
-<span class="go">7.0707070707+0.0000000000j,1.3806276432+0.0000000000j,0.0904429715+0.0000000000j,-0.2571602213+0.0000000000j</span>
-<span class="go">8.0808080808+0.0000000000j,1.2903972224+0.0000000000j,-0.1483837192+0.0000000000j,-0.1852024757+0.0000000000j</span>
+<span class="go">0.0000000000+0.0000000000j,4.4272530638+0.0000000000j,-0.0101420384+0.0000000000j,-0.1298535374+0.0000000000j</span>
+<span class="go">1.0101010101+0.0000000000j,3.5985929429+0.0000000000j,-0.0503890179+0.0000000000j,-0.1261046895+0.0000000000j</span>
+<span class="go">2.0202020202+0.0000000000j,2.9785898865+0.0000000000j,-0.1211552458+0.0000000000j,-0.0188305737+0.0000000000j</span>
+<span class="go">3.0303030303+0.0000000000j,2.5113615936+0.0000000000j,-0.0687026172+0.0000000000j,0.0833822474+0.0000000000j</span>
+<span class="go">4.0404040404+0.0000000000j,2.1564695553+0.0000000000j,0.0313716025+0.0000000000j,0.0895675768+0.0000000000j</span>
+<span class="go">5.0505050505+0.0000000000j,1.8856387077+0.0000000000j,0.0813890768+0.0000000000j,0.0176553827+0.0000000000j</span>
+<span class="go">6.0606060606+0.0000000000j,1.6783506983+0.0000000000j,0.0507214121+0.0000000000j,-0.0525645174+0.0000000000j</span>
+<span class="go">7.0707070707+0.0000000000j,1.5193918223+0.0000000000j,-0.0156690616+0.0000000000j,-0.0620982090+0.0000000000j</span>
+<span class="go">8.0808080808+0.0000000000j,1.3973358345+0.0000000000j,-0.0534566054+0.0000000000j,-0.0171414436+0.0000000000j</span>
 </pre></div>
 </div>
 <p>In this case we didn’t really need to store both the real and imaginary parts, so instead we could use the <cite>numtype=”real”</cite> option:</p>
@@ -286,10 +289,10 @@
 
 <span class="gp">In [27]: </span><span class="o">!</span>head -n5 expect.dat
 <span class="go"># Generated by QuTiP: 100x4 real matrix in decimal format [&#39;,&#39; separated values].</span>
-<span class="go">0.0000000000,3.6870391934,1.1374497054,-0.2951078367</span>
-<span class="go">1.0101010101,2.9640773506,0.1508687185,-0.7403170813</span>
-<span class="go">2.0202020202,2.4767636492,-0.4453067188,-0.3988135953</span>
-<span class="go">3.0303030303,2.1208678804,-0.4752005651,0.1465727136</span>
+<span class="go">0.0000000000,4.4272530638,-0.0101420384,-0.1298535374</span>
+<span class="go">1.0101010101,3.5985929429,-0.0503890179,-0.1261046895</span>
+<span class="go">2.0202020202,2.9785898865,-0.1211552458,-0.0188305737</span>
+<span class="go">3.0303030303,2.5113615936,-0.0687026172,0.0833822474</span>
 </pre></div>
 </div>
 <p>and if we prefer scientific notation we can request that using the <cite>numformat=”exp”</cite> option</p>
@@ -297,10 +300,10 @@
 
 <span class="gp">In [29]: </span><span class="o">!</span>head -n <span class="m">5</span> expect.dat
 <span class="go"># Generated by QuTiP: 100x4 real matrix in exp format [&#39;,&#39; separated values].</span>
-<span class="go">0.0000000000e+00,3.6870391934e+00,1.1374497054e+00,-2.9510783673e-01</span>
-<span class="go">1.0101010101e+00,2.9640773506e+00,1.5086871853e-01,-7.4031708128e-01</span>
-<span class="go">2.0202020202e+00,2.4767636492e+00,-4.4530671880e-01,-3.9881359529e-01</span>
-<span class="go">3.0303030303e+00,2.1208678804e+00,-4.7520056508e-01,1.4657271365e-01</span>
+<span class="go">0.0000000000e+00,4.4272530638e+00,-1.0142038445e-02,-1.2985353743e-01</span>
+<span class="go">1.0101010101e+00,3.5985929429e+00,-5.0389017909e-02,-1.2610468954e-01</span>
+<span class="go">2.0202020202e+00,2.9785898865e+00,-1.2115524579e-01,-1.8830573745e-02</span>
+<span class="go">3.0303030303e+00,2.5113615936e+00,-6.8702617175e-02,8.3382247372e-02</span>
 </pre></div>
 </div>
 <p>Loading data previously stored using <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_store" title="qutip.fileio.file_data_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.fileio.file_data_store</span></code></a> (or some other software) is a even easier. Regardless of which deliminator was used, if data was stored as complex or real numbers, if it is in decimal or exponential form, the data can be loaded using the <a class="reference internal" href="../apidoc/functions.html#qutip.fileio.file_data_read" title="qutip.fileio.file_data_read"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.fileio.file_data_read</span></code></a>, which only takes the filename as mandatory argument.</p>
@@ -312,7 +315,7 @@
 <span class="gp">In [32]: </span><span class="n">plot</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">input_data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]);</span>  <span class="c1"># plot the data</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../images/saving_ex.png"><img alt="../images/saving_ex.png" class="align-center" src="../images/saving_ex.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="../_images/saving_ex.png"><img alt="../_images/saving_ex.png" class="align-center" src="../_images/saving_ex.png" style="width: 4in;" /></a>
 <p>(If a particularly obscure choice of deliminator was used it might be necessary to use the optional second argument, for example <cite>sep=”_”</cite> if _ is the deliminator).</p>
 </div>
 </div>
@@ -328,7 +331,7 @@
         <a href="guide-random.html" class="btn btn-neutral float-right" title="Generating Random Quantum States &amp; Operators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="guide-parfor.html" class="btn btn-neutral" title="Parallel computation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="guide-parfor.html" class="btn btn-neutral float-left" title="Parallel computation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -337,8 +340,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jun 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -355,36 +360,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../static/jquery.js"></script>
-        <script type="text/javascript" src="../static/underscore.js"></script>
-        <script type="text/javascript" src="../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

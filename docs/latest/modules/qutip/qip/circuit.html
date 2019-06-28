@@ -9,43 +9,46 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.qip.circuit &mdash; QuTiP 4.3 Documentation</title>
+  <title>qutip.qip.circuit &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-
-  
-  <script src="../../../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -187,8 +190,13 @@
 <span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <span class="c1">###############################################################################</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="k">import</span> <span class="n">Iterable</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">qutip.qip.circuit_latex</span> <span class="k">import</span> <span class="n">_latex_compile</span>
 <span class="kn">from</span> <span class="nn">qutip.qip.gates</span> <span class="k">import</span> <span class="o">*</span>
@@ -201,62 +209,66 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Representation of a quantum gate, with its required parametrs, and target</span>
 <span class="sd">    and control qubits.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Gate name.</span>
+<span class="sd">    targets : list or int</span>
+<span class="sd">        Gate targets.</span>
+<span class="sd">    controls : list or int</span>
+<span class="sd">        Gate controls.</span>
+<span class="sd">    arg_value : float</span>
+<span class="sd">        Argument value(phi).</span>
+<span class="sd">    arg_label : string</span>
+<span class="sd">        Label for gate representation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arg_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">arg_label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates a gate with specified parameters.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : String</span>
-<span class="sd">            Gate name.</span>
-<span class="sd">        targets : List</span>
-<span class="sd">            Gate targets.</span>
-<span class="sd">        controls : List</span>
-<span class="sd">            Gate controls.</span>
-<span class="sd">        arg_value : Float</span>
-<span class="sd">            Argument value(phi).</span>
-<span class="sd">        arg_label : String</span>
-<span class="sd">            Label for gate representation.</span>
+<span class="sd">        Create a gate with specified parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="n">controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="p">[</span><span class="n">controls</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">arg_value</span> <span class="o">=</span> <span class="n">arg_value</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">arg_label</span> <span class="o">=</span> <span class="n">arg_label</span>
+        <span class="k">for</span> <span class="n">ind_list</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ind_list</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+                <span class="n">all_integer</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">ind_list</span><span class="p">])</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">all_integer</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Index of a qubit must be an integer&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;BERKELEY&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;SWAPalpha&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate </span><span class="si">%s</span><span class="s2"> requires two targets&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate </span><span class="si">%s</span><span class="s2"> cannot have a control&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">,</span> <span class="s2">&quot;CRX&quot;</span><span class="p">,</span> <span class="s2">&quot;CRY&quot;</span><span class="p">,</span> <span class="s2">&quot;CRZ&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">,</span> <span class="s2">&quot;CRX&quot;</span><span class="p">,</span> <span class="s2">&quot;CRY&quot;</span><span class="p">,</span> <span class="s2">&quot;CRZ&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate </span><span class="si">%s</span><span class="s2"> requires one target&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate </span><span class="si">%s</span><span class="s2"> requires one control&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="s2">&quot;PHASEGATE&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="s2">&quot;PHASEGATE&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate </span><span class="si">%s</span><span class="s2"> does not take controls&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="s2">&quot;CPHASE&quot;</span><span class="p">,</span> <span class="s2">&quot;SWAPalpha&quot;</span><span class="p">,</span> <span class="s2">&quot;PHASEGATE&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;GLOBALPHASE&quot;</span><span class="p">,</span> <span class="s2">&quot;CRX&quot;</span><span class="p">,</span> <span class="s2">&quot;CRY&quot;</span><span class="p">,</span> <span class="s2">&quot;CRZ&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="s2">&quot;CPHASE&quot;</span><span class="p">,</span> <span class="s2">&quot;SWAPalpha&quot;</span><span class="p">,</span> <span class="s2">&quot;PHASEGATE&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;GLOBALPHASE&quot;</span><span class="p">,</span> <span class="s2">&quot;CRX&quot;</span><span class="p">,</span> <span class="s2">&quot;CRY&quot;</span><span class="p">,</span> <span class="s2">&quot;CRZ&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">arg_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate </span><span class="si">%s</span><span class="s2"> requires an argument value&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
@@ -319,10 +331,28 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Representation of a quantum program/algorithm, maintaining a sequence</span>
 <span class="sd">    of gates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N : int</span>
+<span class="sd">        Number of qubits in the system.</span>
+<span class="sd">    user_gates : dict</span>
+<span class="sd">        Define a dictionary of the custom gates. See examples for detail.</span>
+<span class="sd">    input_states : list</span>
+<span class="sd">        A list of string such as `0`,&#39;+&#39;, &quot;A&quot;, &quot;Y&quot;. Only used for latex.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; def user_gate():</span>
+<span class="sd">    ...     mat = np.array([[1.,   0],</span>
+<span class="sd">    ...                     [0., 1.j]])</span>
+<span class="sd">    ...     return Qobj(mat, dims=[[2], [2]])</span>
+<span class="sd">    &gt;&gt;&gt; qc.QubitCircuit(2, user_gates={&quot;T&quot;:user_gate})</span>
+<span class="sd">    &gt;&gt;&gt; qc.add_gate(&quot;T&quot;, targets=[0])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">input_states</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_states</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">reverse_states</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                 <span class="n">reverse_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">user_gates</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># number of qubits in the register</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="o">=</span> <span class="n">reverse_states</span>
@@ -330,6 +360,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_states</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_states</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">user_gates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_gates</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_gates</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_gates</span> <span class="o">=</span> <span class="n">user_gates</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;`user_gate` takes a python dictionary of the form&quot;</span>
+                    <span class="s2">&quot;{{str: gate_function}}, not </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_gates</span><span class="p">))</span>
 
 <div class="viewcode-block" id="QubitCircuit.add_state"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.add_state">[docs]</a>    <span class="k">def</span> <span class="nf">add_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state_type</span><span class="o">=</span><span class="s2">&quot;input&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -359,23 +398,25 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span></div>
 
 <div class="viewcode-block" id="QubitCircuit.add_gate"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.add_gate">[docs]</a>    <span class="k">def</span> <span class="nf">add_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arg_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">arg_label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">arg_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a gate with specified parameters to the circuit.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        gate: String or `Gate`</span>
+<span class="sd">        gate: string or `Gate`</span>
 <span class="sd">            Gate name. If gate is an instance of `Gate`, parameters are</span>
 <span class="sd">            unpacked and added.</span>
-<span class="sd">        targets: List</span>
+<span class="sd">        targets: list</span>
 <span class="sd">            Gate targets.</span>
-<span class="sd">        controls: List</span>
+<span class="sd">        controls: list</span>
 <span class="sd">            Gate controls.</span>
-<span class="sd">        arg_value: Float</span>
+<span class="sd">        arg_value: float</span>
 <span class="sd">            Argument value(phi).</span>
-<span class="sd">        arg_label: String</span>
+<span class="sd">        arg_label: string</span>
 <span class="sd">            Label for gate representation.</span>
+<span class="sd">        index : list</span>
+<span class="sd">            Positions to add the gate.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">Gate</span><span class="p">):</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span>
@@ -386,8 +427,17 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">gate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="n">controls</span><span class="p">,</span>
-                               <span class="n">arg_value</span><span class="o">=</span><span class="n">arg_value</span><span class="p">,</span> <span class="n">arg_label</span><span class="o">=</span><span class="n">arg_label</span><span class="p">))</span></div>
+
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="n">controls</span><span class="p">,</span>
+                                   <span class="n">arg_value</span><span class="o">=</span><span class="n">arg_value</span><span class="p">,</span> <span class="n">arg_label</span><span class="o">=</span><span class="n">arg_label</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Gate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+                                                 <span class="n">controls</span><span class="o">=</span><span class="n">controls</span><span class="p">,</span>
+                                                 <span class="n">arg_value</span><span class="o">=</span><span class="n">arg_value</span><span class="p">,</span>
+                                                 <span class="n">arg_label</span><span class="o">=</span><span class="n">arg_label</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="QubitCircuit.add_1q_gate"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.add_1q_gate">[docs]</a>    <span class="k">def</span> <span class="nf">add_1q_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qubits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">arg_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arg_label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -398,17 +448,17 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name : String</span>
+<span class="sd">        name : string</span>
 <span class="sd">            Gate name.</span>
-<span class="sd">        start : Integer</span>
+<span class="sd">        start : int</span>
 <span class="sd">            Starting location of qubits.</span>
-<span class="sd">        end : Integer</span>
+<span class="sd">        end : int</span>
 <span class="sd">            Last qubit for the gate.</span>
-<span class="sd">        qubits : List</span>
+<span class="sd">        qubits : list</span>
 <span class="sd">            Specific qubits for applying gates.</span>
-<span class="sd">        arg_value : Float</span>
+<span class="sd">        arg_value : float</span>
 <span class="sd">            Argument value(phi).</span>
-<span class="sd">        arg_label : String</span>
+<span class="sd">        arg_label : string</span>
 <span class="sd">            Label for gate representation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;PHASEGATE&quot;</span><span class="p">]:</span>
@@ -437,7 +487,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        qc : QubitCircuit</span>
 <span class="sd">            The circuit block to be added to the main circuit.</span>
-<span class="sd">        start : Integer</span>
+<span class="sd">        start : int</span>
 <span class="sd">            The qubit on which the first gate is applied.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">qc</span><span class="o">.</span><span class="n">N</span><span class="p">:</span>
@@ -464,20 +514,24 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                               <span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span>
                                <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">start</span><span class="p">],</span>
-                              <span class="n">gate</span><span class="o">.</span><span class="n">controls</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+                              <span class="n">gate</span><span class="o">.</span><span class="n">controls</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_gates</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span>
+                              <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
+                              <span class="n">arg_value</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QubitCircuit.remove_gate"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.remove_gate">[docs]</a>    <span class="k">def</span> <span class="nf">remove_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Removes a gate from a specific index or between two indexes or the</span>
+<span class="sd">        Remove a gate from a specific index or between two indexes or the</span>
 <span class="sd">        first, last or all instances of a particular gate.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        index : Integer</span>
+<span class="sd">        index : int</span>
 <span class="sd">            Location of gate to be removed.</span>
-<span class="sd">        name : String</span>
+<span class="sd">        name : string</span>
 <span class="sd">            Gate name to be removed.</span>
-<span class="sd">        remove : String</span>
+<span class="sd">        remove : string</span>
 <span class="sd">            If first or all gate are to be removed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">index</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span>
@@ -511,12 +565,12 @@
 
 <div class="viewcode-block" id="QubitCircuit.reverse_circuit"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.reverse_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">reverse_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reverses an entire circuit of unitary gates.</span>
+<span class="sd">        Reverse an entire circuit of unitary gates.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        ----------</span>
 <span class="sd">        qc : QubitCircuit</span>
-<span class="sd">            Returns QubitCircuit of resolved gates for the qubit circuit in the</span>
+<span class="sd">            Return QubitCircuit of resolved gates for the qubit circuit in the</span>
 <span class="sd">            reverse order.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -541,40 +595,35 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        qc : QubitCircuit</span>
-<span class="sd">            Returns QubitCircuit of resolved gates for the qubit circuit in the</span>
+<span class="sd">            Return QubitCircuit of resolved gates for the qubit circuit in the</span>
 <span class="sd">            desired basis.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">qc_temp</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span><span class="p">)</span>
         <span class="n">temp_resolved</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">basis_1q</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">basis_2q</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="n">basis_1q_valid</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">]</span>
         <span class="n">basis_2q_valid</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">,</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">basis_1q</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">basis_2q</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">basis</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">gate</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">basis_1q_valid</span> <span class="o">+</span> <span class="n">basis_2q_valid</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid basis gate&quot;</span> <span class="o">%</span> <span class="n">gate</span><span class="p">)</span>
-
                 <span class="k">if</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">basis_2q_valid</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">basis_2q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At most one two-qubit gate allowed&quot;</span><span class="p">)</span>
-                    <span class="n">basis_2q</span> <span class="o">=</span> <span class="n">gate</span>
-
-                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">basis_2q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">basis_1q_valid</span><span class="p">:</span>
                     <span class="n">basis_1q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
-
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid basis gate&quot;</span> <span class="o">%</span> <span class="n">gate</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">basis_1q</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not sufficient single-qubit gates in basis&quot;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">basis_1q</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">basis_1q</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">]</span>
 
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># only one 2q gate is given as basis</span>
             <span class="n">basis_1q</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">basis</span> <span class="ow">in</span> <span class="n">basis_2q_valid</span><span class="p">:</span>
-                <span class="n">basis_2q</span> <span class="o">=</span> <span class="n">basis</span>
+                <span class="n">basis_2q</span> <span class="o">=</span> <span class="p">[</span><span class="n">basis</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid two-qubit basis gate&quot;</span>
                                  <span class="o">%</span> <span class="n">basis</span><span class="p">)</span>
@@ -608,11 +657,13 @@
                                           <span class="n">arg_label</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_label</span><span class="p">))</span>
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                                           <span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">arg_label</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">basis_2q</span><span class="p">:</span>  <span class="c1"># ignore all gate in 2q basis</span>
+                <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CPHASE&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Cannot be resolved in this basis&quot;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CSIGN&quot;</span> <span class="ow">and</span> <span class="n">basis_2q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">:</span>
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                                           <span class="n">arg_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
                                           <span class="n">arg_label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\pi/2&quot;</span><span class="p">))</span>
@@ -630,14 +681,17 @@
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Cannot be resolved in this basis&quot;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SWAPalpha&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Cannot be resolved in this basis&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SWAP&quot;</span> <span class="ow">and</span> <span class="n">basis_2q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">:</span>
-                <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                          <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-                <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                          <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-                <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                          <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;ISWAP&quot;</span> <span class="ow">and</span> <span class="n">basis_2q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SWAP&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;ISWAP&quot;</span> <span class="ow">in</span> <span class="n">basis_2q</span><span class="p">:</span>  <span class="c1"># dealed with separately</span>
+                    <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">:</span>
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                           <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
@@ -667,11 +721,9 @@
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;GLOBALPHASE&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                                           <span class="n">arg_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
                                           <span class="n">arg_label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\pi/2&quot;</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SQRTSWAP&quot;</span> <span class="ow">and</span> <span class="n">basis_2q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">,</span>
-                                                              <span class="s2">&quot;ISWAP&quot;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Cannot be resolved in this basis&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SQRTISWAP&quot;</span> <span class="ow">and</span> <span class="n">basis_2q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">,</span>
-                                                               <span class="s2">&quot;ISWAP&quot;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Cannot be resolved in this basis&quot;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;FREDKIN&quot;</span><span class="p">:</span>
                 <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -802,9 +854,11 @@
                                           <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span>
                                           <span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">arg_label</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">temp_resolved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s2">&quot;Gate </span><span class="si">{}</span><span class="s2"> &quot;</span>
+                    <span class="s2">&quot;cannot be resolved.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">basis_2q</span> <span class="o">==</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CSIGN&quot;</span> <span class="ow">in</span> <span class="n">basis_2q</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">temp_resolved</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
@@ -817,7 +871,7 @@
                                               <span class="n">arg_label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\pi/2&quot;</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">basis_2q</span> <span class="o">==</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">&quot;ISWAP&quot;</span> <span class="ow">in</span> <span class="n">basis_2q</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">temp_resolved</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;GLOBALPHASE&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
@@ -864,7 +918,7 @@
                                               <span class="n">arg_label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;-\pi/2&quot;</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">basis_2q</span> <span class="o">==</span> <span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">&quot;SQRTSWAP&quot;</span> <span class="ow">in</span> <span class="n">basis_2q</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">temp_resolved</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
@@ -890,7 +944,7 @@
                                               <span class="n">arg_label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;-\pi/2&quot;</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">basis_2q</span> <span class="o">==</span> <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">&quot;SQRTISWAP&quot;</span> <span class="ow">in</span> <span class="n">basis_2q</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">temp_resolved</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
                     <span class="n">qc_temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;RY&quot;</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
@@ -970,13 +1024,13 @@
 <span class="sd">        target/s in terms of gates with adjacent interactions.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        ----------</span>
+<span class="sd">        -------</span>
 <span class="sd">        qc : QubitCircuit</span>
-<span class="sd">            Returns QubitCircuit of the gates for the qubit circuit with the</span>
+<span class="sd">            Return QubitCircuit of the gates for the qubit circuit with the</span>
 <span class="sd">            resolved non-adjacent gates.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">temp</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">reverse_states</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span><span class="p">)</span>
         <span class="n">swap_gates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;BERKELEY&quot;</span><span class="p">,</span>
                       <span class="s2">&quot;SWAPalpha&quot;</span><span class="p">]</span>
 
@@ -1041,7 +1095,9 @@
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">temp</span><span class="o">.</span><span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s2">&quot;`adjacent_gates` is not defined for &quot;</span>
+                    <span class="s2">&quot;gate </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">temp</span></div>
 
@@ -1053,7 +1109,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        U_list : list</span>
-<span class="sd">            Returns list of unitary matrices for the qubit circuit.</span>
+<span class="sd">            Return list of unitary matrices for the qubit circuit.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1072,7 +1128,7 @@
             <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;PHASEGATE&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phasegate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
                                              <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CRX&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CRX&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">controlled_gate</span><span class="p">(</span><span class="n">rx</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">),</span>
                                                    <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
                                                    <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -1117,6 +1173,25 @@
                                            <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
             <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;GLOBALPHASE&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">globalphase</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_gates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;A user defined gate </span><span class="si">{}</span><span class="s2"> takes only  &quot;</span>
+                        <span class="s2">&quot;`targets` variable.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_gates</span><span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">para_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">func</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">para_num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">oper</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">para_num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">oper</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;gate function takes at most one parameters.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expand_oper</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> gate is an unknown gate.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">U_list</span></div>
 
@@ -1133,10 +1208,11 @@
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SWAP&quot;</span><span class="p">:</span>
                             <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; \qswap \qwx &quot;</span><span class="p">)</span>
- 
-                        <span class="k">elif</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span> <span class="ow">or</span>
-                            <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span>
-                             <span class="ow">and</span> <span class="n">n</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">))):</span>
+
+                        <span class="k">elif</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span>
+                                <span class="n">n</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span> <span class="ow">or</span>
+                                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span>
+                                    <span class="n">n</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">))):</span>
                             <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; \multigate{</span><span class="si">%d</span><span class="s2">}{</span><span class="si">%s</span><span class="s2">} &quot;</span> <span class="o">%</span>
                                        <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
                                         <span class="n">_gate_label</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -1161,8 +1237,8 @@
 
                 <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">):</span>
                     <span class="c1"># global gate</span>
-                    <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                            <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span>
+                            <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_states</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)):</span>
                         <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; \multigate{</span><span class="si">%d</span><span class="s2">}{</span><span class="si">%s</span><span class="s2">} &quot;</span> <span class="o">%</span>
                                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
                                     <span class="n">_gate_label</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">arg_label</span><span class="p">)))</span>
@@ -1237,8 +1313,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jun 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -1255,36 +1333,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

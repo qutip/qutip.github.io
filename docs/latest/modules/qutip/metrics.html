@@ -9,43 +9,46 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.metrics &mdash; QuTiP 4.3 Documentation</title>
+  <title>qutip.metrics &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -193,8 +196,8 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fidelity&#39;</span><span class="p">,</span> <span class="s1">&#39;tracedist&#39;</span><span class="p">,</span> <span class="s1">&#39;bures_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;bures_angle&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;hilbert_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;average_gate_fidelity&#39;</span><span class="p">,</span> <span class="s1">&#39;process_fidelity&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;unitarity&#39;</span><span class="p">,</span> <span class="s1">&#39;dnorm&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;hellinger_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;hilbert_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;average_gate_fidelity&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;process_fidelity&#39;</span><span class="p">,</span> <span class="s1">&#39;unitarity&#39;</span><span class="p">,</span> <span class="s1">&#39;dnorm&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">la</span>
@@ -448,6 +451,63 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">fidelity</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span></div>
 
 
+<span class="k">def</span> <span class="nf">hellinger_dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the quantum Hellinger distance between two density matrices.</span>
+
+<span class="sd">    Formula:</span>
+<span class="sd">    hellinger_dist(A, B) = sqrt(2-2*Tr(sqrt(A)*sqrt(B)))</span>
+
+<span class="sd">    See: D. Spehner, F. Illuminati, M. Orszag, and W. Roga, &quot;Geometric</span>
+<span class="sd">    measures of quantum correlations with Bures and Hellinger distances&quot;</span>
+<span class="sd">    arXiv:1611.03449</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : :class:`qutip.Qobj`</span>
+<span class="sd">        Density matrix or state vector.</span>
+<span class="sd">    B : :class:`qutip.Qobj`</span>
+<span class="sd">        Density matrix or state vector with same dimensions as A.</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        Tolerance used by sparse eigensolver, if used. (0=Machine precision)</span>
+<span class="sd">    sparse : {False, True}</span>
+<span class="sd">        Use sparse eigensolver.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hellinger_dist : float</span>
+<span class="sd">        Quantum Hellinger distance between A and B. Ranges from 0 to sqrt(2).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; x=fock_dm(5,3)</span>
+<span class="sd">    &gt;&gt;&gt; y=coherent_dm(5,1)</span>
+<span class="sd">    &gt;&gt;&gt; hellinger_dist(x,y)</span>
+<span class="sd">    1.3725145002591095</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;A and B do not have same dimensions.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">A</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
+        <span class="n">sqrtmA</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sqrtmA</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
+        <span class="n">sqrtmB</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sqrtmB</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+
+    <span class="n">product</span> <span class="o">=</span> <span class="n">sqrtmA</span><span class="o">*</span><span class="n">sqrtmB</span>
+
+    <span class="n">eigs</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                   <span class="n">isherm</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> <span class="n">vecs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+    <span class="c1">#np.maximum() is to avoid nan appearing sometimes due to numerical</span>
+    <span class="c1">#instabilities causing np.sum(eigs) slightly (~1e-8) larger than 1</span>
+    <span class="c1">#when hellinger_dist(A, B) is called for A=B</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigs</span><span class="p">)))))</span>
+
+
 <span class="k">def</span> <span class="nf">dnorm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;CVXOPT&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_solve</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the diamond norm of the quantum map q_oper, using</span>
@@ -608,8 +668,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jun 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -626,36 +688,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

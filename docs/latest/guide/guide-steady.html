@@ -9,45 +9,48 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Solving for Steady-State Solutions &mdash; QuTiP 4.3 Documentation</title>
+  <title>Solving for Steady-State Solutions &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="An Overview of the Eseries Class" href="guide-eseries.html" />
     <link rel="prev" title="Setting Options for the Dynamics Solvers" href="dynamics/dynamics-options.html" /> 
-
-  
-  <script src="../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -184,8 +187,8 @@
   <div class="section" id="solving-for-steady-state-solutions">
 <span id="steady"></span><h1>Solving for Steady-State Solutions<a class="headerlink" href="#solving-for-steady-state-solutions" title="Permalink to this headline">¶</a></h1>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Updated in QuTiP 3.2.</p>
+<p class="admonition-title">Important</p>
+<p>Updated in QuTiP 3.2.</p>
 </div>
 <div class="section" id="introduction">
 <span id="steady-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
@@ -197,46 +200,46 @@
 <div class="section" id="steady-state-solvers-in-qutip">
 <h2>Steady State solvers in QuTiP<a class="headerlink" href="#steady-state-solvers-in-qutip" title="Permalink to this headline">¶</a></h2>
 <p>In QuTiP, the steady-state solution for a system Hamiltonian or Liouvillian is given by <a class="reference internal" href="../apidoc/functions.html#qutip.steadystate.steadystate" title="qutip.steadystate.steadystate"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.steadystate.steadystate</span></code></a>.  This function implements a number of different methods for finding the steady state, each with their own pros and cons, where the method used can be chosen using the <code class="docutils literal notranslate"><span class="pre">method</span></code> keyword argument.</p>
-<table border="1" class="colwidths-given table-striped docutils">
+<table class="colwidths-given table-striped docutils align-default">
 <colgroup>
-<col width="18%" />
-<col width="27%" />
-<col width="55%" />
+<col style="width: 18%" />
+<col style="width: 27%" />
+<col style="width: 55%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">Keyword</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Keyword</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>Direct (default)</td>
-<td>‘direct’</td>
-<td>Direct solution solving <span class="math notranslate nohighlight">\(Ax=b\)</span> via sparse LU decomposition.</td>
+<tbody>
+<tr class="row-even"><td><p>Direct (default)</p></td>
+<td><p>‘direct’</p></td>
+<td><p>Direct solution solving <span class="math notranslate nohighlight">\(Ax=b\)</span> via sparse LU decomposition.</p></td>
 </tr>
-<tr class="row-odd"><td>Eigenvalue</td>
-<td>‘eigen’</td>
-<td>Iteratively find the zero eigenvalue of <span class="math notranslate nohighlight">\(\mathcal{L}\)</span>.</td>
+<tr class="row-odd"><td><p>Eigenvalue</p></td>
+<td><p>‘eigen’</p></td>
+<td><p>Iteratively find the zero eigenvalue of <span class="math notranslate nohighlight">\(\mathcal{L}\)</span>.</p></td>
 </tr>
-<tr class="row-even"><td>Inverse-Power</td>
-<td>‘power’</td>
-<td>Solve using the inverse-power method.</td>
+<tr class="row-even"><td><p>Inverse-Power</p></td>
+<td><p>‘power’</p></td>
+<td><p>Solve using the inverse-power method.</p></td>
 </tr>
-<tr class="row-odd"><td>GMRES</td>
-<td>‘iterative-gmres’</td>
-<td>Solve using the GMRES method and optional preconditioner.</td>
+<tr class="row-odd"><td><p>GMRES</p></td>
+<td><p>‘iterative-gmres’</p></td>
+<td><p>Solve using the GMRES method and optional preconditioner.</p></td>
 </tr>
-<tr class="row-even"><td>LGMRES</td>
-<td>‘iterative-lgmres’</td>
-<td>Solve using the LGMRES method and optional preconditioner.</td>
+<tr class="row-even"><td><p>LGMRES</p></td>
+<td><p>‘iterative-lgmres’</p></td>
+<td><p>Solve using the LGMRES method and optional preconditioner.</p></td>
 </tr>
-<tr class="row-odd"><td>BICGSTAB</td>
-<td>‘iterative-bicgstab’</td>
-<td>Solve using the BICGSTAB method and optional preconditioner.</td>
+<tr class="row-odd"><td><p>BICGSTAB</p></td>
+<td><p>‘iterative-bicgstab’</p></td>
+<td><p>Solve using the BICGSTAB method and optional preconditioner.</p></td>
 </tr>
-<tr class="row-even"><td>SVD</td>
-<td>‘svd’</td>
-<td>Steady-state solution via the <strong>dense</strong> SVD of the Liouvillian.</td>
+<tr class="row-even"><td><p>SVD</p></td>
+<td><p>‘svd’</p></td>
+<td><p>Steady-state solution via the <strong>dense</strong> SVD of the Liouvillian.</p></td>
 </tr>
 </tbody>
 </table>
@@ -264,74 +267,74 @@
 <div class="section" id="additional-solver-arguments">
 <span id="steady-args"></span><h2>Additional Solver Arguments<a class="headerlink" href="#additional-solver-arguments" title="Permalink to this headline">¶</a></h2>
 <p>The following additional solver arguments are available for the steady-state solver:</p>
-<table border="1" class="colwidths-given table-striped docutils">
+<table class="colwidths-given table-striped docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="30%" />
-<col width="60%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 60%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Keyword</th>
-<th class="head">Options (default listed first)</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Keyword</p></th>
+<th class="head"><p>Options (default listed first)</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>method</td>
-<td>‘direct’, ‘eigen’, ‘power’, ‘iterative-gmres’,’iterative-lgmres’, ‘svd’</td>
-<td>Method used for solving for the steady-state density matrix.</td>
+<tbody>
+<tr class="row-even"><td><p>method</p></td>
+<td><p>‘direct’, ‘eigen’, ‘power’, ‘iterative-gmres’,’iterative-lgmres’, ‘svd’</p></td>
+<td><p>Method used for solving for the steady-state density matrix.</p></td>
 </tr>
-<tr class="row-odd"><td>sparse</td>
-<td>True, False</td>
-<td>Use sparse version of direct solver.</td>
+<tr class="row-odd"><td><p>sparse</p></td>
+<td><p>True, False</p></td>
+<td><p>Use sparse version of direct solver.</p></td>
 </tr>
-<tr class="row-even"><td>weight</td>
-<td>None</td>
-<td>Allows the user to define the weighting factor used in the <code class="docutils literal notranslate"><span class="pre">'direct'</span></code>, <code class="docutils literal notranslate"><span class="pre">'GMRES'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'LGMRES'</span></code> solvers.</td>
+<tr class="row-even"><td><p>weight</p></td>
+<td><p>None</p></td>
+<td><p>Allows the user to define the weighting factor used in the <code class="docutils literal notranslate"><span class="pre">'direct'</span></code>, <code class="docutils literal notranslate"><span class="pre">'GMRES'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'LGMRES'</span></code> solvers.</p></td>
 </tr>
-<tr class="row-odd"><td>permc_spec</td>
-<td>‘COLAMD’, ‘NATURAL’</td>
-<td>Column ordering used in the sparse LU decomposition.</td>
+<tr class="row-odd"><td><p>permc_spec</p></td>
+<td><p>‘COLAMD’, ‘NATURAL’</p></td>
+<td><p>Column ordering used in the sparse LU decomposition.</p></td>
 </tr>
-<tr class="row-even"><td>use_rcm</td>
-<td>False, True</td>
-<td>Use a Reverse Cuthill-Mckee reordering to minimize the bandwidth of the modified Liouvillian used in the LU decomposition.  If <code class="docutils literal notranslate"><span class="pre">use_rcm=True</span></code> then the column ordering is set to <code class="docutils literal notranslate"><span class="pre">'Natural'</span></code> automatically unless explicitly set.</td>
+<tr class="row-even"><td><p>use_rcm</p></td>
+<td><p>False, True</p></td>
+<td><p>Use a Reverse Cuthill-Mckee reordering to minimize the bandwidth of the modified Liouvillian used in the LU decomposition.  If <code class="docutils literal notranslate"><span class="pre">use_rcm=True</span></code> then the column ordering is set to <code class="docutils literal notranslate"><span class="pre">'Natural'</span></code> automatically unless explicitly set.</p></td>
 </tr>
-<tr class="row-odd"><td>use_precond</td>
-<td>False, True</td>
-<td>Attempt to generate a preconditioner when using the <code class="docutils literal notranslate"><span class="pre">'iterative-gmres'</span></code> and <code class="docutils literal notranslate"><span class="pre">'iterative-lgmres'</span></code> methods.</td>
+<tr class="row-odd"><td><p>use_precond</p></td>
+<td><p>False, True</p></td>
+<td><p>Attempt to generate a preconditioner when using the <code class="docutils literal notranslate"><span class="pre">'iterative-gmres'</span></code> and <code class="docutils literal notranslate"><span class="pre">'iterative-lgmres'</span></code> methods.</p></td>
 </tr>
-<tr class="row-even"><td>M</td>
-<td>None, sparse_matrix, LinearOperator</td>
-<td>A user defined preconditioner, if any.</td>
+<tr class="row-even"><td><p>M</p></td>
+<td><p>None, sparse_matrix, LinearOperator</p></td>
+<td><p>A user defined preconditioner, if any.</p></td>
 </tr>
-<tr class="row-odd"><td>use_wbm</td>
-<td>False, True</td>
-<td>Use a Weighted Bipartite Matching algorithm to attempt to make the modified Liouvillian more diagonally dominate, and thus for favorable for preconditioning.  Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> automatically when using a iterative method, unless explicitly set.</td>
+<tr class="row-odd"><td><p>use_wbm</p></td>
+<td><p>False, True</p></td>
+<td><p>Use a Weighted Bipartite Matching algorithm to attempt to make the modified Liouvillian more diagonally dominate, and thus for favorable for preconditioning.  Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> automatically when using a iterative method, unless explicitly set.</p></td>
 </tr>
-<tr class="row-even"><td>tol</td>
-<td>1e-9</td>
-<td>Tolerance used in finding the solution for all methods expect <code class="docutils literal notranslate"><span class="pre">'direct'</span></code> and <code class="docutils literal notranslate"><span class="pre">'svd'</span></code>.</td>
+<tr class="row-even"><td><p>tol</p></td>
+<td><p>1e-9</p></td>
+<td><p>Tolerance used in finding the solution for all methods expect <code class="docutils literal notranslate"><span class="pre">'direct'</span></code> and <code class="docutils literal notranslate"><span class="pre">'svd'</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td>maxiter</td>
-<td>10000</td>
-<td>Maximum number of iterations to perform for all methods expect <code class="docutils literal notranslate"><span class="pre">'direct'</span></code> and <code class="docutils literal notranslate"><span class="pre">'svd'</span></code>.</td>
+<tr class="row-odd"><td><p>maxiter</p></td>
+<td><p>10000</p></td>
+<td><p>Maximum number of iterations to perform for all methods expect <code class="docutils literal notranslate"><span class="pre">'direct'</span></code> and <code class="docutils literal notranslate"><span class="pre">'svd'</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td>fill_factor</td>
-<td>10</td>
-<td>Upper-bound on the allowed fill-in for the approximate inverse preconditioner.  This value may need to be set much higher than this in some cases.</td>
+<tr class="row-even"><td><p>fill_factor</p></td>
+<td><p>10</p></td>
+<td><p>Upper-bound on the allowed fill-in for the approximate inverse preconditioner.  This value may need to be set much higher than this in some cases.</p></td>
 </tr>
-<tr class="row-odd"><td>drop_tol</td>
-<td>1e-3</td>
-<td>Sets the threshold for the relative magnitude of preconditioner elements that should be dropped.  A lower number yields a more accurate approximate inverse at the expense of fill-in and increased runtime.</td>
+<tr class="row-odd"><td><p>drop_tol</p></td>
+<td><p>1e-3</p></td>
+<td><p>Sets the threshold for the relative magnitude of preconditioner elements that should be dropped.  A lower number yields a more accurate approximate inverse at the expense of fill-in and increased runtime.</p></td>
 </tr>
-<tr class="row-even"><td>diag_pivot_thresh</td>
-<td>None</td>
-<td>Sets the threshold between <span class="math notranslate nohighlight">\([0,1]\)</span> for which diagonal elements are considered acceptable pivot points when using a preconditioner.</td>
+<tr class="row-even"><td><p>diag_pivot_thresh</p></td>
+<td><p>None</p></td>
+<td><p>Sets the threshold between <span class="math notranslate nohighlight">\([0,1]\)</span> for which diagonal elements are considered acceptable pivot points when using a preconditioner.</p></td>
 </tr>
-<tr class="row-odd"><td>ILU_MILU</td>
-<td>‘smilu_2’</td>
-<td>Selects the incomplete LU decomposition method algorithm used.</td>
+<tr class="row-odd"><td><p>ILU_MILU</p></td>
+<td><p>‘smilu_2’</p></td>
+<td><p>Selects the incomplete LU decomposition method algorithm used.</p></td>
 </tr>
 </tbody>
 </table>
@@ -384,8 +387,8 @@
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../guide/scripts/ex_steady.py">Source code</a>, <a class="reference external" href="../guide/scripts/ex_steady.png">png</a>, <a class="reference external" href="../guide/scripts/ex_steady.hires.png">hires.png</a>, <a class="reference external" href="../guide/scripts/ex_steady.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../images/ex_steady.png" src="../images/ex_steady.png" />
+<div class="figure align-default">
+<img alt="../_images/ex_steady.png" src="../_images/ex_steady.png" />
 </div>
 </div>
 </div>
@@ -401,7 +404,7 @@
         <a href="guide-eseries.html" class="btn btn-neutral float-right" title="An Overview of the Eseries Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dynamics/dynamics-options.html" class="btn btn-neutral" title="Setting Options for the Dynamics Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dynamics/dynamics-options.html" class="btn btn-neutral float-left" title="Setting Options for the Dynamics Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -410,8 +413,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jun 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -428,36 +433,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../static/jquery.js"></script>
-        <script type="text/javascript" src="../static/underscore.js"></script>
-        <script type="text/javascript" src="../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
