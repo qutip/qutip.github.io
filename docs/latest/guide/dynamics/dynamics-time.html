@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Bloch-Redfield master equation" href="dynamics-bloch-redfield.html" />
-    <link rel="prev" title="Monte Carlo Solver" href="dynamics-monte.html" /> 
+    <link rel="prev" title="Stochastic Solver" href="dynamics-stochastic.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,11 +100,15 @@
 <li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-master.html">Lindblad Master Equation Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-photocurrent.html">Stochastic Solver - Photocurrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Solving Problems with Time-dependent Hamiltonians</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#methods-for-writing-time-dependent-operators">Methods for Writing Time-Dependent Operators</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#function-based-time-dependence">Function Based Time Dependence</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#string-format-method">String Format Method</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#modeling-non-analytic-and-or-experimental-time-dependent-parameters-using-interpolating-functions">Modeling Non-Analytic and/or Experimental Time-Dependent Parameters using Interpolating Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accesing-the-state-from-solver">Accesing the state from solver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#reusing-time-dependent-hamiltonian-data">Reusing Time-Dependent Hamiltonian Data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#running-string-based-time-dependent-problems-using-parfor">Running String-Based Time-Dependent Problems using Parfor</a></li>
 </ul>
@@ -201,21 +205,48 @@
 <span id="time"></span><h1>Solving Problems with Time-dependent Hamiltonians<a class="headerlink" href="#solving-problems-with-time-dependent-hamiltonians" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="methods-for-writing-time-dependent-operators">
 <h2>Methods for Writing Time-Dependent Operators<a class="headerlink" href="#methods-for-writing-time-dependent-operators" title="Permalink to this headline">¶</a></h2>
-<p>In the previous examples of quantum evolution, we assumed that the systems under consideration were described by time-independent Hamiltonians.  However, many systems have explicit time dependence in either the Hamiltonian, or the collapse operators describing coupling to the environment, and sometimes both components might depend on time.  The time-evolutions  solvers <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></a>, <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code></a>, <a class="reference internal" href="../../apidoc/functions.html#module-qutip.sesolve" title="qutip.sesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.sesolve</span></code></a>, and <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.brmesolve</span></code> are all capable of handling time-dependent Hamiltonians and collapse terms. There are, in general, three different ways to implement time-dependent problems in QuTiP:</p>
+<p>In the previous examples of quantum evolution,
+we assumed that the systems under consideration were described by time-independent Hamiltonians.
+However, many systems have explicit time dependence in either the Hamiltonian,
+or the collapse operators describing coupling to the environment, and sometimes both components might depend on time.
+The time-evolutions  solvers
+<a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></a>, <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code></a>, <a class="reference internal" href="../../apidoc/functions.html#module-qutip.sesolve" title="qutip.sesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.sesolve</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.brmesolve</span></code>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.ssesolve</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.photocurrent_sesolve</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.smesolve</span></code>, and <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.photocurrent_mesolve</span></code>
+are all capable of handling time-dependent Hamiltonians and collapse terms.
+There are, in general, three different ways to implement time-dependent problems in QuTiP:</p>
 <ol class="arabic simple">
 <li><p><strong>Function based</strong>: Hamiltonian / collapse operators expressed using [qobj, func] pairs, where the time-dependent coefficients of the Hamiltonian (or collapse operators) are expressed using Python functions.</p></li>
 <li><p><strong>String (Cython) based</strong>: The Hamiltonian and/or collapse operators are expressed as a list of [qobj, string] pairs, where the time-dependent coefficients are represented as strings.  The resulting Hamiltonian is then compiled into C code using Cython and executed.</p></li>
+<li><p><strong>Array Based</strong>: The Hamiltonian and/or collapse operators are expressed as a list of [qobj, np.array] pairs. The arrays are 1 dimensional and dtype are complex or float. They must contain one value for each time in the tlist given to the solver. Cubic spline interpolation will be used between the given times.</p></li>
 <li><p><strong>Hamiltonian function (outdated)</strong>: The Hamiltonian is itself a Python function with time-dependence.  Collapse operators must be time independent using this input format.</p></li>
 </ol>
-<p>Give the multiple choices of input style, the first question that arrises is which option to choose?  In short, the function based method (option #1) is the most general, allowing for essentially arbitrary coefficients expressed via user defined functions.  However, by automatically compiling your system into C++ code, the second option (string based) tends to be more efficient and will run faster [This is also the only format that is supported in the <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.brmesolve</span></code> solver].  Of course, for small system sizes and evolution times, the difference will be minor.  Although this method does not support all time-dependent coefficients that one can think of, it does support essentially all problems that one would typically encounter.  Time-dependent coefficients using any of the following functions, or combinations thereof (including constants) can be compiled directly into C++-code:</p>
+<p>Give the multiple choices of input style, the first question that arrises is which option to choose?
+In short, the function based method (option #1) is the most general,
+allowing for essentially arbitrary coefficients expressed via user defined functions.
+However, by automatically compiling your system into C++ code,
+the second option (string based) tends to be more efficient and will run faster
+[This is also the only format that is supported in the <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.brmesolve</span></code> solver].
+Of course, for small system sizes and evolution times, the difference will be minor.
+Although this method does not support all time-dependent coefficients that one can think of,
+it does support essentially all problems that one would typically encounter.
+Time-dependent coefficients using any of the following functions,
+or combinations thereof (including constants) can be compiled directly into C++-code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;abs&#39;</span><span class="p">,</span> <span class="s1">&#39;acos&#39;</span><span class="p">,</span> <span class="s1">&#39;acosh&#39;</span><span class="p">,</span> <span class="s1">&#39;arg&#39;</span><span class="p">,</span> <span class="s1">&#39;asin&#39;</span><span class="p">,</span> <span class="s1">&#39;asinh&#39;</span><span class="p">,</span> <span class="s1">&#39;atan&#39;</span><span class="p">,</span> <span class="s1">&#39;atanh&#39;</span><span class="p">,</span> <span class="s1">&#39;conj&#39;</span><span class="p">,</span>
-<span class="s1">&#39;cos&#39;</span><span class="p">,</span> <span class="s1">&#39;cosh&#39;</span><span class="p">,</span><span class="s1">&#39;exp&#39;</span><span class="p">,</span> <span class="s1">&#39;erf&#39;</span><span class="p">,</span> <span class="s1">&#39;imag&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;log10&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;proj&#39;</span><span class="p">,</span> <span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">,</span> <span class="s1">&#39;sinh&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">,</span>
-<span class="s1">&#39;tan&#39;</span><span class="p">,</span> <span class="s1">&#39;tanh&#39;</span>
+ <span class="s1">&#39;cos&#39;</span><span class="p">,</span> <span class="s1">&#39;cosh&#39;</span><span class="p">,</span><span class="s1">&#39;exp&#39;</span><span class="p">,</span> <span class="s1">&#39;erf&#39;</span><span class="p">,</span> <span class="s1">&#39;zerf&#39;</span><span class="p">,</span> <span class="s1">&#39;imag&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;log10&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;proj&#39;</span><span class="p">,</span> <span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">,</span> <span class="s1">&#39;sinh&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="s1">&#39;tan&#39;</span><span class="p">,</span> <span class="s1">&#39;tanh&#39;</span>
 </pre></div>
 </div>
 <p>In addition, QuTiP supports cubic spline based interpolation functions [<a class="reference internal" href="#time-interp"><span class="std std-ref">Modeling Non-Analytic and/or Experimental Time-Dependent Parameters using Interpolating Functions</span></a>].</p>
-<p>If you require mathematical functions other than those listed above, than it is possible to call any of the functions in the NumPy library using the prefix <code class="docutils literal notranslate"><span class="pre">np.</span></code> before the function name in the string, i.e <code class="docutils literal notranslate"><span class="pre">'np.sin(t)'</span></code>.  This includes a wide range of functionality, but comes with a small overhead created by going from C++-&gt;Python-&gt;C++.</p>
-<p>Finally option #3, expressing the Hamiltonian as a Python function, is the original method for time dependence in QuTiP 1.x.  However, this method is somewhat less efficient then the previously mentioned methods, and does not allow for time-dependent collapse operators. However, in contrast to options #1 and #2, this method can be used in implementing time-dependent Hamiltonians that cannot be expressed as a function of constant operators with time-dependent coefficients.</p>
+<p>If you require mathematical functions other than those listed above,
+it is possible to call any of the functions in the NumPy library using the prefix <code class="docutils literal notranslate"><span class="pre">np.</span></code>
+before the function name in the string, i.e <code class="docutils literal notranslate"><span class="pre">'np.sin(t)'</span></code> and  <code class="docutils literal notranslate"><span class="pre">scipy.special</span></code> imported as <code class="docutils literal notranslate"><span class="pre">spe</span></code>.
+This includes a wide range of functionality, but comes with a small overhead created by going from C++-&gt;Python-&gt;C++.</p>
+<p>Finally option #4, expressing the Hamiltonian as a Python function,
+is the original method for time dependence in QuTiP 1.x.
+However, this method is somewhat less efficient then the previously mentioned methods.
+However, in contrast to the other options
+this method can be used in implementing time-dependent Hamiltonians that cannot be
+expressed as a function of constant operators with time-dependent coefficients.</p>
 <p>A collection of examples demonstrating the simulation of time-dependent problems can be found on the <a class="reference external" href="http://qutip.org/tutorials.html">tutorials</a> web page.</p>
 </div>
 <div class="section" id="function-based-time-dependence">
@@ -295,17 +326,17 @@
 </div>
 <p>We can call the Monte Carlo solver in the exact same way (if using the default <code class="docutils literal notranslate"><span class="pre">ntraj=500</span></code>):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">output</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">ada</span><span class="p">,</span> <span class="n">sigma_UU</span><span class="p">,</span> <span class="n">sigma_GG</span><span class="p">])</span>
-<span class="go">10.0%. Run time:   0.29s. Est. time left: 00:00:00:02</span>
-<span class="go">20.0%. Run time:   0.54s. Est. time left: 00:00:00:02</span>
-<span class="go">30.0%. Run time:   0.81s. Est. time left: 00:00:00:01</span>
-<span class="go">40.0%. Run time:   1.01s. Est. time left: 00:00:00:01</span>
-<span class="go">50.0%. Run time:   1.26s. Est. time left: 00:00:00:01</span>
+<span class="go">10.0%. Run time:   0.25s. Est. time left: 00:00:00:02</span>
+<span class="go">20.0%. Run time:   0.48s. Est. time left: 00:00:00:01</span>
+<span class="go">30.0%. Run time:   0.75s. Est. time left: 00:00:00:01</span>
+<span class="go">40.0%. Run time:   0.97s. Est. time left: 00:00:00:01</span>
+<span class="go">50.0%. Run time:   1.21s. Est. time left: 00:00:00:01</span>
 <span class="go">60.0%. Run time:   1.46s. Est. time left: 00:00:00:00</span>
-<span class="go">70.0%. Run time:   1.67s. Est. time left: 00:00:00:00</span>
-<span class="go">80.0%. Run time:   1.91s. Est. time left: 00:00:00:00</span>
-<span class="go">90.0%. Run time:   2.16s. Est. time left: 00:00:00:00</span>
-<span class="go">100.0%. Run time:   2.39s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:   2.43s</span>
+<span class="go">70.0%. Run time:   1.70s. Est. time left: 00:00:00:00</span>
+<span class="go">80.0%. Run time:   1.95s. Est. time left: 00:00:00:00</span>
+<span class="go">90.0%. Run time:   2.21s. Est. time left: 00:00:00:00</span>
+<span class="go">100.0%. Run time:   2.46s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:   2.47s</span>
 </pre></div>
 </div>
 <p>The output from the master equation solver is identical to that shown in the examples, the Monte Carlo however will be noticeably off, suggesting we should increase the number of trajectories for this example.  In addition, we can also consider the decay of a simple Harmonic oscillator with time-varying decay rate</p>
@@ -384,7 +415,7 @@
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Naming your <code class="docutils literal notranslate"><span class="pre">args</span></code> variables <code class="docutils literal notranslate"><span class="pre">e</span></code>, <code class="docutils literal notranslate"><span class="pre">j</span></code> or <code class="docutils literal notranslate"><span class="pre">pi</span></code> will cause errors when using the string-based format.</p>
+<p>Naming your <code class="docutils literal notranslate"><span class="pre">args</span></code> variables <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">sin</span></code>, <code class="docutils literal notranslate"><span class="pre">pi</span></code> etc. will cause errors when using the string-based format.</p>
 </div>
 <p>Collapse operators are handled in the exact same way.</p>
 </div>
@@ -407,10 +438,10 @@
 <span class="gh">Out[51]: </span><span class="go">&lt;Figure size 640x480 with 0 Axes&gt;</span>
 
 <span class="gp">In [52]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
-<span class="go">                                           Out[52]: [&lt;matplotlib.lines.Line2D at 0x2ba6ec3fa358&gt;]</span>
+<span class="go">                                           Out[52]: [&lt;matplotlib.lines.Line2D at 0x2b22687d8978&gt;]</span>
 
 <span class="gp">In [53]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">noisy_data</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="go">                                                                                                  Out[53]: [&lt;matplotlib.lines.Line2D at 0x2ba6ec3fafd0&gt;]</span>
+<span class="go">                                                                                                  Out[53]: [&lt;matplotlib.lines.Line2D at 0x2b2268f1a400&gt;]</span>
 
 <span class="gp">In [54]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -423,13 +454,13 @@
 <span class="gh">Out[56]: </span><span class="go">&lt;Figure size 640x480 with 0 Axes&gt;</span>
 
 <span class="gp">In [57]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
-<span class="go">                                           Out[57]: [&lt;matplotlib.lines.Line2D at 0x2ba6ddb4c978&gt;]</span>
+<span class="go">                                           Out[57]: [&lt;matplotlib.lines.Line2D at 0x2b226c4fd2e8&gt;]</span>
 
 <span class="gp">In [58]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">noisy_data</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="go">                                                                                                  Out[58]: [&lt;matplotlib.lines.Line2D at 0x2ba6dcb17358&gt;]</span>
+<span class="go">                                                                                                  Out[58]: [&lt;matplotlib.lines.Line2D at 0x2b226c4e4048&gt;]</span>
 
 <span class="gp">In [59]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">S</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="go">                                                                                                                                                         Out[59]: [&lt;matplotlib.lines.Line2D at 0x2ba6dcb17e48&gt;]</span>
+<span class="go">                                                                                                                                                         Out[59]: [&lt;matplotlib.lines.Line2D at 0x2b226c4f55c0&gt;]</span>
 
 <span class="gp">In [60]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -445,6 +476,18 @@
 </div>
 <p>When combining interpolating functions with other Python functions or strings, the interpolating class will automatically pick the appropriate method for calling the class.  That is to say that, if for example, you have other time-dependent terms that are given in the string-format, then the cubic spline representation will also be passed in a string-compatible format.  In the string-format, the interpolation function is compiled into c-code, and thus is quite fast.  This is the default method if no other time-dependent terms are present.</p>
 </div>
+<div class="section" id="accesing-the-state-from-solver">
+<span id="time-dynargs"></span><h2>Accesing the state from solver<a class="headerlink" href="#accesing-the-state-from-solver" title="Permalink to this headline">¶</a></h2>
+<p>New in QuTiP 4.4</p>
+<p>The state of the system, the ket vector or the density matrix,
+is available to time-dependent Hamiltonian and collapse operators in <code class="docutils literal notranslate"><span class="pre">args</span></code>.
+Some keys of the argument dictionary are understood by the solver to be values
+to be updated with the evolution of the system.
+The state can be obtained in 3 forms: <code class="docutils literal notranslate"><span class="pre">Qobj</span></code>, vector (1d <code class="docutils literal notranslate"><span class="pre">np.array</span></code>), matrix (2d <code class="docutils literal notranslate"><span class="pre">np.array</span></code>),
+expectation values and collapse can also be obtained.</p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">psi0</span></code> is the initial value used for tests before the evolution begins.
+<code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.brmesolve</span></code> does not support these arguments.</p>
+</div>
 <div class="section" id="reusing-time-dependent-hamiltonian-data">
 <h2>Reusing Time-Dependent Hamiltonian Data<a class="headerlink" href="#reusing-time-dependent-hamiltonian-data" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
@@ -457,33 +500,33 @@
 <span class="gp">In [62]: </span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;sig&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
 
 <span class="gp">In [63]: </span><span class="n">output</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
-<span class="go">10.0%. Run time:   0.17s. Est. time left: 00:00:00:01</span>
-<span class="go">20.0%. Run time:   0.32s. Est. time left: 00:00:00:01</span>
-<span class="go">30.0%. Run time:   0.51s. Est. time left: 00:00:00:01</span>
-<span class="go">40.0%. Run time:   0.69s. Est. time left: 00:00:00:01</span>
-<span class="go">50.0%. Run time:   0.88s. Est. time left: 00:00:00:00</span>
-<span class="go">60.0%. Run time:   1.06s. Est. time left: 00:00:00:00</span>
-<span class="go">70.0%. Run time:   1.23s. Est. time left: 00:00:00:00</span>
-<span class="go">80.0%. Run time:   1.39s. Est. time left: 00:00:00:00</span>
-<span class="go">90.0%. Run time:   1.57s. Est. time left: 00:00:00:00</span>
-<span class="go">100.0%. Run time:   1.72s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:   1.82s</span>
+<span class="go">10.0%. Run time:   0.23s. Est. time left: 00:00:00:02</span>
+<span class="go">20.0%. Run time:   0.39s. Est. time left: 00:00:00:01</span>
+<span class="go">30.0%. Run time:   0.54s. Est. time left: 00:00:00:01</span>
+<span class="go">40.0%. Run time:   0.71s. Est. time left: 00:00:00:01</span>
+<span class="go">50.0%. Run time:   0.85s. Est. time left: 00:00:00:00</span>
+<span class="go">60.0%. Run time:   0.97s. Est. time left: 00:00:00:00</span>
+<span class="go">70.0%. Run time:   1.12s. Est. time left: 00:00:00:00</span>
+<span class="go">80.0%. Run time:   1.28s. Est. time left: 00:00:00:00</span>
+<span class="go">90.0%. Run time:   1.46s. Est. time left: 00:00:00:00</span>
+<span class="go">100.0%. Run time:   1.63s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:   1.71s</span>
 
 <span class="gp">In [64]: </span><span class="n">opts</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="gp">In [65]: </span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;sig&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
 
 <span class="gp">In [66]: </span><span class="n">output</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">opts</span><span class="p">)</span>
-<span class="go">10.0%. Run time:   0.19s. Est. time left: 00:00:00:01</span>
-<span class="go">20.0%. Run time:   0.34s. Est. time left: 00:00:00:01</span>
-<span class="go">30.0%. Run time:   0.54s. Est. time left: 00:00:00:01</span>
-<span class="go">40.0%. Run time:   0.70s. Est. time left: 00:00:00:01</span>
-<span class="go">50.0%. Run time:   0.86s. Est. time left: 00:00:00:00</span>
-<span class="go">60.0%. Run time:   1.03s. Est. time left: 00:00:00:00</span>
-<span class="go">70.0%. Run time:   1.19s. Est. time left: 00:00:00:00</span>
-<span class="go">80.0%. Run time:   1.35s. Est. time left: 00:00:00:00</span>
-<span class="go">90.0%. Run time:   1.53s. Est. time left: 00:00:00:00</span>
-<span class="go">100.0%. Run time:   1.70s. Est. time left: 00:00:00:00</span>
+<span class="go">10.0%. Run time:   0.21s. Est. time left: 00:00:00:01</span>
+<span class="go">20.0%. Run time:   0.38s. Est. time left: 00:00:00:01</span>
+<span class="go">30.0%. Run time:   0.57s. Est. time left: 00:00:00:01</span>
+<span class="go">40.0%. Run time:   0.75s. Est. time left: 00:00:00:01</span>
+<span class="go">50.0%. Run time:   0.91s. Est. time left: 00:00:00:00</span>
+<span class="go">60.0%. Run time:   1.08s. Est. time left: 00:00:00:00</span>
+<span class="go">70.0%. Run time:   1.22s. Est. time left: 00:00:00:00</span>
+<span class="go">80.0%. Run time:   1.40s. Est. time left: 00:00:00:00</span>
+<span class="go">90.0%. Run time:   1.57s. Est. time left: 00:00:00:00</span>
+<span class="go">100.0%. Run time:   1.71s. Est. time left: 00:00:00:00</span>
 <span class="go">Total run time:   1.73s</span>
 </pre></div>
 </div>
@@ -563,7 +606,7 @@ pre-generated Hamiltonian constructed using the <a class="reference internal" hr
         <a href="dynamics-bloch-redfield.html" class="btn btn-neutral float-right" title="Bloch-Redfield master equation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dynamics-monte.html" class="btn btn-neutral float-left" title="Monte Carlo Solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dynamics-stochastic.html" class="btn btn-neutral float-left" title="Stochastic Solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -574,7 +617,7 @@ pre-generated Hamiltonian constructed using the <a class="reference internal" hr
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
       <span class="lastupdated">
-        Last updated on Jun 28, 2019.
+        Last updated on Jul 02, 2019.
       </span>
 
     </p>

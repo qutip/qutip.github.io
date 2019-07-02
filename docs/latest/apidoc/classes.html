@@ -94,6 +94,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Classes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#qobj">Qobj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qobjevo">QobjEvo</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eseries">eseries</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bloch-sphere">Bloch sphere</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cubic-spline">Cubic Spline</a></li>
@@ -1052,6 +1053,209 @@ else None.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="qobjevo">
+<span id="classes-qobjevo"></span><h2>QobjEvo<a class="headerlink" href="#qobjevo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="qutip.QobjEvo">
+<em class="property">class </em><code class="sig-name descname">QobjEvo</code><span class="sig-paren">(</span><em class="sig-param">Q_object=[]</em>, <em class="sig-param">args={}</em>, <em class="sig-param">tlist=None</em>, <em class="sig-param">copy=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qutip/qobjevo.html#QobjEvo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qutip.QobjEvo" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class for representing time-dependent quantum objects,
+such as quantum operators and states.</p>
+<p>The QobjEvo class is a representation of time-dependent Qutip quantum
+objects (Qobj). This class implements math operations :</p>
+<blockquote>
+<div><p>+,- : QobjEvo, Qobj
+* : Qobj, C-number
+/ : C-number</p>
+</div></blockquote>
+<p>and some common linear operator/state operations. The QobjEvo
+are constructed from a nested list of Qobj with their time-dependent
+coefficients. The time-dependent coefficients are either a funciton, a
+string or a numpy array.</p>
+<p>For function format, the function signature must be f(t, args).
+<em>Examples</em></p>
+<blockquote>
+<div><dl class="simple">
+<dt>def f1_t(t, args):</dt><dd><p>return np.exp(-1j * t * args[“w1”])</p>
+</dd>
+<dt>def f2_t(t, args):</dt><dd><p>return np.cos(t * args[“w2”])</p>
+</dd>
+</dl>
+<p>H = QobjEvo([H0, [H1, f1_t], [H2, f2_t]], args={“w1”:1., “w2”:2.})</p>
+</div></blockquote>
+<p>For string based coeffients, the string must be a compilable python code
+resulting in a complex. The following symbols are defined:</p>
+<blockquote>
+<div><p>sin cos tan asin acos atan pi
+sinh cosh tanh asinh acosh atanh
+exp log log10 erf zerf sqrt
+real imag conj abs norm arg proj
+numpy as np, and scipy.special as spe.</p>
+</div></blockquote>
+<dl class="simple">
+<dt><em>Examples</em></dt><dd><dl class="simple">
+<dt>H = QobjEvo([H0, [H1, ‘exp(-1j*w1*t)’], [H2, ‘cos(w2*t)’]],</dt><dd><p>args={“w1”:1.,”w2”:2.})</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>For numpy array format, the array must be an 1d of dtype float or complex.
+A list of times (float64) at which the coeffients must be given (tlist).
+The coeffients array must have the same len as the tlist.
+The time of the tlist do not need to be equidistant, but must be sorted.
+<em>Examples</em></p>
+<blockquote>
+<div><p>tlist = np.logspace(-5,0,100)
+H = QobjEvo([H0, [H1, np.exp(-1j*tlist)], [H2, np.cos(2.*tlist)]],</p>
+<blockquote>
+<div><p>tlist=tlist)</p>
+</div></blockquote>
+</div></blockquote>
+<p>args is a dict of (name:object). The name must be a valid variables string.
+Some solvers support arguments that update at each call:
+sesolve, mesolve, mcsolve:</p>
+<blockquote>
+<div><dl>
+<dt>state can be obtained with:</dt><dd><p>name+”=vec”:Qobj  =&gt; args[name] == state as 1D np.ndarray
+name+”=mat”:Qobj  =&gt; args[name] == state as 2D np.ndarray
+name+”=Qobj”:Qobj =&gt; args[name] == state as Qobj</p>
+<p>This Qobj is the initial value.</p>
+</dd>
+<dt>expectation values:</dt><dd><p>name+”=expect”:O (Qobj/QobjEvo)  =&gt; args[name] == expect(O, state)
+expect is &lt;phi|O|psi&gt; or tr(state * O) depending on state dimensions</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>mcsolve:</dt><dd><dl class="simple">
+<dt>collapse can be obtained with:</dt><dd><p>name+”=collapse”:list =&gt; args[name] == list of collapse
+each collapse will be appended to the list as (time, which c_ops)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Mixing the formats is possible, but not recommended.
+Mixing tlist will cause problem.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>QobjEvo(Q_object=[], args={}, tlist=None)</strong></dt><dd></dd>
+<dt><strong>Q_object</strong><span class="classifier">array_like</span></dt><dd><p>Data for vector/matrix representation of the quantum object.</p>
+</dd>
+<dt><strong>args</strong><span class="classifier">dictionary that contain the arguments for</span></dt><dd></dd>
+<dt><strong>tlist</strong><span class="classifier">array_like</span></dt><dd><p>List of times at which the numpy-array coefficients are applied. Times
+must be equidistant and start from 0.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl>
+<dt><strong>cte</strong><span class="classifier">Qobj</span></dt><dd><p>Constant part of the QobjEvo</p>
+</dd>
+<dt><strong>ops</strong><span class="classifier">list</span></dt><dd><p>List of Qobj and the coefficients.
+[(Qobj, coefficient as a function, original coefficient,</p>
+<blockquote>
+<div><p>type, local arguments ), … ]</p>
+</div></blockquote>
+<dl class="simple">
+<dt>type :</dt><dd><p>1: function
+2: string
+3: np.array
+4: Cubic_Spline</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>args</strong><span class="classifier">map</span></dt><dd><p>arguments of the coefficients</p>
+</dd>
+<dt><strong>tlist</strong><span class="classifier">array_like</span></dt><dd><p>List of times at which the numpy-array coefficients are applied.</p>
+</dd>
+<dt><strong>compiled</strong><span class="classifier">int</span></dt><dd><p>Has the cython version of the QobjEvo been created</p>
+</dd>
+<dt><strong>compiled_qobjevo</strong><span class="classifier">cy_qobj (CQobjCte or CQobjEvoTd)</span></dt><dd><p>Cython version of the QobjEvo</p>
+</dd>
+<dt><strong>dummy_cte</strong><span class="classifier">bool</span></dt><dd><p>is self.cte a dummy Qobj</p>
+</dd>
+<dt><strong>const</strong><span class="classifier">bool</span></dt><dd><p>Indicates if quantum object is Constant</p>
+</dd>
+<dt><strong>type</strong><span class="classifier">int</span></dt><dd><dl class="simple">
+<dt>information about the type of coefficient</dt><dd><p>“string”, “func”, “array”,
+“spline”, “mixed_callable”, “mixed_compilable”</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>num_obj</strong><span class="classifier">int</span></dt><dd><p>number of Qobj in the QobjEvo : len(ops) + (1 if not dummy_cte)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 91%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>copy() :</strong></p></td>
+<td><p>Create copy of Qobj</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>arguments(new_args):</strong></p></td>
+<td><p>Update the args of the object</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Math:</strong></p></td>
+<td><p>+/- QobjEvo, Qobj, scalar: Addition is possible between QobjEvo and with Qobj or scalar -: Negation operator * Qobj, scalar: Product is possible with Qobj or scalar / scalar: It is possible to divide by scalar only</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>conj()</strong></p></td>
+<td><p>Return the conjugate of quantum object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>dag()</strong></p></td>
+<td><p>Return the adjoint (dagger) of quantum object.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>trans()</strong></p></td>
+<td><p>Return the transpose of quantum object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>norm()</strong></p></td>
+<td><p>Return self.dag() * self. Only possible if num_obj == 1</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>permute(order)</strong></p></td>
+<td><p>Returns composite qobj with indices reordered.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ptrace(sel)</strong></p></td>
+<td><p>Returns quantum object for selected dimensions after performing partial trace.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>apply(f, *args, **kw_args)</strong></p></td>
+<td><p>Apply the function f to every Qobj. f(Qobj) -&gt; Qobj Return a modified QobjEvo and let the original one untouched</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>apply_decorator(decorator, *args, str_mod=None,</strong></p></td>
+<td><p>inplace_np=False, <a href="#id2"><span class="problematic" id="id3">**</span></a>kw_args): Apply the decorator to each function of the ops. The <a href="#id4"><span class="problematic" id="id5">*</span></a>args and <a href="#id6"><span class="problematic" id="id7">**</span></a>kw_args are passed to the decorator. new_coeff_function = decorator(coeff_function, <a href="#id8"><span class="problematic" id="id9">*</span></a>args, <a href="#id10"><span class="problematic" id="id11">**</span></a>kw_args) str_mod : list of 2 elements replace the string : str_mod[0] + original_string + str_mod[1] <a href="#id12"><span class="problematic" id="id13">*</span></a>exemple: str_mod = [“exp(“,”)”] inplace_np: Change the numpy array instead of applying the decorator to the function reading the array. Some decorators create incorrect array. Transformations f’(t) = f(g(t)) create a missmatch between the array and the associated time list.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>tidyup(atol=1e-12)</strong></p></td>
+<td><p>Removes small elements from quantum object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>compress():</strong></p></td>
+<td><p>Merge ops which are based on the same quantum object and coeff type.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>compile(code=False, matched=False, dense=False, omp=0):</strong></p></td>
+<td><p>Create the associated cython object for faster usage. code: return the code generated for compilation of the strings. matched: the compiled object use sparse matrix with matching indices. (experimental, no real advantage) dense: the compiled object use dense matrix. omp: (int) number of thread: the compiled object use spmvpy_openmp.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>__call__(t, data=False, state=None, args={}):</strong></p></td>
+<td><p>Return the Qobj at time t. <a href="#id14"><span class="problematic" id="id15">*</span></a>Faster after compilation</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>mul_mat(t, mat):</strong></p></td>
+<td><p>Product of this at t time with the dense matrix mat. <a href="#id16"><span class="problematic" id="id17">*</span></a>Faster after compilation</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>mul_vec(t, psi):</strong></p></td>
+<td><p>Apply the quantum object (if operator, no check) to psi. More generaly, return the product of the object at t with psi. <a href="#id18"><span class="problematic" id="id19">*</span></a>Faster after compilation</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>expect(t, psi, herm=False):</strong></p></td>
+<td><p>Calculates the expectation value for the quantum object (if operator, no check) and state psi. Return only the real part if herm. <a href="#id20"><span class="problematic" id="id21">*</span></a>Faster after compilation</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>to_list():</strong></p></td>
+<td><p>Return the time-dependent quantum object as a list</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 <div class="section" id="eseries">
 <span id="classes-eseries"></span><h2>eseries<a class="headerlink" href="#eseries" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -1184,7 +1388,7 @@ otherwise you will have a Bloch sphere that looks like a football.</p>
 </dd>
 <dt><strong>vector_width</strong><span class="classifier">int {5}</span></dt><dd><p>Width of displayed vectors.</p>
 </dd>
-<dt><strong>vector_style</strong><span class="classifier">str {‘-<a href="#id2"><span class="problematic" id="id3">|</span></a>&gt;’, ‘simple’, ‘fancy’, ‘’}</span></dt><dd><p>Vector arrowhead style (from matplotlib’s arrow style).</p>
+<dt><strong>vector_style</strong><span class="classifier">str {‘-<a href="#id22"><span class="problematic" id="id23">|</span></a>&gt;’, ‘simple’, ‘fancy’, ‘’}</span></dt><dd><p>Vector arrowhead style (from matplotlib’s arrow style).</p>
 </dd>
 <dt><strong>vector_mutation</strong><span class="classifier">int {20}</span></dt><dd><p>Width of vectors arrowhead.</p>
 </dd>
@@ -1362,7 +1566,7 @@ see also: <a class="reference external" href="http://en.wikipedia.org/wiki/Stoke
 <dl class="attribute">
 <dt id="qutip.bloch.Bloch.vector_style">
 <code class="sig-name descname">vector_style</code><em class="property"> = None</em><a class="headerlink" href="#qutip.bloch.Bloch.vector_style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Style of Bloch vectors, default = ‘-<a href="#id4"><span class="problematic" id="id5">|</span></a>&gt;’ (or ‘simple’)</p>
+<dd><p>Style of Bloch vectors, default = ‘-<a href="#id24"><span class="problematic" id="id25">|</span></a>&gt;’ (or ‘simple’)</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -2125,9 +2329,9 @@ create an instance of this class.</p>
 </dd>
 <dt><strong>times</strong><span class="classifier"><em>list</em> / <em>array</em></span></dt><dd><p>List of times for <span class="math notranslate nohighlight">\(t\)</span>. Must be uniformly spaced.</p>
 </dd>
-<dt><strong>c_ops</strong><span class="classifier">list of <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.QobjEvo</span></code> or [Qobj, coeff*]</span></dt><dd><p>List of deterministic collapse operators.</p>
+<dt><strong>c_ops</strong><span class="classifier">list of <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.QobjEvo</span></code></a> or [Qobj, coeff*]</span></dt><dd><p>List of deterministic collapse operators.</p>
 </dd>
-<dt><strong>sc_ops</strong><span class="classifier">list of <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.QobjEvo</span></code> or [Qobj, coeff*]</span></dt><dd><p>List of stochastic collapse operators. Each stochastic collapse
+<dt><strong>sc_ops</strong><span class="classifier">list of <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.QobjEvo</span></code></a> or [Qobj, coeff*]</span></dt><dd><p>List of stochastic collapse operators. Each stochastic collapse
 operator will give a deterministic and stochastic contribution
 to the equation of motion according to how the d1 and d2 functions
 are defined.</p>
@@ -5549,7 +5753,7 @@ Mainly time evolution calculations</p>
 <dd class="field-odd"><dl>
 <dt><strong>dump_summary</strong><span class="classifier">bool</span></dt><dd><p>If True a summary is recorded</p>
 </dd>
-<dt><strong>evo_summary</strong><span class="classifier">list of :class:<a href="#id6"><span class="problematic" id="id7">`</span></a>tslotcomp.EvoCompSummary’</span></dt><dd><p>Summary items are appended if dump_summary is True
+<dt><strong>evo_summary</strong><span class="classifier">list of :class:<a href="#id26"><span class="problematic" id="id27">`</span></a>tslotcomp.EvoCompSummary’</span></dt><dd><p>Summary items are appended if dump_summary is True
 at each recomputation of the evolution.</p>
 </dd>
 <dt><strong>dump_amps</strong><span class="classifier">bool</span></dt><dd><p>If True control amplitudes are dumped</p>
@@ -5624,7 +5828,7 @@ as numpy.savetxt is used, and requires this.</p>
 <em class="property">class </em><code class="sig-name descname">EvoCompDumpItem</code><span class="sig-paren">(</span><em class="sig-param">dump</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qutip/control/dump.html#EvoCompDumpItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qutip.control.dump.EvoCompDumpItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A copy of all objects generated to calculate one time evolution
 Note the attributes are only set if the corresponding
-<a class="reference internal" href="#qutip.control.dump.DynamicsDump" title="qutip.control.dump.DynamicsDump"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicsDump</span></code></a> <a href="#id8"><span class="problematic" id="id9">dump_</span></a> attribute is set.</p>
+<a class="reference internal" href="#qutip.control.dump.DynamicsDump" title="qutip.control.dump.DynamicsDump"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicsDump</span></code></a> <a href="#id28"><span class="problematic" id="id29">dump_</span></a> attribute is set.</p>
 <dl class="method">
 <dt id="qutip.control.dump.EvoCompDumpItem.writeout">
 <code class="sig-name descname">writeout</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qutip/control/dump.html#EvoCompDumpItem.writeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qutip.control.dump.EvoCompDumpItem.writeout" title="Permalink to this definition">¶</a></dt>
@@ -5680,7 +5884,7 @@ idx : int</p>
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
       <span class="lastupdated">
-        Last updated on Jun 28, 2019.
+        Last updated on Jul 02, 2019.
       </span>
 
     </p>

@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Solving Problems with Time-dependent Hamiltonians" href="dynamics-time.html" />
+    <link rel="next" title="Stochastic Solver - Photocurrent" href="dynamics-photocurrent.html" />
     <link rel="prev" title="Lindblad Master Equation Solver" href="dynamics-master.html" /> 
 </head>
 
@@ -99,6 +99,13 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-master.html">Lindblad Master Equation Solver</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Monte Carlo Solver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#monte-carlo-in-qutip">Monte Carlo in QuTiP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-photocurrent.html">Stochastic Solver - Photocurrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Monte Carlo Solver</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#monte-carlo-in-qutip">Monte Carlo in QuTiP</a></li>
@@ -238,25 +245,25 @@ function for master-equation evolution, except that the initial state must be a 
 <span class="gp">In [5]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
-<span class="go">10.0%. Run time:   0.81s. Est. time left: 00:00:00:07</span>
-<span class="go">20.0%. Run time:   1.54s. Est. time left: 00:00:00:06</span>
-<span class="go">30.0%. Run time:   2.29s. Est. time left: 00:00:00:05</span>
-<span class="go">40.0%. Run time:   3.07s. Est. time left: 00:00:00:04</span>
-<span class="go">50.0%. Run time:   3.91s. Est. time left: 00:00:00:03</span>
-<span class="go">60.0%. Run time:   4.69s. Est. time left: 00:00:00:03</span>
-<span class="go">70.0%. Run time:   5.47s. Est. time left: 00:00:00:02</span>
-<span class="go">80.0%. Run time:   6.28s. Est. time left: 00:00:00:01</span>
-<span class="go">90.0%. Run time:   7.11s. Est. time left: 00:00:00:00</span>
-<span class="go">100.0%. Run time:   7.88s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:   7.99s</span>
+<span class="go">10.0%. Run time:   0.87s. Est. time left: 00:00:00:07</span>
+<span class="go">20.0%. Run time:   1.72s. Est. time left: 00:00:00:06</span>
+<span class="go">30.0%. Run time:   2.92s. Est. time left: 00:00:00:06</span>
+<span class="go">40.0%. Run time:   4.12s. Est. time left: 00:00:00:06</span>
+<span class="go">50.0%. Run time:   5.09s. Est. time left: 00:00:00:05</span>
+<span class="go">60.0%. Run time:   5.96s. Est. time left: 00:00:00:03</span>
+<span class="go">70.0%. Run time:   6.89s. Est. time left: 00:00:00:02</span>
+<span class="go">80.0%. Run time:   7.79s. Est. time left: 00:00:00:01</span>
+<span class="go">90.0%. Run time:   8.63s. Est. time left: 00:00:00:00</span>
+<span class="go">100.0%. Run time:   9.46s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:   9.47s</span>
 
 <span class="gp">In [7]: </span><span class="n">figure</span><span class="p">()</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Out[7]: &lt;Figure size 640x480 with 0 Axes&gt;</span>
 
 <span class="gp">In [8]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Out[8]: </span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x2ba6dc7a7860&gt;,</span>
-<span class="go"> &lt;matplotlib.lines.Line2D at 0x2ba6dc7a7d30&gt;]</span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x2b2269419860&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x2b226973b0f0&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Out[9]: Text(0.5,1,&#39;Monte Carlo time evolution&#39;)</span>
@@ -268,7 +275,7 @@ function for master-equation evolution, except that the initial state must be a 
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Out[11]: Text(0,0.5,&#39;Expectation values&#39;)</span>
 
 <span class="gp">In [12]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Out[12]: &lt;matplotlib.legend.Legend at 0x2ba6ba9e1ef0&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Out[12]: &lt;matplotlib.legend.Legend at 0x2b226a4139e8&gt;</span>
 
 <span class="gp">In [13]: </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -280,17 +287,17 @@ function for master-equation evolution, except that the initial state must be a 
 <span id="monte-ntraj"></span><h3>Changing the Number of Trajectories<a class="headerlink" href="#changing-the-number-of-trajectories" title="Permalink to this headline">¶</a></h3>
 <p>As mentioned earlier, by default, the <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> function runs 500 trajectories.  This value was chosen because it gives good accuracy, Monte Carlo errors scale as <span class="math notranslate nohighlight">\(1/n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the number of trajectories, and simultaneously does not take an excessive amount of time to run.  However, like many other options in QuTiP you are free to change the number of trajectories to fit your needs.  If we want to run 1000 trajectories in the above example, we can simply modify the call to <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> like:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="go">10.0%. Run time:   1.91s. Est. time left: 00:00:00:17</span>
-<span class="go">20.0%. Run time:   3.86s. Est. time left: 00:00:00:15</span>
-<span class="go">30.0%. Run time:   5.73s. Est. time left: 00:00:00:13</span>
-<span class="go">40.0%. Run time:   7.44s. Est. time left: 00:00:00:11</span>
-<span class="go">50.0%. Run time:   9.30s. Est. time left: 00:00:00:09</span>
-<span class="go">60.0%. Run time:  11.03s. Est. time left: 00:00:00:07</span>
-<span class="go">70.0%. Run time:  12.66s. Est. time left: 00:00:00:05</span>
-<span class="go">80.0%. Run time:  14.51s. Est. time left: 00:00:00:03</span>
-<span class="go">90.0%. Run time:  16.39s. Est. time left: 00:00:00:01</span>
-<span class="go">100.0%. Run time:  18.22s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:  18.25s</span>
+<span class="go">10.0%. Run time:   2.03s. Est. time left: 00:00:00:18</span>
+<span class="go">20.0%. Run time:   3.56s. Est. time left: 00:00:00:14</span>
+<span class="go">30.0%. Run time:   5.10s. Est. time left: 00:00:00:11</span>
+<span class="go">40.0%. Run time:   6.92s. Est. time left: 00:00:00:10</span>
+<span class="go">50.0%. Run time:   8.75s. Est. time left: 00:00:00:08</span>
+<span class="go">60.0%. Run time:  10.56s. Est. time left: 00:00:00:07</span>
+<span class="go">70.0%. Run time:  12.28s. Est. time left: 00:00:00:05</span>
+<span class="go">80.0%. Run time:  14.25s. Est. time left: 00:00:00:03</span>
+<span class="go">90.0%. Run time:  15.88s. Est. time left: 00:00:00:01</span>
+<span class="go">100.0%. Run time:  17.40s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:  17.42s</span>
 </pre></div>
 </div>
 <p>where we have added the keyword argument <code class="docutils literal notranslate"><span class="pre">ntraj=1000</span></code> at the end of the inputs.  Now, the Monte Carlo solver will calculate expectation values for both operators, <code class="docutils literal notranslate"><span class="pre">a.dag()</span> <span class="pre">*</span> <span class="pre">a,</span> <span class="pre">sm.dag()</span> <span class="pre">*</span> <span class="pre">sm</span></code> averaging over 1000 trajectories.  Sometimes one is also interested in seeing how the Monte Carlo trajectories converge to the master equation solution by calculating expectation values over a range of trajectory numbers.  If, for example, we want to average over 1, 10, 100, and 1000 trajectories, then we can input this into the solver using:</p>
@@ -299,17 +306,17 @@ function for master-equation evolution, except that the initial state must be a 
 </div>
 <p>Keep in mind that the input list must be in ascending order since the total number of trajectories run by <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> will be calculated using the last element of <code class="docutils literal notranslate"><span class="pre">ntraj</span></code>.  In this case, we need to use an extra index when getting the expectation values from the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> object returned by <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code>.  In the above example using:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
-<span class="go">10.0%. Run time:   2.16s. Est. time left: 00:00:00:19</span>
-<span class="go">20.0%. Run time:   4.07s. Est. time left: 00:00:00:16</span>
-<span class="go">30.0%. Run time:   5.96s. Est. time left: 00:00:00:13</span>
-<span class="go">40.0%. Run time:   7.86s. Est. time left: 00:00:00:11</span>
-<span class="go">50.0%. Run time:   9.93s. Est. time left: 00:00:00:09</span>
-<span class="go">60.0%. Run time:  11.54s. Est. time left: 00:00:00:07</span>
-<span class="go">70.0%. Run time:  13.31s. Est. time left: 00:00:00:05</span>
-<span class="go">80.0%. Run time:  15.08s. Est. time left: 00:00:00:03</span>
-<span class="go">90.0%. Run time:  17.02s. Est. time left: 00:00:00:01</span>
-<span class="go">100.0%. Run time:  18.81s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:  18.91s</span>
+<span class="go">10.0%. Run time:   1.83s. Est. time left: 00:00:00:16</span>
+<span class="go">20.0%. Run time:   3.83s. Est. time left: 00:00:00:15</span>
+<span class="go">30.0%. Run time:   5.66s. Est. time left: 00:00:00:13</span>
+<span class="go">40.0%. Run time:   7.31s. Est. time left: 00:00:00:10</span>
+<span class="go">50.0%. Run time:   8.95s. Est. time left: 00:00:00:08</span>
+<span class="go">60.0%. Run time:  10.76s. Est. time left: 00:00:00:07</span>
+<span class="go">70.0%. Run time:  12.59s. Est. time left: 00:00:00:05</span>
+<span class="go">80.0%. Run time:  14.30s. Est. time left: 00:00:00:03</span>
+<span class="go">90.0%. Run time:  15.92s. Est. time left: 00:00:00:01</span>
+<span class="go">100.0%. Run time:  17.62s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:  17.63s</span>
 </pre></div>
 </div>
 <p>we can extract the relevant expectation values using:</p>
@@ -349,47 +356,47 @@ function for master-equation evolution, except that the initial state must be a 
 <span class="gp">   ....: </span>
 
 <span class="gp">In [27]: </span><span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
-<span class="go">10.0%. Run time:   0.85s. Est. time left: 00:00:00:07</span>
-<span class="go">20.0%. Run time:   1.64s. Est. time left: 00:00:00:06</span>
-<span class="go">30.0%. Run time:   2.43s. Est. time left: 00:00:00:05</span>
-<span class="go">40.0%. Run time:   3.16s. Est. time left: 00:00:00:04</span>
-<span class="go">50.0%. Run time:   4.05s. Est. time left: 00:00:00:04</span>
-<span class="go">60.0%. Run time:   4.94s. Est. time left: 00:00:00:03</span>
-<span class="go">70.0%. Run time:   5.90s. Est. time left: 00:00:00:02</span>
-<span class="go">80.0%. Run time:   6.80s. Est. time left: 00:00:00:01</span>
-<span class="go">90.0%. Run time:   7.74s. Est. time left: 00:00:00:00</span>
-<span class="go">100.0%. Run time:   8.68s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:   8.71s</span>
+<span class="go">10.0%. Run time:   0.83s. Est. time left: 00:00:00:07</span>
+<span class="go">20.0%. Run time:   1.59s. Est. time left: 00:00:00:06</span>
+<span class="go">30.0%. Run time:   2.33s. Est. time left: 00:00:00:05</span>
+<span class="go">40.0%. Run time:   3.06s. Est. time left: 00:00:00:04</span>
+<span class="go">50.0%. Run time:   3.78s. Est. time left: 00:00:00:03</span>
+<span class="go">60.0%. Run time:   4.77s. Est. time left: 00:00:00:03</span>
+<span class="go">70.0%. Run time:   5.72s. Est. time left: 00:00:00:02</span>
+<span class="go">80.0%. Run time:   6.65s. Est. time left: 00:00:00:01</span>
+<span class="go">90.0%. Run time:   7.55s. Est. time left: 00:00:00:00</span>
+<span class="go">100.0%. Run time:   8.39s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:   8.45s</span>
 
 <span class="gp">In [28]: </span><span class="n">psi1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">coherent</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1j</span><span class="p">))</span>
 
 <span class="gp">In [29]: </span><span class="n">opts</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">rhs_reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c1"># Run a second time, reusing RHS</span>
 
 <span class="gp">In [30]: </span><span class="n">data2</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="n">opts</span><span class="p">)</span>
-<span class="go">10.0%. Run time:   1.56s. Est. time left: 00:00:00:14</span>
-<span class="go">20.0%. Run time:   2.99s. Est. time left: 00:00:00:11</span>
-<span class="go">30.0%. Run time:   4.41s. Est. time left: 00:00:00:10</span>
-<span class="go">40.0%. Run time:   5.87s. Est. time left: 00:00:00:08</span>
-<span class="go">50.0%. Run time:   7.42s. Est. time left: 00:00:00:07</span>
-<span class="go">60.0%. Run time:   9.09s. Est. time left: 00:00:00:06</span>
-<span class="go">70.0%. Run time:  10.67s. Est. time left: 00:00:00:04</span>
-<span class="go">80.0%. Run time:  12.09s. Est. time left: 00:00:00:03</span>
-<span class="go">90.0%. Run time:  13.53s. Est. time left: 00:00:00:01</span>
-<span class="go">100.0%. Run time:  15.15s. Est. time left: 00:00:00:00</span>
-<span class="go">Total run time:  15.21s</span>
+<span class="go">10.0%. Run time:   1.70s. Est. time left: 00:00:00:15</span>
+<span class="go">20.0%. Run time:   3.21s. Est. time left: 00:00:00:12</span>
+<span class="go">30.0%. Run time:   4.56s. Est. time left: 00:00:00:10</span>
+<span class="go">40.0%. Run time:   5.91s. Est. time left: 00:00:00:08</span>
+<span class="go">50.0%. Run time:   7.22s. Est. time left: 00:00:00:07</span>
+<span class="go">60.0%. Run time:   8.58s. Est. time left: 00:00:00:05</span>
+<span class="go">70.0%. Run time:   9.85s. Est. time left: 00:00:00:04</span>
+<span class="go">80.0%. Run time:  11.18s. Est. time left: 00:00:00:02</span>
+<span class="go">90.0%. Run time:  12.51s. Est. time left: 00:00:00:01</span>
+<span class="go">100.0%. Run time:  13.80s. Est. time left: 00:00:00:00</span>
+<span class="go">Total run time:  13.90s</span>
 
 <span class="gp">In [31]: </span><span class="n">figure</span><span class="p">()</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Out[31]: &lt;Figure size 640x480 with 0 Axes&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Out[32]: </span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x2ba6baa0d588&gt;,</span>
-<span class="go"> &lt;matplotlib.lines.Line2D at 0x2ba6baa0d128&gt;]</span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x2b226a7a09b0&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x2b226a7a05f8&gt;]</span>
 
 <span class="gp">In [33]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Out[33]: </span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x2ba6ddb716d8&gt;,</span>
-<span class="go"> &lt;matplotlib.lines.Line2D at 0x2ba6ddb71208&gt;]</span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x2b2268c662b0&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x2b226a536208&gt;]</span>
 
 <span class="gp">In [34]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Out[34]: Text(0.5,1,&#39;Monte Carlo time evolution&#39;)</span>
@@ -401,7 +408,7 @@ function for master-equation evolution, except that the initial state must be a 
 <span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Out[36]: Text(0,0.5,&#39;Expectation values&#39;)</span>
 
 <span class="gp">In [37]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Out[37]: &lt;matplotlib.legend.Legend at 0x2ba6dd2f5518&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Out[37]: &lt;matplotlib.legend.Legend at 0x2b2268db0ef0&gt;</span>
 
 <span class="gp">In [38]: </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -420,7 +427,7 @@ function for master-equation evolution, except that the initial state must be a 
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dynamics-time.html" class="btn btn-neutral float-right" title="Solving Problems with Time-dependent Hamiltonians" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dynamics-photocurrent.html" class="btn btn-neutral float-right" title="Stochastic Solver - Photocurrent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="dynamics-master.html" class="btn btn-neutral float-left" title="Lindblad Master Equation Solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -434,7 +441,7 @@ function for master-equation evolution, except that the initial state must be a 
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
       <span class="lastupdated">
-        Last updated on Jun 28, 2019.
+        Last updated on Jul 02, 2019.
       </span>
 
     </p>
