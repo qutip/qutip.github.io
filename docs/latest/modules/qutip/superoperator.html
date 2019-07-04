@@ -9,43 +9,46 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.superoperator &mdash; QuTiP 4.3 Documentation</title>
+  <title>qutip.superoperator &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -197,6 +200,8 @@
 <span class="kn">from</span> <span class="nn">qutip.fastsparse</span> <span class="k">import</span> <span class="n">fast_csr_matrix</span><span class="p">,</span> <span class="n">fast_identity</span>
 <span class="kn">from</span> <span class="nn">qutip.sparse</span> <span class="k">import</span> <span class="n">sp_reshape</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.spmath</span> <span class="k">import</span> <span class="n">zcsr_kron</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+
 
 <div class="viewcode-block" id="liouvillian"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superoperator.liouvillian">[docs]</a><span class="k">def</span> <span class="nf">liouvillian</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">data_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Assembles the Liouvillian superoperator from a Hamiltonian</span>
@@ -206,35 +211,44 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : qobj</span>
+<span class="sd">    H : Qobj or QobjEvo</span>
 <span class="sd">        System Hamiltonian.</span>
 
-<span class="sd">    c_ops : array_like</span>
+<span class="sd">    c_ops : array_like of Qobj or QobjEvo</span>
 <span class="sd">        A ``list`` or ``array`` of collapse operators.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    L : qobj</span>
+<span class="sd">    L : Qobj or QobjEvo</span>
 <span class="sd">        Liouvillian superoperator.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)):</span>
+        <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ops</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">chi</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">chi</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_ops</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;chi must be a list with same length as c_ops&#39;</span><span class="p">)</span>
 
+    <span class="n">h</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">H</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
-            <span class="n">op_dims</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dims</span>
-            <span class="n">op_shape</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span>
-        <span class="k">elif</span> <span class="n">H</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
-            <span class="n">op_dims</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">cte</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">H</span>
+        <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+            <span class="n">op_dims</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">dims</span>
+            <span class="n">op_shape</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">elif</span> <span class="n">h</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+            <span class="n">op_dims</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">op_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">op_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">op_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid type for Hamiltonian.&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># no hamiltonian given, pick system size from a collapse operator</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_ops</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">QobjEvo</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cte</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
                 <span class="n">op_dims</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">dims</span>
                 <span class="n">op_shape</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">shape</span>
@@ -251,7 +265,20 @@
 
     <span class="n">spI</span> <span class="o">=</span> <span class="n">fast_identity</span><span class="p">(</span><span class="n">op_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">H</span><span class="p">:</span>
+    <span class="n">td</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="n">td</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">def</span> <span class="nf">H2L</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="o">-</span> <span class="n">spost</span><span class="p">(</span><span class="n">H</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">H</span>
+
+        <span class="n">L</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">H2L</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
             <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span>
             <span class="n">data</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">spI</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -261,12 +288,26 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">fast_csr_matrix</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">sop_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sop_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
+    <span class="n">td_c_ops</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c_ops</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">c_op</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">c_op</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+            <span class="n">td</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">c_op</span><span class="o">.</span><span class="n">const</span><span class="p">:</span>
+                <span class="n">c_</span> <span class="o">=</span> <span class="n">c_op</span><span class="o">.</span><span class="n">cte</span>
+            <span class="k">elif</span> <span class="n">chi</span><span class="p">:</span>
+                <span class="n">td_c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lindblad_dissipator</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="n">chi</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">td_c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lindblad_dissipator</span><span class="p">(</span><span class="n">c_op</span><span class="p">))</span>
+                <span class="k">continue</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">cd</span> <span class="o">=</span> <span class="n">c_op</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">H</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">c_op</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">c_</span> <span class="o">=</span> <span class="n">c_op</span>
+
+        <span class="k">if</span> <span class="n">c_</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">c_</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cd</span> <span class="o">=</span> <span class="n">c_</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">H</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">c_</span><span class="o">.</span><span class="n">data</span>
             <span class="k">if</span> <span class="n">chi</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">chi</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">*</span> \
                                 <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">c</span><span class="p">)</span>
@@ -277,13 +318,26 @@
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">spI</span><span class="p">,</span> <span class="n">cdc</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">cdct</span><span class="p">,</span> <span class="n">spI</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">data_only</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">data</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">td</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">data_only</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">()</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">sop_dims</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s1">&#39;super&#39;</span>
+            <span class="k">return</span> <span class="n">L</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">()</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">sop_dims</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s1">&#39;super&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">L</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">()</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">sop_dims</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s1">&#39;super&#39;</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">td_c_ops</span><span class="p">:</span>
+            <span class="n">L</span> <span class="o">+=</span> <span class="n">c_op</span>
         <span class="k">return</span> <span class="n">L</span></div>
 
 
@@ -317,7 +371,7 @@
     <span class="k">return</span> <span class="n">L</span>
 
 
-<div class="viewcode-block" id="lindblad_dissipator"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superoperator.lindblad_dissipator">[docs]</a><span class="k">def</span> <span class="nf">lindblad_dissipator</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="lindblad_dissipator"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superoperator.lindblad_dissipator">[docs]</a><span class="k">def</span> <span class="nf">lindblad_dissipator</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lindblad dissipator (generalized) for a single pair of collapse operators</span>
 <span class="sd">    (a, b), or for a single collapse operator (a) when b is not specified:</span>
@@ -329,25 +383,30 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    a : qobj</span>
+<span class="sd">    a : Qobj or QobjEvo</span>
 <span class="sd">        Left part of collapse operator.</span>
 
-<span class="sd">    b : qobj (optional)</span>
+<span class="sd">    b : Qobj or QobjEvo (optional)</span>
 <span class="sd">        Right part of collapse operator. If not specified, b defaults to a.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    D : qobj</span>
+<span class="sd">    D : qobj, QobjEvo</span>
 <span class="sd">        Lindblad dissipator superoperator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
-
     <span class="n">ad_b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">b</span>
-    <span class="n">D</span> <span class="o">=</span> <span class="n">spre</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">ad_b</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">ad_b</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">chi</span><span class="p">:</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">spre</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">chi</span><span class="p">)</span> \
+            <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">ad_b</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">ad_b</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">spre</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">ad_b</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">ad_b</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">D</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="n">data_only</span> <span class="k">else</span> <span class="n">D</span></div>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">D</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">D</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="n">data_only</span> <span class="k">else</span> <span class="n">D</span></div>
 
 
 <div class="viewcode-block" id="operator_to_vector"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superoperator.operator_to_vector">[docs]</a><span class="k">def</span> <span class="nf">operator_to_vector</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
@@ -355,6 +414,9 @@
 <span class="sd">    Create a vector representation of a quantum operator given</span>
 <span class="sd">    the matrix representation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">op</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">operator_to_vector</span><span class="p">)</span>
+
     <span class="n">q</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">()</span>
     <span class="n">q</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">q</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sp_reshape</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
@@ -366,6 +428,9 @@
 <span class="sd">    Create a matrix representation given a quantum operator in</span>
 <span class="sd">    vector form.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">op</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">vector_to_operator</span><span class="p">)</span>
+
     <span class="n">q</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">()</span>
     <span class="n">q</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
@@ -411,14 +476,17 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : qobj</span>
+<span class="sd">    A : Qobj or QobjEvo</span>
 <span class="sd">        Quantum operator for post multiplication.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    super : qobj</span>
+<span class="sd">    super : Qobj or QobjEvo</span>
 <span class="sd">        Superoperator formed from input qauntum object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">A</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">spost</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input is not a quantum object&#39;</span><span class="p">)</span>
 
@@ -427,8 +495,8 @@
 
     <span class="n">S</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">isherm</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">)</span>
     <span class="n">S</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
-    <span class="n">S</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> 
-                <span class="n">fast_identity</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                       <span class="n">fast_identity</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
     <span class="k">return</span> <span class="n">S</span></div>
 
 
@@ -437,14 +505,17 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : qobj</span>
+<span class="sd">    A : Qobj or QobjEvo</span>
 <span class="sd">        Quantum operator for pre-multiplication.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
-<span class="sd">    super :qobj</span>
+<span class="sd">    super :Qobj or QobjEvo</span>
 <span class="sd">        Superoperator formed from input quantum object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">A</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">spre</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input is not a quantum object&#39;</span><span class="p">)</span>
 
@@ -471,22 +542,29 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : Qobj</span>
+<span class="sd">    A : Qobj or QobjEvo</span>
 <span class="sd">        Quantum operator for pre-multiplication.</span>
 
-<span class="sd">    B : Qobj</span>
+<span class="sd">    B : Qobj or QobjEvo</span>
 <span class="sd">        Quantum operator for post-multiplication.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
-<span class="sd">    super : Qobj</span>
+<span class="sd">    super : Qobj or QobjEvo</span>
 <span class="sd">        Superoperator formed from input quantum objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">spre</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
 
-    <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
-            <span class="p">[</span><span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])]]</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">)</span></div>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                 <span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
+                <span class="p">[</span><span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                 <span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])]]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">zcsr_kron</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">)</span></div>
+
+<span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="k">import</span> <span class="n">QobjEvo</span>
 </pre></div>
 
            </div>
@@ -499,8 +577,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jul 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -517,36 +597,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -9,43 +9,46 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.control.dynamics &mdash; QuTiP 4.3 Documentation</title>
+  <title>qutip.control.dynamics &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-
-  
-  <script src="../../../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -249,7 +252,7 @@
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">return</span> <span class="kc">False</span>
-    
+
 <span class="k">def</span> <span class="nf">_check_ctrls_container</span><span class="p">(</span><span class="n">ctrls</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check through the controls container.</span>
@@ -261,10 +264,10 @@
         <span class="c1"># Check to see if list of lists</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-                <span class="n">ctrls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ctrls</span><span class="p">)</span>
+                <span class="n">ctrls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
-        
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ctrls</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incorrect shape for ctrl dyn gen array&quot;</span><span class="p">)</span>
@@ -275,12 +278,12 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
         <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">ctrls</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;All control dyn gen must be Qobj&quot;</span><span class="p">)</span> 
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;All control dyn gen must be Qobj&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Controls list or array not set correctly&quot;</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">ctrls</span>
-    
+
 <span class="k">def</span> <span class="nf">_check_drift_dyn_gen</span><span class="p">(</span><span class="n">drift</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drift</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drift</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -365,7 +368,7 @@
 <span class="sd">        taken, for instance using Qobj (and hence sparse arrays) as the</span>
 <span class="sd">        the internal operator data type, and not caching some operators</span>
 <span class="sd">        Potentially further memory saving maybe made with</span>
-<span class="sd">        memory_optimization &gt; 1. </span>
+<span class="sd">        memory_optimization &gt; 1.</span>
 <span class="sd">        The options are processed in _set_memory_optimizations, see</span>
 <span class="sd">        this for more information. Individual memory saving  options can be</span>
 <span class="sd">        switched by settting them directly (see below)</span>
@@ -379,26 +382,26 @@
 <span class="sd">        perform better when (custom) fidelity measures use Qobj methods</span>
 <span class="sd">        such as partial trace.</span>
 <span class="sd">        See _choose_oper_dtype for how this is chosen when not specified</span>
-<span class="sd">        </span>
+
 <span class="sd">    cache_phased_dyn_gen : bool</span>
-<span class="sd">        If True then the dynamics generators will be saved with and </span>
+<span class="sd">        If True then the dynamics generators will be saved with and</span>
 <span class="sd">        without the propagation prefactor (if there is one)</span>
 <span class="sd">        Defaults to True when memory_optimization=0, otherwise False</span>
-<span class="sd">        </span>
+
 <span class="sd">    cache_prop_grad : bool</span>
 <span class="sd">        If the True then the propagator gradients (for exact gradients) will</span>
 <span class="sd">        be computed when the propagator are computed and cache until</span>
-<span class="sd">        the are used by the fidelity computer. If False then the </span>
+<span class="sd">        the are used by the fidelity computer. If False then the</span>
 <span class="sd">        fidelity computer will calculate them as needed.</span>
 <span class="sd">        Defaults to True when memory_optimization=0, otherwise False</span>
-<span class="sd">           </span>
+
 <span class="sd">    cache_dyn_gen_eigenvectors_adj: bool</span>
-<span class="sd">        If True then DynamicsUnitary will cached the adjoint of </span>
+<span class="sd">        If True then DynamicsUnitary will cached the adjoint of</span>
 <span class="sd">        the Hamiltion eignvector matrix</span>
 <span class="sd">        Defaults to True when memory_optimization=0, otherwise False</span>
-<span class="sd">        </span>
+
 <span class="sd">    sparse_eigen_decomp: bool</span>
-<span class="sd">        If True then DynamicsUnitary will use the sparse eigenvalue </span>
+<span class="sd">        If True then DynamicsUnitary will use the sparse eigenvalue</span>
 <span class="sd">        decomposition.</span>
 <span class="sd">        Defaults to True when memory_optimization&lt;=1, otherwise False</span>
 
@@ -535,7 +538,7 @@
 <span class="sd">        dyn_params.</span>
 <span class="sd">        If dump is None then will return None or will set dumping to SUMMARY</span>
 <span class="sd">        when setting a path</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimconfig</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">optimconfig</span>
@@ -797,17 +800,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tau</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeslots_initialized</span> <span class="o">=</span> <span class="kc">True</span></div>
-        
+
     <span class="k">def</span> <span class="nf">_set_memory_optimizations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set various memory optimisation attributes based on the </span>
+<span class="sd">        Set various memory optimisation attributes based on the</span>
 <span class="sd">        memory_optimization attribute</span>
 <span class="sd">        If they have been set already, e.g. in apply_params</span>
 <span class="sd">        then they will not be overridden here</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting memory optimisations for level </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">memory_optimization</span><span class="p">))</span>
-                    
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_choose_oper_dtype</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Internal operator data type choosen to be </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -815,7 +818,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using operator data type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="p">))</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_optimization</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span> <span class="o">=</span> <span class="kc">False</span>
@@ -823,31 +826,31 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;phased dynamics generator caching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">))</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_prop_grad</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_optimization</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cache_prop_grad</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cache_prop_grad</span> <span class="o">=</span> <span class="kc">True</span>       
+                <span class="bp">self</span><span class="o">.</span><span class="n">cache_prop_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;propagator gradient caching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">cache_prop_grad</span><span class="p">))</span>
-                            
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_dyn_gen_eigenvectors_adj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_optimization</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cache_dyn_gen_eigenvectors_adj</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cache_dyn_gen_eigenvectors_adj</span> <span class="o">=</span> <span class="kc">True</span>       
+                <span class="bp">self</span><span class="o">.</span><span class="n">cache_dyn_gen_eigenvectors_adj</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;eigenvector adjoint caching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">cache_dyn_gen_eigenvectors_adj</span><span class="p">))</span>
-                            
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_optimization</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span> <span class="o">=</span> <span class="kc">False</span>       
+                <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;use sparse eigen decomp </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span><span class="p">))</span>
-                            
+
     <span class="k">def</span> <span class="nf">_choose_oper_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Attempt select most efficient internal operator data type</span>
@@ -931,7 +934,7 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> \
                                     <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctrl</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctrl</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
                                         <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">]</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_initial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="o">.</span><span class="n">data</span>
@@ -940,7 +943,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_drift_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_drift_dyn_gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="o">.</span><span class="n">data</span>
-                
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">n_ts</span><span class="p">,</span> <span class="n">n_ctrls</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">):</span>
@@ -956,7 +959,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">n_ts</span><span class="p">,</span> <span class="n">n_ctrls</span><span class="p">],</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">n_ts</span><span class="p">,</span> <span class="n">n_ctrls</span><span class="p">],</span>
                                                      <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">):</span>
                     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ctrls</span><span class="p">):</span>
@@ -965,7 +968,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>
                                                 <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">]</span>
-                                                
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="nb">object</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">)]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_phased_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="nb">object</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">)]</span>
@@ -983,7 +986,7 @@
             <span class="c1"># Onward propagation overlap with inverse target</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo</span> <span class="o">=</span> <span class="p">[</span><span class="nb">object</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_onto_evo_target</span><span class="p">()</span>
-            
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="p">,</span> <span class="n">propcomp</span><span class="o">.</span><span class="n">PropCompDiag</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_decomp_lists</span><span class="p">()</span>
 
@@ -998,7 +1001,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="o">.</span><span class="n">create_dump_dir</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dynamics dump will be written to:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="o">.</span><span class="n">dump_dir</span><span class="p">))</span>
-            
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_evo_initialized</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="nd">@property</span>
@@ -1011,11 +1014,11 @@
         <span class="c1"># Note that if this returns None then _apply_phase will never be</span>
         <span class="c1"># called</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span>
-    
+
     <span class="nd">@dyn_gen_phase</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span> <span class="o">=</span> <span class="n">value</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1032,7 +1035,7 @@
     <span class="nd">@phase_application</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_phase_application</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        
+
     <span class="k">def</span> <span class="nf">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_config_phase_application</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span> <span class="o">=</span> <span class="n">value</span>
@@ -1043,10 +1046,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Invalid value &#39;</span><span class="si">{}</span><span class="s2">&#39; for phase application. Must be either &quot;</span>
                    <span class="s2">&quot;&#39;preop&#39;, &#39;postop&#39; or &#39;custom&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ph_app</span><span class="p">))</span>
-        
+
         <span class="k">if</span> <span class="n">ph_app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ph_app</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span>
-            
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ph_app</span> <span class="o">=</span> <span class="n">ph_app</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
@@ -1067,7 +1070,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_config_phase_application</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span> <span class="o">=</span> <span class="kc">False</span>
-            
+
     <span class="k">def</span> <span class="nf">_apply_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This default method does nothing.</span>
@@ -1077,7 +1080,7 @@
 <span class="sd">        It will never be called if `dyn_gen_phase` is None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dg</span>
-            
+
     <span class="k">def</span> <span class="nf">_apply_phase_preop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply phasing operator to dynamics generator.</span>
@@ -1101,7 +1104,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">phased_dg</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_phase</span>
         <span class="k">return</span> <span class="n">phased_dg</span>
-        
+
     <span class="k">def</span> <span class="nf">_create_decomp_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create lists that will hold the eigen decomposition</span>
@@ -1247,10 +1250,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">refresh_drift_attribs</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dyn_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
-        
+
 <div class="viewcode-block" id="Dynamics.refresh_drift_attribs"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.refresh_drift_attribs">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_drift_attribs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset the dyn_shape, dyn_dims and time_depend_drift attribs&quot;&quot;&quot;</span>
-            
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="n">d0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_drift</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1261,10 +1264,10 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unable to determine drift attributes, &quot;</span>
                     <span class="s2">&quot;because drift_dyn_gen is not Qobj (nor list of)&quot;</span><span class="p">)</span>
-                        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">dyn_shape</span> <span class="o">=</span> <span class="n">d0</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dyn_dims</span> <span class="o">=</span> <span class="n">d0</span><span class="o">.</span><span class="n">dims</span></div>
-            
+
 <div class="viewcode-block" id="Dynamics.get_num_ctrls"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_num_ctrls">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_ctrls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate the of controls from the length of the control list</span>
@@ -1274,7 +1277,7 @@
         <span class="n">_func_deprecation</span><span class="p">(</span><span class="s2">&quot;&#39;get_num_ctrls&#39; has been replaced by &quot;</span>
                          <span class="s2">&quot;&#39;num_ctrls&#39; property&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_ctrls</span></div>
-        
+
     <span class="k">def</span> <span class="nf">_get_num_ctrls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen_checked</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">_check_ctrls_container</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">)</span>
@@ -1283,8 +1286,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_num_ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_num_ctrls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">)</span>    
-        
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_ctrls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_ctrls</span>
 
     <span class="nd">@property</span>
@@ -1382,7 +1385,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dg</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_phased_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_phase</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
-   
+
 <div class="viewcode-block" id="Dynamics.get_dyn_gen"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.dynamics.Dynamics.get_dyn_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_dyn_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the combined dynamics generator for the timeslot</span>
@@ -1475,12 +1478,12 @@
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_prop_grad</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
                                                     <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_dims</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop_grad_qobj</span>
-        
+
     <span class="k">def</span> <span class="nf">_get_prop_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_prop_grad</span><span class="p">:</span>
             <span class="n">prop_grad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop_grad</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">prop_grad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="o">.</span><span class="n">_compute_prop_grad</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> 
+            <span class="n">prop_grad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop_computer</span><span class="o">.</span><span class="n">_compute_prop_grad</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>
                                                        <span class="n">compute_prop</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">prop_grad</span>
 
@@ -1750,7 +1753,7 @@
             <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="c1"># Returns eigenvalues as array (row)</span>
             <span class="c1"># and eigenvectors as rows of an array</span>
-            <span class="n">eig_val</span><span class="p">,</span> <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> 
+            <span class="n">eig_val</span><span class="p">,</span> <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span>
                                        <span class="n">sparse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span><span class="p">)</span>
             <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">eig_vec</span><span class="o">.</span><span class="n">T</span>
 
@@ -1877,7 +1880,7 @@
 <span class="sd">    omega : array[drift_dyn_gen.shape]</span>
 <span class="sd">        matrix used in the calculation of propagators (time evolution)</span>
 <span class="sd">        with symplectic systems.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1924,7 +1927,7 @@
             <span class="k">else</span><span class="p">:</span>
                  <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">omg</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span>
-        
+
     <span class="k">def</span> <span class="nf">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">Dynamics</span><span class="o">.</span><span class="n">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evo_initialized</span><span class="p">:</span>
@@ -1944,7 +1947,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No option for phase_application &quot;</span>
                              <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_application</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">phase</span>
-                
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dyn_gen_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1970,8 +1973,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jul 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -1988,36 +1993,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

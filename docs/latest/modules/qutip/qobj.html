@@ -9,43 +9,46 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qutip.qobj &mdash; QuTiP 4.3 Documentation</title>
+  <title>qutip.qobj &mdash; QuTiP 4.4 Documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
   
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                4.3
+                4.4
               </div>
             
           
@@ -523,7 +526,12 @@
             <span class="k">return</span> <span class="n">other</span><span class="o">.</span><span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="n">other</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span>
+                          <span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> \
+                          <span class="ow">or</span> <span class="n">sp</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+                <span class="n">other</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">NotImplemented</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># case for scalar quantum object</span>
@@ -643,7 +651,7 @@
                 <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
                 <span class="n">out</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
                 <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">auto_tidyup</span><span class="p">:</span> <span class="n">out</span><span class="o">.</span><span class="n">tidyup</span><span class="p">()</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">auto_tidyup_dims</span> 
+                <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">auto_tidyup_dims</span>
                         <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
                         <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)):</span>
                     <span class="c1"># If neither left or right is a superoperator,</span>
@@ -726,7 +734,7 @@
             <span class="k">return</span> <span class="n">out</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incompatible object for multiplication&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
 
     <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1156,12 +1164,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        Q : Qobj</span>
+<span class="sd">        Q : :class:`qutip.Qobj`</span>
 <span class="sd">            Input bra or ket vector</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        P : Qobj</span>
+<span class="sd">        P : :class:`qutip.Qobj`</span>
 <span class="sd">            Projection operator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
@@ -1208,6 +1216,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">toarray</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">__array__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Numpy array from Qobj</span>
+<span class="sd">        For compatibility with np.array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+
 <div class="viewcode-block" id="Qobj.diag"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.Qobj.diag">[docs]</a>    <span class="k">def</span> <span class="nf">diag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Diagonal elements of quantum object.</span>
 
@@ -1239,7 +1253,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Exponentiated quantum operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1290,7 +1304,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Matrix square root of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1329,7 +1343,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Matrix cosine of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1355,7 +1369,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Matrix sine of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1397,7 +1411,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Normalized quantum object if not in-place,</span>
 <span class="sd">            else None.</span>
 
@@ -1427,7 +1441,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Quantum object representing partial trace with selected components</span>
 <span class="sd">            remaining.</span>
 
@@ -1451,7 +1465,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        P : qobj</span>
+<span class="sd">        P : :class:`qutip.Qobj`</span>
 <span class="sd">            Permuted quantum object.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1470,7 +1484,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Quantum object with small elements removed.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1506,7 +1520,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Operator in new basis.</span>
 
 <span class="sd">        Notes</span>
@@ -1586,7 +1600,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            A valid density operator.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1639,10 +1653,10 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
-<span class="sd">        bra : qobj</span>
+<span class="sd">        bra : :class:`qutip.Qobj`</span>
 <span class="sd">            Quantum object of type &#39;bra&#39; or &#39;ket&#39;</span>
 
-<span class="sd">        ket : qobj</span>
+<span class="sd">        ket : :class:`qutip.Qobj`</span>
 <span class="sd">            Quantum object of type &#39;ket&#39;.</span>
 
 <span class="sd">        Returns</span>
@@ -1669,15 +1683,17 @@
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only calculate matrix elements for bra and ket vectors.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.overlap"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.Qobj.overlap">[docs]</a>    <span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Overlap between two state vectors.</span>
+        <span class="sd">&quot;&quot;&quot;Overlap between two state vectors or two operators.</span>
 
 <span class="sd">        Gives the overlap (inner product) between the current bra or ket Qobj</span>
-<span class="sd">        and and another bra or ket Qobj.</span>
+<span class="sd">        and and another bra or ket Qobj. It gives the Hilbert-Schmidt overlap</span>
+<span class="sd">        when one of the Qobj is an operator/density matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
-<span class="sd">        other : qobj</span>
-<span class="sd">            Quantum object for a state vector of type &#39;ket&#39; or &#39;bra&#39;.</span>
+<span class="sd">        other : :class:`qutip.Qobj`</span>
+<span class="sd">            Quantum object for a state vector of type &#39;ket&#39;, &#39;bra&#39; or density</span>
+<span class="sd">            matrix.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1687,14 +1703,14 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        TypeError</span>
-<span class="sd">            Can only calculate overlap between a bra and ket quantum objects.</span>
+<span class="sd">            Can only calculate overlap between a bra, ket and density matrix</span>
+<span class="sd">            quantum objects.</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        Since QuTiP mainly deals with ket vectors, the most efficient inner product</span>
-<span class="sd">        call is the ket-ket version that computes the product &lt;self|other&gt; with</span>
-<span class="sd">        both vectors expressed as kets.</span>
-
+<span class="sd">        Since QuTiP mainly deals with ket vectors, the most efficient inner</span>
+<span class="sd">        product call is the ket-ket version that computes the product</span>
+<span class="sd">        &lt;self|other&gt; with both vectors expressed as kets.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
@@ -1706,6 +1722,8 @@
                     <span class="c1">#Since we deal mainly with ket vectors, the bra-bra combo</span>
                     <span class="c1">#is not common, and not optimized.</span>
                     <span class="k">return</span> <span class="n">zcsr_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only calculate overlap for state vector Qobjs&quot;</span><span class="p">)</span>
 
@@ -1714,8 +1732,19 @@
                     <span class="k">return</span> <span class="n">zcsr_inner</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">zcsr_inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only calculate overlap for state vector Qobjs&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only calculate overlap for state vector Qobjs&quot;</span><span class="p">)</span>
+
 
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only calculate overlap for state vector Qobjs&quot;</span><span class="p">)</span></div>
 
@@ -1826,7 +1855,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        eigval : float</span>
 <span class="sd">            Eigenvalue for the ground state of quantum operator.</span>
-<span class="sd">        eigvec : qobj</span>
+<span class="sd">        eigvec : :class:`qutip.Qobj`</span>
 <span class="sd">            Eigenket for the ground state of quantum operator.</span>
 
 <span class="sd">        Notes</span>
@@ -1856,7 +1885,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : qobj</span>
+<span class="sd">        oper : :class:`qutip.Qobj`</span>
 <span class="sd">            Transpose of input operator.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1882,7 +1911,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        q : Qobj</span>
+<span class="sd">        q : :class:`qutip.Qobj`</span>
 <span class="sd">            A new instance of :class:`qutip.Qobj` that contains only the states</span>
 <span class="sd">            corresponding to the indices in `state_inds`.</span>
 
@@ -1920,7 +1949,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        q : Qobj</span>
+<span class="sd">        q : :class:`qutip.Qobj`</span>
 <span class="sd">            A new instance of :class:`qutip.Qobj` that contains only the states</span>
 <span class="sd">            corresponding to indices that are **not** in `state_inds`.</span>
 
@@ -1940,7 +1969,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        B : Qobj or None</span>
+<span class="sd">        B : :class:`qutip.Qobj` or None</span>
 <span class="sd">            If B is not None, the diamond distance d(A, B) = dnorm(A - B) between</span>
 <span class="sd">            this operator and B is returned instead of the diamond norm.</span>
 
@@ -2150,7 +2179,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        output : Qobj</span>
+<span class="sd">        output : :class:`qutip.Qobj`</span>
 <span class="sd">            A Qobj instance that represents the value of qobj_list at time t.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2208,12 +2237,12 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : qobj</span>
+<span class="sd">    A : :class:`qutip.Qobj`</span>
 <span class="sd">        Input quantum object.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    oper : qobj</span>
+<span class="sd">    oper : :class:`qutip.Qobj`</span>
 <span class="sd">        Adjoint of input operator</span>
 
 <span class="sd">    Notes</span>
@@ -2233,14 +2262,14 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Composite quantum object.</span>
 <span class="sd">    sel : int/list</span>
 <span class="sd">        An ``int`` or ``list`` of components to keep after partial trace.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    oper : qobj</span>
+<span class="sd">    oper : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object representing partial trace with selected components</span>
 <span class="sd">        remaining.</span>
 
@@ -2261,7 +2290,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    inpt : qobj</span>
+<span class="sd">    inpt : :class:`qutip.Qobj`</span>
 <span class="sd">        Input quantum object.</span>
 
 <span class="sd">    Returns</span>
@@ -2286,7 +2315,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    inpt : qobj</span>
+<span class="sd">    inpt : :class:`qutip.Qobj`</span>
 <span class="sd">        Input quantum object.</span>
 
 <span class="sd">    Returns</span>
@@ -2312,7 +2341,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2340,7 +2369,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2369,7 +2398,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2392,7 +2421,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2414,7 +2443,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2442,7 +2471,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2464,9 +2493,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : qobj</span>
+<span class="sd">    A : :class:`qutip.Qobj`</span>
 <span class="sd">        Qobj one</span>
-<span class="sd">    B : qobj</span>
+<span class="sd">    B : :class:`qutip.Qobj`</span>
 <span class="sd">        Qobj two</span>
 <span class="sd">    tol : float</span>
 <span class="sd">        Tolerence for equality to be valid</span>
@@ -2505,7 +2534,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : qobj</span>
+<span class="sd">    Q : :class:`qutip.Qobj`</span>
 <span class="sd">        Quantum object</span>
 
 <span class="sd">    Returns</span>
@@ -2549,8 +2578,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
-      Last updated on Feb 26, 2019.
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jul 02, 2019.
+      </span>
 
     </p>
   </div>
@@ -2567,36 +2598,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'4.3.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
