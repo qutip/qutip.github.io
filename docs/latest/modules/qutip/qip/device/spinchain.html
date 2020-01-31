@@ -1,0 +1,820 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qutip.qip.device.spinchain &mdash; QuTiP 4.5 Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/qutip_examples/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.qip.device.spinchain</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.qip.device.spinchain</h1><div class="highlight"><pre>
+<span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
+<span class="c1">#    All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c1">#    modification, are permitted provided that the following conditions are</span>
+<span class="c1">#    met:</span>
+<span class="c1">#</span>
+<span class="c1">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c1">#       this list of conditions and the following disclaimer.</span>
+<span class="c1">#</span>
+<span class="c1">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c1">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c1">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c1">#</span>
+<span class="c1">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c1">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c1">#       from this software without specific prior written permission.</span>
+<span class="c1">#</span>
+<span class="c1">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c1">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c1">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c1">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c1">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c1">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c1">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c1">###############################################################################</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">sigmax</span><span class="p">,</span> <span class="n">sigmay</span><span class="p">,</span> <span class="n">sigmaz</span><span class="p">,</span> <span class="n">identity</span>
+<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device.processor</span> <span class="kn">import</span> <span class="n">Processor</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device.modelprocessor</span> <span class="kn">import</span> <span class="n">ModelProcessor</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.pulse</span> <span class="kn">import</span> <span class="n">Pulse</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.compiler.gatecompiler</span> <span class="kn">import</span> <span class="n">GateCompiler</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.compiler.spinchaincompiler</span> <span class="kn">import</span> <span class="n">SpinChainCompiler</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SpinChain&#39;</span><span class="p">,</span> <span class="s1">&#39;LinearSpinChain&#39;</span><span class="p">,</span> <span class="s1">&#39;CircularSpinChain&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SpinChain"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain">[docs]</a><span class="k">class</span> <span class="nc">SpinChain</span><span class="p">(</span><span class="n">ModelProcessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The processor based on the physical implementation of</span>
+<span class="sd">    a spin chain qubits system.</span>
+<span class="sd">    The available Hamiltonian of the system is predefined.</span>
+<span class="sd">    The processor can simulate the evolution under the given</span>
+<span class="sd">    control pulses either numerically or analytically.</span>
+<span class="sd">    It is a base class and should not be used directly, please</span>
+<span class="sd">    refer the the subclasses :class:`qutip.qip.LinearSpinChain` and</span>
+<span class="sd">    :class:`qutip.qip.CircularSpinChain`.</span>
+<span class="sd">    (Only additional attributes are documented here, for others please</span>
+<span class="sd">    refer to the parent class :class:`qutip.qip.device.ModelProcessor`)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of qubits in the system.</span>
+
+<span class="sd">    correct_global_phase: float</span>
+<span class="sd">        Save the global phase, the analytical solution</span>
+<span class="sd">        will track the global phase.</span>
+<span class="sd">        It has no effect on the numerical solution.</span>
+
+<span class="sd">    sx: int or list</span>
+<span class="sd">        The delta for each of the qubits in the system.</span>
+
+<span class="sd">    sz: int or list</span>
+<span class="sd">        The epsilon for each of the qubits in the system.</span>
+
+<span class="sd">    sxsy: int or list</span>
+<span class="sd">        The interaction strength for each of the qubit pair in the system.</span>
+
+<span class="sd">    t1: list or float</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    t2: list of float</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sx: list</span>
+<span class="sd">        The delta for each of the qubits in the system.</span>
+
+<span class="sd">    sz: list</span>
+<span class="sd">        The epsilon for each of the qubits in the system.</span>
+
+<span class="sd">    sxsy: list</span>
+<span class="sd">        The interaction strength for each of the qubit pair in the system.</span>
+
+<span class="sd">    sx_ops: list</span>
+<span class="sd">        A list of sigmax Hamiltonians for each qubit.</span>
+
+<span class="sd">    sz_ops: list</span>
+<span class="sd">        A list of sigmaz Hamiltonians for each qubit.</span>
+
+<span class="sd">    sxsy_ops: list</span>
+<span class="sd">        A list of tensor(sigmax, sigmay)</span>
+<span class="sd">        interacting Hamiltonians for each qubit.</span>
+
+<span class="sd">    sx_u: array_like</span>
+<span class="sd">        Pulse matrix for sigmax Hamiltonians.</span>
+
+<span class="sd">    sz_u: array_like</span>
+<span class="sd">        Pulse matrix for sigmaz Hamiltonians.</span>
+
+<span class="sd">    sxsy_u: array_like</span>
+<span class="sd">        Pulse matrix for tensor(sigmax, sigmay) interacting Hamiltonians.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="p">,</span>
+                 <span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="o">=</span><span class="n">correct_global_phase</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">t2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correct_global_phase</span> <span class="o">=</span> <span class="n">correct_global_phase</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">=</span> <span class="s2">&quot;step_func&quot;</span>
+        <span class="c1"># params and ops are set in the submethods</span>
+
+<div class="viewcode-block" id="SpinChain.set_up_ops"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain.set_up_ops">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the Hamiltonians for the spinchain model and save them in the</span>
+<span class="sd">        attribute `ctrls`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N: int</span>
+<span class="sd">            The number of qubits in the system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># sx_ops</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Pulse</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">m</span><span class="p">,</span> <span class="n">spline_kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span><span class="p">))</span>
+        <span class="c1"># sz_ops</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Pulse</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">m</span><span class="p">,</span> <span class="n">spline_kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span><span class="p">))</span>
+        <span class="c1"># sxsy_ops</span>
+        <span class="n">operator</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">()])</span> <span class="o">+</span> <span class="n">tensor</span><span class="p">([</span><span class="n">sigmay</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">()])</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Pulse</span><span class="p">(</span><span class="n">operator</span><span class="p">,</span> <span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">spline_kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SpinChain.set_up_params"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain.set_up_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the parameters in the attribute `params` and check the validity.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sx: float or list</span>
+<span class="sd">            The coefficient of sigmax in the model</span>
+
+<span class="sd">        sz: flaot or list</span>
+<span class="sd">            The coefficient of sigmaz in the model</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The coefficient of sxsy is defined in the submethods.</span>
+<span class="sd">        All parameters will be multiplied by 2*pi for simplicity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sx_para</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_para_list</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paras</span><span class="p">[</span><span class="s2">&quot;sx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sx_para</span>
+        <span class="n">sz_para</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_para_list</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paras</span><span class="p">[</span><span class="s2">&quot;sz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sz_para</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sx_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sz_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sxsy_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sx_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sz_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sxsy_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:]</span>
+
+<div class="viewcode-block" id="SpinChain.load_circuit"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain.load_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">load_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">,</span> <span class="n">setup</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Decompose a :class:`qutip.QubitCircuit` in to the control</span>
+<span class="sd">        amplitude generating the corresponding evolution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qc: :class:`qutip.QubitCircuit`</span>
+<span class="sd">            Takes the quantum circuit to be implemented.</span>
+
+<span class="sd">        setup: string</span>
+<span class="sd">            &quot;linear&quot; or &quot;circular&quot; for two sub-calsses.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tlist: array_like</span>
+<span class="sd">            A NumPy array specifies the time of each coefficient</span>
+
+<span class="sd">        coeffs: array_like</span>
+<span class="sd">            A 2d NumPy array of the shape (len(ctrls), len(tlist)). Each</span>
+<span class="sd">            row corresponds to the control pulse sequence for</span>
+<span class="sd">            one Hamiltonian.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span><span class="o">.</span><span class="n">gates</span>
+
+        <span class="n">dec</span> <span class="o">=</span> <span class="n">SpinChainCompiler</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paras</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="n">setup</span><span class="p">,</span>
+            <span class="n">global_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">num_ops</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">))</span>
+        <span class="n">tlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">gates</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span>
+
+        <span class="k">return</span> <span class="n">tlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span></div>
+
+<div class="viewcode-block" id="SpinChain.adjacent_gates"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain.adjacent_gates">[docs]</a>    <span class="k">def</span> <span class="nf">adjacent_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to resolve 2 qubit gates with non-adjacent control/s or target/s</span>
+<span class="sd">        in terms of gates with adjacent interactions for linear/circular spin</span>
+<span class="sd">        chain system.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qc: :class:`qutip.QubitCircuit`</span>
+<span class="sd">            The circular spin chain circuit to be resolved</span>
+
+<span class="sd">        setup: Boolean</span>
+<span class="sd">            Linear of Circular spin chain setup</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        qc: :class:`qutip.QubitCircuit`</span>
+<span class="sd">            Returns QubitCircuit of resolved gates for the qubit circuit in the</span>
+<span class="sd">            desired basis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FIXME This huge block has been here for a long time.</span>
+        <span class="c1"># It could be moved to the new compiler section and carefully</span>
+        <span class="c1"># splitted into smaller peaces.</span>
+        <span class="n">qc_t</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">qc</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">qc</span><span class="o">.</span><span class="n">reverse_states</span><span class="p">)</span>
+        <span class="n">swap_gates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SQRTSWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;BERKELEY&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;SWAPalpha&quot;</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">N</span>
+
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">qc</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span> <span class="ow">or</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">setup</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span> <span class="ow">or</span>
+                        <span class="p">(</span><span class="n">setup</span> <span class="o">==</span> <span class="s2">&quot;circular&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">N</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)):</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">start</span>
+                    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+                                <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="c1"># Apply required gate if control and target are</span>
+                            <span class="c1"># adjacent to each other, provided |control-target|</span>
+                            <span class="c1"># is even.</span>
+                            <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                        <span class="k">elif</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span>
+                              <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                            <span class="c1"># Apply a swap between i and its adjacent gate,</span>
+                            <span class="c1"># then the required gate if and then another swap</span>
+                            <span class="c1"># if control and target have one qubit between</span>
+                            <span class="c1"># them, provided |control-target| is odd.</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># Swap the target/s and/or control with their</span>
+                            <span class="c1"># adjacent qubit to bring them closer.</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                                   <span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span><span class="p">])</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">elif</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    If the resolving has to go backwards, the path is first</span>
+<span class="sd">                    mapped to a separate circuit and then copied back to the</span>
+<span class="sd">                    original circuit.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span><span class="p">):</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+                                <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                                <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                        <span class="k">elif</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span>
+                              <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                                <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                              <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span>
+                                          <span class="p">[</span><span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                           <span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span><span class="p">])</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">temp</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">]:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                              <span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                              <span class="p">[</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                        <span class="k">elif</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">]:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                              <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                              <span class="p">[</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="s2">&quot;CSIGN&quot;</span><span class="p">]:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                              <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">,</span>
+                                              <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                              <span class="p">[(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">,</span>
+                                               <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">])</span>
+                        <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="k">elif</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">==</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">swap_gates</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">setup</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span> <span class="ow">or</span>
+                        <span class="p">(</span><span class="n">setup</span> <span class="o">==</span> <span class="s2">&quot;circular&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">N</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)):</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">start</span>
+                    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+                                <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                        <span class="k">elif</span> <span class="p">((</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span>
+                              <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                                   <span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span><span class="p">])</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span><span class="p">):</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+                                <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+                        <span class="k">elif</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span>
+                              <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">+</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                            <span class="n">temp</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                                   <span class="n">N</span> <span class="o">+</span> <span class="n">start</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="n">i</span><span class="p">])</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">temp</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                      <span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                        <span class="k">elif</span><span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">N</span> <span class="o">-</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                          <span class="p">[</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                           <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                          <span class="p">[(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">,</span>
+                                           <span class="p">(</span><span class="n">end</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">N</span><span class="p">])</span>
+                        <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">qc_t</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span>
+                              <span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">arg_label</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">qc_t</span></div>
+
+<div class="viewcode-block" id="SpinChain.eliminate_auxillary_modes"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain.eliminate_auxillary_modes">[docs]</a>    <span class="k">def</span> <span class="nf">eliminate_auxillary_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">U</span></div>
+
+<div class="viewcode-block" id="SpinChain.optimize_circuit"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.SpinChain.optimize_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">optimize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Take a quantum circuit/algorithm and convert it into the</span>
+<span class="sd">        optimal form/basis for the desired physical system.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qc: :class:`qutip.QubitCircuit`</span>
+<span class="sd">            Takes the quantum circuit to be implemented.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        qc: :class:`qutip.QubitCircuit`</span>
+<span class="sd">            The circuit representation with elementary gates</span>
+<span class="sd">            that can be implemented in this model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc0</span> <span class="o">=</span> <span class="n">qc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacent_gates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qc0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qc2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc1</span><span class="o">.</span><span class="n">resolve_gates</span><span class="p">(</span>
+            <span class="n">basis</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">,</span> <span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qc2</span></div></div>
+
+
+<div class="viewcode-block" id="LinearSpinChain"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.LinearSpinChain">[docs]</a><span class="k">class</span> <span class="nc">LinearSpinChain</span><span class="p">(</span><span class="n">SpinChain</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A processor based on the physical implementation of</span>
+<span class="sd">    a linear spin chain qubits system.</span>
+<span class="sd">    The available Hamiltonian of the system is predefined.</span>
+<span class="sd">    The processor can simulate the evolution under the given</span>
+<span class="sd">    control pulses either numerically or analytically.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of qubits in the system.</span>
+
+<span class="sd">    correct_global_phase: float</span>
+<span class="sd">        Save the global phase, the analytical solution</span>
+<span class="sd">        will track the global phase.</span>
+<span class="sd">        It has no effect on the numerical solution.</span>
+
+<span class="sd">    sx: int or list</span>
+<span class="sd">        The delta for each of the qubits in the system.</span>
+
+<span class="sd">    sz: int or list</span>
+<span class="sd">        The epsilon for each of the qubits in the system.</span>
+
+<span class="sd">    sxsy: int or list</span>
+<span class="sd">        The interaction strength for each of the qubit pair in the system.</span>
+
+<span class="sd">    t1: list or float, optional</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit.</span>
+
+<span class="sd">    t2: list of float, optional</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">sx</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sxsy</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">LinearSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="o">=</span><span class="n">correct_global_phase</span><span class="p">,</span>
+            <span class="n">sx</span><span class="o">=</span><span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="o">=</span><span class="n">sxsy</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">t2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_up_params</span><span class="p">(</span><span class="n">sx</span><span class="o">=</span><span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="o">=</span><span class="n">sxsy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_up_ops</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LinearSpinChain.set_up_ops"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.LinearSpinChain.set_up_ops">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LinearSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_up_ops</span><span class="p">(</span><span class="n">N</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LinearSpinChain.set_up_params"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.LinearSpinChain.set_up_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="p">):</span>
+        <span class="c1"># Doc same as in the parent class</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LinearSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_up_params</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="p">)</span>
+        <span class="n">sxsy_para</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_para_list</span><span class="p">(</span><span class="n">sxsy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paras</span><span class="p">[</span><span class="s2">&quot;sxsy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sxsy_para</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sxsy_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sxsy_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LinearSpinChain.load_circuit"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.LinearSpinChain.load_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">load_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LinearSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="s2">&quot;linear&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">get_ops_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">([</span><span class="sa">r</span><span class="s2">&quot;$\sigma_x^</span><span class="si">%d</span><span class="s2">$&quot;</span> <span class="o">%</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)]</span> <span class="o">+</span>
+                <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_z^</span><span class="si">%d</span><span class="s2">$&quot;</span> <span class="o">%</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)]</span> <span class="o">+</span>
+                <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_x^</span><span class="si">%d</span><span class="s2">\sigma_x^{</span><span class="si">%d</span><span class="s2">} + \sigma_y^</span><span class="si">%d</span><span class="s2">\sigma_y^{</span><span class="si">%d</span><span class="s2">}$&quot;</span>
+                 <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="LinearSpinChain.adjacent_gates"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.LinearSpinChain.adjacent_gates">[docs]</a>    <span class="k">def</span> <span class="nf">adjacent_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LinearSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">adjacent_gates</span><span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="s2">&quot;linear&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CircularSpinChain"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.CircularSpinChain">[docs]</a><span class="k">class</span> <span class="nc">CircularSpinChain</span><span class="p">(</span><span class="n">SpinChain</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A processor based on the physical implementation of</span>
+<span class="sd">    a circular spin chain qubits system.</span>
+<span class="sd">    The available Hamiltonian of the system is predefined.</span>
+<span class="sd">    The processor can simulate the evolution under the given</span>
+<span class="sd">    control pulses either numerically or analytically.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of qubits in the system.</span>
+
+<span class="sd">    correct_global_phase: float</span>
+<span class="sd">        Save the global phase, the analytical solution</span>
+<span class="sd">        will track the global phase.</span>
+<span class="sd">        It has no effect on the numerical solution.</span>
+
+<span class="sd">    sx: int or list</span>
+<span class="sd">        The delta for each of the qubits in the system.</span>
+
+<span class="sd">    sz: int or list</span>
+<span class="sd">        The epsilon for each of the qubits in the system.</span>
+
+<span class="sd">    sxsy: int or list</span>
+<span class="sd">        The interaction strength for each of the qubit pair in the system.</span>
+
+<span class="sd">    t1: list or float, optional</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit.</span>
+
+<span class="sd">    t2: list of float, optional</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">sx</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sxsy</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">CircularSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="o">=</span><span class="n">correct_global_phase</span><span class="p">,</span>
+            <span class="n">sx</span><span class="o">=</span><span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="o">=</span><span class="n">sxsy</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">t2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_up_params</span><span class="p">(</span><span class="n">sx</span><span class="o">=</span><span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="o">=</span><span class="n">sxsy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_up_ops</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CircularSpinChain.set_up_ops"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.CircularSpinChain.set_up_ops">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CircularSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_up_ops</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">operator</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">()])</span> <span class="o">+</span> <span class="n">tensor</span><span class="p">([</span><span class="n">sigmay</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Pulse</span><span class="p">(</span><span class="n">operator</span><span class="p">,</span> <span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">spline_kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CircularSpinChain.set_up_params"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.CircularSpinChain.set_up_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">sxsy</span><span class="p">):</span>
+        <span class="c1"># Doc same as in the parent class</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CircularSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_up_params</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sz</span><span class="p">)</span>
+        <span class="n">sxsy_para</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_para_list</span><span class="p">(</span><span class="n">sxsy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paras</span><span class="p">[</span><span class="s2">&quot;sxsy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sxsy_para</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sxsy_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sxsy_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+
+<div class="viewcode-block" id="CircularSpinChain.load_circuit"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.CircularSpinChain.load_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">load_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CircularSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="s2">&quot;circular&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">get_ops_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">([</span><span class="sa">r</span><span class="s2">&quot;$\sigma_x^</span><span class="si">%d</span><span class="s2">$&quot;</span> <span class="o">%</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)]</span> <span class="o">+</span>
+                <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_z^</span><span class="si">%d</span><span class="s2">$&quot;</span> <span class="o">%</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)]</span> <span class="o">+</span>
+                <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_x^</span><span class="si">%d</span><span class="s2">\sigma_x^{</span><span class="si">%d</span><span class="s2">} + \sigma_y^</span><span class="si">%d</span><span class="s2">\sigma_y^{</span><span class="si">%d</span><span class="s2">}$&quot;</span>
+                 <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+                 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="CircularSpinChain.adjacent_gates"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.CircularSpinChain.adjacent_gates">[docs]</a>    <span class="k">def</span> <span class="nf">adjacent_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CircularSpinChain</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">adjacent_gates</span><span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="s2">&quot;circular&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Feb 01, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
