@@ -1,0 +1,733 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qutip.qip.noise &mdash; QuTiP 4.5 Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/qutip_examples/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.qip.noise</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.qip.noise</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">normal</span>
+
+<span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span><span class="p">,</span> <span class="n">EvoElement</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.operations</span> <span class="kn">import</span> <span class="n">expand_operator</span>
+<span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
+<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">sigmaz</span><span class="p">,</span> <span class="n">destroy</span><span class="p">,</span> <span class="n">identity</span>
+<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.pulse</span> <span class="kn">import</span> <span class="n">Pulse</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Noise&quot;</span><span class="p">,</span> <span class="s2">&quot;DecoherenceNoise&quot;</span><span class="p">,</span> <span class="s2">&quot;RelaxationNoise&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;ControlAmpNoise&quot;</span><span class="p">,</span> <span class="s2">&quot;RandomNoise&quot;</span><span class="p">,</span> <span class="s2">&quot;UserNoise&quot;</span><span class="p">,</span> <span class="s2">&quot;process_noise&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">process_noise</span><span class="p">(</span><span class="n">pulses</span><span class="p">,</span> <span class="n">noise_list</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">device_noise</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply noise to the input list of pulses. It does not modify the input</span>
+<span class="sd">    pulse, but return a new one containing the noise.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">        The input pulses, on which the noise object will be applied.</span>
+<span class="sd">    noise_list: list of :class:`qutip.qip.noise`</span>
+<span class="sd">        A list of noise objects.</span>
+<span class="sd">    dims: int or list</span>
+<span class="sd">        Dimension of the system.</span>
+<span class="sd">        If int, we assume it is the number of qubits in the system.</span>
+<span class="sd">        If list, it is the dimension of the component systems.</span>
+<span class="sd">    t1: list or float, optional</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+<span class="sd">    t2: list of float, optional</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+<span class="sd">    device_noise: bool</span>
+<span class="sd">        If pulse independent noise such as relaxation are included.</span>
+<span class="sd">        Default is False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    noisy_pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">        The noisy pulses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># first the control pulse with noise,</span>
+    <span class="c1"># then additional pulse independent noise.</span>
+    <span class="n">noisy_pulses</span> <span class="o">=</span> <span class="n">process_pulse_noise</span><span class="p">(</span><span class="n">pulses</span><span class="p">,</span> <span class="n">noise_list</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">device_noise</span><span class="p">:</span>
+        <span class="n">noisy_pulses</span> <span class="o">+=</span> <span class="n">process_device_noise</span><span class="p">(</span><span class="n">noise_list</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">noisy_pulses</span>
+
+
+<span class="k">def</span> <span class="nf">process_device_noise</span><span class="p">(</span><span class="n">noise_list</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply pulse independent noise to the input list of pulses.</span>
+<span class="sd">    It does not modify the input</span>
+<span class="sd">    pulse, but return a new one containing the noise.</span>
+<span class="sd">    Pulse dependent noise will be ignored.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    noise_list: list of :class:`qutip.qip.noise`</span>
+<span class="sd">        A list of noise objects.</span>
+<span class="sd">    dims: int or list</span>
+<span class="sd">        Dimension of the system.</span>
+<span class="sd">        If int, we assume it is the number of qubits in the system.</span>
+<span class="sd">        If list, it is the dimension of the component systems.</span>
+<span class="sd">    t1: list or float, optional</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+<span class="sd">    t2: list of float, optional</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    noisy_pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">        A list of Dummy pulse objects with zero Hamiltonian</span>
+<span class="sd">        by non-trivial noise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">device_noise</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">t2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">device_noise</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RelaxationNoise</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span><span class="o">.</span><span class="n">get_noisy_dynamics</span><span class="p">(</span><span class="n">dims</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">noise</span> <span class="ow">in</span> <span class="n">noise_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="p">(</span><span class="n">DecoherenceNoise</span><span class="p">,</span> <span class="n">RelaxationNoise</span><span class="p">)):</span>
+            <span class="n">device_noise</span> <span class="o">+=</span> <span class="p">[</span><span class="n">noise</span><span class="o">.</span><span class="n">get_noisy_dynamics</span><span class="p">(</span><span class="n">dims</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">device_noise</span>
+
+
+<span class="k">def</span> <span class="nf">process_pulse_noise</span><span class="p">(</span><span class="n">pulses</span><span class="p">,</span> <span class="n">noise_list</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply pulse dependent noise to the input list of pulses.</span>
+<span class="sd">    It does not modify the input</span>
+<span class="sd">    pulse, but return a new one containing the noise.</span>
+<span class="sd">    Device noise noise will be ignored.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">        The input pulses, on which the noise object will be applied.</span>
+<span class="sd">    noise_list: list of :class:`qutip.qip.noise`</span>
+<span class="sd">        A list of noise objects.</span>
+<span class="sd">    dims: int or list</span>
+<span class="sd">        Dimension of the system.</span>
+<span class="sd">        If int, we assume it is the number of qubits in the system.</span>
+<span class="sd">        If list, it is the dimension of the component systems.</span>
+
+<span class="sd">    noisy_pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">        The list of pulses with pulse dependent noise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">noisy_pulses</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">pulses</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">noise</span> <span class="ow">in</span> <span class="n">noise_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">ControlAmpNoise</span><span class="p">):</span>
+            <span class="n">noisy_pulses</span> <span class="o">=</span> <span class="n">noise</span><span class="o">.</span><span class="n">get_noisy_dynamics</span><span class="p">(</span><span class="n">noisy_pulses</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">UserNoise</span><span class="p">):</span>
+            <span class="n">noisy_pulses</span> <span class="o">=</span> <span class="n">noise</span><span class="o">.</span><span class="n">get_noisy_dynamics</span><span class="p">(</span><span class="n">pulses</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">noisy_pulses</span>
+
+
+<span class="k">class</span> <span class="nc">Noise</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The base class representing noise in a processor.</span>
+<span class="sd">    The noise object can be added to :class:`qutip.qip.device.Processor` and</span>
+<span class="sd">    contributes to evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_check_coeff_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">ops_num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ops_num</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The length of coeffs is not </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ops_num</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="DecoherenceNoise"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.DecoherenceNoise">[docs]</a><span class="k">class</span> <span class="nc">DecoherenceNoise</span><span class="p">(</span><span class="n">Noise</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The decoherence noise in a processor. It generates lindblad noise</span>
+<span class="sd">    according to the given collapse operator `c_ops`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c_ops: :class:`qutip.Qobj` or list</span>
+<span class="sd">        The Hamiltonian representing the dynamics of the noise.</span>
+<span class="sd">    targets: int or list, optional</span>
+<span class="sd">        The indices of qubits that are acted on. Default is on all</span>
+<span class="sd">        qubits</span>
+<span class="sd">    coeff: list, optional</span>
+<span class="sd">        A list of the coefficients for the control Hamiltonians.</span>
+<span class="sd">    tlist: array_like, optional</span>
+<span class="sd">        A NumPy array specifies the time of each coefficient.</span>
+<span class="sd">    all_qubits: bool, optional</span>
+<span class="sd">        If `c_ops` contains only single qubits collapse operator,</span>
+<span class="sd">        ``all_qubits=True`` will allow it to be applied to all qubits.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    c_ops: :class:`qutip.Qobj` or list</span>
+<span class="sd">        The Hamiltonian representing the dynamics of the noise.</span>
+<span class="sd">    targets: int or list</span>
+<span class="sd">        The indices of qubits that are acted on.</span>
+<span class="sd">    coeff: list</span>
+<span class="sd">        A list of the coefficients for the control Hamiltonians.</span>
+<span class="sd">    tlist: array_like</span>
+<span class="sd">        A NumPy array specifies the time of each coefficient.</span>
+<span class="sd">    all_qubits: bool</span>
+<span class="sd">        If `c_ops` contains only single qubits collapse operator,</span>
+<span class="sd">        ``all_qubits=True`` will allow it to be applied to all qubits.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">all_qubits</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ops</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span> <span class="o">=</span> <span class="n">c_ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="k">if</span> <span class="n">all_qubits</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">c_op</span><span class="o">.</span><span class="n">dims</span> <span class="o">==</span> <span class="p">[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;The operator is not a single qubit operator, &quot;</span>
+                    <span class="s2">&quot;thus cannot be applied to all qubits&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_qubits</span> <span class="o">=</span> <span class="n">all_qubits</span>
+
+<div class="viewcode-block" id="DecoherenceNoise.get_noisy_dynamics"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.DecoherenceNoise.get_noisy_dynamics">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_dynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of Pulse object with only trivial ideal pulse (H=0) but</span>
+<span class="sd">        non-trivial lindblad noise.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dims: list, optional</span>
+<span class="sd">            The dimension of the components system, the default value is</span>
+<span class="sd">            [2,2...,2] for qubits system.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        lindblad_noise: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            A list of Pulse object with only trivial ideal pulse (H=0) but</span>
+<span class="sd">            non-trivial lindblad noise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">dims</span>
+        <span class="c1"># time-independent</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">lindblad_noise</span> <span class="o">=</span> <span class="n">Pulse</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_qubits</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">targets</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                    <span class="n">lindblad_noise</span><span class="o">.</span><span class="n">add_lindblad_noise</span><span class="p">(</span>
+                        <span class="n">c_op</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lindblad_noise</span><span class="o">.</span><span class="n">add_lindblad_noise</span><span class="p">(</span>
+                    <span class="n">c_op</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lindblad_noise</span></div></div>
+
+
+<div class="viewcode-block" id="RelaxationNoise"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.RelaxationNoise">[docs]</a><span class="k">class</span> <span class="nc">RelaxationNoise</span><span class="p">(</span><span class="n">Noise</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The decoherence on each qubit characterized by two time scales t1 and t2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    t1: float or list, optional</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit.</span>
+<span class="sd">    t2: float or list, optional</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit.</span>
+<span class="sd">    targets: int or list, optional</span>
+<span class="sd">        The indices of qubits that are acted on. Default is on all</span>
+<span class="sd">        qubits</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    t1: float or list</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit.</span>
+<span class="sd">    t2: float or list</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit.</span>
+<span class="sd">    targets: int or list</span>
+<span class="sd">        The indices of qubits that are acted on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="n">t1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">t2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+
+    <span class="k">def</span> <span class="nf">_T_to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the relaxation time is valid</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        T: list of float</span>
+<span class="sd">            The relaxation time</span>
+<span class="sd">        N: int</span>
+<span class="sd">            The number of component systems.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        T: list</span>
+<span class="sd">            The relaxation time in Python list form</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="n">T</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">T</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">==</span> <span class="n">N</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">)</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">T</span><span class="p">]):</span>
+                <span class="k">return</span> <span class="n">T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid relaxation time T=</span><span class="si">{}</span><span class="s2">,&quot;</span>
+                <span class="s2">&quot;either the length is not equal to the number of qubits, &quot;</span>
+                <span class="s2">&quot;or T is not a positive number.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">))</span>
+
+<div class="viewcode-block" id="RelaxationNoise.get_noisy_dynamics"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.RelaxationNoise.get_noisy_dynamics">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_dynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of Pulse object with only trivial ideal pulse (H=0) but</span>
+<span class="sd">        non-trivial relaxation noise.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dims: list, optional</span>
+<span class="sd">            The dimension of the components system, the default value is</span>
+<span class="sd">            [2,2...,2] for qubits system.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        lindblad_noise: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            A list of Pulse object with only trivial ideal pulse (H=0) but</span>
+<span class="sd">            non-trivial relaxation noise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">d</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Relaxation noise is defined only for qubits system&quot;</span><span class="p">)</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">dims</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T_to_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T_to_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">N</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Length of t1 or t2 does not match N, &quot;</span>
+                <span class="s2">&quot;len(t1)=</span><span class="si">{}</span><span class="s2">, len(t2)=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t2</span><span class="p">)))</span>
+        <span class="n">lindblad_noise</span> <span class="o">=</span> <span class="n">Pulse</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+        <span class="k">for</span> <span class="n">qu_ind</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">[</span><span class="n">qu_ind</span><span class="p">]</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2</span><span class="p">[</span><span class="n">qu_ind</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">t1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">op</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span> <span class="o">*</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">lindblad_noise</span><span class="o">.</span><span class="n">add_lindblad_noise</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">qu_ind</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">t2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Keep the total dephasing ~ exp(-t/t2)</span>
+                <span class="k">if</span> <span class="n">t1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="mi">2</span><span class="o">*</span><span class="n">t1</span> <span class="o">&lt;</span> <span class="n">t2</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">&quot;t1=</span><span class="si">{}</span><span class="s2">, t2=</span><span class="si">{}</span><span class="s2"> does not fulfill &quot;</span>
+                            <span class="s2">&quot;2*t1&gt;t2&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">))</span>
+                    <span class="n">T2_eff</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">t2</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="o">/</span><span class="n">t1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">T2_eff</span> <span class="o">=</span> <span class="n">t2</span>
+                <span class="n">op</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">T2_eff</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmaz</span><span class="p">()</span>
+                <span class="n">lindblad_noise</span><span class="o">.</span><span class="n">add_lindblad_noise</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">qu_ind</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lindblad_noise</span></div></div>
+
+
+<div class="viewcode-block" id="ControlAmpNoise"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.ControlAmpNoise">[docs]</a><span class="k">class</span> <span class="nc">ControlAmpNoise</span><span class="p">(</span><span class="n">Noise</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The noise in the amplitude of the control pulse.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coeff: list</span>
+<span class="sd">        A list of the coefficients for the control Hamiltonians.</span>
+<span class="sd">        For available choices, see :class:`qutip.QobjEvo`.</span>
+<span class="sd">    tlist: array_like, optional</span>
+<span class="sd">        A NumPy array specifies the time of each coefficient.</span>
+<span class="sd">    indices: list of int, optional</span>
+<span class="sd">        The indices of target pulse in the list of pulses.</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coeff: list</span>
+<span class="sd">        A list of the coefficients for the control Hamiltonians.</span>
+<span class="sd">        For available choices, see :class:`qutip.QobjEvo`.</span>
+<span class="sd">    tlist: array_like</span>
+<span class="sd">        A NumPy array specifies the time of each coefficient.</span>
+<span class="sd">    indices: list of int</span>
+<span class="sd">        The indices of target pulse in the list of pulses.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span>
+
+<div class="viewcode-block" id="ControlAmpNoise.get_noisy_dynamics"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.ControlAmpNoise.get_noisy_dynamics">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_dynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of pulses containing the input pulse with additional</span>
+<span class="sd">        coherent noise.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            The input pulses, on which the noise object will be applied.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        noisy_pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            The input `Pulse` object with additional coherent noise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pulses</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">pulses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="n">coeff</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">coeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tlist</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span>
+            <span class="n">pulses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">add_coherent_noise</span><span class="p">(</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">qobj</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pulses</span></div></div>
+
+
+<div class="viewcode-block" id="RandomNoise"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.RandomNoise">[docs]</a><span class="k">class</span> <span class="nc">RandomNoise</span><span class="p">(</span><span class="n">ControlAmpNoise</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Random noise in the amplitude of the control pulse. The arguments for</span>
+<span class="sd">    the random generator need to be given as key word arguments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dt: float, optional</span>
+<span class="sd">        The time interval between two random amplitude. The coefficients</span>
+<span class="sd">        of the noise are the same within this time range.</span>
+<span class="sd">    rand_gen: numpy.random, optional</span>
+<span class="sd">        A random generator in numpy.random, it has to take a ``size``</span>
+<span class="sd">        parameter as the size of random numbers in the output array.</span>
+<span class="sd">    indices: list of int, optional</span>
+<span class="sd">        The indices of target pulse in the list of pulses.</span>
+<span class="sd">    kwargs:</span>
+<span class="sd">        Key word arguments for the random number generator.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dt: float, optional</span>
+<span class="sd">        The time interval between two random amplitude. The coefficients</span>
+<span class="sd">        of the noise are the same within this time range.</span>
+<span class="sd">    rand_gen: numpy.random, optional</span>
+<span class="sd">        A random generator in numpy.random, it has to take a ``size``</span>
+<span class="sd">        parameter.</span>
+<span class="sd">    indices: list of int</span>
+<span class="sd">        The indices of target pulse in the list of pulses.</span>
+<span class="sd">    kwargs:</span>
+<span class="sd">        Key word arguments for the random number generator.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; gaussnoise = RandomNoise(</span>
+<span class="sd">            dt=0.1, rand_gen=np.random.normal, loc=mean, scale=std)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">rand_gen</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RandomNoise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">coeff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rand_gen</span> <span class="o">=</span> <span class="n">rand_gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">if</span> <span class="s2">&quot;size&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;size is preditermined inside the noise object.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span>
+
+<div class="viewcode-block" id="RandomNoise.get_noisy_dynamics"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.RandomNoise.get_noisy_dynamics">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_dynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of pulses containing the input pulse with additional</span>
+<span class="sd">        coherent noise.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            The input pulses, on which the noise object will be applied.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        noisy_pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            The input `Pulse` object with additional coherent noise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pulses</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span>
+        <span class="n">t_max</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">t_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">pulses</span><span class="p">:</span>
+            <span class="n">t_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">),</span> <span class="n">t_max</span><span class="p">)</span>
+            <span class="n">t_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">),</span> <span class="n">t_min</span><span class="p">)</span>
+        <span class="c1"># create new tlist and random coeff</span>
+        <span class="n">num_rand</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">t_max</span> <span class="o">-</span> <span class="n">t_min</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">num_rand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)[:</span><span class="n">num_rand</span><span class="p">]</span> <span class="o">+</span> <span class="n">t_min</span><span class="p">)</span>
+        <span class="c1"># [:num_rand] for round of error like 0.2*6=1.2000000000002</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">pulses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rand_gen</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num_rand</span><span class="p">)</span>
+            <span class="n">pulses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">add_coherent_noise</span><span class="p">(</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">qobj</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pulses</span></div></div>
+
+
+<div class="viewcode-block" id="UserNoise"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.UserNoise">[docs]</a><span class="k">class</span> <span class="nc">UserNoise</span><span class="p">(</span><span class="n">Noise</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Template class for user defined noise. It is classified as a pulse</span>
+<span class="sd">    dependent noise. By calling the method `get_noisy_dynamics`,</span>
+<span class="sd">    it should return the input pulses with additional</span>
+<span class="sd">    coherent and/or lindblad noise. If there are</span>
+<span class="sd">    pulse independent noise, a dummy Pulse can be created by</span>
+<span class="sd">    ``Pulse(None, None)``. The modified input pulses should always</span>
+<span class="sd">    be at the begining of the list, followed by the dummy pulses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="UserNoise.get_noisy_dynamics"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.noise.UserNoise.get_noisy_dynamics">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_dynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulses</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Template method.</span>
+<span class="sd">        It should return a list of pulses with noise.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            The input pulses, on which the noise object will be applied.</span>
+
+<span class="sd">        dims: list, optional</span>
+<span class="sd">            The dimension of the components system, the default value is</span>
+<span class="sd">            [2,2...,2] for qubits system.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        noisy_pulses: list of :class:`qutip.qip.Pulse`</span>
+<span class="sd">            The input `Pulse` object with additional noise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pulses</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Feb 01, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

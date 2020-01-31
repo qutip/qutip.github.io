@@ -1,0 +1,870 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Basic Operations on Quantum Objects &mdash; QuTiP 4.4 Documentation</title>
+
+
+
+
+    <link rel="shortcut icon" href="../static/favicon.ico"/>
+
+
+
+
+
+  <script type="text/javascript" src="../static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../static/documentation_options.js"></script>
+        <script type="text/javascript" src="../static/jquery.js"></script>
+        <script type="text/javascript" src="../static/underscore.js"></script>
+        <script type="text/javascript" src="../static/doctools.js"></script>
+        <script type="text/javascript" src="../static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript" src="../static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Manipulating States and Operators" href="guide-states.html" />
+    <link rel="prev" title="Guide Overview" href="guide-overview.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                4.4
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic Operations on Quantum Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#first-things-first">First things first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-quantum-object-class">The quantum object class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#states-and-operators">States and operators</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qobj-attributes">Qobj attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qobj-math">Qobj Math</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions-operating-on-qobj-class">Functions operating on Qobj class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+
+          <li><a href="guide.html">Users Guide</a> &raquo;</li>
+
+      <li>Basic Operations on Quantum Objects</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="basic-operations-on-quantum-objects">
+<span id="basics"></span><h1>Basic Operations on Quantum Objects<a class="headerlink" href="#basic-operations-on-quantum-objects" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="first-things-first">
+<span id="basics-first"></span><h2>First things first<a class="headerlink" href="#first-things-first" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not run QuTiP from the installation directory.</p>
+</div>
+<p>To load the qutip modules, we must first call the import statement:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>that will load all of the user available functions. Often, we also need to import the NumPy and Matplotlib libraries with:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<p>Note that, in the rest of the documentation, functions are written using <cite>qutip.module.function()</cite> notation which links to the corresponding function in the QuTiP API: <a class="reference internal" href="../apidoc/functions.html#functions"><span class="std std-ref">Functions</span></a>. However, in calling <cite>import *</cite>, we have already loaded all of the QuTiP modules. Therefore, we will only need the function name and not the complete path when calling the function from the interpreter prompt, Python script, or Jupyter notebook.</p>
+</div>
+<div class="section" id="the-quantum-object-class">
+<span id="basics-qobj"></span><h2>The quantum object class<a class="headerlink" href="#the-quantum-object-class" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<span id="basics-qobj-intro"></span><h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>The key difference between classical and quantum mechanics lies in the use of operators instead of numbers as variables. Moreover, we need to specify state vectors and their properties. Therefore, in computing the dynamics of quantum systems we need a data structure that is capable of encapsulating the properties of a quantum operator and ket/bra vectors. The quantum object class, <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, accomplishes this using matrix representation.</p>
+<p>To begin, let us create a blank <code class="docutils literal notranslate"><span class="pre">Qobj</span></code>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">Qobj</span><span class="p">()</span>
+<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[1], [1]], shape = (1, 1), type = bra</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.]]</span>
+</pre></div>
+</div>
+<p>where we see the blank <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> object with dimensions, shape, and data. Here the data corresponds to a 1x1-dimensional matrix consisting of a single zero entry.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>By convention, Class objects in Python such as <code class="docutils literal notranslate"><span class="pre">Qobj()</span></code> differ from functions in the use of a beginning capital letter.</p>
+</div>
+<p>We can create a <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> with a user defined data set by passing a list or array of data into the <code class="docutils literal notranslate"><span class="pre">Qobj</span></code>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">Qobj</span><span class="p">([[</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">]])</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = (5, 1), type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[1.]</span>
+<span class="go"> [2.]</span>
+<span class="go"> [3.]</span>
+<span class="go"> [4.]</span>
+<span class="go"> [5.]]</span>
+
+<span class="gp">In [6]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+
+<span class="gp">In [7]: </span><span class="n">Qobj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[1], [5]], shape = (1, 5), type = bra</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[1. 2. 3. 4. 5.]]</span>
+
+<span class="gp">In [8]: </span><span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">Qobj</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[4], [4]], shape = (4, 4), type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.05466434 0.64087948 0.17482837 0.515324  ]</span>
+<span class="go"> [0.70784678 0.524319   0.31937872 0.56781693]</span>
+<span class="go"> [0.93001784 0.30682201 0.83393431 0.11172942]</span>
+<span class="go"> [0.17233207 0.48796145 0.88912997 0.94194679]]</span>
+</pre></div>
+</div>
+<p>Notice how both the dims and shape change according to the input data.  Although dims and shape appear to have the same function, the difference will become quite clear in the section on <a class="reference internal" href="guide-tensor.html#tensor"><span class="std std-ref">tensor products and partial traces</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are running QuTiP from a python script you must use the <code class="xref py py-func docutils literal notranslate"><span class="pre">print</span></code> function to view the Qobj attributes.</p>
+</div>
+</div>
+<div class="section" id="states-and-operators">
+<span id="basics-qobj-states"></span><h3>States and operators<a class="headerlink" href="#states-and-operators" title="Permalink to this headline">¶</a></h3>
+<p>Manually specifying the data for each quantum object is inefficient. Even more so when most objects correspond to commonly used types such as the ladder operators of a harmonic oscillator, the Pauli spin operators for a two-level system, or state vectors such as Fock states. Therefore, QuTiP includes predefined objects for a variety of states:</p>
+<table class="table-striped docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 34%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>States</p></th>
+<th class="head"><p>Command (# means optional)</p></th>
+<th class="head"><p>Inputs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fock state ket vector</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">basis(N,#m)</span></code>/<code class="docutils literal notranslate"><span class="pre">fock(N,#m)</span></code></p></td>
+<td><p>N = number of levels in Hilbert space,
+m = level containing excitation
+(0 if no m given)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fock density matrix
+(outer product of basis)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fock_dm(N,#p)</span></code></p></td>
+<td><p>same as basis(N,m) / fock(N,m)</p></td>
+</tr>
+<tr class="row-even"><td><p>Coherent state</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">coherent(N,alpha)</span></code></p></td>
+<td><p>alpha = complex number (eigenvalue)
+for requested coherent state</p></td>
+</tr>
+<tr class="row-odd"><td><p>Coherent density matrix
+(outer product)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">coherent_dm(N,alpha)</span></code></p></td>
+<td><p>same as coherent(N,alpha)</p></td>
+</tr>
+<tr class="row-even"><td><p>Thermal density matrix
+(for n particles)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">thermal_dm(N,n)</span></code></p></td>
+<td><p>n = particle number expectation value</p></td>
+</tr>
+</tbody>
+</table>
+<p>and operators:</p>
+<table class="table-striped docutils align-default">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 30%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operators</p></th>
+<th class="head"><p>Command (# means optional)</p></th>
+<th class="head"><p>Inputs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Charge operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">charge(N,M=-N)</span></code></p></td>
+<td><p>Diagonal operator with entries
+from M..0..N.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Commutator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">commutator(A,</span> <span class="pre">B,</span> <span class="pre">kind)</span></code></p></td>
+<td><p>Kind = ‘normal’ or ‘anti’.</p></td>
+</tr>
+<tr class="row-even"><td><p>Diagonals operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">qdiags(N)</span></code></p></td>
+<td><p>Quantum object created from arrays of
+diagonals at given offsets.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Displacement operator
+(Single-mode)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">displace(N,alpha)</span></code></p></td>
+<td><p>N=number of levels in Hilbert space,
+alpha = complex displacement amplitude.</p></td>
+</tr>
+<tr class="row-even"><td><p>Higher spin operators</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jmat(j,#s)</span></code></p></td>
+<td><p>j = integer or half-integer
+representing spin, s = ‘x’, ‘y’, ‘z’,
+‘+’, or ‘-‘</p></td>
+</tr>
+<tr class="row-odd"><td><p>Identity</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">qeye(N)</span></code></p></td>
+<td><p>N = number of levels in Hilbert space.</p></td>
+</tr>
+<tr class="row-even"><td><p>Lowering (destruction)
+operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">destroy(N)</span></code></p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-odd"><td><p>Momentum operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">momentum(N)</span></code></p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-even"><td><p>Number operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num(N)</span></code></p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-odd"><td><p>Phase operator
+(Single-mode)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">phase(N,</span> <span class="pre">phi0)</span></code></p></td>
+<td><p>Single-mode Pegg-Barnett phase
+operator with ref phase phi0.</p></td>
+</tr>
+<tr class="row-even"><td><p>Position operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">position(N)</span></code></p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-odd"><td><p>Raising (creation)
+operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">create(N)</span></code></p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-even"><td><p>Squeezing operator
+(Single-mode)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">squeeze(N,</span> <span class="pre">sp)</span></code></p></td>
+<td><p>N=number of levels in Hilbert space,
+sp = squeezing parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Squeezing operator
+(Generalized)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">squeezing(q1,</span> <span class="pre">q2,</span> <span class="pre">sp)</span></code></p></td>
+<td><p>q1,q2 = Quantum operators (Qobj)
+sp = squeezing parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>Sigma-X</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sigmax()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Sigma-Y</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sigmay()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Sigma-Z</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sigmaz()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Sigma plus</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sigmap()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Sigma minus</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sigmam()</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Tunneling operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tunneling(N,m)</span></code></p></td>
+<td><p>Tunneling operator with elements of the
+form <span class="math notranslate nohighlight">\(|N&gt;&lt;N+m| + |N+m&gt;&lt;N|\)</span>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>As an example, we give the output for a few of these functions:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = (5, 1), type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.]</span>
+<span class="go"> [0.]</span>
+<span class="go"> [0.]</span>
+<span class="go"> [1.]</span>
+<span class="go"> [0.]]</span>
+
+<span class="gp">In [11]: </span><span class="n">coherent</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.5</span><span class="o">-</span><span class="mf">0.5j</span><span class="p">)</span>
+<span class="go">                                                                                                                   Out[11]: </span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = (5, 1), type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 0.7788017 +0.j        ]</span>
+<span class="go"> [ 0.38939142-0.38939142j]</span>
+<span class="go"> [ 0.        -0.27545895j]</span>
+<span class="go"> [-0.07898617-0.07898617j]</span>
+<span class="go"> [-0.04314271+0.j        ]]</span>
+
+<span class="gp">In [12]: </span><span class="n">destroy</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                               Out[12]: </span>
+<span class="go">Quantum object: dims = [[4], [4]], shape = (4, 4), type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.         1.         0.         0.        ]</span>
+<span class="go"> [0.         0.         1.41421356 0.        ]</span>
+<span class="go"> [0.         0.         0.         1.73205081]</span>
+<span class="go"> [0.         0.         0.         0.        ]]</span>
+
+<span class="gp">In [13]: </span><span class="n">sigmaz</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Out[13]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 0. -1.]]</span>
+
+<span class="gp">In [14]: </span><span class="n">jmat</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Out[14]: </span>
+<span class="go">Quantum object: dims = [[6], [6]], shape = (6, 6), type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.         2.23606798 0.         0.         0.         0.        ]</span>
+<span class="go"> [0.         0.         2.82842712 0.         0.         0.        ]</span>
+<span class="go"> [0.         0.         0.         3.         0.         0.        ]</span>
+<span class="go"> [0.         0.         0.         0.         2.82842712 0.        ]</span>
+<span class="go"> [0.         0.         0.         0.         0.         2.23606798]</span>
+<span class="go"> [0.         0.         0.         0.         0.         0.        ]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qobj-attributes">
+<span id="basics-qobj-props"></span><h3>Qobj attributes<a class="headerlink" href="#qobj-attributes" title="Permalink to this headline">¶</a></h3>
+<p>We have seen that a quantum object has several internal attributes, such as data, dims, and shape.  These can be accessed in the following way:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">q</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [16]: </span><span class="n">q</span><span class="o">.</span><span class="n">dims</span>
+<span class="gh">Out[16]: </span><span class="go">[[4], [4]]</span>
+
+<span class="gp">In [17]: </span><span class="n">q</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">                    Out[17]: (4, 4)</span>
+</pre></div>
+</div>
+<p>In general, the attributes (properties) of a <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> object (or any Python class) can be retrieved using the <cite>Q.attribute</cite> notation.  In addition to the attributes shown with the <code class="docutils literal notranslate"><span class="pre">print</span></code> function, the <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> class also has the following:</p>
+<table class="table-striped docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Data</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.data</span></code></p></td>
+<td><p>Matrix representing state or operator</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dimensions</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.dims</span></code></p></td>
+<td><p>List keeping track of shapes for
+individual components of a
+multipartite system (for tensor
+products and partial traces).</p></td>
+</tr>
+<tr class="row-even"><td><p>Shape</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.shape</span></code></p></td>
+<td><p>Dimensions of underlying data matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p>is Hermitian?</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.isherm</span></code></p></td>
+<td><p>Is the operator Hermitian or not?</p></td>
+</tr>
+<tr class="row-even"><td><p>Type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.type</span></code></p></td>
+<td><p>Is object of type ‘ket, ‘bra’,
+‘oper’, or ‘super’?</p></td>
+</tr>
+</tbody>
+</table>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../images/quide-basics-qobj-box.png"><img alt="../images/quide-basics-qobj-box.png" src="../images/quide-basics-qobj-box.png" style="width: 3.5in;" /></a>
+<p class="caption"><span class="caption-text">The <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> Class viewed as a container for the properties need to characterize a quantum operator or state vector.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>For the destruction operator above:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">q</span><span class="o">.</span><span class="n">type</span>
+<span class="gh">Out[18]: </span><span class="go">&#39;oper&#39;</span>
+
+<span class="gp">In [19]: </span><span class="n">q</span><span class="o">.</span><span class="n">isherm</span>
+<span class="go">                Out[19]: False</span>
+
+<span class="gp">In [20]: </span><span class="n">q</span><span class="o">.</span><span class="n">data</span>
+<span class="go">                               Out[20]: </span>
+<span class="go">&lt;4x4 sparse matrix of type &#39;&lt;class &#39;numpy.complex128&#39;&gt;&#39;</span>
+<span class="go">	with 3 stored elements in Compressed Sparse Row format&gt;</span>
+</pre></div>
+</div>
+<p>The data attribute returns a message stating that the data is a sparse matrix. All <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> instances store their data as a sparse matrix to save memory. To access the underlying dense matrix one needs to use the <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj.full" title="qutip.Qobj.full"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.Qobj.full</span></code></a> function as described below.</p>
+</div>
+<div class="section" id="qobj-math">
+<span id="basics-qobj-math"></span><h3>Qobj Math<a class="headerlink" href="#qobj-math" title="Permalink to this headline">¶</a></h3>
+<p>The rules for mathematical operations on <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> instances are similar to standard matrix arithmetic:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">q</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">sigmax</span><span class="p">()</span>
+
+<span class="gp">In [23]: </span><span class="n">q</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gh">Out[23]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[4], [4]], shape = (4, 4), type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[5.         1.         0.         0.        ]</span>
+<span class="go"> [0.         5.         1.41421356 0.        ]</span>
+<span class="go"> [0.         0.         5.         1.73205081]</span>
+<span class="go"> [0.         0.         0.         5.        ]]</span>
+
+<span class="gp">In [24]: </span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
+<span class="go">                                                                                                                                                                                                                                                                                                  Out[24]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[1. 0.]</span>
+<span class="go"> [0. 1.]]</span>
+
+<span class="gp">In [25]: </span><span class="n">q</span> <span class="o">**</span> <span class="mi">3</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                         Out[25]: </span>
+<span class="go">Quantum object: dims = [[4], [4]], shape = (4, 4), type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.         0.         0.         2.44948974]</span>
+<span class="go"> [0.         0.         0.         0.        ]</span>
+<span class="go"> [0.         0.         0.         0.        ]</span>
+<span class="go"> [0.         0.         0.         0.        ]]</span>
+
+<span class="gp">In [26]: </span><span class="n">x</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Out[26]: </span>
+<span class="go">Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.         0.70710678]</span>
+<span class="go"> [0.70710678 0.        ]]</span>
+</pre></div>
+</div>
+<p>Of course, like matrices, multiplying two objects of incompatible shape throws an error:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">q</span> <span class="o">*</span> <span class="n">x</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">27</span><span class="o">-</span><span class="mi">57</span><span class="n">f05cd0899f</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">q</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="nn">~/release/build_doc/lib/python3.7/site-packages/qutip/qobj.py</span> in <span class="ni">__mul__</span><span class="nt">(self, other)</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span>
+<span class="g g-Whitespace">    </span><span class="mi">544</span>             <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">545</span>                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incompatible Qobj shapes&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">546</span>
+<span class="g g-Whitespace">    </span><span class="mi">547</span>         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+
+<span class="ne">TypeError</span>: Incompatible Qobj shapes
+</pre></div>
+</div>
+<p>In addition, the logic operators is equal <cite>==</cite> and is not equal <cite>!=</cite> are also supported.</p>
+</div>
+</div>
+<div class="section" id="functions-operating-on-qobj-class">
+<span id="basics-functions"></span><h2>Functions operating on Qobj class<a class="headerlink" href="#functions-operating-on-qobj-class" title="Permalink to this headline">¶</a></h2>
+<p>Like attributes, the quantum object class has defined functions (methods) that operate on <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> class instances. For a general quantum object <code class="docutils literal notranslate"><span class="pre">Q</span></code>:</p>
+<table class="table-striped docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 35%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Check Hermicity</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.check_herm()</span></code></p></td>
+<td><p>Check if quantum object is Hermitian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Conjugate</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.conj()</span></code></p></td>
+<td><p>Conjugate of quantum object.</p></td>
+</tr>
+<tr class="row-even"><td><p>Cosine</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.cosm()</span></code></p></td>
+<td><p>Cosine of quantum object.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dagger (adjoint)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.dag()</span></code></p></td>
+<td><p>Returns adjoint (dagger) of object.</p></td>
+</tr>
+<tr class="row-even"><td><p>Diagonal</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.diag()</span></code></p></td>
+<td><p>Returns the diagonal elements.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Diamond Norm</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.dnorm()</span></code></p></td>
+<td><p>Returns the diamond norm.</p></td>
+</tr>
+<tr class="row-even"><td><p>Eigenenergies</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.eigenenergies()</span></code></p></td>
+<td><p>Eigenenergies (values) of operator.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Eigenstates</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.eigenstates()</span></code></p></td>
+<td><p>Returns eigenvalues and eigenvectors.</p></td>
+</tr>
+<tr class="row-even"><td><p>Eliminate States</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.eliminate_states(inds)</span></code></p></td>
+<td><p>Returns quantum object with states in
+list inds removed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Exponential</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.expm()</span></code></p></td>
+<td><p>Matrix exponential of operator.</p></td>
+</tr>
+<tr class="row-even"><td><p>Extract States</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.extract_states(inds)</span></code></p></td>
+<td><p>Qobj with states listed in inds only.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Full</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.full()</span></code></p></td>
+<td><p>Returns full (not sparse) array of
+Q’s data.</p></td>
+</tr>
+<tr class="row-even"><td><p>Groundstate</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.groundstate()</span></code></p></td>
+<td><p>Eigenval &amp; eigket of Qobj groundstate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Matrix Element</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.matrix_element(bra,ket)</span></code></p></td>
+<td><p>Matrix element &lt;bra|Q|ket&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>Norm</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.norm()</span></code></p></td>
+<td><p>Returns L2 norm for states,
+trace norm for operators.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Overlap</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.overlap(state)</span></code></p></td>
+<td><p>Overlap between current Qobj and a
+given state.</p></td>
+</tr>
+<tr class="row-even"><td><p>Partial Trace</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.ptrace(sel)</span></code></p></td>
+<td><p>Partial trace returning components
+selected using ‘sel’ parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Permute</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.permute(order)</span></code></p></td>
+<td><p>Permutes the tensor structure of a
+composite object in the given order.</p></td>
+</tr>
+<tr class="row-even"><td><p>Projector</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.proj()</span></code></p></td>
+<td><p>Form projector operator from given
+ket or bra vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sine</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.sinm()</span></code></p></td>
+<td><p>Sine of quantum operator.</p></td>
+</tr>
+<tr class="row-even"><td><p>Sqrt</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.sqrtm()</span></code></p></td>
+<td><p>Matrix sqrt of operator.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tidyup</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.tidyup()</span></code></p></td>
+<td><p>Removes small elements from Qobj.</p></td>
+</tr>
+<tr class="row-even"><td><p>Trace</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.tr()</span></code></p></td>
+<td><p>Returns trace of quantum object.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Transform</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.transform(inpt)</span></code></p></td>
+<td><p>A basis transformation defined by
+matrix or list of kets ‘inpt’ .</p></td>
+</tr>
+<tr class="row-even"><td><p>Transpose</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.trans()</span></code></p></td>
+<td><p>Transpose of quantum object.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Truncate Neg</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.trunc_neg()</span></code></p></td>
+<td><p>Truncates negative eigenvalues</p></td>
+</tr>
+<tr class="row-even"><td><p>Unit</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.unit()</span></code></p></td>
+<td><p>Returns normalized (unit)
+vector Q/Q.norm().</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gh">Out[28]: </span><span class="go"></span>
+<span class="go">Quantum object: dims = [[5], [1]], shape = (5, 1), type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.]</span>
+<span class="go"> [0.]</span>
+<span class="go"> [0.]</span>
+<span class="go"> [1.]</span>
+<span class="go"> [0.]]</span>
+
+<span class="gp">In [29]: </span><span class="n">basis</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="go">                                                                                                                   Out[29]: </span>
+<span class="go">Quantum object: dims = [[1], [5]], shape = (1, 5), type = bra</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0. 0. 0. 1. 0.]]</span>
+
+<span class="gp">In [30]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                          Out[30]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = (5, 5), type = oper, isherm = True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.36791117 0.36774407 0.26105441 0.14620658 0.08826704]</span>
+<span class="go"> [0.36774407 0.36757705 0.26093584 0.14614018 0.08822695]</span>
+<span class="go"> [0.26105441 0.26093584 0.18523331 0.10374209 0.06263061]</span>
+<span class="go"> [0.14620658 0.14614018 0.10374209 0.05810197 0.035077  ]</span>
+<span class="go"> [0.08826704 0.08822695 0.06263061 0.035077   0.0211765 ]]</span>
+
+<span class="gp">In [31]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">diag</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Out[31]: array([0.36791117, 0.36757705, 0.18523331, 0.05810197, 0.0211765 ])</span>
+
+<span class="gp">In [32]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Out[32]: </span>
+<span class="go">array([[0.36791117+0.j, 0.36774407+0.j, 0.26105441+0.j, 0.14620658+0.j,</span>
+<span class="go">        0.08826704+0.j],</span>
+<span class="go">       [0.36774407+0.j, 0.36757705+0.j, 0.26093584+0.j, 0.14614018+0.j,</span>
+<span class="go">        0.08822695+0.j],</span>
+<span class="go">       [0.26105441+0.j, 0.26093584+0.j, 0.18523331+0.j, 0.10374209+0.j,</span>
+<span class="go">        0.06263061+0.j],</span>
+<span class="go">       [0.14620658+0.j, 0.14614018+0.j, 0.10374209+0.j, 0.05810197+0.j,</span>
+<span class="go">        0.035077  +0.j],</span>
+<span class="go">       [0.08826704+0.j, 0.08822695+0.j, 0.06263061+0.j, 0.035077  +0.j,</span>
+<span class="go">        0.0211765 +0.j]])</span>
+
+<span class="gp">In [33]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Out[33]: 1.000000029930193</span>
+
+<span class="gp">In [34]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Out[34]: </span>
+<span class="go">Quantum object: dims = [[5], [5]], shape = (5, 5), type = oper, isherm = False</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.36791119+0.00000000e+00j 0.36774406+0.00000000e+00j</span>
+<span class="go">  0.2610544 +0.00000000e+00j 0.14620658+0.00000000e+00j</span>
+<span class="go">  0.08826704+0.00000000e+00j]</span>
+<span class="go"> [0.36774406+0.00000000e+00j 0.36757705+9.33478344e-11j</span>
+<span class="go">  0.26093584+4.30453576e-11j 0.14614018-2.99165502e-10j</span>
+<span class="go">  0.08822695-2.06796067e-11j]</span>
+<span class="go"> [0.2610544 +0.00000000e+00j 0.26093584+4.30453576e-11j</span>
+<span class="go">  0.18523332+1.98494461e-11j 0.10374209-1.37953774e-10j</span>
+<span class="go">  0.06263061-9.53595840e-12j]</span>
+<span class="go"> [0.14620658+0.00000000e+00j 0.14614018-2.99165502e-10j</span>
+<span class="go">  0.10374209-1.37953774e-10j 0.05810197+9.58779581e-10j</span>
+<span class="go">  0.035077  +6.62749700e-11j]</span>
+<span class="go"> [0.08826704+0.00000000e+00j 0.08822695-2.06796067e-11j</span>
+<span class="go">  0.06263061-9.53595840e-12j 0.035077  +6.62749700e-11j</span>
+<span class="go">  0.0211765 +4.58121108e-12j]]</span>
+
+<span class="gp">In [35]: </span><span class="n">coherent_dm</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Out[35]: 1.0</span>
+
+<span class="gp">In [36]: </span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Out[36]: </span>
+<span class="go">Quantum object: dims = [[4], [1]], shape = (4, 1), type = ket</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0.        ]</span>
+<span class="go"> [0.70710678]</span>
+<span class="go"> [0.70710678]</span>
+<span class="go"> [0.        ]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="guide-states.html" class="btn btn-neutral float-right" title="Manipulating States and Operators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="guide-overview.html" class="btn btn-neutral float-left" title="Guide Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Jul 02, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>
