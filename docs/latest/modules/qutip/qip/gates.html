@@ -6,68 +6,65 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qutip.qip.gates &mdash; QuTiP 4.3 Documentation</title>
+  
 
-  <title>qutip.qip.gates &mdash; QuTiP 4.4 Documentation</title>
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
 
+  
 
+  
+  
+    
 
+  
 
-    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
-
-
-
-
-
-  <script type="text/javascript" src="../../../static/js/modernizr.min.js"></script>
-
-
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../static/jquery.js"></script>
-        <script type="text/javascript" src="../../../static/underscore.js"></script>
-        <script type="text/javascript" src="../../../static/doctools.js"></script>
-        <script type="text/javascript" src="../../../static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    <script type="text/javascript" src="../../../static/js/theme.js"></script>
-
-
-
-
-  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
 </head>
 
 <body class="wy-body-for-nav">
 
-
+   
   <div class="wy-grid-for-nav">
 
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
+          
 
-
-
+          
             <a href="../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
 
-
-
+          
           </a>
 
-
-
-
+          
+            
+            
               <div class="version">
-                4.4
+                4.3
               </div>
+            
+          
 
-
-
-
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,16 +73,16 @@
   </form>
 </div>
 
-
+          
         </div>
 
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+          
+            
+            
+              
+            
+            
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
@@ -96,28 +93,28 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
 </ul>
 
-
-
+            
+          
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
+      
       <nav class="wy-nav-top" aria-label="top navigation">
-
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
-
+        
       </nav>
 
 
       <div class="wy-nav-content">
-
+        
         <div class="rst-content">
-
-
+        
+          
 
 
 
@@ -136,26 +133,26 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-
+    
       <li><a href="../../../index.html">Docs</a> &raquo;</li>
-
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-
+        
       <li>qutip.qip.gates</li>
-
-
+    
+    
       <li class="wy-breadcrumbs-aside">
-
+        
       </li>
-
+    
   </ul>
 
-
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
+            
   <h1>Source code for qutip.qip.gates</h1><div class="highlight"><pre>
 <span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
 <span class="c1">#</span>
@@ -189,11 +186,7 @@
 <span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
 <span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <span class="c1">###############################################################################</span>
-<span class="kn">import</span> <span class="nn">numbers</span>
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="k">import</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">reduce</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">mul</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
@@ -202,15 +195,16 @@
 <span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="k">import</span> <span class="n">tensor</span>
 <span class="kn">from</span> <span class="nn">qutip.states</span> <span class="k">import</span> <span class="n">fock_dm</span>
 
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">mul</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="s1">&#39;ry&#39;</span><span class="p">,</span> <span class="s1">&#39;rz&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrtnot&#39;</span><span class="p">,</span> <span class="s1">&#39;snot&#39;</span><span class="p">,</span> <span class="s1">&#39;phasegate&#39;</span><span class="p">,</span> <span class="s1">&#39;qrot&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;cphase&#39;</span><span class="p">,</span> <span class="s1">&#39;cnot&#39;</span><span class="p">,</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="s1">&#39;ry&#39;</span><span class="p">,</span> <span class="s1">&#39;rz&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrtnot&#39;</span><span class="p">,</span> <span class="s1">&#39;snot&#39;</span><span class="p">,</span> <span class="s1">&#39;phasegate&#39;</span><span class="p">,</span> <span class="s1">&#39;cphase&#39;</span><span class="p">,</span> <span class="s1">&#39;cnot&#39;</span><span class="p">,</span>
            <span class="s1">&#39;csign&#39;</span><span class="p">,</span> <span class="s1">&#39;berkeley&#39;</span><span class="p">,</span> <span class="s1">&#39;swapalpha&#39;</span><span class="p">,</span> <span class="s1">&#39;swap&#39;</span><span class="p">,</span> <span class="s1">&#39;iswap&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrtswap&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;sqrtiswap&#39;</span><span class="p">,</span> <span class="s1">&#39;fredkin&#39;</span><span class="p">,</span> <span class="s1">&#39;molmer_sorensen&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;toffoli&#39;</span><span class="p">,</span> <span class="s1">&#39;rotation&#39;</span><span class="p">,</span> <span class="s1">&#39;controlled_gate&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sqrtiswap&#39;</span><span class="p">,</span> <span class="s1">&#39;fredkin&#39;</span><span class="p">,</span> <span class="s1">&#39;toffoli&#39;</span><span class="p">,</span> <span class="s1">&#39;rotation&#39;</span><span class="p">,</span> <span class="s1">&#39;controlled_gate&#39;</span><span class="p">,</span>
            <span class="s1">&#39;globalphase&#39;</span><span class="p">,</span> <span class="s1">&#39;hadamard_transform&#39;</span><span class="p">,</span> <span class="s1">&#39;gate_sequence_product&#39;</span><span class="p">,</span>
            <span class="s1">&#39;gate_expand_1toN&#39;</span><span class="p">,</span> <span class="s1">&#39;gate_expand_2toN&#39;</span><span class="p">,</span> <span class="s1">&#39;gate_expand_3toN&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;qubit_clifford_group&#39;</span><span class="p">,</span> <span class="s1">&#39;expand_oper&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;qubit_clifford_group&#39;</span><span class="p">]</span>
 
 <span class="c1">#</span>
 <span class="c1"># Single Qubit Gates</span>
@@ -336,37 +330,6 @@
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)]],</span>
                     <span class="n">dims</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]])</span></div>
-
-
-<span class="k">def</span> <span class="nf">qrot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Single qubit rotation driving by Rabi oscillation with 0 detune.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    phi : float</span>
-<span class="sd">        The inital phase of the rabi pulse.</span>
-<span class="sd">    theta : float</span>
-<span class="sd">        The duration of the rabi pulse.</span>
-<span class="sd">    N : int</span>
-<span class="sd">        Number of qubits in the system.</span>
-<span class="sd">    target : int</span>
-<span class="sd">        The index of the target qubit.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    qrot_gate : :class:`qutip.Qobj`</span>
-<span class="sd">        Quantum object representation of physical qubit rotation under</span>
-<span class="sd">        a rabi pulse.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">expand_oper</span><span class="p">(</span><span class="n">qrot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">),</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">)],</span>
-                <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">)]</span>
-            <span class="p">])</span>
 
 
 <span class="c1">#</span>
@@ -678,40 +641,6 @@
                               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="n">j</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">],</span>
                               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="n">j</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">],</span>
                               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span> <span class="n">dims</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span></div>
-
-
-<span class="k">def</span> <span class="nf">molmer_sorensen</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Quantum object of a Mølmer–Sørensen gate.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    theta: float</span>
-<span class="sd">        The duration of the interaction pulse.</span>
-<span class="sd">    N: int</span>
-<span class="sd">        Number of qubits in the system.</span>
-<span class="sd">    target: int</span>
-<span class="sd">        The indices of the target qubits.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    molmer_sorensen_gate: :class:`qutip.Qobj`</span>
-<span class="sd">        Quantum object representation of the Mølmer–Sørensen gate.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">targets</span> <span class="o">!=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="mi">2</span>
-
-    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">expand_oper</span><span class="p">(</span><span class="n">molmer_sorensen</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">N</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">)],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mf">2.</span><span class="p">)]</span>
-            <span class="p">],</span>
-            <span class="n">dims</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
 
 
 <span class="c1">#</span>
@@ -1272,120 +1201,24 @@
         <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">p1</span><span class="p">[</span><span class="n">p2</span><span class="p">[</span><span class="n">k</span><span class="p">]]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
 
     <span class="k">return</span> <span class="n">tensor</span><span class="p">([</span><span class="n">U</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
-
-
-<span class="k">def</span> <span class="nf">_check_qubits_oper</span><span class="p">(</span><span class="n">oper</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check if it is an operator acting on a qubit system.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qboj`</span>
-<span class="sd">        The quantum object to be checked.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">check</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">check</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
-        <span class="n">check</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;The following operator is not an &quot;</span>
-            <span class="s2">&quot;operator on a qubits system:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oper</span><span class="p">))</span>
-
-
-<span class="k">def</span> <span class="nf">expand_oper</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Expand a qubits operator to one that acts on a N-qutbis system.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`</span>
-<span class="sd">        An operator acts on qubits, the type of the `Qobj`</span>
-<span class="sd">        has to be an operator</span>
-<span class="sd">        and the dimension matches the tensored qubit Hilbertspace</span>
-<span class="sd">        e.g. dims = [[2,2,2],[2,2,2]]</span>
-<span class="sd">    N : int</span>
-<span class="sd">        The number of qubits in the system.</span>
-<span class="sd">    targets : int or list of int</span>
-<span class="sd">        The indices of qubits that are acted on.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    expanded_oper : :class:`qutip.Qobj`</span>
-<span class="sd">        The expanded qubits operator acting on a system with N qubits</span>
-
-<span class="sd">    Note</span>
-<span class="sd">    ----</span>
-<span class="sd">    This is equivalent to gate_expand_1toN, gate_expand_2toN,</span>
-<span class="sd">    gate_expand_3toN in `qutip.qip.gate.py`, but works for any dimension.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_check_qubits_oper</span><span class="p">(</span><span class="n">oper</span><span class="p">)</span>
-    <span class="n">req_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">req_num</span> <span class="o">&gt;</span> <span class="n">N</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;The dimension of the operator &quot;</span>
-            <span class="s2">&quot;cannot be larger than the system dimension &quot;</span>
-            <span class="s2">&quot;N=</span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-
-    <span class="c1"># Check validity of targets</span>
-    <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
-        <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>  <span class="c1"># correct type</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;targets should be &quot;</span>
-                <span class="s2">&quot;an integer or a list of integer, but </span><span class="si">{}</span><span class="s2"> &quot;</span>
-                <span class="s2">&quot;was given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">!=</span> <span class="n">req_num</span><span class="p">:</span>  <span class="c1"># correct number of targets</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;The given operator needs </span><span class="si">{}</span><span class="s2"> &quot;</span>
-                <span class="s2">&quot;target qutbis, &quot;</span>
-                <span class="s2">&quot;but </span><span class="si">{}</span><span class="s2"> given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">req_num</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;targets should be &quot;</span>
-            <span class="s2">&quot;an integer or a list of integer, but </span><span class="si">{}</span><span class="s2"> &quot;</span>
-            <span class="s2">&quot;was given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
-
-    <span class="c1"># Generate the correct order for qubits permutation,</span>
-    <span class="c1"># eg. if N = 5, targets = [3,0], the order is [1,x,x,0,x].</span>
-    <span class="c1"># If the operator is cnot,</span>
-    <span class="c1"># this order means that the 3rd qubit control the 0th qubit.</span>
-    <span class="n">new_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-    <span class="n">old_ind</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">old_ind</span><span class="p">:</span>
-        <span class="n">new_order</span><span class="p">[</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span>
-    <span class="n">old_ind_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">old_ind</span><span class="p">)</span>
-    <span class="n">targets_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
-    <span class="n">mod_value</span> <span class="o">=</span> <span class="n">targets_set</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">old_ind_set</span><span class="p">)</span>
-    <span class="n">mod_ind</span> <span class="o">=</span> <span class="n">old_ind_set</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">targets_set</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mod_ind</span><span class="p">,</span> <span class="n">mod_value</span><span class="p">):</span>
-        <span class="n">new_order</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="k">return</span> <span class="n">tensor</span><span class="p">([</span><span class="n">oper</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)))</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="n">new_order</span><span class="p">)</span>
 </pre></div>
 
            </div>
-
+           
           </div>
           <footer>
-
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
-      <span class="lastupdated">
-        Last updated on Jul 02, 2019.
-      </span>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, and A.L. Grimsmo
+      Last updated on Feb 27, 2019.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1395,19 +1228,39 @@
     </section>
 
   </div>
+  
 
 
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'4.3.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-
-
-
-
+  </script> 
 
 </body>
 </html>

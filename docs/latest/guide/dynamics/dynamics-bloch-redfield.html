@@ -6,70 +6,71 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Bloch-Redfield master equation &mdash; QuTiP 4.5 Documentation</title>
+  
 
-  <title>Bloch-Redfield master equation &mdash; QuTiP 4.4 Documentation</title>
-
-
-
-
+  
+  
     <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+  
+  
 
-
-
-
-
+  
   <script type="text/javascript" src="../../static/js/modernizr.min.js"></script>
-
-
+  
+    
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
         <script type="text/javascript" src="../../static/jquery.js"></script>
         <script type="text/javascript" src="../../static/underscore.js"></script>
         <script type="text/javascript" src="../../static/doctools.js"></script>
         <script type="text/javascript" src="../../static/language_data.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
+    
     <script type="text/javascript" src="../../static/js/theme.js"></script>
 
+    
 
-
-
+  
   <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Floquet Formalism" href="dynamics-floquet.html" />
-    <link rel="prev" title="Solving Problems with Time-dependent Hamiltonians" href="dynamics-time.html" />
+    <link rel="prev" title="Solving Problems with Time-dependent Hamiltonians" href="dynamics-time.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
-
+   
   <div class="wy-grid-for-nav">
-
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
 
-
-
+          
             <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
 
-
-
+          
           </a>
 
-
-
-
+          
+            
+            
               <div class="version">
-                4.4
+                4.5
               </div>
+            
+          
 
-
-
-
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,16 +79,16 @@
   </form>
 </div>
 
-
+          
         </div>
 
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -102,7 +103,6 @@
 <li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-photocurrent.html">Stochastic Solver - Photocurrent</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Bloch-Redfield master equation</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -126,36 +126,38 @@
 <li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-qip.html">Quantum Information Processing</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/qutip_examples/index.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
 </ul>
 
-
-
+            
+          
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
+      
       <nav class="wy-nav-top" aria-label="top navigation">
-
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
-
+        
       </nav>
 
 
       <div class="wy-nav-content">
-
+        
         <div class="rst-content">
-
-
+        
+          
 
 
 
@@ -174,30 +176,30 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-
+    
       <li><a href="../../index.html">Docs</a> &raquo;</li>
-
+        
           <li><a href="../guide.html">Users Guide</a> &raquo;</li>
-
+        
           <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
-
+        
       <li>Bloch-Redfield master equation</li>
-
-
+    
+    
       <li class="wy-breadcrumbs-aside">
-
-
-
+        
+            
+        
       </li>
-
+    
   </ul>
 
-
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
+            
   <div class="section" id="bloch-redfield-master-equation">
 <span id="bloch-redfield"></span><h1>Bloch-Redfield master equation<a class="headerlink" href="#bloch-redfield-master-equation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
@@ -335,7 +337,7 @@ A^\alpha_{ac}A^\beta_{db}e^{i\omega_{bd}\tau}
 </div>
 <p>Note that it is also possible to add Lindblad dissipation superoperators in the Bloch-Refield tensor by passing the operators via the <code class="docutils literal notranslate"><span class="pre">c_ops</span></code> keyword argument like you would in the <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></a> or <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code></a> functions. For convenience, the function <a class="reference internal" href="../../apidoc/functions.html#qutip.bloch_redfield.bloch_redfield_tensor" title="qutip.bloch_redfield.bloch_redfield_tensor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.bloch_redfield.bloch_redfield_tensor</span></code></a> also returns a list of eigenkets <cite>ekets</cite>, since they are calculated in the process of calculating the Bloch-Redfield tensor <cite>R</cite>, and the <cite>ekets</cite> are usually needed again later when transforming operators between the computational basis and the eigenbasis.</p>
 <p>The evolution of a wavefunction or density matrix, according to the Bloch-Redfield master equation <a class="reference internal" href="#equation-br-final">(5)</a>, can be calculated using the QuTiP function <a class="reference internal" href="../../apidoc/functions.html#qutip.bloch_redfield.bloch_redfield_solve" title="qutip.bloch_redfield.bloch_redfield_solve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.bloch_redfield.bloch_redfield_solve</span></code></a>. It takes five mandatory arguments: the Bloch-Redfield tensor <code class="docutils literal notranslate"><span class="pre">R</span></code>, the list of eigenkets <code class="docutils literal notranslate"><span class="pre">ekets</span></code>, the initial state <code class="docutils literal notranslate"><span class="pre">psi0</span></code> (as a ket or density matrix), a list of times <code class="docutils literal notranslate"><span class="pre">tlist</span></code> for which to evaluate the expectation values, and a list of operators <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> for which to evaluate the expectation values at each time step defined by <cite>tlist</cite>. For example, to evaluate the expectation values of the <span class="math notranslate nohighlight">\(\sigma_x\)</span>, <span class="math notranslate nohighlight">\(\sigma_y\)</span>, and <span class="math notranslate nohighlight">\(\sigma_z\)</span> operators for the example above, we can use the following code:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="gp">In [7]: </span><span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
 
@@ -380,7 +382,7 @@ if you are doing repeated simulations by varying parameters, then it is best to 
 <p>If you have not done so already, please read the section: <a class="reference internal" href="dynamics-time.html#time"><span class="std std-ref">Solving Problems with Time-dependent Hamiltonians</span></a>.</p>
 <p>As we have already discussed, the Bloch-Redfield master equation requires transforming into the eigenbasis of the system Hamiltonian.  For time-independent systems, this transformation need only be done once.  However, for time-dependent systems, one must move to the instantaneous eigenbasis at each time-step in the evolution, thus greatly increasing the computational complexity of the dynamics.  In addition, the requirement for computing all the eigenvalues severely limits the scalability of the method.  Fortunately, this eigen decomposition occurs at the Hamiltonian level, as opposed to the super-operator level, and thus, with efficient programming, one can tackle many systems that are commonly encountered.</p>
 <p>The time-dependent Bloch-Redfield solver in QuTiP relies on the efficient numerical computations afforded by the string-based time-dependent format, and Cython compilation.  As such, all the time-dependent terms, and noise power spectra must be expressed in the string format.  To begin, lets consider the previous example, but formatted to call the time-dependent solver:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">ohmic</span> <span class="o">=</span> <span class="s2">&quot;{gamma1} / 2.0 * (w / (2 * pi)) * (w &gt; 0.0)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gamma1</span><span class="o">=</span><span class="n">gamma1</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">ohmic</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{gamma1}</span><span class="s2"> / 2.0 * (w / (2 * pi)) * (w &gt; 0.0)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gamma1</span><span class="o">=</span><span class="n">gamma1</span><span class="p">)</span>
 
 <span class="gp">In [19]: </span><span class="n">output</span> <span class="o">=</span> <span class="n">brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">=</span><span class="p">[[</span><span class="n">sigmax</span><span class="p">(),</span><span class="n">ohmic</span><span class="p">]],</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span>
 </pre></div>
@@ -397,7 +399,7 @@ if you are doing repeated simulations by varying parameters, then it is best to 
 
 <span class="gp">In [24]: </span><span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># coupling to oscillator</span>
 
-<span class="gp">In [25]: </span><span class="n">a_ops</span> <span class="o">=</span> <span class="p">[[</span><span class="n">a</span><span class="o">+</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="s1">&#39;{kappa}*exp(-t)*(w&gt;=0)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">)]]</span>
+<span class="gp">In [25]: </span><span class="n">a_ops</span> <span class="o">=</span> <span class="p">[[</span><span class="n">a</span><span class="o">+</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="s1">&#39;</span><span class="si">{kappa}</span><span class="s1">*exp(-t)*(w&gt;=0)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">)]]</span>
 
 <span class="gp">In [26]: </span><span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 
@@ -409,17 +411,17 @@ if you are doing repeated simulations by varying parameters, then it is best to 
 <span class="gh">Out[29]: </span><span class="go">&lt;Figure size 640x480 with 0 Axes&gt;</span>
 
 <span class="gp">In [30]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="go">                                           Out[30]: [&lt;matplotlib.lines.Line2D at 0x2b226a96cb00&gt;]</span>
+<span class="gh">Out[30]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a251955c0&gt;]</span>
 
 <span class="gp">In [31]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">actual_answer</span><span class="p">)</span>
-<span class="go">                                                                                                  Out[31]: [&lt;matplotlib.lines.Line2D at 0x2b226a9862b0&gt;]</span>
+<span class="gh">Out[31]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a254cc860&gt;]</span>
 
 <span class="gp">In [32]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../images/guide-brmesolve-td1.png"><img alt="../../images/guide-brmesolve-td1.png" class="align-center" src="../../images/guide-brmesolve-td1.png" style="width: 5.0in;" /></a>
 <p>In many cases, the bath-coupling operators can take the form <span class="math notranslate nohighlight">\(A = f(t)a + f(t)^* a^{+}\)</span>.  In this case, the above format for inputting the <code class="docutils literal notranslate"><span class="pre">a_ops</span></code> is not sufficient. Instead, one must construct a nested-list of tuples to specify this time-dependence.  For example consider a white-noise bath that is coupled to an operator of the form <code class="docutils literal notranslate"><span class="pre">exp(1j*t)*a</span> <span class="pre">+</span> <span class="pre">exp(-1j*t)*</span> <span class="pre">a.dag()</span></code>.  In this example, the <code class="docutils literal notranslate"><span class="pre">a_ops</span></code> list would be:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">a_ops</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()),</span> <span class="p">(</span><span class="s1">&#39;{0} * (w &gt;= 0)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kappa</span><span class="p">),</span> <span class="s1">&#39;exp(1j*t)&#39;</span><span class="p">,</span> <span class="s1">&#39;exp(-1j*t)&#39;</span><span class="p">)</span> <span class="p">]</span> <span class="p">]</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">a_ops</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()),</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> * (w &gt;= 0)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kappa</span><span class="p">),</span> <span class="s1">&#39;exp(1j*t)&#39;</span><span class="p">,</span> <span class="s1">&#39;exp(-1j*t)&#39;</span><span class="p">)</span> <span class="p">]</span> <span class="p">]</span>
 </pre></div>
 </div>
 <p>where the first tuple element <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">a.dag())</span></code> tells the solver which operators make up the full Hermitian coupling operator.  The second tuple <code class="docutils literal notranslate"><span class="pre">('{0}</span> <span class="pre">*</span> <span class="pre">(w</span> <span class="pre">&gt;=</span> <span class="pre">0)'.format(kappa),</span> <span class="pre">'exp(1j*t)',</span> <span class="pre">'exp(-1j*t)')</span></code>, gives the noise power spectrum, and time-dependence of each operator.  Note that the noise spectrum must always come first in this second tuple. A full example is:</p>
@@ -439,7 +441,7 @@ if you are doing repeated simulations by varying parameters, then it is best to 
 
 <span class="gp">In [41]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">((</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">())</span>
 
-<span class="gp">In [42]: </span><span class="n">a_ops</span> <span class="o">=</span> <span class="p">[[</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()),</span> <span class="p">(</span><span class="s1">&#39;{0} * (w &gt;= 0)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kappa</span><span class="p">),</span> <span class="s1">&#39;exp(1j*t)&#39;</span><span class="p">,</span> <span class="s1">&#39;exp(-1j*t)&#39;</span><span class="p">)</span> <span class="p">]]</span>
+<span class="gp">In [42]: </span><span class="n">a_ops</span> <span class="o">=</span> <span class="p">[[</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()),</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> * (w &gt;= 0)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kappa</span><span class="p">),</span> <span class="s1">&#39;exp(1j*t)&#39;</span><span class="p">,</span> <span class="s1">&#39;exp(-1j*t)&#39;</span><span class="p">)</span> <span class="p">]]</span>
 
 <span class="gp">In [43]: </span><span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
 
@@ -449,13 +451,13 @@ if you are doing repeated simulations by varying parameters, then it is best to 
 <span class="gh">Out[45]: </span><span class="go">&lt;Figure size 640x480 with 0 Axes&gt;</span>
 
 <span class="gp">In [46]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">res_brme</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$a^{+}a$&#39;</span><span class="p">)</span>
-<span class="go">                                           Out[46]: [&lt;matplotlib.lines.Line2D at 0x2b22693d17b8&gt;]</span>
+<span class="gh">Out[46]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a24dff668&gt;]</span>
 
 <span class="gp">In [47]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">res_brme</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$a+a^{+}$&#39;</span><span class="p">)</span>
-<span class="go">                                                                                                  Out[47]: [&lt;matplotlib.lines.Line2D at 0x2b2268d61e10&gt;]</span>
+<span class="gh">Out[47]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a24dffc50&gt;]</span>
 
 <span class="gp">In [48]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="go">                                                                                                                                                         Out[48]: &lt;matplotlib.legend.Legend at 0x2b226a92ce48&gt;</span>
+<span class="gh">Out[48]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1a21f86eb8&gt;</span>
 
 <span class="gp">In [49]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -467,19 +469,19 @@ if you are doing repeated simulations by varying parameters, then it is best to 
 
 
            </div>
-
+           
           </div>
           <footer>
-
+  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-
+      
         <a href="dynamics-floquet.html" class="btn btn-neutral float-right" title="Floquet Formalism" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-
-
+      
+      
         <a href="dynamics-time.html" class="btn btn-neutral float-left" title="Solving Problems with Time-dependent Hamiltonians" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-
+      
     </div>
-
+  
 
   <hr/>
 
@@ -487,12 +489,12 @@ if you are doing repeated simulations by varying parameters, then it is best to 
     <p>
         &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
       <span class="lastupdated">
-        Last updated on Jul 02, 2019.
+        Last updated on Feb 01, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -502,7 +504,7 @@ if you are doing repeated simulations by varying parameters, then it is best to 
     </section>
 
   </div>
-
+  
 
 
   <script type="text/javascript">
@@ -511,10 +513,10 @@ if you are doing repeated simulations by varying parameters, then it is best to 
       });
   </script>
 
-
-
-
-
+  
+  
+    
+   
 
 </body>
 </html>
