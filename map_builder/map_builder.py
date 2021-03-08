@@ -92,9 +92,16 @@ footer_string = """
 """
 
 
-class UnknownCountry:
+class UnspecifiedCountry:
+    """ An country object for users whose country is not known.
+
+        "XXX" is the officially designated user-assigned Alpha 3 code
+        element for people from an unspecified country. See
+        https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3#Reserved_code_elements
+        for details.
+    """
     name = "Unknown"
-    alpha_3 = "---"
+    alpha_3 = "XXX"
 
 
 max_users = 0
@@ -107,7 +114,7 @@ with open('2020.csv', 'rt') as csvfile:
         if name in replace_countries.keys():
             name = replace_countries[name]
         if name == "NOTSET":
-            country = UnknownCountry()
+            country = UnspecifiedCountry()
         else:
             country = pc.countries.get(name=name)
             if country is None:
