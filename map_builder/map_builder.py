@@ -79,16 +79,16 @@ var map = new Datamap({
         highlightBorderColor: '#666666',
         popupTemplate: function(geography, data) {
             if (data != null) {
-                return "<div class='hoverinfo'>" + geography.properties.name
-                        + ': ' + data.visitors + '</div>';
+                return "<div class='hoverinfo'>" + geography.properties.name +
+                       ': ' + data.visitors + '</div>';
             }
-    },
-    highlightBorderWidth: 1
+        },
+        highlightBorderWidth: 1
     },
 """
 
 footer_string = """
-})
+});
 """
 
 
@@ -133,26 +133,27 @@ map_color = cm.ScalarMappable(norm=norm, cmap=cmap)
 
 
 # build_fills
-fills = ["fills: { \n", "defaultFill: '#CCCCCC', \n"]
+fills = ["    fills: {\n", "        defaultFill: '#CCCCCC',\n"]
 for item in countries:
     rgb_color = map_color.to_rgba(countries[item])[:3]
     fills += [
-        f"{item.alpha_3}: '{str(mpl.colors.rgb2hex(rgb_color))}',\n"
+        f"        {item.alpha_3}: '{str(mpl.colors.rgb2hex(rgb_color))}',\n"
     ]
-fills += ["},"]
+fills += ["    },\n"]
 
 
 # build_data
-data = ["data: { \n"]
+data = ["    data: {\n"]
 for item in countries:
     data += [
+        f"        "
         f"{item.alpha_3}: {{"
         f"fillKey: '{item.alpha_3}',"
         f" visitors: {str(countries[item])},"
-        f" country: ' {item.name} '"
+        f" country: \" {item.name} \""
         f"}},\n"
     ]
-data += ["}"]
+data += ["    }"]
 
 
 # Generate map.js file
