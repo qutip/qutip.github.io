@@ -35,7 +35,6 @@
 import csv
 import pycountry as pc
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 """
@@ -45,65 +44,80 @@ in csv format. Requires pycountry to get ISO alpha-3 codes.
 
 # Google analytics does not use offical country names.
 # Replace names of several countries to offical ones.
-replace_countries={
-    'Bolivia' : 'Bolivia, Plurinational State of',
-    'Bosnia & Herzegovina': 'Bosnia and Herzegovina',
-    "Côte d’Ivoire" : "Côte d'Ivoire",
-    'Iran' : 'Iran, Islamic Republic of',
-    'Kosovo' : 'Serbia',
-    'Macau': 'Macao',
-    'Macedonia (FYROM)' : 'Macedonia, Republic of',
-    'Moldova' : 'Moldova, Republic of',
-    'Myanmar (Burma)': 'Myanmar',
-    'Russia' : 'Russian Federation',
-    'South Korea': 'Korea, Republic of',
-    'Syria' : 'Syrian Arab Republic',
-    'Taiwan' : 'Taiwan, Province of China',
-    'Tanzania' : 'Tanzania, United Republic of',
-    'Trinidad & Tobago' : 'Trinidad and Tobago',
-    'Vietnam' : 'Viet Nam',
-    'Venezuela': 'Venezuela, Bolivarian Republic of',
-    'Palestine': 'Palestine, State of'  
-    }
+replace_countries = {
+    "Antigua & Barbuda": "Antigua and Barbuda",
+    "Bolivia": "Bolivia, Plurinational State of",
+    "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+    "Côte d’Ivoire": "Côte d'Ivoire",
+    "Czech Republic": "Czechia",
+    "Iran": "Iran, Islamic Republic of",
+    "Kosovo": "Serbia",
+    "Laos": "Lao People's Democratic Republic",
+    "Macau": "Macao",
+    "Macedonia (FYROM)": "North Macedonia",
+    "Moldova": "Moldova, Republic of",
+    "Myanmar (Burma)": "Myanmar",
+    "Russia": "Russian Federation",
+    "South Korea": "Korea, Republic of",
+    "Swaziland": "Eswatini",
+    "Syria": "Syrian Arab Republic",
+    "Taiwan": "Taiwan, Province of China",
+    "Tanzania": "Tanzania, United Republic of",
+    "Trinidad & Tobago": "Trinidad and Tobago",
+    "Vietnam": "Viet Nam",
+    "Venezuela": "Venezuela, Bolivarian Republic of",
+    "Palestine": "Palestine, State of",
+}
 
 header_string = """
 //basic map config with custom fills, mercator projection
 var map = new Datamap({
-	scope: 'world',
-	element: document.getElementById('container1'),
-	projection: 'mercator',
-	geographyConfig: {
-		highlightBorderColor: '#666666',
-		popupTemplate: function(geography, data) {
-			if (data != null) return "<div class='hoverinfo'>" + geography.properties.name+': '+data.visitors +'</div>'
-	},
-	highlightBorderWidth: 1
-	},
+    scope: 'world',
+    element: document.getElementById('container1'),
+    projection: 'mercator',
+    geographyConfig: {
+        highlightBorderColor: '#666666',
+        popupTemplate: function(geography, data) {
+            if (data != null) {
+                return "<div class='hoverinfo'>" + geography.properties.name
+                        + ': ' + data.visitors + '</div>';
+            }
+    },
+    highlightBorderWidth: 1
+    },
 """
 
-footer_string="""
+footer_string = """
 })
 """
+
+
+class UnknownCountry:
+    name = "Unknown"
+    alpha_3 = "---"
+
 
 max_users = 0
 total_users = 0
 countries = {}
-with open('2016.csv', 'rt') as csvfile:
+with open('2020.csv', 'rt') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='"')
     for row in reader:
         name = row[0]
         if name in replace_countries.keys():
             name = replace_countries[name]
-        try:
-            country = pc.countries.get(official_name=name)
-        except:
+        if name == "NOTSET":
+            country = UnknownCountry()
+        else:
             country = pc.countries.get(name=name)
+            if country is None:
+                raise ValueError(f"Unknown country {name!r}")
         country_users = int(row[1].replace(',', ''))
-        countries[country.alpha_3] = country_users
+        countries[country] = country_users
         total_users += country_users
-        max_users = max(max_users,country_users)
+        max_users = max(max_users, country_users)
 
-print(total_users)
+print("Total users:", total_users)
 
 # Pick colormap and normalize. Colors too light if vmin=0.
 cmap = cm.Blues
@@ -112,18 +126,25 @@ map_color = cm.ScalarMappable(norm=norm, cmap=cmap)
 
 
 # build_fills
-fills = ["fills: { \n","defaultFill: '#CCCCCC', \n"]
+fills = ["fills: { \n", "defaultFill: '#CCCCCC', \n"]
 for item in countries:
     rgb_color = map_color.to_rgba(countries[item])[:3]
-    fills += [item+": '" + str(mpl.colors.rgb2hex(rgb_color))+"',"+"\n"]
+    fills += [
+        f"{item.alpha_3}: '{str(mpl.colors.rgb2hex(rgb_color))}',\n"
+    ]
 fills += ["},"]
 
 
 # build_data
 data = ["data: { \n"]
 for item in countries:
-    item_str = item+": "+"{fillKey: '"+item+"', visitors: "+str(countries[item])+""", country: " """+pc.countries.get(alpha_3=item).name+""" " },"""+"\n"
-    data += [item_str]
+    data += [
+        f"{item.alpha_3}: {{"
+        f"fillKey: '{item.alpha_3}',"
+        f" visitors: {str(countries[item])},"
+        f" country: ' {item.name} '"
+        f"}},\n"
+    ]
 data += ["}"]
 
 
