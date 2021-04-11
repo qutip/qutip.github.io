@@ -1,0 +1,329 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Pulse level description of quantum circuits &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="TensorFlow Data Backend" href="tensorflow-data-backend.html" />
+    <link rel="prev" title="QuTiP Interactive" href="qutip-interactive.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../development.html">Development Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html">QuTiP Development Roadmap</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ideas.html">Ideas for future QuTiP development</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qutip-interactive.html">QuTiP Interactive</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Pulse level description of quantum circuits</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#expected-outcomes">Expected outcomes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#skills">Skills</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#difficulty">Difficulty</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mentors">Mentors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tensorflow-data-backend.html">TensorFlow Data Backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantum-error-mitigation.html">Quantum Error Mitigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="heom-gpu.html">GPU implementation of the Hierarchical Equations of Motion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs.html">Working with the QuTiP Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_distribution.html">Release and Distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../development.html">Development Documentation</a> &raquo;</li>
+        
+          <li><a href="../ideas.html">Ideas for future QuTiP development</a> &raquo;</li>
+        
+      <li>Pulse level description of quantum circuits</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pulse-level-description-of-quantum-circuits">
+<h1>Pulse level description of quantum circuits<a class="headerlink" href="#pulse-level-description-of-quantum-circuits" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#expected-outcomes" id="id7">Expected outcomes</a></p></li>
+<li><p><a class="reference internal" href="#skills" id="id8">Skills</a></p></li>
+<li><p><a class="reference internal" href="#difficulty" id="id9">Difficulty</a></p></li>
+<li><p><a class="reference internal" href="#mentors" id="id10">Mentors</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id11">References</a></p></li>
+</ul>
+</div>
+<p>The aim of this proposal is to enhance QuTiP quantum-circuit compilation
+features with regard to quantum information processing. While QuTiP core modules
+deal with dynamics simulation, there is also a module for quantum circuits
+simulation. The two subsequent Google Summer of Code projects, in 2019 and 2020,
+enhanced them in capabilities and features, allowing the simulation both at the
+level of gates and at the level of time evolution. To connect them, a compiler
+is implemented to compile quantum gates into the Hamiltonian model. We would
+like to further enhance this feature in QuTiP and the connection with other
+libraries.</p>
+<div class="section" id="expected-outcomes">
+<h2><a class="toc-backref" href="#id7">Expected outcomes</a><a class="headerlink" href="#expected-outcomes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>APIs to import and export pulses to other libraries. Quantum compiler is a
+current research topic in quantum engineering. Although QuTiP has a simple
+compiler, many may want to try their own compiler which is more compatible
+with their quantum device. Allowing importation and exportation of control
+pulses will make this much easier. This will include a study of existing
+libraries, such as <cite>qiskit.pulse</cite> and <cite>OpenPulse</cite> <a class="footnote-reference brackets" href="#id4" id="id1">1</a>, comparing them with
+<cite>qutip.qip.pulse</cite> module and building a more general and comprehensive
+description of the pulse.</p></li>
+<li><p>More examples of quantum system in the <cite>qutip.qip.device</cite> module. The circuit
+simulation and compilation depend strongly on the physical system. At the
+moment, we have two models: spin chain and cavity QED. We would like to
+include some other commonly used planform such as Superconducting system <a class="footnote-reference brackets" href="#id5" id="id2">2</a>,
+Ion trap system <a class="footnote-reference brackets" href="#id6" id="id3">3</a> or silicon system. Each model will need a new set of
+control Hamiltonian and a compiler that finds the control pulse of a quantum
+gate. More involved noise models can also be added based on the physical
+system. This part is going to involve some physics and study of commonly used
+hardware platforms. The related code can be found in <cite>qutip.qip.device</cite> and
+<cite>qutip.qip.compiler</cite>.</p></li>
+</ul>
+</div>
+<div class="section" id="skills">
+<h2><a class="toc-backref" href="#id8">Skills</a><a class="headerlink" href="#skills" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Git, Python and familiarity with the Python scientific computing stack</p></li>
+<li><p>quantum information processing and quantum computing (quantum circuit formalism)</p></li>
+</ul>
+</div>
+<div class="section" id="difficulty">
+<h2><a class="toc-backref" href="#id9">Difficulty</a><a class="headerlink" href="#difficulty" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Medium</p></li>
+</ul>
+</div>
+<div class="section" id="mentors">
+<h2><a class="toc-backref" href="#id10">Mentors</a><a class="headerlink" href="#mentors" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Boxi Li (<a class="reference external" href="mailto:etamin1201&#37;&#52;&#48;gmail&#46;com">etamin1201<span>&#64;</span>gmail<span>&#46;</span>com</a>) [QuTiP GSoC 2019 graduate]</p></li>
+<li><p>Nathan Shammah (<a class="reference external" href="mailto:nathan&#46;shammah&#37;&#52;&#48;gmail&#46;com">nathan<span>&#46;</span>shammah<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
+<li><p>Alex Pitchford (<a class="reference external" href="mailto:alex&#46;pitchford&#37;&#52;&#48;gmail&#46;com">alex<span>&#46;</span>pitchford<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2><a class="toc-backref" href="#id11">References</a><a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>McKay D C, Alexander T, Bello L, et al. Qiskit backend specifications for openqasm and openpulse experiments[J]. arXiv preprint arXiv:1809.03452, 2018.</p>
+</dd>
+<dt class="label" id="id5"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Häffner H, Roos C F, Blatt R, <strong>Quantum computing with trapped ions</strong>, Physics reports, 2008, 469(4): 155-203.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Krantz P, Kjaergaard M, Yan F, et al. <strong>A quantum engineer’s guide to superconducting qubits</strong>, Applied Physics Reviews, 2019, 6(2): 021318.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tensorflow-data-backend.html" class="btn btn-neutral float-right" title="TensorFlow Data Backend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="qutip-interactive.html" class="btn btn-neutral float-left" title="QuTiP Interactive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2021.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

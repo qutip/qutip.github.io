@@ -2,42 +2,47 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.qip.pulse &mdash; QuTiP 4.5 Documentation</title>
+  <title>qutip.qip.pulse &mdash; QuTiP 4.6 Documentation</title>
   
-
-  
-  
-    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-rendered-html.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -63,7 +68,7 @@
             
             
               <div class="version">
-                4.5
+                4.6
               </div>
             
           
@@ -80,6 +85,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -91,16 +97,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../gallery/qutip_examples/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -135,11 +143,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -159,9 +169,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for qutip.qip.pulse</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">CubicSpline</span>
 
 <span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
@@ -180,7 +188,7 @@
 <span class="sd">    `qobj`, `targets`, `tlist` and `coeff`.</span>
 
 <span class="sd">    For documentation and use instruction of the attributes, please</span>
-<span class="sd">    refer to :class:`qutip.qip.Pulse`.</span>
+<span class="sd">    refer to :class:`.Pulse`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qobj</span> <span class="o">=</span> <span class="n">qobj</span>
@@ -342,12 +350,12 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    ideal_pulse: :class:`qutip.qip.pulse._EvoElement`</span>
+<span class="sd">    ideal_pulse: :class:`._EvoElement`</span>
 <span class="sd">        The ideal dynamic of the control pulse.</span>
-<span class="sd">    coherent_noise: list of :class:`qutip.qip.pulse._EvoElement`</span>
+<span class="sd">    coherent_noise: list of :class:`._EvoElement`</span>
 <span class="sd">        The coherent noise caused by the control pulse. Each dynamic element is</span>
 <span class="sd">        still characterized by a time-dependent Hamiltonian.</span>
-<span class="sd">    lindblad_noise: list of :class:`qutip.qip.pulse._EvoElement`</span>
+<span class="sd">    lindblad_noise: list of :class:`._EvoElement`</span>
 <span class="sd">        The dissipative noise of the control pulse. Each dynamic element</span>
 <span class="sd">        will be treated as a (time-dependent) lindblad operator in the</span>
 <span class="sd">        master equation.</span>
@@ -360,31 +368,31 @@
 <span class="sd">    --------</span>
 <span class="sd">    Create a pulse that is turned off</span>
 
-<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0)</span>
-<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, None, None)</span>
+<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0) # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, None, None) # doctest: +SKIP</span>
 
 <span class="sd">    Create a time dependent pulse</span>
 
-<span class="sd">    &gt;&gt;&gt; tlist = np.array([0., 1., 2., 4.])</span>
-<span class="sd">    &gt;&gt;&gt; coeff = np.array([0.5, 1.2, 0.8])</span>
-<span class="sd">    &gt;&gt;&gt; spline_kind = &quot;step_func&quot;</span>
-<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, tlist=tlist, coeff=coeff, spline_kind=&quot;step_func&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; tlist = np.array([0., 1., 2., 4.]) # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; coeff = np.array([0.5, 1.2, 0.8]) # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; spline_kind = &quot;step_func&quot; # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, tlist=tlist, coeff=coeff, spline_kind=&quot;step_func&quot;) # doctest: +SKIP</span>
 
 <span class="sd">    Create a time independent pulse</span>
 
-<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, coeff=True)</span>
+<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, coeff=True) # doctest: +SKIP</span>
 
 <span class="sd">    Create a constant pulse with time range</span>
 
-<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, tlist=tlist, coeff=True)</span>
+<span class="sd">    &gt;&gt;&gt; Pulse(sigmaz(), 0, tlist=tlist, coeff=True) # doctest: +SKIP</span>
 
 <span class="sd">    Create an dummy Pulse (H=0)</span>
 
-<span class="sd">    &gt;&gt;&gt; Pulse(None, None)</span>
+<span class="sd">    &gt;&gt;&gt; Pulse(None, None) # doctest: +SKIP</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">spline_kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">spline_kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">=</span> <span class="n">spline_kind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ideal_pulse</span> <span class="o">=</span> <span class="n">_EvoElement</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coherent_noise</span> <span class="o">=</span> <span class="p">[]</span>
@@ -452,16 +460,19 @@
 <span class="sd">            `tlist` does not have to be equidistant, but must have the same</span>
 <span class="sd">            length</span>
 <span class="sd">            or one element shorter compared to `coeff`. See documentation for</span>
-<span class="sd">            the parameter `spline_kind` of :class:`qutip.qip.Pulse`.</span>
+<span class="sd">            the parameter `spline_kind` of :class:`.Pulse`.</span>
 <span class="sd">        coeff: array-like or bool, optional</span>
 <span class="sd">            Time-dependent coefficients of the pulse noise.</span>
 <span class="sd">            If an array, the length</span>
 <span class="sd">            must be the same or one element longer compared to `tlist`.</span>
 <span class="sd">            See documentation for</span>
-<span class="sd">            the parameter `spline_kind` of :class:`qutip.qip.Pulse`.</span>
+<span class="sd">            the parameter `spline_kind` of :class:`.Pulse`.</span>
 <span class="sd">            If a bool, the coefficient is a constant 1 or 0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coherent_noise</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_EvoElement</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">add_control_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_coherent_noise</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">coeff</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pulse.add_lindblad_noise"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.pulse.Pulse.add_lindblad_noise">[docs]</a>    <span class="k">def</span> <span class="nf">add_lindblad_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -481,13 +492,13 @@
 <span class="sd">            length</span>
 <span class="sd">            or one element shorter compared to `coeff`.</span>
 <span class="sd">            See documentation for</span>
-<span class="sd">            the parameter `spline_kind` of :class:`qutip.qip.Pulse`.</span>
+<span class="sd">            the parameter `spline_kind` of :class:`.Pulse`.</span>
 <span class="sd">        coeff: array-like or bool, optional</span>
 <span class="sd">            Time-dependent coefficients of the pulse noise.</span>
 <span class="sd">            If an array, the length</span>
 <span class="sd">            must be the same or one element longer compared to `tlist`.</span>
 <span class="sd">            See documentation for</span>
-<span class="sd">            the parameter `spline_kind` of :class:`qutip.qip.Pulse`.</span>
+<span class="sd">            the parameter `spline_kind` of :class:`.Pulse`.</span>
 <span class="sd">            If a bool, the coefficient is a constant 1 or 0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_noise</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_EvoElement</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="p">))</span></div>
@@ -530,8 +541,8 @@
 
 <div class="viewcode-block" id="Pulse.get_noisy_qobjevo"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.pulse.Pulse.get_noisy_qobjevo">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_qobjevo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the `QobjEvo` representation of the noisy evolution. The result</span>
-<span class="sd">        can be used directly as input for the qutip solvers.</span>
+<span class="sd">        Get the :obj:`.QobjEvo` representation of the noisy evolution. The</span>
+<span class="sd">        result can be used directly as input for the qutip solvers.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -543,7 +554,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        noisy_evo: :class:`qutip.QobjEvo`</span>
-<span class="sd">            A `QobjEvo` representing the ideal evolution and coherent noise.</span>
+<span class="sd">            A ``QobjEvo`` representing the ideal evolution and coherent noise.</span>
 <span class="sd">        c_ops: list of :class:`qutip.QobjEvo`</span>
 <span class="sd">            A list of (time-dependent) lindbald operators.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -559,16 +570,16 @@
             <span class="n">c_ops</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_merge_qobjevo</span><span class="p">([</span><span class="n">c_op</span><span class="p">],</span> <span class="n">full_tlist</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">qu</span><span class="p">,</span> <span class="n">c_ops</span></div>
 
-<div class="viewcode-block" id="Pulse.get_full_tlist"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.pulse.Pulse.get_full_tlist">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_tlist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pulse.get_full_tlist"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.pulse.Pulse.get_full_tlist">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_tlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the full tlist of the pulses and noise.</span>
-<span class="sd">        It means that if different `tlist`s are present, they will be merged</span>
-<span class="sd">        to one with all time points stored in a sorted array.</span>
+<span class="sd">        Return the full tlist of the pulses and noise.  It means that if</span>
+<span class="sd">        different ``tlist`` are present, they will be merged to one with all</span>
+<span class="sd">        time points stored in a sorted array.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        full_tlist: array-like 1d</span>
-<span class="sd">            The full time sequence for the nosiy evolution.</span>
+<span class="sd">            The full time sequence for the noisy evolution.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO add test</span>
         <span class="n">all_tlists</span> <span class="o">=</span> <span class="p">[]</span>
@@ -581,6 +592,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">all_tlists</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">full_tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">all_tlists</span><span class="p">)))</span>
+        <span class="n">full_tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">full_tlist</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">full_tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">full_tlist</span></div>
 
 <div class="viewcode-block" id="Pulse.print_info"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.qip.pulse.Pulse.print_info">[docs]</a>    <span class="k">def</span> <span class="nf">print_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -685,7 +698,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ideal_qobjevo</span><span class="p">(</span><span class="n">dims</span><span class="p">),</span> <span class="p">[]</span>
 
 
-<span class="k">def</span> <span class="nf">_find_common_tlist</span><span class="p">(</span><span class="n">qobjevo_list</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_find_common_tlist</span><span class="p">(</span><span class="n">qobjevo_list</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the common `tlist` of a list of :class:`qutip.QobjEvo`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -694,6 +707,8 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">all_tlists</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="n">full_tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">all_tlists</span><span class="p">)))</span>
+    <span class="n">full_tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">full_tlist</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">full_tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">full_tlist</span>
 
 <span class="c1">########################################################################</span>
@@ -742,7 +757,7 @@
     <span class="k">return</span> <span class="n">qobjevo</span>
 
 
-<span class="k">def</span> <span class="nf">_fill_coeff</span><span class="p">(</span><span class="n">old_coeffs</span><span class="p">,</span> <span class="n">old_tlist</span><span class="p">,</span> <span class="n">full_tlist</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_fill_coeff</span><span class="p">(</span><span class="n">old_coeffs</span><span class="p">,</span> <span class="n">old_tlist</span><span class="p">,</span> <span class="n">full_tlist</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make a step function coefficients compatible with a longer `tlist` by</span>
 <span class="sd">    filling the empty slot with the nearest left value.</span>
@@ -760,13 +775,14 @@
         <span class="n">new_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">new_n</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">new_ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_n</span><span class="p">):</span>
             <span class="n">t</span> <span class="o">=</span> <span class="n">full_tlist</span><span class="p">[</span><span class="n">new_ind</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">old_tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">old_tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
                 <span class="n">new_coeff</span><span class="p">[</span><span class="n">new_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">old_tlist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">-</span> <span class="n">old_tlist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
                 <span class="n">new_coeff</span><span class="p">[</span><span class="n">new_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">old_tlist</span><span class="p">[</span><span class="n">old_ind</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span>
+            <span class="c1"># tol is required because of the floating-point error</span>
+            <span class="k">if</span> <span class="n">old_tlist</span><span class="p">[</span><span class="n">old_ind</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">tol</span><span class="p">:</span>
                 <span class="n">old_ind</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">new_coeff</span><span class="p">[</span><span class="n">new_ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">old_coeffs</span><span class="p">[</span><span class="n">old_ind</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -781,23 +797,28 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Feb 01, 2020.
+        Last updated on Apr 11, 2021.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -805,7 +826,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -1,0 +1,348 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Stochastic Solver &mdash; QuTiP 4.5 Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../static/jquery.js"></script>
+        <script type="text/javascript" src="../../static/underscore.js"></script>
+        <script type="text/javascript" src="../../static/doctools.js"></script>
+        <script type="text/javascript" src="../../static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Solving Problems with Time-dependent Hamiltonians" href="dynamics-time.html" />
+    <link rel="prev" title="Stochastic Solver - Photocurrent" href="dynamics-photocurrent.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-master.html">Lindblad Master Equation Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-photocurrent.html">Stochastic Solver - Photocurrent</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Stochastic Solver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#homodyne-detection">Homodyne detection</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-piqs.html">Permutational Invariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-eseries.html">An Overview of the Eseries Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-qip.html">Quantum Information Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/qutip_examples/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+        
+          <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
+        
+      <li>Stochastic Solver</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stochastic-solver">
+<span id="stochastic"></span><h1>Stochastic Solver<a class="headerlink" href="#stochastic-solver" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="homodyne-detection">
+<span id="stochastic-intro"></span><h2>Homodyne detection<a class="headerlink" href="#homodyne-detection" title="Permalink to this headline">¶</a></h2>
+<p>Homodyne detection is an extension of the photocurrent method where the output
+is mixed with a strong external source allowing to get information about the
+phase of the system. With this method, the resulting detection rate depends is</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}:label: jump_rate\\\tau = tr \left((\gamma^2 + \gamma (C+C^\dag) + C^\dag C)\rho \right)\end{aligned}\end{align} \]</div>
+<p>With <span class="math notranslate nohighlight">\(\gamma\)</span>, the strength of the external beam and <span class="math notranslate nohighlight">\(C\)</span> the collapse
+operator. When the beam is very strong <span class="math notranslate nohighlight">\((\gamma &gt;&gt; C^\dag C)\)</span>,
+the rate becomes a constant term plus a term proportional to the quadrature of
+the system.</p>
+<div class="section" id="closed-system">
+<h3>Closed system<a class="headerlink" href="#closed-system" title="Permalink to this headline">¶</a></h3>
+<p>In closed systems, the resulting stochastic differential equation is</p>
+<div class="math notranslate nohighlight" id="equation-jump-ssesolve">
+<span class="eqno">(1)<a class="headerlink" href="#equation-jump-ssesolve" title="Permalink to this equation">¶</a></span>\[\delta \psi(t) = - i H \psi(t) \delta t
+                 - \sum_n \left( \frac{C_n^{+} C_n}{2} -\frac{e_n}{2} C_n
+                                 + \frac{e_n^2}{8} \right) \psi \delta t
+                 + \sum_n \left( C_n - \frac{e_n}{2} \right) \psi \delta \omega\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}:label: jump_rate\\e_n = \left&lt;\psi(t)|C_n + C_n^{+}|\psi(t)\right&gt;\end{aligned}\end{align} \]</div>
+<p>Here <span class="math notranslate nohighlight">\(\delta \omega\)</span> is a Wiener increment.</p>
+<p>In QuTiP, this is available with the function <code class="xref py py-func docutils literal notranslate"><span class="pre">ssesolve</span></code>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+
+<span class="gp">In [2]: </span><span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="gp">In [3]: </span><span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [4]: </span><span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="gp">In [5]: </span><span class="n">H</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">ssesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">sc_ops</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;homodyne&quot;</span><span class="p">)</span>
+<span class="go">Total run time:   0.01s</span>
+
+<span class="gp">In [7]: </span><span class="n">figure</span><span class="p">()</span>
+<span class="gh">Out[7]: </span><span class="go">&lt;Figure size 640x480 with 0 Axes&gt;</span>
+
+<span class="gp">In [8]: </span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x1a25a75c18&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0x1a25a755c0&gt;]</span>
+
+<span class="gp">In [9]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Homodyne time evolution&#39;</span><span class="p">)</span>
+<span class="gh">Out[9]: </span><span class="go">Text(0.5,1,&#39;Homodyne time evolution&#39;)</span>
+
+<span class="gp">In [10]: </span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="gh">Out[10]: </span><span class="go">Text(0.5,0,&#39;Time&#39;)</span>
+
+<span class="gp">In [11]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">)</span>
+<span class="gh">Out[11]: </span><span class="go">Text(0,0.5,&#39;Expectation values&#39;)</span>
+
+<span class="gp">In [12]: </span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
+<span class="gh">Out[12]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1a263e9860&gt;</span>
+
+<span class="gp">In [13]: </span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../images/guide-sse1.png"><img alt="../../images/guide-sse1.png" class="align-center" src="../../images/guide-sse1.png" style="width: 5.0in;" /></a>
+</div>
+<div class="section" id="open-system">
+<h3>Open system<a class="headerlink" href="#open-system" title="Permalink to this headline">¶</a></h3>
+<p>In open systems, 2 types of collapse operators are considered, <span class="math notranslate nohighlight">\(S_i\)</span>
+represent the dissipation in the environment, <span class="math notranslate nohighlight">\(C_i\)</span> are monitored operators.
+The deterministic part of the evolution is the liouvillian with both types of
+collapses</p>
+<div class="math notranslate nohighlight" id="equation-liouvillian">
+<span class="eqno">(2)<a class="headerlink" href="#equation-liouvillian" title="Permalink to this equation">¶</a></span>\[L(\rho(t)) = - i[H(t),\rho(t)]
+             + \sum_n D(S_n, \rho)
+                         + \sum_i D(C_i, \rho),\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight" id="equation-disipator">
+<span class="eqno">(3)<a class="headerlink" href="#equation-disipator" title="Permalink to this equation">¶</a></span>\[D(C, \rho) = \frac{1}{2} \left[2 C \rho(t) C^{+}
+                   - \rho(t) C^{+} C - C^{+} C \rho(t) \right].\]</div>
+<p>The stochastic part is given by</p>
+<div class="math notranslate nohighlight" id="equation-stochastic-smesolve">
+<span class="eqno">(4)<a class="headerlink" href="#equation-stochastic-smesolve" title="Permalink to this equation">¶</a></span>\[d_2 = \left(C \rho(t) + \rho(t) C^{+} - \rm{tr}\left(C \times \rho
+                                 + \rho \times C^{+} \right)\rho(t) \right),\]</div>
+<p>resulting in the stochastic differential equation</p>
+<div class="math notranslate nohighlight" id="equation-sde-smesolve">
+<span class="eqno">(5)<a class="headerlink" href="#equation-sde-smesolve" title="Permalink to this equation">¶</a></span>\[\delta \rho(t) = L(\rho(t)) \delta t + d_2  \delta \omega\]</div>
+<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">smesolve</span></code> covert these cases in QuTiP.</p>
+</div>
+<div class="section" id="heterodyne-detection">
+<h3>Heterodyne detection<a class="headerlink" href="#heterodyne-detection" title="Permalink to this headline">¶</a></h3>
+<p>With heterodyne detection, two measurements are made in order to obtain
+information about 2 orthogonal quadratures at once.</p>
+<hr class="docutils" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dynamics-time.html" class="btn btn-neutral float-right" title="Solving Problems with Time-dependent Hamiltonians" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dynamics-photocurrent.html" class="btn btn-neutral float-left" title="Stochastic Solver - Photocurrent" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+      <span class="lastupdated">
+        Last updated on Feb 01, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
