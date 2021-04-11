@@ -1,0 +1,838 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.qip.compiler.scheduler &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-rendered-html.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../static/documentation_options.js"></script>
+        <script src="../../../../static/jquery.js"></script>
+        <script src="../../../../static/underscore.js"></script>
+        <script src="../../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.qip.compiler.scheduler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.qip.compiler.scheduler</h1><div class="highlight"><pre>
+<span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
+<span class="c1">#    All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c1">#    modification, are permitted provided that the following conditions are</span>
+<span class="c1">#    met:</span>
+<span class="c1">#</span>
+<span class="c1">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c1">#       this list of conditions and the following disclaimer.</span>
+<span class="c1">#</span>
+<span class="c1">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c1">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c1">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c1">#</span>
+<span class="c1">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c1">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c1">#       from this software without specific prior written permission.</span>
+<span class="c1">#</span>
+<span class="c1">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c1">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c1">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c1">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c1">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c1">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c1">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c1">###############################################################################</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cmp_to_key</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">shuffle</span>
+
+<span class="kn">from</span> <span class="nn">..circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span><span class="p">,</span> <span class="n">Gate</span>
+<span class="kn">from</span> <span class="nn">.instruction</span> <span class="kn">import</span> <span class="n">Instruction</span>
+
+
+<span class="k">class</span> <span class="nc">InstructionsGraph</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A directed acyclic graph (DAG) representation</span>
+<span class="sd">    of the quantum instruction dependency.</span>
+<span class="sd">    An example is Fig3(b) in https://doi.org/10.1117/12.666419.</span>
+<span class="sd">    It contains methods of generating the instruction dependency graph,</span>
+<span class="sd">    a list-schedule algorithm to find the topological order</span>
+<span class="sd">    and the computation of the distance in the weighted graph</span>
+<span class="sd">    (circuit latency).</span>
+
+<span class="sd">    It uses the `Instruction` object as a representation of node</span>
+<span class="sd">    and adds the following attributes to it:</span>
+
+<span class="sd">    predecessors, successors: dependency arrow of the DAG</span>
+<span class="sd">    distance_to_start, distance_to_end: longest distance to the start and end</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    instructions: list</span>
+<span class="sd">        A list of instructions</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nodes: list</span>
+<span class="sd">        The input list of instruction with additional graph information.</span>
+<span class="sd">    start, end: list</span>
+<span class="sd">        List of indices of nodes connected to the start or end nodes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instructions</span><span class="p">):</span>
+        <span class="n">instructions</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">instructions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="n">instructions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">Gate</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Instruction</span><span class="p">(</span><span class="n">instruction</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">generate_dependency_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commuting</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the instruction dependency graph.</span>
+<span class="sd">        It modifies the class attribute `nodes`, where each element (node)</span>
+<span class="sd">        is an `Instruction`.</span>
+<span class="sd">        The graph is represented by attributes `predecessors` and</span>
+<span class="sd">        `successors`, each a set of indices</span>
+<span class="sd">        pointing to the position of the target node in the nodes list.</span>
+
+<span class="sd">        The graph preserves the mobility of the gates,</span>
+<span class="sd">        i.e. if two gates commute with each other,</span>
+<span class="sd">        such as ``CNOT 2, 3`` and ``CNOT 2, 1``,</span>
+<span class="sd">        there should be no dependency arrow between them.</span>
+<span class="sd">        Because of this, the generated graph does not consider</span>
+<span class="sd">        the hardware constraints,</span>
+<span class="sd">        e.g. two commuting gates addressing the same qubits</span>
+<span class="sd">        cannot be executed at the same time.</span>
+<span class="sd">        A dependency arrow between Instruction 1 and instruction 2</span>
+<span class="sd">        means that they do not commute.</span>
+<span class="sd">        However, the converse does not hold because we do not need</span>
+<span class="sd">        gate1-&gt;gate3 if we already have gate1-&gt;gate2-&gt;gate3.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        commuting: function</span>
+<span class="sd">            A Python function that determines if two gates commute,</span>
+<span class="sd">            given that their used qubits overlap.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># initialize the graph</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">predecessors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">successors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">[</span><span class="n">instruction</span><span class="o">.</span><span class="n">used_qubits</span> <span class="k">for</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">qubits_instructions_dependency</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">set</span><span class="p">()]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)]</span>
+        <span class="c1"># qubits_instructions_dependency:</span>
+        <span class="c1"># instruction dependency for each qubits, a nested list of level 3.</span>
+        <span class="c1"># E.g. [</span>
+        <span class="c1">#       [{1, }],</span>
+        <span class="c1">#       [{0, 1}, {2, }],</span>
+        <span class="c1">#       [{0, }]</span>
+        <span class="c1">#       ]</span>
+        <span class="c1"># means that</span>
+        <span class="c1"># Gate0 acts on qubit 1 and 2, gate1 act on qubit0 and qubit1,</span>
+        <span class="c1"># but gate0 and gate1 cummute with each other.</span>
+        <span class="c1"># Therefore, there is not dependency between gate0 and gate1;</span>
+        <span class="c1"># Gate 2 acts on qubit1 and must be executed after gate0 and gate1.</span>
+        <span class="c1"># Hence, gate2 will depends on gate0 and gate1.</span>
+
+        <span class="c1"># Generate instruction dependency for each qubit</span>
+        <span class="k">for</span> <span class="n">current_ind</span><span class="p">,</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="n">instruction</span><span class="o">.</span><span class="n">used_qubits</span><span class="p">:</span>
+                <span class="c1"># For each used qubit, find the last dependency gate set.</span>
+                <span class="c1"># If the current gate commute with all of them,</span>
+                <span class="c1"># add it to the list.</span>
+                <span class="c1"># Otherwise,</span>
+                <span class="c1"># append a new set with the current gate to the list.</span>
+                <span class="n">dependent</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">dependent_ind</span> <span class="ow">in</span> <span class="n">qubits_instructions_dependency</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">commuting</span><span class="p">(</span><span class="n">current_ind</span><span class="p">,</span> <span class="n">dependent_ind</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+                        <span class="n">dependent</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">dependent</span><span class="p">:</span>
+                    <span class="n">qubits_instructions_dependency</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">current_ind</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">qubits_instructions_dependency</span><span class="p">[</span><span class="n">qubit</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">current_ind</span><span class="p">})</span>
+
+        <span class="c1"># Generate the dependency graph</span>
+        <span class="k">for</span> <span class="n">instructions_cycles</span> <span class="ow">in</span> <span class="n">qubits_instructions_dependency</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cycle_ind1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">instructions_cycles</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">instruction_ind1</span> <span class="ow">in</span> <span class="n">instructions_cycles</span><span class="p">[</span><span class="n">cycle_ind1</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">instruction_ind2</span> <span class="ow">in</span> <span class="n">instructions_cycles</span><span class="p">[</span><span class="n">cycle_ind1</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">instruction_ind1</span><span class="p">]</span><span class="o">.</span><span class="n">successors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                            <span class="n">instruction_ind2</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">instruction_ind2</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                            <span class="n">instruction_ind1</span><span class="p">)</span>
+
+        <span class="c1"># Find start and end nodes of the graph</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instruction</span><span class="o">.</span><span class="n">successors</span><span class="p">:</span>
+                <span class="n">end</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instruction</span><span class="o">.</span><span class="n">predecessors</span><span class="p">:</span>
+                <span class="n">start</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+
+    <span class="k">def</span> <span class="nf">reverse_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reverse the graph.</span>
+<span class="sd">        The start node becomes the end node</span>
+<span class="sd">        Predecessors and successors of each node are exchanged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">predecessors</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">successors</span> \
+                <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">successors</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">predecessors</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_end</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_start</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
+
+    <span class="k">def</span> <span class="nf">find_topological_order</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_constraint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list-schedule algorithm, it</span>
+<span class="sd">        finds the topological order of the directed graph</span>
+<span class="sd">        under certain constraint and priority indicator.</span>
+<span class="sd">        The function returns a list of cycles,</span>
+<span class="sd">        where each cycle is a list of instructions</span>
+<span class="sd">        that can be executed in parallel.</span>
+<span class="sd">        In the case of gates schedule,</span>
+<span class="sd">        the result will be the gates cycle list.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        priority: bool</span>
+<span class="sd">            If use distance to the start and end nodes</span>
+<span class="sd">            as a priority measure for the schedule problem.</span>
+<span class="sd">        apply_constraint: function</span>
+<span class="sd">            A Python function that determines</span>
+<span class="sd">            if to instruction can be executed in parallel.</span>
+<span class="sd">            E.g. if two gates apply to the same qubit, the function</span>
+<span class="sd">            returns False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cycles_list: list</span>
+<span class="sd">            A list of cycles, where each cycle is a list of instructions</span>
+<span class="sd">            that can be executed in parallel.</span>
+<span class="sd">        constraint_dependency: set</span>
+<span class="sd">            A set of instruction pairs that are found conflicted</span>
+<span class="sd">            due to the hardware constraints.</span>
+<span class="sd">            Because of this, they are executed in different cycles.</span>
+<span class="sd">            This set is used to add this dependency to the graph</span>
+<span class="sd">            in another method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The method will destruct the graph, therefore we make a copy.</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">cycles_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">available_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>  <span class="c1"># a list of available instructions</span>
+        <span class="c1"># pairs of instructions that are limited by hardware constraint</span>
+        <span class="n">constraint_dependency</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">available_nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">random</span><span class="p">:</span>
+                <span class="n">shuffle</span><span class="p">(</span><span class="n">available_nodes</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">priority</span><span class="p">:</span>
+                <span class="n">available_nodes</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_compare_priority</span><span class="p">))</span>
+            <span class="n">current_cycle</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">apply_constraint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if no constraits</span>
+                <span class="n">current_cycle</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">available_nodes</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># check if constraits allow the parallelization</span>
+                <span class="k">for</span> <span class="n">node1</span> <span class="ow">in</span> <span class="n">available_nodes</span><span class="p">:</span>
+                    <span class="n">approval</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">for</span> <span class="n">node2</span> <span class="ow">in</span> <span class="n">current_cycle</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">apply_constraint</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+                            <span class="n">approval</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="c1"># save the conflicted pairs of instructions</span>
+                            <span class="n">constraint_dependency</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">node2</span><span class="p">,</span> <span class="n">node1</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">approval</span><span class="p">:</span>
+                        <span class="n">current_cycle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node1</span><span class="p">)</span>
+            <span class="c1"># add this cycle to cycles_list</span>
+            <span class="n">cycles_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_cycle</span><span class="p">)</span>
+
+            <span class="c1"># update the list of available nodes</span>
+            <span class="c1"># remove the executed nodes from available_node</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">current_cycle</span><span class="p">:</span>
+                <span class="n">available_nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="c1"># add new nodes to available_nodes</span>
+            <span class="c1"># if they have no other predecessors</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">current_cycle</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">successor_ind</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">successors</span><span class="p">:</span>
+                    <span class="n">graph</span><span class="p">[</span><span class="n">successor_ind</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="p">[</span><span class="n">successor_ind</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span><span class="p">:</span>
+                        <span class="n">available_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">successor_ind</span><span class="p">)</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">successors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">cycles_list</span><span class="p">,</span> <span class="n">constraint_dependency</span>
+
+    <span class="k">def</span> <span class="nf">compute_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cycles_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the longest distance of each node</span>
+<span class="sd">        to the start and end nodes.</span>
+<span class="sd">        The weight for each dependency arrow is</span>
+<span class="sd">        the duration of the source instruction</span>
+<span class="sd">        (which should be 1 for gates schedule).</span>
+<span class="sd">        The method solves the longest path problem</span>
+<span class="sd">        by using the topological order in cycles_list.</span>
+<span class="sd">        It makes sure that by following the list,</span>
+<span class="sd">        the distance to the predecessors (successors) of</span>
+<span class="sd">        the source (target) node is always calculated</span>
+<span class="sd">        before the target (source) node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cycles_list: list</span>
+<span class="sd">            A `cycles_list` obtained by the method `find_topological_order`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cycles_list</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cycles_list</span><span class="p">)</span>
+
+        <span class="c1"># distance to the start node</span>
+        <span class="k">for</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="n">cycles_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">cycle</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_start</span> <span class="o">=</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">predecessor_ind</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_start</span>
+                            <span class="k">for</span> <span class="n">predecessor_ind</span>
+                            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span>
+                        <span class="p">]</span>
+                        <span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span>
+
+        <span class="c1"># distance to the end node</span>
+        <span class="n">cycles_list</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse_graph</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="n">cycles_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">cycle</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">predecessor_ind</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span>
+                            <span class="k">for</span> <span class="n">predecessor_ind</span>
+                            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span>
+                        <span class="p">]</span>
+                        <span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longest_distance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse_graph</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_compare_priority</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The node with longer `distance_to_end` has higher priority.</span>
+<span class="sd">        If it is the same for the two nodes,</span>
+<span class="sd">        the node with shorter `distance_to_start` has higher priority.</span>
+<span class="sd">        If node1 has higher priority, the method returns a negative value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ind1, ind2: int</span>
+<span class="sd">            Indices of nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span> <span class="o">==</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span><span class="p">:</span>
+            <span class="c1"># lower distance_to_start, higher priority</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_start</span> <span class="o">-</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_start</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># higher distance_to_end, higher priority</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span> <span class="o">-</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span><span class="o">.</span><span class="n">distance_to_end</span>
+
+    <span class="k">def</span> <span class="nf">add_constraint_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint_dependency</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add the dependency caused by hardware constraint to the graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        constraint_dependency: list</span>
+<span class="sd">            `constraint_dependency` obtained by the method</span>
+<span class="sd">            `find_topological_order`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span> <span class="ow">in</span> <span class="n">constraint_dependency</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span><span class="o">.</span><span class="n">successors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ind2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span><span class="o">.</span><span class="n">predecessors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>
+
+        <span class="c1"># Update the start and end nodes of the graph</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instruction</span><span class="o">.</span><span class="n">successors</span><span class="p">:</span>
+                <span class="n">end</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instruction</span><span class="o">.</span><span class="n">predecessors</span><span class="p">:</span>
+                <span class="n">start</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+
+
+<div class="viewcode-block" id="Scheduler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.Scheduler">[docs]</a><span class="k">class</span> <span class="nc">Scheduler</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A gate (pulse) scheduler for quantum circuits (instructions).</span>
+<span class="sd">    It schedules a given circuit or instructions</span>
+<span class="sd">    to reduce the total execution time by parallelization.</span>
+<span class="sd">    It uses heuristic methods mainly from</span>
+<span class="sd">    in https://doi.org/10.1117/12.666419.</span>
+
+<span class="sd">    The scheduler includes two methods,</span>
+<span class="sd">    &quot;ASAP&quot;, as soon as possible, and &quot;ALAP&quot;, as late as possible.</span>
+<span class="sd">    The later is commonly used in quantum computation</span>
+<span class="sd">    because of the finite lifetime of qubits.</span>
+
+<span class="sd">    The scheduler aims at pulse schedule and</span>
+<span class="sd">    therefore does not consider merging gates to reduce the gates number.</span>
+<span class="sd">    It assumes that the input circuit is optimized at the gate level</span>
+<span class="sd">    and matches the hardware topology.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    method: str</span>
+<span class="sd">        &quot;ASAP&quot; for as soon as possible.</span>
+<span class="sd">        &quot;ALAP&quot; for as late as possible.</span>
+<span class="sd">    constraint_functions: list, optional</span>
+<span class="sd">        A list of hardware constraint functions.</span>
+<span class="sd">        Default includes a function `qubit_contraint`,</span>
+<span class="sd">        i.e. one qubit cannot be used by two gates at the same time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ALAP&quot;</span><span class="p">,</span> <span class="n">constraint_functions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="k">if</span> <span class="n">constraint_functions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">constraint_functions</span> <span class="o">=</span> <span class="p">[</span><span class="n">qubit_constraint</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">constraint_functions</span>
+
+<div class="viewcode-block" id="Scheduler.schedule"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.Scheduler.schedule">[docs]</a>    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">gates_schedule</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">return_cycles_list</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">repeat_num</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Schedule a `QubitCircuit`,</span>
+<span class="sd">        a list of `Gates` or a list of `Instruction`.</span>
+<span class="sd">        For pulse schedule, the execution time for each `Instruction`</span>
+<span class="sd">        is given in its `duration` attributes.</span>
+
+<span class="sd">        The scheduler first generates a quantum gates dependency graph,</span>
+<span class="sd">        containing information about</span>
+<span class="sd">        which gates have to be executed before some other gates.</span>
+<span class="sd">        The graph preserves the mobility of the gates,</span>
+<span class="sd">        i.e. commuting gates are not dependent on each other,</span>
+<span class="sd">        even if they use the same qubits.</span>
+<span class="sd">        Next, it computes the longest distance of each node</span>
+<span class="sd">        to the start and end nodes.</span>
+<span class="sd">        The distance for each dependency arrow is defined</span>
+<span class="sd">        by the execution time of the instruction</span>
+<span class="sd">        (By default, it is 1 for all gates).</span>
+<span class="sd">        This is used as a priority measure in the next step.</span>
+<span class="sd">        The gate with a longer distance to the end node and</span>
+<span class="sd">        a shorter distance to the start node has higher priority.</span>
+<span class="sd">        In the last step, it uses a list-schedule algorithm</span>
+<span class="sd">        with hardware constraint and priority and</span>
+<span class="sd">        returns a list of cycles for gates/instructions.</span>
+
+<span class="sd">        For pulse schedule, an additional step is required</span>
+<span class="sd">        to compute the start time of each instruction.</span>
+<span class="sd">        It adds the additional dependency</span>
+<span class="sd">        caused by hardware constraint to the graph</span>
+<span class="sd">        and recomputes the distance of each node to the start and end node.</span>
+<span class="sd">        This distance is then converted to</span>
+<span class="sd">        the start time of each instruction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        circuit: QubitCircuit or list</span>
+<span class="sd">            For gate schedule,</span>
+<span class="sd">            it should be a QubitCircuit or a list of Gate objects.</span>
+<span class="sd">            For pulse schedule, it should be a list of Instruction objects,</span>
+<span class="sd">            each with an attribute `duration`</span>
+<span class="sd">            that indicates the execution time of this instruction.</span>
+<span class="sd">        gates_schedule: bool, optional</span>
+<span class="sd">            `True`, if only gates schedule is needed.</span>
+<span class="sd">            This saves some computation</span>
+<span class="sd">            that is only useful to pulse schedule.</span>
+<span class="sd">            If the input `circuit` is a `QubitCircuit`,</span>
+<span class="sd">            it will be assigned to `True` automatically.</span>
+<span class="sd">            Otherwise, the default is `False`.</span>
+<span class="sd">        return_cycles_list: bool, optional</span>
+<span class="sd">            If `True`, the method returns the `cycles_list`,</span>
+<span class="sd">            e.g. [{0, 2}, {1, 3}],</span>
+<span class="sd">            which means that the first cycle contains gates0 and gates2</span>
+<span class="sd">            while the second cycle contains gates1 and gates3.</span>
+<span class="sd">            It is only usefull for gates schedule.</span>
+<span class="sd">        random_shuffle: bool, optional</span>
+<span class="sd">            If the commuting gates are randomly scuffled to explore</span>
+<span class="sd">            larger search space.</span>
+<span class="sd">        repeat_num: int, optional</span>
+<span class="sd">            Repeat the scheduling several times and use the best result.</span>
+<span class="sd">            Used together with ``random_shuffle=Ture``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        gate_cycle_indices or instruction_start_time: list</span>
+<span class="sd">            The cycle indices for each gate or</span>
+<span class="sd">            the start time for each instruction.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from qutip.qip.circuit import QubitCircuit</span>
+<span class="sd">        &gt;&gt;&gt; from qutip.qip.scheduler import Scheduler</span>
+<span class="sd">        &gt;&gt;&gt; circuit = QubitCircuit(7)</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;SNOT&quot;, 3)  # gate0</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;CZ&quot;, 5, 3)  # gate1</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;CZ&quot;, 4, 3)  # gate2</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;CZ&quot;, 2, 3)  # gate3</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;CZ&quot;, 6, 5)  # gate4</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;CZ&quot;, 2, 6)  # gate5</span>
+<span class="sd">        &gt;&gt;&gt; circuit.add_gate(&quot;SWAP&quot;, [0, 2])  # gate6</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; scheduler = Scheduler(&quot;ASAP&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; scheduler.schedule(circuit, gates_schedule=True)</span>
+<span class="sd">        [0, 1, 3, 2, 2, 3, 4]</span>
+
+<span class="sd">        The result list is the cycle indices for each gate.</span>
+<span class="sd">        It means that the circuit can be executed in 5 gate cycles:</span>
+<span class="sd">        ``[gate0, gate1, (gate3, gate4), (gate2, gate5), gate6]``</span>
+<span class="sd">        Notice that gate3 and gate4 commute with gate2,</span>
+<span class="sd">        therefore, the order is changed to reduce the number of cycles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">repeat_num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">random_shuffle</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">max_length</span> <span class="o">=</span> <span class="mi">4294967296</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeat_num</span><span class="p">):</span>
+                <span class="n">gate_cycle_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span>
+                    <span class="n">circuit</span><span class="p">,</span> <span class="n">gates_schedule</span><span class="o">=</span><span class="n">gates_schedule</span><span class="p">,</span>
+                    <span class="n">return_cycles_list</span><span class="o">=</span><span class="n">return_cycles_list</span><span class="p">,</span>
+                    <span class="n">random_shuffle</span><span class="o">=</span><span class="n">random_shuffle</span><span class="p">,</span> <span class="n">repeat_num</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">current_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gate_cycle_indices</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">current_length</span> <span class="o">&lt;</span> <span class="n">max_length</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">gate_cycle_indices</span>
+                    <span class="n">max_length</span> <span class="o">=</span> <span class="n">current_length</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">QubitCircuit</span><span class="p">):</span>
+            <span class="n">gates</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">gates</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gates</span> <span class="o">=</span> <span class="n">circuit</span>
+
+        <span class="c1"># Generate the quantum operations dependency graph.</span>
+        <span class="n">instructions_graph</span> <span class="o">=</span> <span class="n">InstructionsGraph</span><span class="p">(</span><span class="n">gates</span><span class="p">)</span>
+        <span class="n">instructions_graph</span><span class="o">.</span><span class="n">generate_dependency_graph</span><span class="p">(</span>
+            <span class="n">commuting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">commutation_rules</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ALAP&quot;</span><span class="p">:</span>
+            <span class="n">instructions_graph</span><span class="o">.</span><span class="n">reverse_graph</span><span class="p">()</span>
+
+        <span class="c1"># Schedule without hardware constraints, then</span>
+        <span class="c1"># use this cycles_list to compute the distance.</span>
+        <span class="n">cycles_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">instructions_graph</span><span class="o">.</span><span class="n">find_topological_order</span><span class="p">(</span>
+            <span class="n">priority</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">apply_constraint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="n">random_shuffle</span><span class="p">)</span>
+        <span class="n">instructions_graph</span><span class="o">.</span><span class="n">compute_distance</span><span class="p">(</span><span class="n">cycles_list</span><span class="o">=</span><span class="n">cycles_list</span><span class="p">)</span>
+
+        <span class="c1"># Schedule again with priority and hardware constraint.</span>
+        <span class="n">cycles_list</span><span class="p">,</span> <span class="n">constraint_dependency</span> <span class="o">=</span> \
+            <span class="n">instructions_graph</span><span class="o">.</span><span class="n">find_topological_order</span><span class="p">(</span>
+                <span class="n">priority</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_constraint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_constraint</span><span class="p">,</span>
+                <span class="n">random</span><span class="o">=</span><span class="n">random_shuffle</span><span class="p">)</span>
+
+        <span class="c1"># If we only need gates schedule, we can output the result here.</span>
+        <span class="k">if</span> <span class="n">gates_schedule</span> <span class="ow">or</span> <span class="n">return_cycles_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ALAP&quot;</span><span class="p">:</span>
+                <span class="n">cycles_list</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">return_cycles_list</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cycles_list</span>
+            <span class="n">gate_cycles_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">gates</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cycle_ind</span><span class="p">,</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cycles_list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">instruction_ind</span> <span class="ow">in</span> <span class="n">cycle</span><span class="p">:</span>
+                    <span class="n">gate_cycles_indices</span><span class="p">[</span><span class="n">instruction_ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycle_ind</span>
+            <span class="k">return</span> <span class="n">gate_cycles_indices</span>
+
+        <span class="c1"># For pulse schedule,</span>
+        <span class="c1"># we add the hardware dependency to the graph</span>
+        <span class="c1"># and compute the longest distance to the start node again.</span>
+        <span class="c1"># The longest distance to the start node determines</span>
+        <span class="c1"># the start time of each pulse.</span>
+        <span class="n">instructions_graph</span><span class="o">.</span><span class="n">add_constraint_dependency</span><span class="p">(</span><span class="n">constraint_dependency</span><span class="p">)</span>
+        <span class="n">instructions_graph</span><span class="o">.</span><span class="n">compute_distance</span><span class="p">(</span><span class="n">cycles_list</span><span class="o">=</span><span class="n">cycles_list</span><span class="p">)</span>
+
+        <span class="c1"># Output pulse schedule result.</span>
+        <span class="n">instruction_start_time</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ASAP&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="n">instructions_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="n">instruction_start_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">instruction</span><span class="o">.</span><span class="n">distance_to_start</span> <span class="o">-</span> <span class="n">instruction</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ALAP&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="n">instructions_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="n">instruction_start_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">instructions_graph</span><span class="o">.</span><span class="n">longest_distance</span> <span class="o">-</span>
+                    <span class="n">instruction</span><span class="o">.</span><span class="n">distance_to_start</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">instruction_start_time</span></div>
+
+<div class="viewcode-block" id="Scheduler.commutation_rules"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.Scheduler.commutation_rules">[docs]</a>    <span class="k">def</span> <span class="nf">commutation_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">instructions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if two gates commute, given that their used qubits overlap.</span>
+<span class="sd">        Since usually the input gates are already in a universal gate sets,</span>
+<span class="sd">        it uses an oversimplified condition:</span>
+
+<span class="sd">        If the two gates do not have the same name,</span>
+<span class="sd">        they are considered as not commuting.</span>
+<span class="sd">        If they are the same gate and have the same controls or targets,</span>
+<span class="sd">        they are considered as commuting.</span>
+<span class="sd">        E.g. `CNOT 0, 1` commute with `CNOT 0, 2`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">instruction1</span> <span class="o">=</span> <span class="n">instructions</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span>
+        <span class="n">instruction2</span> <span class="o">=</span> <span class="n">instructions</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">instruction1</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">instruction2</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">instruction1</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span> <span class="ow">and</span> \
+                <span class="p">(</span><span class="n">instruction1</span><span class="o">.</span><span class="n">controls</span> <span class="o">==</span> <span class="n">instruction2</span><span class="o">.</span><span class="n">controls</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">instruction1</span><span class="o">.</span><span class="n">targets</span> <span class="o">==</span> <span class="n">instruction2</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Scheduler.apply_constraint"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.Scheduler.apply_constraint">[docs]</a>    <span class="k">def</span> <span class="nf">apply_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">instructions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply hardware constraint to check</span>
+<span class="sd">        if two instructions can be executed in parallel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ind1, ind2: int</span>
+<span class="sd">            indices of the two instructions</span>
+<span class="sd">        instructions: list</span>
+<span class="sd">            The instruction list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">constraint_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraint_functions</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraint_function</span><span class="p">(</span><span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">instructions</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">qubit_constraint</span><span class="p">(</span><span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">instructions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine if two instructions have overlap in the used qubits.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">instructions</span><span class="p">[</span><span class="n">ind1</span><span class="p">]</span><span class="o">.</span><span class="n">used_qubits</span> <span class="o">&amp;</span> <span class="n">instructions</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span><span class="o">.</span><span class="n">used_qubits</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2021.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

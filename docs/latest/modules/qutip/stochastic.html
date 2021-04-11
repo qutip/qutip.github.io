@@ -2,42 +2,47 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.stochastic &mdash; QuTiP 4.5 Documentation</title>
+  <title>qutip.stochastic &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
   
 
   
   
-    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
+
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
     
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -63,7 +68,7 @@
             
             
               <div class="version">
-                4.5
+                4.6
               </div>
             
           
@@ -80,6 +85,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -91,16 +97,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gallery/qutip_examples/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -135,11 +143,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -194,16 +204,16 @@
 <span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <span class="c1">###############################################################################</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
-<span class="kn">from</span> <span class="nn">qutip.cy.stochastic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">SSESolver</span><span class="p">,</span> <span class="n">SMESolver</span><span class="p">,</span> <span class="n">PcSSESolver</span><span class="p">,</span> <span class="n">PcSMESolver</span><span class="p">,</span>
-                                 <span class="n">PmSMESolver</span><span class="p">,</span> <span class="n">GenericSSolver</span><span class="p">,</span> <span class="n">Solvers</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">qutip.cy.stochastic</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SSESolver</span><span class="p">,</span> <span class="n">SMESolver</span><span class="p">,</span> <span class="n">PcSSESolver</span><span class="p">,</span> <span class="n">PcSMESolver</span><span class="p">,</span> <span class="n">PmSMESolver</span><span class="p">,</span>
+    <span class="n">GenericSSolver</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">isket</span><span class="p">,</span> <span class="n">isoper</span><span class="p">,</span> <span class="n">issuper</span>
 <span class="kn">from</span> <span class="nn">qutip.states</span> <span class="kn">import</span> <span class="n">ket2dm</span>
 <span class="kn">from</span> <span class="nn">qutip.solver</span> <span class="kn">import</span> <span class="n">Result</span>
 <span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
-<span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="kn">import</span> <span class="p">(</span><span class="n">spre</span><span class="p">,</span> <span class="n">spost</span><span class="p">,</span> <span class="n">mat2vec</span><span class="p">,</span> <span class="n">vec2mat</span><span class="p">,</span>
-                                 <span class="n">liouvillian</span><span class="p">,</span> <span class="n">lindblad_dissipator</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">qutip.solver</span> <span class="kn">import</span> <span class="n">Options</span><span class="p">,</span> <span class="n">_solver_safety_check</span>
+<span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="kn">import</span> <span class="n">spre</span><span class="p">,</span> <span class="n">spost</span><span class="p">,</span> <span class="n">mat2vec</span><span class="p">,</span> <span class="n">liouvillian</span>
+<span class="kn">from</span> <span class="nn">qutip.solver</span> <span class="kn">import</span> <span class="n">Options</span>
 <span class="kn">from</span> <span class="nn">qutip.parallel</span> <span class="kn">import</span> <span class="n">serial_map</span>
 <span class="kn">from</span> <span class="nn">qutip.ui.progressbar</span> <span class="kn">import</span> <span class="n">TextProgressBar</span>
 <span class="kn">from</span> <span class="nn">qutip.pdpsolve</span> <span class="kn">import</span> <span class="n">main_ssepdpsolve</span><span class="p">,</span> <span class="n">main_smepdpsolve</span>
@@ -214,121 +224,145 @@
 
 
 <div class="viewcode-block" id="stochastic_solvers"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.stochastic.stochastic_solvers">[docs]</a><span class="k">def</span> <span class="nf">stochastic_solvers</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Available solvers for ssesolve and smesolve</span>
-<span class="sd">    euler-maruyama:</span>
-<span class="sd">        A simple generalization of the Euler method for ordinary</span>
-<span class="sd">        differential equations to stochastic differential equations.</span>
-<span class="sd">        Only solver which could take non-commuting sc_ops. *not tested*</span>
-<span class="sd">        -Order 0.5</span>
-<span class="sd">        -Code: &#39;euler-maruyama&#39;, &#39;euler&#39;, 0.5</span>
+    <span class="c1"># This docstring contains several literal backslash characters inside LaTeX</span>
+    <span class="c1"># blocks, but it cannot be declared as a raw string because we also need to</span>
+    <span class="c1"># use a line continuation.  At one point we need a restructured text</span>
+    <span class="c1"># &quot;definition list&quot;, where the heading _must_ be entirely on one line,</span>
+    <span class="c1"># however it will violate our line-length reporting if we do that.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is purely a reference point for documenting the available</span>
+<span class="sd">    stochastic solver methods, and takes no actions.</span>
 
-<span class="sd">    milstein, Order 1.0 strong Taylor scheme:</span>
-<span class="sd">        Better approximate numerical solution to stochastic</span>
-<span class="sd">        differential equations.</span>
-<span class="sd">        -Order strong 1.0</span>
-<span class="sd">        -Code: &#39;milstein&#39;, 1.0</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 10.3 Eq. (3.1), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Available solvers for :obj:`~ssesolve` and :obj:`~smesolve`</span>
+<span class="sd">        euler-maruyama</span>
+<span class="sd">            A simple generalization of the Euler method for ordinary</span>
+<span class="sd">            differential equations to stochastic differential equations.  Only</span>
+<span class="sd">            solver which could take non-commuting ``sc_ops``. *not tested*</span>
 
-<span class="sd">    milstein-imp, Order 1.0 implicit strong Taylor scheme:</span>
-<span class="sd">        Implicit milstein scheme for the numerical simulation of stiff</span>
-<span class="sd">        stochastic differential equations.</span>
-<span class="sd">        -Order strong 1.0</span>
-<span class="sd">        -Code: &#39;milstein-imp&#39;</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 12.2 Eq. (2.9), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">            - Order 0.5</span>
+<span class="sd">            - Code: ``&#39;euler-maruyama&#39;``, ``&#39;euler&#39;`` or ``0.5``</span>
 
-<span class="sd">    predictor-corrector:</span>
-<span class="sd">        Generalization of the trapezoidal method to stochastic</span>
-<span class="sd">        differential equations. More stable than explicit methods.</span>
-<span class="sd">        -Order strong 0.5, weak 1.0</span>
-<span class="sd">        Only the stochastic part is corrected.</span>
-<span class="sd">            (alpha = 0, eta = 1/2)</span>
-<span class="sd">            -Code: &#39;pred-corr&#39;, &#39;predictor-corrector&#39;, &#39;pc-euler&#39;</span>
-<span class="sd">        Both the deterministic and stochastic part corrected.</span>
-<span class="sd">            (alpha = 1/2, eta = 1/2)</span>
-<span class="sd">            -Code: &#39;pc-euler-imp&#39;, &#39;pc-euler-2&#39;, &#39;pred-corr-2&#39;</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 15.5 Eq. (5.4), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">        milstein</span>
+<span class="sd">            An order 1.0 strong Taylor scheme.  Better approximate numerical</span>
+<span class="sd">            solution to stochastic differential equations.  See eq. (2.9) of</span>
+<span class="sd">            chapter 12.2 of [1]_.</span>
 
-<span class="sd">    platen:</span>
-<span class="sd">        Explicit scheme, create the milstein using finite difference instead of</span>
-<span class="sd">        derivatives. Also contain some higher order terms, thus converge better</span>
-<span class="sd">        than milstein while staying strong order 1.0.</span>
-<span class="sd">        Do not require derivatives, therefore usable for</span>
-<span class="sd">        :func:`qutip.stochastic.general_stochastic`</span>
-<span class="sd">        -Order strong 1.0, weak 2.0</span>
-<span class="sd">        -Code: &#39;platen&#39;, &#39;platen1&#39;, &#39;explicit1&#39;</span>
-<span class="sd">        The Theory of Open Quantum Systems</span>
-<span class="sd">        Chapter 7 Eq. (7.47), H.-P Breuer, F. Petruccione</span>
+<span class="sd">            - Order strong 1.0</span>
+<span class="sd">            - Code: ``&#39;milstein&#39;`` or ``1.0``</span>
 
-<span class="sd">    rouchon:</span>
-<span class="sd">        Scheme keeping the positivity of the density matrix. (smesolve only)</span>
-<span class="sd">        -Order strong 1.0?</span>
-<span class="sd">        -Code: &#39;rouchon&#39;, &#39;Rouchon&#39;</span>
-<span class="sd">        Eq. 4 of arXiv:1410.5345 with eta=1</span>
-<span class="sd">        Efficient Quantum Filtering for Quantum Feedback Control</span>
-<span class="sd">        Pierre Rouchon, Jason F. Ralph</span>
-<span class="sd">        arXiv:1410.5345 [quant-ph]</span>
-<span class="sd">        Phys. Rev. A 91, 012118, (2015)</span>
+<span class="sd">        milstein-imp</span>
+<span class="sd">            An order 1.0 implicit strong Taylor scheme.  Implicit Milstein</span>
+<span class="sd">            scheme for the numerical simulation of stiff stochastic</span>
+<span class="sd">            differential equations.</span>
 
-<span class="sd">    taylor1.5, Order 1.5 strong Taylor scheme:</span>
-<span class="sd">        Solver with more terms of the Ito-Taylor expansion.</span>
-<span class="sd">        Default solver for smesolve and ssesolve.</span>
-<span class="sd">        -Order strong 1.5</span>
-<span class="sd">        -Code: &#39;taylor1.5&#39;, &#39;taylor15&#39;, 1.5, None</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 10.4 Eq. (4.6), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">            - Order strong 1.0</span>
+<span class="sd">            - Code: ``&#39;milstein-imp&#39;``</span>
 
-<span class="sd">    taylor1.5-imp, Order 1.5 implicit strong Taylor scheme:</span>
-<span class="sd">        implicit Taylor 1.5 (alpha = 1/2, beta = doesn&#39;t matter)</span>
-<span class="sd">        -Order strong 1.5</span>
-<span class="sd">        -Code: &#39;taylor1.5-imp&#39;, &#39;taylor15-imp&#39;</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 12.2 Eq. (2.18), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">        predictor-corrector</span>
+<span class="sd">            Generalization of the trapezoidal method to stochastic differential</span>
+<span class="sd">            equations. More stable than explicit methods.  See eq. (5.4) of</span>
+<span class="sd">            chapter 15.5 of [1]_.</span>
 
-<span class="sd">    explicit1.5, Explicit Order 1.5 Strong Schemes:</span>
-<span class="sd">        Reproduce the order 1.5 strong Taylor scheme using finite difference</span>
-<span class="sd">        instead of derivatives. Slower than taylor15 but usable by</span>
-<span class="sd">        :func:`qutip.stochastic.general_stochastic`</span>
-<span class="sd">        -Order strong 1.5</span>
-<span class="sd">        -Code: &#39;explicit1.5&#39;, &#39;explicit15&#39;, &#39;platen15&#39;</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 11.2 Eq. (2.13), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">            - Order strong 0.5, weak 1.0</span>
+<span class="sd">            - Codes to only correct the stochastic part (:math:`\\alpha=0`,</span>
+<span class="sd">              :math:`\\eta=1/2`): ``&#39;pred-corr&#39;``, ``&#39;predictor-corrector&#39;`` or</span>
+<span class="sd">              ``&#39;pc-euler&#39;``</span>
+<span class="sd">            - Codes to correct both the stochastic and deterministic parts</span>
+<span class="sd">              (:math:`\\alpha=1/2`, :math:`\\eta=1/2`): ``&#39;pc-euler-imp&#39;``,</span>
+<span class="sd">              ``&#39;pc-euler-2&#39;`` or ``&#39;pred-corr-2&#39;``</span>
 
-<span class="sd">    taylor2.0, Order 2 strong Taylor scheme:</span>
-<span class="sd">        Solver with more terms of the Stratonovich expansion.</span>
-<span class="sd">        -Order strong 2.0</span>
-<span class="sd">        -Code: &#39;taylor2.0&#39;, &#39;taylor20&#39;, 2.0</span>
-<span class="sd">        Numerical Solution of Stochastic Differential Equations</span>
-<span class="sd">        Chapter 10.5 Eq. (5.2), By Peter E. Kloeden, Eckhard Platen</span>
+<span class="sd">        platen</span>
+<span class="sd">            Explicit scheme, creates the Milstein using finite differences</span>
+<span class="sd">            instead of analytic derivatives. Also contains some higher order</span>
+<span class="sd">            terms, thus converges better than Milstein while staying strong</span>
+<span class="sd">            order 1.0.  Does not require derivatives, therefore usable by</span>
+<span class="sd">            :func:`~general_stochastic`.  See eq. (7.47) of chapter 7 of [2]_.</span>
 
-<span class="sd">    ---All solvers, except taylor2.0, are usable in both smesolve and ssesolve</span>
-<span class="sd">    and for both heterodyne and homodyne. taylor2.0 only work for 1 stochastic</span>
-<span class="sd">    operator not dependent of time with the homodyne method.</span>
-<span class="sd">    The :func:`qutip.stochastic.general_stochastic` only accept derivatives</span>
-<span class="sd">    free solvers: [&#39;euler&#39;, &#39;platen&#39;, &#39;explicit1.5&#39;].</span>
+<span class="sd">            - Order strong 1.0, weak 2.0</span>
+<span class="sd">            - Code: ``&#39;platen&#39;``, ``&#39;platen1&#39;`` or ``&#39;explicit1&#39;``</span>
 
-<span class="sd">Available solver for photocurrent_sesolve and photocurrent_mesolve:</span>
+<span class="sd">        rouchon</span>
+<span class="sd">            Scheme keeping the positivity of the density matrix</span>
+<span class="sd">            (:obj:`~smesolve` only).  See eq. (4) with :math:`\\eta=1` of [3]_.</span>
+
+<span class="sd">            - Order strong 1.0?</span>
+<span class="sd">            - Code: ``&#39;rouchon&#39;`` or ``&#39;Rouchon&#39;``</span>
+
+<span class="sd">        taylor1.5</span>
+<span class="sd">            Order 1.5 strong Taylor scheme.  Solver with more terms of the</span>
+<span class="sd">            Ito-Taylor expansion.  Default solver for :obj:`~smesolve` and</span>
+<span class="sd">            :obj:`~ssesolve`.  See eq. (4.6) of chapter 10.4 of [1]_.</span>
+
+<span class="sd">            - Order strong 1.5</span>
+<span class="sd">            - Code: ``&#39;taylor1.5&#39;``, ``&#39;taylor15&#39;``, ``1.5``, or ``None``</span>
+
+<span class="sd">        taylor1.5-imp</span>
+<span class="sd">            Order 1.5 implicit strong Taylor scheme.  Implicit Taylor 1.5</span>
+<span class="sd">            (:math:`\\alpha = 1/2`, :math:`\\beta` doesn&#39;t matter).  See eq.</span>
+<span class="sd">            (2.18) of chapter 12.2 of [1]_.</span>
+
+<span class="sd">            - Order strong 1.5</span>
+<span class="sd">            - Code: ``&#39;taylor1.5-imp&#39;`` or ``&#39;taylor15-imp&#39;``</span>
+
+<span class="sd">        explicit1.5</span>
+<span class="sd">            Explicit order 1.5 strong schemes.  Reproduce the order 1.5 strong</span>
+<span class="sd">            Taylor scheme using finite difference instead of derivatives.</span>
+<span class="sd">            Slower than ``taylor15`` but usable by</span>
+<span class="sd">            :func:`~general_stochastic`.  See eq. (2.13) of chapter 11.2 of</span>
+<span class="sd">            [1]_.</span>
+
+<span class="sd">            - Order strong 1.5</span>
+<span class="sd">            - Code: ``&#39;explicit1.5&#39;``, ``&#39;explicit15&#39;`` or ``&#39;platen15&#39;``</span>
+
+<span class="sd">        taylor2.0</span>
+<span class="sd">            Order 2 strong Taylor scheme.  Solver with more terms of the</span>
+<span class="sd">            Stratonovich expansion.  See eq. (5.2) of chapter 10.5 of [1]_.</span>
+
+<span class="sd">            - Order strong 2.0</span>
+<span class="sd">            - Code: ``&#39;taylor2.0&#39;``, ``&#39;taylor20&#39;`` or ``2.0``</span>
+
+<span class="sd">        All solvers, except taylor2.0, are usable in both smesolve and ssesolve</span>
+<span class="sd">        and for both heterodyne and homodyne. taylor2.0 only works for 1</span>
+<span class="sd">        stochastic operator independent of time with the homodyne method.</span>
+<span class="sd">        :func:`~general_stochastic` only accepts the derivative-free</span>
+<span class="sd">        solvers: ``&#39;euler&#39;``, ``&#39;platen&#39;`` and ``&#39;explicit1.5&#39;``.</span>
+
+<span class="sd">    Available solvers for :obj:`~photocurrent_sesolve` and \</span>
+<span class="sd">:obj:`~photocurrent_mesolve`</span>
 <span class="sd">        Photocurrent use ordinary differential equations between</span>
 <span class="sd">        stochastic &quot;jump/collapse&quot;.</span>
-<span class="sd">    euler:</span>
-<span class="sd">        Euler method for ordinary differential equations between jumps.</span>
-<span class="sd">        Only 1 jumps per time interval.</span>
-<span class="sd">        Default solver</span>
-<span class="sd">        -Order 1.0</span>
-<span class="sd">        -Code: &#39;euler&#39;</span>
-<span class="sd">        Quantum measurement and control</span>
-<span class="sd">        Chapter 4, Eq 4.19, 4.40, By Howard M. Wiseman, Gerard J. Milburn</span>
 
-<span class="sd">    predictor–corrector:</span>
-<span class="sd">        predictor–corrector method (PECE) for ordinary differential equations.</span>
-<span class="sd">        Use poisson distribution to obtain the number of jump at each timestep.</span>
-<span class="sd">        -Order 2.0</span>
-<span class="sd">        -Code: &#39;pred-corr&#39;</span>
+<span class="sd">        euler</span>
+<span class="sd">            Euler method for ordinary differential equations between jumps.</span>
+<span class="sd">            Only one jump per time interval.  Default solver.  See eqs. (4.19)</span>
+<span class="sd">            and (4.4) of chapter 4 of [4]_.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
+<span class="sd">            - Order 1.0</span>
+<span class="sd">            - Code: ``&#39;euler&#39;``</span>
+
+<span class="sd">        predictor–corrector</span>
+<span class="sd">            predictor–corrector method (PECE) for ordinary differential</span>
+<span class="sd">            equations.  Uses the Poisson distribution to obtain the number of</span>
+<span class="sd">            jumps at each timestep.</span>
+
+<span class="sd">            - Order 2.0</span>
+<span class="sd">            - Code: ``&#39;pred-corr&#39;``</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Peter E. Kloeden and Exkhard Platen, *Numerical Solution of</span>
+<span class="sd">       Stochastic Differential Equations*.</span>
+<span class="sd">    .. [2] H.-P. Breuer and F. Petruccione, *The Theory of Open Quantum</span>
+<span class="sd">       Systems*.</span>
+<span class="sd">    .. [3] Pierre Rouchon and Jason F. Ralpha, *Efficient Quantum Filtering for</span>
+<span class="sd">       Quantum Feedback Control*, `arXiv:1410.5345 [quant-ph]</span>
+<span class="sd">       &lt;https://arxiv.org/abs/1410.5345&gt;`_, Phys. Rev. A 91, 012118,</span>
+<span class="sd">       (2015).</span>
+<span class="sd">    .. [4] Howard M. Wiseman, Gerard J. Milburn, *Quantum measurement and</span>
+<span class="sd">       control*.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="StochasticSolverOptions"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.stochastic.StochasticSolverOptions">[docs]</a><span class="k">class</span> <span class="nc">StochasticSolverOptions</span><span class="p">:</span>
@@ -344,26 +378,39 @@
 <span class="sd">    construct an instance of this class, so it is rarely needed to explicitly</span>
 <span class="sd">    create an instance of this class.</span>
 
+<span class="sd">    Within the attribute list, a ``time_dependent_object`` is either</span>
+
+<span class="sd">    - :class:`~Qobj`: a constant term</span>
+<span class="sd">    - 2-element list of ``[Qobj, time_dependence]``: a time-dependent term</span>
+<span class="sd">      where the ``Qobj`` will be multiplied by the time-dependent scalar.</span>
+
+<span class="sd">    For more details on all allowed time-dependent objects, see the</span>
+<span class="sd">    documentation for :class:`~QobjEvo`.</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-
-<span class="sd">    H : :class:`qutip.Qobj`, time-dependent Qobj as a list*</span>
-<span class="sd">        System Hamiltonian.</span>
+<span class="sd">    H : time_dependent_object or list of time_dependent_object</span>
+<span class="sd">        System Hamiltonian in standard time-dependent list format.  This is the</span>
+<span class="sd">        same as the argument that (e.g.) :func:`~mesolve` takes.  If this is a</span>
+<span class="sd">        list of elements, they are summed.</span>
 
 <span class="sd">    state0 : :class:`qutip.Qobj`</span>
 <span class="sd">        Initial state vector (ket) or density matrix.</span>
 
-<span class="sd">    times : *list* / *array*</span>
+<span class="sd">    times : array_like of float</span>
 <span class="sd">        List of times for :math:`t`. Must be uniformly spaced.</span>
 
-<span class="sd">    c_ops : list of :class:`qutip.Qobj`, :class:`qutip.QobjEvo` or [Qobj, coeff*]</span>
-<span class="sd">        List of deterministic collapse operators.</span>
+<span class="sd">    c_ops : list of time_dependent_object</span>
+<span class="sd">        List of deterministic collapse operators.  Each element of the list is</span>
+<span class="sd">        a separate operator; unlike the Hamiltonian, there is no implicit</span>
+<span class="sd">        summation over the terms.</span>
 
-<span class="sd">    sc_ops : list of :class:`qutip.Qobj`, :class:`qutip.QobjEvo` or [Qobj, coeff*]</span>
+<span class="sd">    sc_ops : list of time_dependent_object</span>
 <span class="sd">        List of stochastic collapse operators. Each stochastic collapse</span>
 <span class="sd">        operator will give a deterministic and stochastic contribution</span>
 <span class="sd">        to the equation of motion according to how the d1 and d2 functions</span>
-<span class="sd">        are defined.</span>
+<span class="sd">        are defined.  Each element of the list is a separate operator, like</span>
+<span class="sd">        ``c_ops``.</span>
 
 <span class="sd">    e_ops : list of :class:`qutip.Qobj`</span>
 <span class="sd">        Single operator or list of operators for which to evaluate</span>
@@ -393,14 +440,15 @@
 <span class="sd">    solver : string</span>
 <span class="sd">        Name of the solver method to use for solving the stochastic</span>
 <span class="sd">        equations. Valid values are:</span>
-<span class="sd">        order 1/2 algorithms: &#39;euler-maruyama&#39;, &#39;pc-euler&#39;, &#39;pc-euler-imp&#39;</span>
-<span class="sd">        order 1 algorithms: &#39;milstein&#39;, &#39;platen&#39;, &#39;milstein-imp&#39;, &#39;rouchon&#39;</span>
-<span class="sd">        order 3/2 algorithms: &#39;taylor1.5&#39;, &#39;taylor1.5-imp&#39;, &#39;explicit1.5&#39;</span>
-<span class="sd">        order 2 algorithms: &#39;taylor2.0&#39;</span>
-<span class="sd">        call help of :func:`qutip.stochastic.stochastic_solvers`</span>
-<span class="sd">        for a description of the solvers.</span>
-<span class="sd">        Implicit methods can adjust tolerance via the kw &#39;tol&#39;</span>
-<span class="sd">        default is {&#39;tol&#39;:1e-6}</span>
+
+<span class="sd">        - order 1/2 algorithms: &#39;euler-maruyama&#39;, &#39;pc-euler&#39;, &#39;pc-euler-imp&#39;</span>
+<span class="sd">        - order 1 algorithms: &#39;milstein&#39;, &#39;platen&#39;, &#39;milstein-imp&#39;, &#39;rouchon&#39;</span>
+<span class="sd">        - order 3/2 algorithms: &#39;taylor1.5&#39;, &#39;taylor1.5-imp&#39;, &#39;explicit1.5&#39;</span>
+<span class="sd">        - order 2 algorithms: &#39;taylor2.0&#39;</span>
+
+<span class="sd">        See the documentation of :func:`~qutip.stochastic.stochastic_solvers`</span>
+<span class="sd">        for a description of the solvers.  Implicit methods can adjust</span>
+<span class="sd">        tolerance via the kw &#39;tol&#39;. Default is {&#39;tol&#39;: 1e-6}</span>
 
 <span class="sd">    method : string (&#39;homodyne&#39;, &#39;heterodyne&#39;)</span>
 <span class="sd">        The name of the type of measurement process that give rise to the</span>
@@ -413,12 +461,12 @@
 <span class="sd">        Whether or not to store the measurement results in the</span>
 <span class="sd">        :class:`qutip.solver.Result` instance returned by the solver.</span>
 
-<span class="sd">    noise : int, array[int, 1d], array[double, 4d]</span>
-<span class="sd">        int : seed of the noise</span>
-<span class="sd">        array[int, 1d], length = ntraj, seeds for each trajectories</span>
-<span class="sd">        array[double, 4d] (ntraj, len(times), nsubsteps, len(sc_ops)*[1|2])</span>
-<span class="sd">            vector for the noise, the len of the last dimensions is doubled for</span>
-<span class="sd">            solvers of order 1.5. The correspond to results.noise</span>
+<span class="sd">    noise : int, or 1D array of int, or 4D array of float</span>
+<span class="sd">        - int : seed of the noise</span>
+<span class="sd">        - 1D array : length = ntraj, seeds for each trajectories.</span>
+<span class="sd">        - 4D array : ``(ntraj, len(times), nsubsteps, len(sc_ops)*[1|2])``.</span>
+<span class="sd">          Vector for the noise, the len of the last dimensions is doubled for</span>
+<span class="sd">          solvers of order 1.5. This corresponds to results.noise.</span>
 
 <span class="sd">    noiseDepth : int</span>
 <span class="sd">        Number of terms kept of the truncated series used to create the</span>
@@ -441,28 +489,6 @@
 
 <span class="sd">    progress_bar : :class:`qutip.ui.BaseProgressBar`</span>
 <span class="sd">        Optional progress bar class instance.</span>
-
-<span class="sd">    *</span>
-<span class="sd">    time-dependent Qobj can be used for H, c_ops and sc_ops.</span>
-<span class="sd">    The format for time-dependent system hamiltonian is:</span>
-<span class="sd">    H = [Qobj0,[Qobj1,coeff1],[Qobj2,coeff2],...]</span>
-<span class="sd">      = Qobj0 + Qobj1 * coeff1(t) + Qobj2 * coeff2(t)</span>
-
-<span class="sd">    coeff function can be:</span>
-<span class="sd">        function: coeff(t, args) -&gt; complex</span>
-<span class="sd">        str: &quot;sin(1j*w*t)&quot;</span>
-<span class="sd">        np.array[complex, 1d] of length equal to the times array</span>
-<span class="sd">    The argument args for the function coeff is the args keyword argument of</span>
-<span class="sd">        the stochastic solver.</span>
-<span class="sd">    Likewisem in str cases, the parameters (&#39;w&#39; in this case) are taken from</span>
-<span class="sd">        the args keywords argument.</span>
-<span class="sd">    *While mixing coeff type does not results in errors, it is not recommended.*</span>
-
-<span class="sd">    For the collapse operators (c_ops, sc_ops):</span>
-<span class="sd">    Each operators can only be composed of 1 Qobj.</span>
-<span class="sd">    c_ops = [c_op1, c_op2, ...]</span>
-<span class="sd">    where, c_opN = Qobj or [Qobj,coeff]</span>
-<span class="sd">    The coeff format is the same as for the Hamiltonian.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">me</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">sc_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">state0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">m_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">store_all_expect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -561,7 +587,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="c1"># noise contain a seed</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
-                <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">)</span>
+                <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
             <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">noise</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">noise</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ntraj</span><span class="p">:</span>
@@ -590,7 +616,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">noise</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;u4&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">noise_type</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Map</span>
@@ -771,7 +797,7 @@
         <span class="n">sso</span><span class="o">.</span><span class="n">sops</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">m_ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">c</span> <span class="o">-</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+                <span class="n">m_ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">())]</span>
             <span class="n">sso</span><span class="o">.</span><span class="n">sops</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
                          <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
         <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="o">=</span> <span class="n">m_ops</span>
@@ -957,7 +983,7 @@
         <span class="n">sops</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">m_ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">c</span> <span class="o">-</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()]</span>
+                <span class="n">m_ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">())]</span>
             <span class="n">sops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span><span class="p">]</span>
         <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="o">=</span> <span class="n">m_ops</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -1615,23 +1641,28 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, and E. Giguere
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Feb 01, 2020.
+        Last updated on Apr 11, 2021.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1639,7 +1670,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
