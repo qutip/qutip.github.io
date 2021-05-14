@@ -1,5 +1,5 @@
 Repository for QuTiP web pages
 -------------------------------------------
 
-[http://qutip.org](http://qutip.org)
+[https://qutip.org](https://qutip.org)
 
