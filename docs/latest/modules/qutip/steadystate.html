@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.steadystate &mdash; QuTiP 4.6 Documentation</title>
+  <title>qutip.steadystate &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -210,24 +210,23 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;steadystate&#39;</span><span class="p">,</span> <span class="s1">&#39;steady&#39;</span><span class="p">,</span> <span class="s1">&#39;build_preconditioner&#39;</span><span class="p">,</span>
            <span class="s1">&#39;pseudo_inverse&#39;</span><span class="p">]</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">packaging.version</span> <span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">_parse_version</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">prod</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="p">(</span><span class="n">use_solver</span><span class="p">,</span> <span class="n">splu</span><span class="p">,</span> <span class="n">spilu</span><span class="p">,</span> <span class="n">spsolve</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span>
-                                 <span class="n">LinearOperator</span><span class="p">,</span> <span class="n">gmres</span><span class="p">,</span> <span class="n">lgmres</span><span class="p">,</span> <span class="n">bicgstab</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">use_solver</span><span class="p">,</span> <span class="n">splu</span><span class="p">,</span> <span class="n">spilu</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">LinearOperator</span><span class="p">,</span> <span class="n">gmres</span><span class="p">,</span> <span class="n">lgmres</span><span class="p">,</span> <span class="n">bicgstab</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">issuper</span><span class="p">,</span> <span class="n">isoper</span>
 
 <span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="kn">import</span> <span class="n">liouvillian</span><span class="p">,</span> <span class="n">vec2mat</span><span class="p">,</span> <span class="n">spre</span>
-<span class="kn">from</span> <span class="nn">qutip.sparse</span> <span class="kn">import</span> <span class="n">sp_permute</span><span class="p">,</span> <span class="n">sp_bandwidth</span><span class="p">,</span> <span class="n">sp_reshape</span><span class="p">,</span> <span class="n">sp_profile</span>
-
-<span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="kn">import</span> <span class="n">liouvillian</span><span class="p">,</span> <span class="n">vec2mat</span>
-<span class="kn">from</span> <span class="nn">qutip.sparse</span> <span class="kn">import</span> <span class="p">(</span><span class="n">sp_permute</span><span class="p">,</span> <span class="n">sp_bandwidth</span><span class="p">,</span> <span class="n">sp_reshape</span><span class="p">,</span>
-                          <span class="n">sp_profile</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">qutip.sparse</span> <span class="kn">import</span> <span class="n">sp_permute</span><span class="p">,</span> <span class="n">sp_bandwidth</span><span class="p">,</span> <span class="n">sp_profile</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.spmath</span> <span class="kn">import</span> <span class="n">zcsr_kron</span>
 <span class="kn">from</span> <span class="nn">qutip.graph</span> <span class="kn">import</span> <span class="n">weighted_bipartite_matching</span>
 <span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="p">(</span><span class="n">mat2vec</span><span class="p">,</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">operator_to_vector</span><span class="p">)</span>
@@ -241,6 +240,36 @@
 <span class="c1"># Load MKL spsolve if avaiable</span>
 <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">has_mkl</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">qutip._mkl.spsolve</span> <span class="kn">import</span> <span class="p">(</span><span class="n">mkl_splu</span><span class="p">,</span> <span class="n">mkl_spsolve</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_eat_kwargs</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a wrapped version of `function` that simply removes any keyword</span>
+<span class="sd">    arguments with one of the given names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">out</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># From SciPy 1.4 onwards we need to pass the `callback_type=&#39;legacy&#39;` argument</span>
+<span class="c1"># to gmres to maintain the same behaviour we used to have.  Since this should</span>
+<span class="c1"># be the default behaviour, we use that in the main code and just &quot;eat&quot; the</span>
+<span class="c1"># argument if passed to a lower version of SciPy that doesn&#39;t know about it.</span>
+<span class="c1"># Similarly, SciPy &lt; 1.1 does not recognise the `atol` keyword.</span>
+<span class="c1">#</span>
+<span class="c1"># Respective checks can be removed when SciPy version requirements are raised.</span>
+
+<span class="k">if</span> <span class="n">_parse_version</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">_parse_version</span><span class="p">(</span><span class="s2">&quot;1.1&quot;</span><span class="p">):</span>
+    <span class="n">gmres</span> <span class="o">=</span> <span class="n">_eat_kwargs</span><span class="p">(</span><span class="n">gmres</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">,</span> <span class="s1">&#39;callback_type&#39;</span><span class="p">])</span>
+    <span class="n">lgmres</span> <span class="o">=</span> <span class="n">_eat_kwargs</span><span class="p">(</span><span class="n">lgmres</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">])</span>
+    <span class="n">bicgstab</span> <span class="o">=</span> <span class="n">_eat_kwargs</span><span class="p">(</span><span class="n">bicgstab</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">])</span>
+<span class="k">elif</span> <span class="n">_parse_version</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">_parse_version</span><span class="p">(</span><span class="s2">&quot;1.4&quot;</span><span class="p">):</span>
+    <span class="n">gmres</span> <span class="o">=</span> <span class="n">_eat_kwargs</span><span class="p">(</span><span class="n">gmres</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;callback_type&#39;</span><span class="p">])</span>
 
 
 <span class="k">def</span> <span class="nf">_empty_info_dict</span><span class="p">():</span>
@@ -643,8 +672,8 @@
 
 <span class="k">def</span> <span class="nf">_steadystate_direct_dense</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">ss_args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Direct solver that use numpy dense matrices. Suitable for</span>
-<span class="sd">    small system, with a few states.</span>
+<span class="sd">    Direct solver that uses numpy arrays. Suitable for small systems with few</span>
+<span class="sd">    states.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting direct dense solver.&#39;</span><span class="p">)</span>
@@ -654,14 +683,14 @@
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span>
 
-    <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
     <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
     <span class="n">_dense_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="n">_dense_end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;solution_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_dense_end</span><span class="o">-</span><span class="n">_dense_start</span>
     <span class="k">if</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;return_info&#39;</span><span class="p">]:</span>
-        <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;residual_norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">L</span><span class="o">*</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+        <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;residual_norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">L</span><span class="nd">@v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">vec2mat</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
@@ -799,50 +828,23 @@
 
     <span class="c1"># Select iterative solver type</span>
     <span class="n">_iter_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="c1"># FIXME: These atol keyword except checks can be removed once scipy 1.1</span>
-    <span class="c1"># is a minimum requirement</span>
-    <span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;callback_type&quot;</span><span class="p">:</span> <span class="s1">&#39;legacy&#39;</span><span class="p">}</span> <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="s2">&quot;1.4&quot;</span> <span class="k">else</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;iterative-gmres&#39;</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
-                             <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                             <span class="n">restart</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;restart&#39;</span><span class="p">],</span>
-                             <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                             <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;unexpected keyword argument &#39;atol&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span>
-                                 <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                 <span class="n">restart</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;restart&#39;</span><span class="p">],</span>
-                                 <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                 <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-
+        <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
+                         <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
+                         <span class="n">restart</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;restart&#39;</span><span class="p">],</span>
+                         <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
+                         <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">,</span> <span class="n">callback_type</span><span class="o">=</span><span class="s1">&#39;legacy&#39;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;iterative-lgmres&#39;</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">lgmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
-                              <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                              <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                              <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;unexpected keyword argument &#39;atol&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">lgmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span>
-                                  <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                  <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                  <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-
+        <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">lgmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
+                          <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
+                          <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
+                          <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;iterative-bicgstab&#39;</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span>
-                                <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
-                                <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;unexpected keyword argument &#39;atol&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span>
-                                    <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                    <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                    <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;tol&#39;</span><span class="p">],</span>
+                            <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
+                            <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
+                            <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
+                            <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid iterative solver method.&quot;</span><span class="p">)</span>
     <span class="n">_iter_end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -1046,52 +1048,26 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Fill factor: </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">((</span><span class="n">L_nnz</span><span class="o">+</span><span class="n">U_nnz</span><span class="p">)</span><span class="o">/</span><span class="n">orig_nnz</span><span class="p">))</span>
 
     <span class="n">it</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1"># FIXME: These atol keyword except checks can be removed once scipy 1.1</span>
-    <span class="c1"># is a minimum requirement</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">L</span> <span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">it</span> <span class="o">&lt;</span> <span class="n">maxiter</span><span class="p">):</span>
         <span class="n">check</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;power&#39;</span><span class="p">:</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">lu</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;power-gmres&#39;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
-                                 <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                 <span class="n">restart</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;restart&#39;</span><span class="p">],</span>
-                                 <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                 <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;unexpected keyword argument &#39;atol&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                    <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span>
-                                     <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                     <span class="n">restart</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;restart&#39;</span><span class="p">],</span>
-                                     <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                     <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-
+            <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
+                             <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
+                             <span class="n">restart</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;restart&#39;</span><span class="p">],</span>
+                             <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
+                             <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">,</span> <span class="n">callback_type</span><span class="o">=</span><span class="s1">&#39;legacy&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;power-lgmres&#39;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">lgmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
-                                  <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                  <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                  <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;unexpected keyword argument &#39;atol&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                    <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">lgmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span>
-                                      <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                      <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                      <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-
+            <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">lgmres</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
+                              <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
+                              <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
+                              <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;power-bicgstab&#39;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
-                                    <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                    <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                    <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;unexpected keyword argument &#39;atol&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                    <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span>
-                                        <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
-                                        <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
-                                        <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
+            <span class="n">v</span><span class="p">,</span> <span class="n">check</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">mtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;matol&#39;</span><span class="p">],</span>
+                                <span class="n">M</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span>
+                                <span class="n">maxiter</span><span class="o">=</span><span class="n">ss_args</span><span class="p">[</span><span class="s1">&#39;maxiter&#39;</span><span class="p">],</span>
+                                <span class="n">callback</span><span class="o">=</span><span class="n">_iter_count</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid iterative solver method.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">check</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1408,7 +1384,7 @@
 <span class="sd">    cast the problem as an Ax=b type problem where the explicit calculation</span>
 <span class="sd">    of the inverse is not required. See page 67 of &quot;Electrons in</span>
 <span class="sd">    nanostructures&quot; C. Flindt, PhD Thesis available online:</span>
-<span class="sd">    http://orbit.dtu.dk/fedora/objects/orbit:82314/datastreams/</span>
+<span class="sd">    https://orbit.dtu.dk/fedora/objects/orbit:82314/datastreams/</span>
 <span class="sd">    file_4732600/content</span>
 
 <span class="sd">    Note also that the definition of the pseudo-inverse herein is different</span>
@@ -1452,9 +1428,9 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Apr 28, 2021.
+        Last updated on May 26, 2021.
       </span>
 
     </p>

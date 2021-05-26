@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.correlation &mdash; QuTiP 4.6 Documentation</title>
+  <title>qutip.correlation &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -210,6 +210,7 @@
 
 <span class="kn">from</span> <span class="nn">re</span> <span class="kn">import</span> <span class="n">sub</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">types</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1324,12 +1325,18 @@
 
     <span class="n">corr_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">tlist</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">taulist</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
 
-    <span class="n">solES_t</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
-    <span class="c1"># evaluate the correlation function</span>
-    <span class="k">for</span> <span class="n">t_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)):</span>
-        <span class="n">rho_t</span> <span class="o">=</span> <span class="n">esval</span><span class="p">(</span><span class="n">solES_t</span><span class="p">,</span> <span class="p">[</span><span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">]])</span>
-        <span class="n">solES_tau</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">c_op</span> <span class="o">*</span> <span class="n">rho_t</span> <span class="o">*</span> <span class="n">a_op</span><span class="p">)</span>
-        <span class="n">corr_mat</span><span class="p">[</span><span class="n">t_idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">esval</span><span class="p">(</span><span class="n">expect</span><span class="p">(</span><span class="n">b_op</span><span class="p">,</span> <span class="n">solES_tau</span><span class="p">),</span> <span class="n">taulist</span><span class="p">)</span>
+    <span class="c1"># The user-facing eseries and ode2es are deprecated from QuTiP 4.6, pending</span>
+    <span class="c1"># removal in QuTiP 5.0, however they are being maintained for internal use</span>
+    <span class="c1"># in correlation, so should not raise warnings to the user not matter what</span>
+    <span class="c1"># their settings.</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">solES_t</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
+        <span class="c1"># evaluate the correlation function</span>
+        <span class="k">for</span> <span class="n">t_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)):</span>
+            <span class="n">rho_t</span> <span class="o">=</span> <span class="n">esval</span><span class="p">(</span><span class="n">solES_t</span><span class="p">,</span> <span class="p">[</span><span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">]])</span>
+            <span class="n">solES_tau</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">c_op</span> <span class="o">*</span> <span class="n">rho_t</span> <span class="o">*</span> <span class="n">a_op</span><span class="p">)</span>
+            <span class="n">corr_mat</span><span class="p">[</span><span class="n">t_idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">esval</span><span class="p">(</span><span class="n">expect</span><span class="p">(</span><span class="n">b_op</span><span class="p">,</span> <span class="n">solES_tau</span><span class="p">),</span> <span class="n">taulist</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">corr_mat</span>
 
 
@@ -1350,17 +1357,23 @@
     <span class="n">a_op_ss</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">a_op</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
     <span class="n">b_op_ss</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">b_op</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
 
-    <span class="c1"># eseries solution for (b * rho0)(t)</span>
-    <span class="n">es</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b_op</span> <span class="o">*</span> <span class="n">rho0</span><span class="p">)</span>
-    <span class="c1"># correlation</span>
-    <span class="n">corr_es</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">a_op</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span>
-    <span class="c1"># covariance</span>
-    <span class="n">cov_es</span> <span class="o">=</span> <span class="n">corr_es</span> <span class="o">-</span> <span class="n">a_op_ss</span> <span class="o">*</span> <span class="n">b_op_ss</span>
-    <span class="c1"># tidy up covariance (to combine, e.g., zero-frequency components that</span>
-    <span class="c1"># cancel)</span>
-    <span class="n">cov_es</span><span class="o">.</span><span class="n">tidyup</span><span class="p">()</span>
-    <span class="c1"># spectrum</span>
-    <span class="k">return</span> <span class="n">esspec</span><span class="p">(</span><span class="n">cov_es</span><span class="p">,</span> <span class="n">wlist</span><span class="p">)</span>
+    <span class="c1"># The user-facing eseries and ode2es are deprecated from QuTiP 4.6, pending</span>
+    <span class="c1"># removal in QuTiP 5.0, however they are being maintained for internal use</span>
+    <span class="c1"># in spectrum, so should not raise warnings to the user not matter what</span>
+    <span class="c1"># their settings.</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="c1"># eseries solution for (b * rho0)(t)</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="n">ode2es</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b_op</span> <span class="o">*</span> <span class="n">rho0</span><span class="p">)</span>
+        <span class="c1"># correlation</span>
+        <span class="n">corr_es</span> <span class="o">=</span> <span class="n">expect</span><span class="p">(</span><span class="n">a_op</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span>
+        <span class="c1"># covariance</span>
+        <span class="n">cov_es</span> <span class="o">=</span> <span class="n">corr_es</span> <span class="o">-</span> <span class="n">a_op_ss</span> <span class="o">*</span> <span class="n">b_op_ss</span>
+        <span class="c1"># tidy up covariance (to combine, e.g., zero-frequency components that</span>
+        <span class="c1"># cancel)</span>
+        <span class="n">cov_es</span><span class="o">.</span><span class="n">tidyup</span><span class="p">()</span>
+        <span class="c1"># spectrum</span>
+        <span class="k">return</span> <span class="n">esspec</span><span class="p">(</span><span class="n">cov_es</span><span class="p">,</span> <span class="n">wlist</span><span class="p">)</span>
 
 
 <span class="c1"># Monte Carlo solvers</span>
@@ -1570,9 +1583,9 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Apr 28, 2021.
+        Last updated on May 26, 2021.
       </span>
 
     </p>

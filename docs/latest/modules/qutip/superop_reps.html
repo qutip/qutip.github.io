@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.superop_reps &mdash; QuTiP 4.6 Documentation</title>
+  <title>qutip.superop_reps &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -287,7 +287,7 @@
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">starmap</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span>
                                      <span class="n">product</span><span class="p">(</span><span class="n">_SINGLE_QUBIT_PAULI_BASIS</span><span class="p">,</span>
                                              <span class="n">repeat</span><span class="o">=</span><span class="n">nq</span><span class="p">))):</span>
-        <span class="n">B</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+        <span class="n">B</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
 
@@ -393,7 +393,7 @@
 <span class="sd">    TODO: Create a new class structure for quantum channels, perhaps as a</span>
 <span class="sd">    strict sub-class of Qobj.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
     <span class="n">vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vecs</span><span class="p">)]</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">inpt</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">*</span><span class="n">vec2mat</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">),</span>
@@ -509,18 +509,16 @@
     <span class="n">in_left</span><span class="p">,</span> <span class="n">in_right</span> <span class="o">=</span> <span class="n">in_dims</span>
 
     <span class="c1"># Find the SVD.</span>
-    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
 
     <span class="c1"># Truncate away the zero singular values, up to a threshold.</span>
     <span class="n">nonzero_idxs</span> <span class="o">=</span> <span class="n">S</span> <span class="o">&gt;</span> <span class="n">thresh</span>
     <span class="n">dK</span> <span class="o">=</span> <span class="n">nonzero_idxs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">U</span><span class="p">)[:,</span> <span class="n">nonzero_idxs</span><span class="p">]</span>
-    <span class="c1"># We also want S to be a single index array, which np.matrix</span>
-    <span class="c1"># doesn&#39;t allow for. This is stripped by calling array() on it.</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">S</span><span class="p">)[</span><span class="n">nonzero_idxs</span><span class="p">])</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">nonzero_idxs</span><span class="p">]</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">nonzero_idxs</span><span class="p">])</span>
     <span class="c1"># Since NumPy returns V and not V+, we need to take the dagger</span>
     <span class="c1"># to get back to quantum info notation for Stinespring pairs.</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)[:,</span> <span class="n">nonzero_idxs</span><span class="p">]</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">nonzero_idxs</span><span class="p">]</span>
 
     <span class="c1"># Next, we convert each of U and V into Kraus operators.</span>
     <span class="c1"># Finally, we want the Kraus index to be left-most so that we</span>
@@ -769,9 +767,9 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Apr 28, 2021.
+        Last updated on May 26, 2021.
       </span>
 
     </p>

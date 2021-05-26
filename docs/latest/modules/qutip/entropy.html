@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.entropy &mdash; QuTiP 4.6 Documentation</title>
+  <title>qutip.entropy &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -203,9 +203,10 @@
 <span class="c1">###############################################################################</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;entropy_vn&#39;</span><span class="p">,</span> <span class="s1">&#39;entropy_linear&#39;</span><span class="p">,</span> <span class="s1">&#39;entropy_mutual&#39;</span><span class="p">,</span> <span class="s1">&#39;negativity&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;concurrence&#39;</span><span class="p">,</span> <span class="s1">&#39;entropy_conditional&#39;</span><span class="p">,</span> <span class="s1">&#39;entangling_power&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;concurrence&#39;</span><span class="p">,</span> <span class="s1">&#39;entropy_conditional&#39;</span><span class="p">,</span> <span class="s1">&#39;entangling_power&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;entropy_relative&#39;</span><span class="p">]</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">e</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">conj</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">imag</span><span class="p">,</span> <span class="n">inner</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">sqrt</span>
 <span class="kn">from</span> <span class="nn">numpy.lib.scimath</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">log2</span>
 <span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">ptrace</span>
 <span class="kn">from</span> <span class="nn">qutip.states</span> <span class="kn">import</span> <span class="n">ket2dm</span>
@@ -296,7 +297,7 @@
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    .. [1] http://en.wikipedia.org/wiki/Concurrence_(quantum_computing)</span>
+<span class="sd">    .. [1] https://en.wikipedia.org/wiki/Concurrence_(quantum_computing)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">isket</span> <span class="ow">and</span> <span class="n">rho</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]:</span>
@@ -394,45 +395,98 @@
     <span class="k">return</span> <span class="n">out</span></div>
 
 
-<span class="k">def</span> <span class="nf">_entropy_relative</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_relative"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.entropy.entropy_relative">[docs]</a><span class="k">def</span> <span class="nf">entropy_relative</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    ****NEEDS TO BE WORKED ON****</span>
-
 <span class="sd">    Calculates the relative entropy S(rho||sigma) between two density</span>
 <span class="sd">    matrices.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rho : qobj</span>
-<span class="sd">        First density matrix.</span>
-<span class="sd">    sigma : qobj</span>
-<span class="sd">        Second density matrix.</span>
+<span class="sd">    rho : :class:`qutip.Qobj`</span>
+<span class="sd">        First density matrix (or ket which will be converted to a density</span>
+<span class="sd">        matrix).</span>
+<span class="sd">    sigma : :class:`qutip.Qobj`</span>
+<span class="sd">        Second density matrix (or ket which will be converted to a density</span>
+<span class="sd">        matrix).</span>
 <span class="sd">    base : {e,2}</span>
-<span class="sd">        Base of logarithm.</span>
+<span class="sd">        Base of logarithm. Defaults to e.</span>
+<span class="sd">    sparse : bool</span>
+<span class="sd">        Flag to use sparse solver when determining the eigenvectors</span>
+<span class="sd">        of the density matrices. Defaults to False.</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        Tolerance to use to detect 0 eigenvalues or dot producted between</span>
+<span class="sd">        eigenvectors. Defaults to 1e-12.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    rel_ent : float</span>
-<span class="sd">        Value of relative entropy.</span>
+<span class="sd">        Value of relative entropy. Guaranteed to be greater than zero</span>
+<span class="sd">        and should equal zero only when rho and sigma are identical.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    First we define two density matrices:</span>
+
+<span class="sd">    &gt;&gt;&gt; rho = qutip.ket2dm(qutip.ket(&quot;00&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; sigma = rho + qutip.ket2dm(qutip.ket(&quot;01&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; sigma = sigma.unit()</span>
+
+<span class="sd">    Then we calculate their relative entropy using base 2 (i.e. ``log2``)</span>
+<span class="sd">    and base e (i.e. ``log``).</span>
+
+<span class="sd">    &gt;&gt;&gt; qutip.entropy_relative(rho, sigma, base=2)</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &gt;&gt;&gt; qutip.entropy_relative(rho, sigma)</span>
+<span class="sd">    0.6931471805599453</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    See Nielsen &amp; Chuang, &quot;Quantum Computation and Quantum Information&quot;,</span>
+<span class="sd">    Section 11.3.1, pg. 511 for a detailed explanation of quantum relative</span>
+<span class="sd">    entropy.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;oper&#39;</span> <span class="ow">or</span> <span class="n">sigma</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Inputs must be density matrices..&quot;</span><span class="p">)</span>
-    <span class="c1"># sigma terms</span>
-    <span class="n">svals</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">sigma</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">sigma</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> <span class="n">vecs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span>
-    <span class="n">snzvals</span> <span class="o">=</span> <span class="n">svals</span><span class="p">[</span><span class="n">svals</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sigma</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rho</span><span class="o">.</span><span class="n">isoper</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">sigma</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Inputs must be density matrices.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="n">sigma</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inputs must have the same shape and dims.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">slogvals</span> <span class="o">=</span> <span class="n">log2</span><span class="p">(</span><span class="n">snzvals</span><span class="p">)</span>
+        <span class="n">log_base</span> <span class="o">=</span> <span class="n">log2</span>
     <span class="k">elif</span> <span class="n">base</span> <span class="o">==</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">slogvals</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">snzvals</span><span class="p">)</span>
+        <span class="n">log_base</span> <span class="o">=</span> <span class="n">log</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Base must be 2 or e.&quot;</span><span class="p">)</span>
-    <span class="c1"># rho terms</span>
-    <span class="n">rvals</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rho</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> <span class="n">vecs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span>
-    <span class="n">rnzvals</span> <span class="o">=</span> <span class="n">rvals</span><span class="p">[</span><span class="n">rvals</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># calculate tr(rho*log sigma)</span>
-    <span class="n">rel_trace</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">rnzvals</span> <span class="o">*</span> <span class="n">slogvals</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">entropy_vn</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">sparse</span><span class="p">)</span> <span class="o">-</span> <span class="n">rel_trace</span>
+    <span class="c1"># S(rho || sigma) = sum_i(p_i log p_i) - sum_ij(p_i P_ij log q_i)</span>
+    <span class="c1">#</span>
+    <span class="c1"># S is +inf if the kernel of sigma (i.e. svecs[svals == 0]) has non-trivial</span>
+    <span class="c1"># intersection with the support of rho (i.e. rvecs[rvals != 0]).</span>
+    <span class="n">rvals</span><span class="p">,</span> <span class="n">rvecs</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">rho</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> <span class="n">vecs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">rvals</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input rho has non-real eigenvalues.&quot;</span><span class="p">)</span>
+    <span class="n">rvals</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">rvals</span><span class="p">)</span>
+    <span class="n">svals</span><span class="p">,</span> <span class="n">svecs</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">sigma</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">sigma</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span> <span class="n">vecs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">svals</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input sigma has non-real eigenvalues.&quot;</span><span class="p">)</span>
+    <span class="n">svals</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">svals</span><span class="p">)</span>
+    <span class="c1"># Calculate inner products of eigenvectors and return +inf if kernel</span>
+    <span class="c1"># of sigma overlaps with support of rho.</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">rvecs</span><span class="p">,</span> <span class="n">conj</span><span class="p">(</span><span class="n">svecs</span><span class="p">)))</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rvals</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">P</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">svals</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">inf</span>
+    <span class="c1"># Avoid -inf from log(0) -- these terms will be multiplied by zero later</span>
+    <span class="c1"># anyway</span>
+    <span class="n">svals</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">svals</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">nzrvals</span> <span class="o">=</span> <span class="n">rvals</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">rvals</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">]</span>
+    <span class="c1"># Calculate S</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">nzrvals</span> <span class="o">@</span> <span class="n">log_base</span><span class="p">(</span><span class="n">nzrvals</span><span class="p">)</span> <span class="o">-</span> <span class="n">rvals</span> <span class="o">@</span> <span class="n">P</span> <span class="o">@</span> <span class="n">log_base</span><span class="p">(</span><span class="n">svals</span><span class="p">)</span>
+    <span class="c1"># the relative entropy is guaranteed to be &gt;= 0, so we clamp the</span>
+    <span class="c1"># calculated value to 0 to avoid small violations of the lower bound.</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="entropy_conditional"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.entropy.entropy_conditional">[docs]</a><span class="k">def</span> <span class="nf">entropy_conditional</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">selB</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -537,9 +591,9 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, and E. Giguère.
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Apr 28, 2021.
+        Last updated on May 26, 2021.
       </span>
 
     </p>
