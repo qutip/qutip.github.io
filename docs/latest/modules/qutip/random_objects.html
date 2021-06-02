@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.random_objects &mdash; QuTiP 4.7 Documentation</title>
+  <title>qutip.random_objects &mdash; QuTiP 4.6 Documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                4.7
+                4.6
               </div>
             
           
@@ -471,14 +471,14 @@
     <span class="k">return</span> <span class="n">U</span></div>
 
 
-<div class="viewcode-block" id="rand_ket"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket">[docs]</a><span class="k">def</span> <span class="nf">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rand_ket"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket">[docs]</a><span class="k">def</span> <span class="nf">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Creates a random Nx1 sparse ket vector.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    N : int</span>
-<span class="sd">        Number of rows for output quantum vector.</span>
-<span class="sd">        If None, N is deduced from dims.</span>
+<span class="sd">        Number of rows for output quantum operator.</span>
+<span class="sd">        If None or 0, N is deduced from dims.</span>
 <span class="sd">    density : float</span>
 <span class="sd">        Density between [0,1] of output ket state.</span>
 <span class="sd">    dims : list</span>
@@ -488,26 +488,18 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    oper : qobj</span>
-<span class="sd">        Nx1 ket quantum state vector.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    -------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If neither `N` or `dims` are specified.</span>
+<span class="sd">        Nx1 ket state quantum operator.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Specify either the number of rows of state vector&#39;</span>
-                         <span class="s1">&#39;(N) or dimensions of quantum object (dims)&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">:</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">X</span><span class="o">.</span><span class="n">nnz</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># ensure that the ket is not all zeros.</span>
@@ -521,7 +513,7 @@
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">X</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="rand_ket_haar"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket_haar">[docs]</a><span class="k">def</span> <span class="nf">rand_ket_haar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rand_ket_haar"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket_haar">[docs]</a><span class="k">def</span> <span class="nf">rand_ket_haar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a Haar random pure state of dimension ``dim`` by</span>
 <span class="sd">    applying a Haar random unitary to a fixed pure state.</span>
@@ -530,7 +522,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    N : int</span>
 <span class="sd">        Dimension of the state vector to be returned.</span>
-<span class="sd">        If None, N is deduced from dims.</span>
+<span class="sd">        If None or 0, N is deduced from dims.</span>
 <span class="sd">    dims : list of ints, or None</span>
 <span class="sd">        Dimensions of the resultant quantum object.</span>
 <span class="sd">        If None, [[N],[1]] is used.</span>
@@ -539,22 +531,14 @@
 <span class="sd">    -------</span>
 <span class="sd">    psi : Qobj</span>
 <span class="sd">        A random state vector drawn from the Haar measure.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    -------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If neither `N` or `dims` are specified.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Specify either the number of rows of state vector&#39;</span>
-                         <span class="s1">&#39;(N) or dimensions of quantum object (dims)&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">N</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">:</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">psi</span> <span class="o">=</span> <span class="n">rand_unitary_haar</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">psi</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
     <span class="k">return</span> <span class="n">psi</span></div>
@@ -914,7 +898,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on May 26, 2021.
+        Last updated on Jun 02, 2021.
       </span>
 
     </p>

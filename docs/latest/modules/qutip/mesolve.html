@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.mesolve &mdash; QuTiP 4.7 Documentation</title>
+  <title>qutip.mesolve &mdash; QuTiP 4.6 Documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                4.7
+                4.6
               </div>
             
           
@@ -464,7 +464,17 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">L_td</span> <span class="o">=</span> <span class="n">H_td</span>
     <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
-        <span class="n">op_td</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
+        <span class="c1"># We want to avoid passing tlist where it isn&#39;t necessary, to allow a</span>
+        <span class="c1"># Hamiltonian/Liouvillian which already _has_ time-dependence not equal</span>
+        <span class="c1"># to the mesolve evaluation times to be used in conjunction with</span>
+        <span class="c1"># time-independent c_ops.  If we _always_ pass it, it may appear to</span>
+        <span class="c1"># QobjEvo that there is a tlist mismatch, even though it is not used.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="n">op_td</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
+            <span class="n">op_td</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">op_td</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">issuper</span><span class="p">(</span><span class="n">op_td</span><span class="o">.</span><span class="n">cte</span><span class="p">):</span>
             <span class="n">op_td</span> <span class="o">=</span> <span class="n">lindblad_dissipator</span><span class="p">(</span><span class="n">op_td</span><span class="p">)</span>
         <span class="n">L_td</span> <span class="o">+=</span> <span class="n">op_td</span>
@@ -725,7 +735,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on May 26, 2021.
+        Last updated on Jun 02, 2021.
       </span>
 
     </p>
