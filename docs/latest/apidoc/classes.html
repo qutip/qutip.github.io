@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../static/site.css" type="text/css" />
 
   
   
@@ -108,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#qobjevo">QobjEvo</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eseries">eseries</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bloch-sphere">Bloch sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distributions">Distributions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cubic-spline">Cubic Spline</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#non-markovian-solvers">Non-Markovian Solvers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#solver-options-and-results">Solver Options and Results</a></li>
@@ -1733,7 +1735,7 @@ connected with a line.</p>
 
 <dl class="py method">
 <dt id="qutip.bloch.Bloch.render">
-<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.render" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render the Bloch sphere and its data sets in on given figure and axes.</p>
 </dd></dl>
 
@@ -1779,9 +1781,9 @@ This overrides the ‘format’ and ‘dirc’ arguments.</p>
 <li><p>“01”</p></li>
 <li><p>“polarization jones”</p></li>
 <li><p>“polarization jones letters”
-see also: <a class="reference external" href="https://en.wikipedia.org/wiki/Jones_calculus">https://en.wikipedia.org/wiki/Jones_calculus</a></p></li>
+see also: <a class="reference external" href="http://en.wikipedia.org/wiki/Jones_calculus">http://en.wikipedia.org/wiki/Jones_calculus</a></p></li>
 <li><p>“polarization stokes”
-see also: <a class="reference external" href="https://en.wikipedia.org/wiki/Stokes_parameters">https://en.wikipedia.org/wiki/Stokes_parameters</a></p></li>
+see also: <a class="reference external" href="http://en.wikipedia.org/wiki/Stokes_parameters">http://en.wikipedia.org/wiki/Stokes_parameters</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -1793,6 +1795,14 @@ see also: <a class="reference external" href="https://en.wikipedia.org/wiki/Stok
 <dt id="qutip.bloch.Bloch.show">
 <code class="sig-name descname"><span class="pre">show</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display Bloch sphere and corresponding data sets.</p>
+<p class="rubric">Notes</p>
+<p>When using inline plotting in Jupyter notebooks, any figure created
+in a notebook cell is displayed after the cell executes. Thus if you
+create a figure yourself and use it create a Bloch sphere with
+<code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">Bloch(...,</span> <span class="pre">fig=fig)</span></code> and then call <code class="docutils literal notranslate"><span class="pre">b.show()</span></code> in the same
+cell, then the figure will be displayed twice. If you do create your
+own figure, the simplest solution to this is to not call <code class="docutils literal notranslate"><span class="pre">.show()</span></code>
+in the cell you create the figure in.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1813,6 +1823,59 @@ see also: <a class="reference external" href="https://en.wikipedia.org/wiki/Stok
 <dd><p>Width of Bloch vectors, default = 5</p>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="distributions">
+<h2>Distributions<a class="headerlink" href="#distributions" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="qutip.QFunc">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">QFunc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.4142135623730951</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/wigner.html#QFunc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.QFunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class-based method of calculating the Husimi-Q function of many different
+quantum states at fixed phase-space points <code class="docutils literal notranslate"><span class="pre">0.5*g*</span> <span class="pre">(xvec</span> <span class="pre">+</span> <span class="pre">i*yvec)</span></code>.
+This class has slightly higher first-usage costs than <a class="reference internal" href="functions.html#qutip.wigner.qfunc" title="qutip.wigner.qfunc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qfunc</span></code></a>, but
+subsequent operations will be several times faster. However, it can require
+quite a lot of memory. Call the created object as a function to retrieve
+the Husimi-Q function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>xvec, yvec</strong><span class="classifier">array_like</span></dt><dd><p>x- and y-coordinates at which to calculate the Husimi-Q function.</p>
+</dd>
+<dt><strong>g</strong><span class="classifier">float, default sqrt(2)</span></dt><dd><p>Scaling factor for <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">g</span> <span class="pre">*</span> <span class="pre">(x</span> <span class="pre">+</span> <span class="pre">iy)</span></code>.  The value of <cite>g</cite> is
+related to the value of <cite>hbar</cite> in the commutation relation
+<span class="math notranslate nohighlight">\([x,\,y] = i\hbar\)</span> via <span class="math notranslate nohighlight">\(\hbar=2/g^2\)</span>, so the default
+corresponds to <span class="math notranslate nohighlight">\(\hbar=1\)</span>.</p>
+</dd>
+<dt><strong>memory</strong><span class="classifier">real, default 1024</span></dt><dd><p>Size in MB that may be used internally as workspace.  This class will
+raise <code class="docutils literal notranslate"><span class="pre">MemoryError</span></code> if subsequently passed a state of sufficiently
+large dimension that this bound would be exceeded.  In those cases, use
+<a class="reference internal" href="functions.html#qutip.wigner.qfunc" title="qutip.wigner.qfunc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qfunc</span></code></a> with <code class="docutils literal notranslate"><span class="pre">precompute_memory=None</span></code> instead to force using
+the slower, more memory-efficient algorithm.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="functions.html#qutip.wigner.qfunc" title="qutip.wigner.qfunc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qfunc</span></code></a></dt><dd><p>a single function version, which will involve computing several quantities multiple times in order to use less memory.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>Initialise the class for a square set of coordinates, with some states we
+want to investigate.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">qutip</span><span class="o">.</span><span class="n">rand_dm</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qfunc</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QFunc</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">xvec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can calculate the Husimi-Q function over each of the states more
+efficiently with:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">husimiq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qfunc</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -3633,6 +3696,8 @@ of gates.</p>
 e.g [2,2,2,2,2] for 5 qubits system. If None, qubits system
 will be the default option.</p>
 </dd>
+<dt><strong>num_cbits</strong><span class="classifier">int</span></dt><dd><p>Number of classical bits in the system.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -4475,8 +4540,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -4978,8 +5042,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -5438,8 +5501,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -6001,8 +6063,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -6565,8 +6626,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -7129,8 +7189,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -7699,8 +7758,7 @@ the quantum circuit saved in the processor by <code class="docutils literal notr
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>An instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>U_list: list</dt><dd><p>A list of propagators obtained for the physical implementation.</p>
 </dd>
 </dl>
 </dd>
@@ -9425,9 +9483,7 @@ this for more information. Individual memory saving  options can be
 switched by settting them directly (see below)</p>
 </dd>
 <dt><strong>oper_dtype</strong><span class="classifier">type</span></dt><dd><p>Data type for internal dynamics generators, propagators and time
-evolution operators. This can be ndarray or Qobj, or (in theory) any
-other representaion that supports typical matrix methods (e.g. dot)
-ndarray performs best for smaller quantum systems.
+evolution operators. This can be ndarray or Qobj.
 Qobj may perform better for larger systems, and will also
 perform better when (custom) fidelity measures use Qobj methods
 such as partial trace.
@@ -11189,7 +11245,7 @@ as numpy.savetxt is used, and requires this.</p>
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

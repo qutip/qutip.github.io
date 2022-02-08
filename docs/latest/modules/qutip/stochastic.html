@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -529,8 +530,6 @@
                                <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sc_ops</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sc_ops</span> <span class="o">=</span> <span class="n">sc_ops</span>
 
@@ -543,8 +542,6 @@
                               <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span> <span class="o">=</span> <span class="n">c_ops</span>
 
@@ -552,6 +549,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rho0</span> <span class="o">=</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">state0</span><span class="o">.</span><span class="n">full</span><span class="p">())</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
         <span class="c1"># Observation</span>
+
+        <span class="k">for</span> <span class="n">e_op</span> <span class="ow">in</span> <span class="n">e_ops</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">e_op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="n">e_op</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;e_ops dims (</span><span class="si">{</span><span class="n">e_op</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">) are not compatible &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;with the system&#39;s (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">e_ops</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_ops</span> <span class="o">=</span> <span class="n">m_ops</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_measurement</span> <span class="o">=</span> <span class="n">store_measurement</span>
@@ -673,16 +679,17 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> \
                     <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">const</span> <span class="ow">or</span> \
                     <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;homodyne&quot;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Taylor2.0 only works with 1 constant &quot;</span> <span class="o">+</span>
-                                <span class="s2">&quot;sc_ops and for homodyne method&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Taylor2.0 only works with 1 constant sc_ops and for&quot;</span>
+                    <span class="s2">&quot; homodyne method&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
-                    <span class="s2">&quot;The solver should be one of &quot;</span>
-                    <span class="s2">&quot;[None, &#39;euler-maruyama&#39;, &#39;platen&#39;, &#39;pc-euler&#39;, &quot;</span>
-                    <span class="s2">&quot;&#39;pc-euler-imp&#39;, &#39;milstein&#39;, &#39;milstein-imp&#39;, &quot;</span>
-                    <span class="s2">&quot;&#39;rouchon&#39;, &quot;</span>
-                    <span class="s2">&quot;&#39;taylor1.5&#39;, &#39;taylor1.5-imp&#39;, &#39;explicit1.5&#39; &quot;</span>
-                    <span class="s2">&quot;&#39;taylor2.0&#39;]&quot;</span><span class="p">))</span></div>
+            <span class="n">known</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;euler-maruyama&#39;</span><span class="p">,</span> <span class="s1">&#39;platen&#39;</span><span class="p">,</span> <span class="s1">&#39;pc-euler&#39;</span><span class="p">,</span> <span class="s1">&#39;pc-euler-imp&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;milstein&#39;</span><span class="p">,</span> <span class="s1">&#39;milstein-imp&#39;</span><span class="p">,</span> <span class="s1">&#39;rouchon&#39;</span><span class="p">,</span> <span class="s1">&#39;taylor1.5&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;taylor1.5-imp&#39;</span><span class="p">,</span> <span class="s1">&#39;explicit1.5&#39;</span><span class="p">,</span> <span class="s1">&#39;taylor2.0&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The solver should be one of </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">known</span><span class="p">))</span></div>
 
 
 <span class="k">class</span> <span class="nc">StochasticSolverOptionsPhoto</span><span class="p">(</span><span class="n">StochasticSolverOptions</span><span class="p">):</span>
@@ -760,8 +767,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stochastic solver with photocurrent method has been moved to &quot;</span>
               <span class="s2">&quot;it&#39;s own function: photocurrent_mesolve&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">photocurrent_mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">sc_ops</span><span class="o">=</span><span class="n">sc_ops</span><span class="p">,</span>
-                                   <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span>
-                                   <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                                    <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span>
+                                    <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">isket</span><span class="p">(</span><span class="n">rho0</span><span class="p">):</span>
         <span class="n">rho0</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">rho0</span><span class="p">)</span>
 
@@ -887,8 +894,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stochastic solver with photocurrent method has been moved to &quot;</span>
               <span class="s2">&quot;it&#39;s own function: photocurrent_sesolve&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">photocurrent_sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span>
-                                   <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span>
-                                   <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                                    <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span>
+                                    <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e_ops</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">e_ops_dict</span> <span class="o">=</span> <span class="n">e_ops</span>
@@ -1050,7 +1057,7 @@
 
 
 <div class="viewcode-block" id="photocurrent_mesolve"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.stochastic.photocurrent_mesolve">[docs]</a><span class="k">def</span> <span class="nf">photocurrent_mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">sc_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span>
-                        <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                         <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solve stochastic master equation using the photocurrent method.</span>
 
@@ -1146,7 +1153,7 @@
 
 
 <div class="viewcode-block" id="photocurrent_sesolve"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.stochastic.photocurrent_sesolve">[docs]</a><span class="k">def</span> <span class="nf">photocurrent_sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">sc_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span>
-                        <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                         <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solve stochastic schrodinger equation using the photocurrent method.</span>
 
@@ -1187,7 +1194,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e_ops</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">e_ops_dict</span> <span class="o">=</span> <span class="n">e_ops</span>
-        <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">e_ops</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">e_ops</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">e_ops</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">e_ops_dict</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1303,15 +1310,11 @@
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Safety check: d1(0., state0_vec) failed.:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
                                <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Safety check: d1(0., state0_vec) failed.&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">out_d2</span> <span class="o">=</span> <span class="n">d2</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sso</span><span class="o">.</span><span class="n">rho0</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Safety check: d2(0., state0_vec) failed:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
                                <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Safety check: d2(0., state0_vec) failed.&quot;</span><span class="p">)</span>
 
         <span class="n">msg_d1</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;d1 must return an 1d numpy array with the same number &quot;</span>
                   <span class="s2">&quot;of elements as the initial state as a vector.&quot;</span><span class="p">)</span>
@@ -1356,7 +1359,7 @@
         <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">)</span>
+            <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of dW_factors must fit&quot;</span> <span class="o">+</span>
                              <span class="s2">&quot; the number of m_ops.&quot;</span><span class="p">)</span>
@@ -1365,7 +1368,8 @@
         <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_d2</span>
     <span class="n">sso</span><span class="o">.</span><span class="n">sops</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_d2</span>
     <span class="n">sso</span><span class="o">.</span><span class="n">ce_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">e_ops</span><span class="p">]</span>
-    <span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">ce_ops</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">ce_ops</span><span class="p">:</span>
+        <span class="n">op</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
 
     <span class="n">sso</span><span class="o">.</span><span class="n">solver_obj</span> <span class="o">=</span> <span class="n">GenericSSolver</span>
     <span class="n">sso</span><span class="o">.</span><span class="n">solver_name</span> <span class="o">=</span> <span class="s2">&quot;general_stochastic_solver_&quot;</span> <span class="o">+</span> <span class="n">sso</span><span class="o">.</span><span class="n">solver</span>
@@ -1387,7 +1391,9 @@
     <span class="n">l_vec</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">rho0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
-            <span class="k">raise</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Given a Liouvillian for a Schrödinger equation problem.&quot;</span>
+            <span class="p">)</span>
         <span class="n">shape_op</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the hamiltonian does &quot;</span>
@@ -1406,7 +1412,9 @@
     <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
-                <span class="k">raise</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Given a Liouvillian for a Schrödinger equation problem.&quot;</span>
+                <span class="p">)</span>
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the sc_ops does &quot;</span>
@@ -1425,7 +1433,9 @@
     <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">c_ops</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
-                <span class="k">raise</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Given a Liouvillian for a Schrödinger equation problem.&quot;</span>
+                <span class="p">)</span>
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the c_ops does &quot;</span>
@@ -1540,9 +1550,8 @@
 <span class="k">def</span> <span class="nf">_single_trajectory</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sso</span><span class="p">):</span>
     <span class="c1"># Only one step?</span>
     <span class="n">ssolver</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">solver_obj</span><span class="p">()</span>
-    <span class="c1">#ssolver.set_data(sso)</span>
     <span class="n">ssolver</span><span class="o">.</span><span class="n">set_solver</span><span class="p">(</span><span class="n">sso</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">ssolver</span><span class="o">.</span><span class="n">cy_sesolve_single_trajectory</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="c1">#, sso)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">ssolver</span><span class="o">.</span><span class="n">cy_sesolve_single_trajectory</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span>
 
 
@@ -1648,7 +1657,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

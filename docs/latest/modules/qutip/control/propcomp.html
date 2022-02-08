@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
 
   
   
@@ -510,16 +511,11 @@
             <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">dg</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">aug</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">]),</span> <span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Z</span><span class="p">,</span> <span class="n">A</span><span class="p">])]))</span>
-        <span class="k">elif</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">aug</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Z</span><span class="p">,</span> <span class="n">A</span><span class="p">])])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">A</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">Z</span> <span class="o">=</span> <span class="n">dg</span><span class="o">*</span><span class="mf">0.0</span>
-            <span class="n">aug</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">]),</span> <span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Z</span><span class="p">,</span> <span class="n">A</span><span class="p">])])</span>
         <span class="k">return</span> <span class="n">aug</span>
 
     <span class="k">def</span> <span class="nf">_compute_prop_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">compute_prop</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -592,7 +588,7 @@
                 <span class="n">prop_grad_dense</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">compute_expm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="n">prop_grad</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">prop_grad_dense</span><span class="p">,</span>
                                             <span class="n">dims</span><span class="o">=</span><span class="n">dyn</span><span class="o">.</span><span class="n">dyn_dims</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">dyn</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">A</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">E</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">compute_prop</span><span class="p">:</span>
@@ -600,19 +596,6 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">prop_grad</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span>
                                                     <span class="n">compute_expm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Assuming some sparse matrix</span>
-            <span class="n">spcls</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
-            <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-            <span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyn</span><span class="o">.</span><span class="n">_get_phased_ctrl_dyn_gen</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">dyn</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">compute_prop</span><span class="p">:</span>
-                <span class="n">prop_dense</span><span class="p">,</span> <span class="n">prop_grad_dense</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
-                <span class="n">prop</span> <span class="o">=</span> <span class="n">spcls</span><span class="p">(</span><span class="n">prop_dense</span><span class="p">)</span>
-                <span class="n">prop_grad</span> <span class="o">=</span> <span class="n">spcls</span><span class="p">(</span><span class="n">prop_grad_dense</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">prop_grad_dense</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">expm_frechet</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">compute_expm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">prop_grad</span> <span class="o">=</span> <span class="n">spcls</span><span class="p">(</span><span class="n">prop_grad_dense</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">compute_prop</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">prop</span><span class="p">,</span> <span class="n">prop_grad</span>
         <span class="k">else</span><span class="p">:</span>
@@ -630,7 +613,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

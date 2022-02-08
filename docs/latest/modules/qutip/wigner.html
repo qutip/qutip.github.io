@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -202,29 +203,24 @@
 <span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <span class="c1">###############################################################################</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;qfunc&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_q_function&#39;</span><span class="p">,</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;qfunc&#39;</span><span class="p">,</span> <span class="s1">&#39;QFunc&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_q_function&#39;</span><span class="p">,</span>
            <span class="s1">&#39;spin_wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;wigner_transform&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">zeros</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">conj</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span>
-    <span class="n">conjugate</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">polyval</span><span class="p">,</span> <span class="n">fliplr</span><span class="p">,</span>
+    <span class="n">zeros</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">conj</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="k">as</span> <span class="nn">ft</span>
 <span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">genlaguerre</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">binom</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">sph_harm</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">genlaguerre</span><span class="p">,</span> <span class="n">binom</span><span class="p">,</span> <span class="n">sph_harm</span><span class="p">,</span> <span class="n">factorial</span>
 
-<span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">isket</span><span class="p">,</span> <span class="n">isoper</span>
-<span class="kn">from</span> <span class="nn">qutip.states</span> <span class="kn">import</span> <span class="n">ket2dm</span>
+<span class="kn">import</span> <span class="nn">qutip</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">ket2dm</span><span class="p">,</span> <span class="n">jmat</span>
 <span class="kn">from</span> <span class="nn">qutip.parallel</span> <span class="kn">import</span> <span class="n">parfor</span>
-<span class="kn">from</span> <span class="nn">qutip.utilities</span> <span class="kn">import</span> <span class="n">clebsch</span>
-<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">jmat</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">factorial</span>
 <span class="kn">from</span> <span class="nn">qutip.cy.sparse_utils</span> <span class="kn">import</span> <span class="n">_csr_get_diag</span>
-<span class="kn">import</span> <span class="nn">qutip</span> <span class="k">as</span> <span class="nn">qt</span>
 <span class="kn">from</span> <span class="nn">qutip.sparse</span> <span class="kn">import</span> <span class="n">eigh</span>
 
 
@@ -317,7 +313,7 @@
         <span class="n">foo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mult</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="n">foo</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">qt</span><span class="o">.</span><span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+                <span class="n">foo</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
             <span class="n">matrix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">matrix</span> <span class="o">/</span> <span class="n">mult</span>
 
@@ -366,7 +362,7 @@
     <span class="k">return</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span>
 
 
-<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
            <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wigner function for a state vector or density matrix at points</span>
 <span class="sd">    `xvec + i * yvec`.</span>
@@ -658,7 +654,6 @@
 <span class="sd">    :math:`W = e^(-0.5*x^2)/pi * \sum_{L} c_L (2x)^L / \sqrt(L!)` where</span>
 <span class="sd">    :math:`c_L = \sum_n \rho_{n,L+n} LL_n^L` where</span>
 <span class="sd">    :math:`LL_n^L = (-1)^n \sqrt(L!n!/(L+n)!) LaguerreL[n,L,x]`</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -695,10 +690,16 @@
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this is evaluation of polynomial series inspired by hermval from numpy.</span>
 <span class="sd">    Returns polynomial series</span>
-<span class="sd">    \sum_n b_n LL_n^L,</span>
+
+<span class="sd">    .. math:</span>
+<span class="sd">        \sum_n b_n LL_n^L,</span>
+
 <span class="sd">    where</span>
-<span class="sd">    LL_n^L = (-1)^n \sqrt(L!n!/(L+n)!) LaguerreL[n,L,x]</span>
-<span class="sd">    The evaluation uses Clenshaw recursion</span>
+
+<span class="sd">    .. math:</span>
+<span class="sd">        LL_n^L = (-1)^n \sqrt(L!n!/(L+n)!) LaguerreL[n,L,x]</span>
+
+<span class="sd">    The evaluation uses Clenshaw recursion.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -719,97 +720,357 @@
     <span class="k">return</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">*</span> <span class="p">((</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">**-</span><span class="mf">0.5</span>
 
 
-
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># Q FUNCTION</span>
 <span class="c1">#</span>
-<div class="viewcode-block" id="qfunc"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner.qfunc">[docs]</a><span class="k">def</span> <span class="nf">qfunc</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
-    <span class="sd">&quot;&quot;&quot;Q-function of a given state vector or density matrix</span>
-<span class="sd">    at points `xvec + i * yvec`.</span>
+<span class="k">def</span> <span class="nf">_qfunc_check_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;state must be Qobj, but is </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># This is only approximate, but it&#39;s enough for our purposes; doing more</span>
+    <span class="c1"># than this would take computational effort we don&#39;t _need_ to do.</span>
+    <span class="n">isdm</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">isoper</span>
+        <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">isherm</span>
+        <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">qutip</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">atol</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">isdm</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;state must be a ket or density matrix, but is </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;state must not have tensor structure, but has dimensions:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span>
+
+
+<span class="k">def</span> <span class="nf">_qfunc_check_coordinates</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">xvec</span><span class="p">)</span> <span class="ow">or</span> <span class="n">xvec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;xvec must be array-like, but is &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">xvec</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">yvec</span><span class="p">)</span> <span class="ow">or</span> <span class="n">yvec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;yvec must be array-like, but is &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">yvec</span><span class="p">))</span>
+    <span class="n">xvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">yvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yvec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xvec</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">yvec</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;xvec and yvec must be 1D, but have shapes </span><span class="si">{</span><span class="n">xvec</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">yvec</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span>
+
+
+<span class="k">class</span> <span class="nc">_QFuncCoherentGrid</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Internal function to compute coherent state operators corresponding to a</span>
+<span class="sd">    grid of complex values in phase space.  For efficiency reasons, this class</span>
+<span class="sd">    produces the adjoint of the coherent states, to save allocations when</span>
+<span class="sd">    calculating inner products later.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Initialise the grid calculator.</span>
+
+<span class="sd">    &gt;&gt;&gt; xvec = yvec = np.linspace(-1, 1, 21)</span>
+<span class="sd">    &gt;&gt;&gt; g = np.sqrt(0.5)</span>
+<span class="sd">    &gt;&gt;&gt; max_ns = 10</span>
+<span class="sd">    &gt;&gt;&gt; grid = _QFuncCoherentGrid(xvec, yvec, g)</span>
+
+<span class="sd">    The naive construction of the grid is</span>
+
+<span class="sd">    &gt;&gt;&gt; xs, ys = np.meshgrid(xvec, yvec)</span>
+<span class="sd">    &gt;&gt;&gt; all_alphas = 0.5 * g * (xs + 1j*ys)</span>
+<span class="sd">    &gt;&gt;&gt; naive = np.array([</span>
+<span class="sd">    ...     [</span>
+<span class="sd">    ...         qutip.coherent(max_ns, alpha, method=&#39;analytic&#39;)</span>
+<span class="sd">    ...             .dag().full().ravel()</span>
+<span class="sd">    ...         for alpha in x_alphas</span>
+<span class="sd">    ...     ]</span>
+<span class="sd">    ...     for y_alphas in all_alphas</span>
+<span class="sd">    ... ])</span>
+
+<span class="sd">    The naive approach is typically several of orders of magnitude slower than</span>
+<span class="sd">    this class, which uses much simpler vectorised operations.  The outputs are</span>
+<span class="sd">    within close tolerance, however:</span>
+
+<span class="sd">    &gt;&gt;&gt; np.allclose(naive, grid(max_ns))</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; np.allclose(naive[:, :, 4:7], grid(4, 7))</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xvec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yvec</span> <span class="o">=</span> <span class="n">_qfunc_check_coordinates</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xvec</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">yvec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">real</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="c1"># We produce the adjoint of the coherent states to save an operation</span>
+        <span class="c1"># later when computing dot products, hence the negative imaginary part.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">imag</span> <span class="o">=</span> <span class="o">-</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefactor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the coherent state matrix corresponding to the first needed Fock</span>
+<span class="sd">        state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">first</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefactor</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">first</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefactor</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">last</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a 3D array of shape ``(yvec.size, xvec.size, last - first)`` of the</span>
+<span class="sd">        coherent-state vectors for all the Fock states in the range ``first``</span>
+<span class="sd">        to ``last``, excluding the end point.  The first two axes are the y-</span>
+<span class="sd">        and x-coordinates of phase space (i.e. Cartesian indexing, like</span>
+<span class="sd">        ``numpy.meshgrid``), and the last runs over the selected range of</span>
+<span class="sd">        Fock-space dimensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Technically we could avoid hitting the limits of floating-point</span>
+        <span class="c1"># exponents for longer by doing all this in logarithmic space (using</span>
+        <span class="c1"># scipy.special.gammaln), but that ends up involving more</span>
+        <span class="c1"># floating-point operations overall, and needs special care around the</span>
+        <span class="c1"># point alpha = 0 to avoid nan appearing, due to how Python handles</span>
+        <span class="c1"># mixed-width arithmetic operations.</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">size</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
+        <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">ns</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+
+<div class="viewcode-block" id="QFunc"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.QFunc">[docs]</a><span class="k">class</span> <span class="nc">QFunc</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class-based method of calculating the Husimi-Q function of many different</span>
+<span class="sd">    quantum states at fixed phase-space points ``0.5*g* (xvec + i*yvec)``.</span>
+<span class="sd">    This class has slightly higher first-usage costs than :obj:`.qfunc`, but</span>
+<span class="sd">    subsequent operations will be several times faster. However, it can require</span>
+<span class="sd">    quite a lot of memory. Call the created object as a function to retrieve</span>
+<span class="sd">    the Husimi-Q function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    state : qobj</span>
-<span class="sd">        A state vector or density matrix.</span>
+<span class="sd">    xvec, yvec : array_like</span>
+<span class="sd">        x- and y-coordinates at which to calculate the Husimi-Q function.</span>
 
-<span class="sd">    xvec : array_like</span>
-<span class="sd">        x-coordinates at which to calculate the Husimi-Q function.</span>
+<span class="sd">    g : float, default sqrt(2)</span>
+<span class="sd">        Scaling factor for ``a = 0.5 * g * (x + iy)``.  The value of `g` is</span>
+<span class="sd">        related to the value of `hbar` in the commutation relation</span>
+<span class="sd">        :math:`[x,\,y] = i\hbar` via :math:`\hbar=2/g^2`, so the default</span>
+<span class="sd">        corresponds to :math:`\hbar=1`.</span>
 
-<span class="sd">    yvec : array_like</span>
-<span class="sd">        y-coordinates at which to calculate the Husimi-Q function.</span>
+<span class="sd">    memory : real, default 1024</span>
+<span class="sd">        Size in MB that may be used internally as workspace.  This class will</span>
+<span class="sd">        raise ``MemoryError`` if subsequently passed a state of sufficiently</span>
+<span class="sd">        large dimension that this bound would be exceeded.  In those cases, use</span>
+<span class="sd">        :obj:`.qfunc` with ``precompute_memory=None`` instead to force using</span>
+<span class="sd">        the slower, more memory-efficient algorithm.</span>
 
-<span class="sd">    g : float</span>
-<span class="sd">        Scaling factor for `a = 0.5 * g * (x + iy)`, default `g = sqrt(2)`.</span>
-<span class="sd">        The value of `g` is related to the value of `hbar` in the commutation</span>
-<span class="sd">        relation `[x, y] = 1j * hbar` via `hbar=2/g^2` giving the default</span>
-<span class="sd">        value `hbar=1`.</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Initialise the class for a square set of coordinates, with some states we</span>
+<span class="sd">    want to investigate.</span>
 
+<span class="sd">    &gt;&gt;&gt; xvec = np.linspace(-2, 2, 101)</span>
+<span class="sd">    &gt;&gt;&gt; states = [qutip.rand_dm(10) for _ in [None]*10]</span>
+<span class="sd">    &gt;&gt;&gt; qfunc = qutip.QFunc(xvec, xvec)</span>
+
+<span class="sd">    Now we can calculate the Husimi-Q function over each of the states more</span>
+<span class="sd">    efficiently with:</span>
+
+<span class="sd">    &gt;&gt;&gt; husimiq = np.array([qfunc(state) for state in states])</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :obj:`.qfunc` :</span>
+<span class="sd">        a single function version, which will involve computing several</span>
+<span class="sd">        quantities multiple times in order to use less memory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">memory</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span> <span class="o">=</span> <span class="n">_QFuncCoherentGrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+        <span class="c1"># 16 bytes per complex, 1024**2 bytes per MB.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size_mb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_mb</span> <span class="o">=</span> <span class="n">memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_memory_mb</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size_mb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_alphas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrive the full tensor of (the conjugate of) coherent states over all</span>
+<span class="sd">        values of :math:`\alpha`, for states of dimension ``size``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">size</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_size</span><span class="p">:</span>
+            <span class="n">requirement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size_mb</span> <span class="o">*</span> <span class="n">size</span>
+            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Refusing to precompute up to </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> basis states.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; This would require </span><span class="si">{</span><span class="n">requirement</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB,&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; but only </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_memory_mb</span><span class="si">}</span><span class="s2"> MB is allowed.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span><span class="p">,</span> <span class="n">size</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span>
+
+    <span class="k">def</span> <span class="nf">_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">alphas</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the Q function (without the :math:`\pi` scaling factor) of a single</span>
+<span class="sd">        state vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">vector</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the Husimi-Q function for the given state vector or density matrix,</span>
+<span class="sd">        over the coordinates used to initialise the class.  If called multiple</span>
+<span class="sd">        times, the states do not need to have the same dimensions, but none of</span>
+<span class="sd">        them can have tensor-product structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">_qfunc_check_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">alphas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alphas</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">alphas</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="c1"># We don&#39;t use Qobj.eigenstates() to avoid building many unnecessary</span>
+        <span class="c1"># CSR versions of dense matrices.</span>
+        <span class="n">values</span><span class="p">,</span> <span class="n">vectors</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+        <span class="n">vectors</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alphas</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">vector</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">alphas</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span></div>
+
+
+<span class="k">def</span> <span class="nf">_qfunc_iterative_single</span><span class="p">(</span>
+    <span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">alpha_grid</span><span class="p">:</span> <span class="n">_QFuncCoherentGrid</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the Q function (without the :math:`\pi` scaling factor) of a single</span>
+<span class="sd">    state vector, using the iterative algorithm which recomputes the powers of</span>
+<span class="sd">    the coherent-state matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span>
+        <span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">g</span> <span class="o">*</span> <span class="n">vector</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">ns</span><span class="p">)))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">alpha_grid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">out</span> <span class="o">*=</span> <span class="n">alpha_grid</span><span class="o">.</span><span class="n">prefactor</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+
+<div class="viewcode-block" id="qfunc"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.qfunc">[docs]</a><span class="k">def</span> <span class="nf">qfunc</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">,</span>
+    <span class="n">xvec</span><span class="p">,</span>
+    <span class="n">yvec</span><span class="p">,</span>
+    <span class="n">g</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">precompute_memory</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Husimi-Q function of a given state vector or density matrix at phase-space</span>
+<span class="sd">    points ``0.5 * g * (xvec + i*yvec)``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :obj:`.Qobj`</span>
+<span class="sd">        A state vector or density matrix.  This cannot have tensor-product</span>
+<span class="sd">        structure.</span>
+
+<span class="sd">    xvec, yvec : array_like</span>
+<span class="sd">        x- and y-coordinates at which to calculate the Husimi-Q function.</span>
+
+<span class="sd">    g : float, default sqrt(2)</span>
+<span class="sd">        Scaling factor for ``a = 0.5 * g * (x + iy)``.  The value of `g` is</span>
+<span class="sd">        related to the value of :math:`\hbar` in the commutation relation</span>
+<span class="sd">        :math:`[x,\,y] = i\hbar` via :math:`\hbar=2/g^2`, so the default</span>
+<span class="sd">        corresponds to :math:`\hbar=1`.</span>
+
+<span class="sd">    precompute_memory : real, default 1024</span>
+<span class="sd">        Size in MB that may be used during calculations as working space when</span>
+<span class="sd">        dealing with density-matrix inputs.  This is ignored for state-vector</span>
+<span class="sd">        inputs.  The bound is not quite exact due to other, order-of-magnitude</span>
+<span class="sd">        smaller, intermediaries being necessary, but is a good approximation.</span>
+<span class="sd">        If you want to use the same iterative algorithm for density matrices</span>
+<span class="sd">        that is used for single kets, set ``precompute_memory=None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
-<span class="sd">    Q : array</span>
-<span class="sd">        Values representing the Q-function calculated over the specified range</span>
-<span class="sd">        [xvec,yvec].</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Values representing the Husimi-Q function calculated over the specified</span>
+<span class="sd">        range ``[xvec, yvec]``.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :obj:`.QFunc` :</span>
+<span class="sd">        a class-based version, more efficient if you want to calculate the</span>
+<span class="sd">        Husimi-Q function for several states over the same coordinates.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
-    <span class="n">amat</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">Y</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">isoper</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">or</span> <span class="n">isket</span><span class="p">(</span><span class="n">state</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid state operand to qfunc.&#39;</span><span class="p">)</span>
-
-    <span class="n">qmat</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">amat</span><span class="p">))</span>
-
-    <span class="k">if</span> <span class="n">isket</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-        <span class="n">qmat</span> <span class="o">=</span> <span class="n">_qfunc_pure</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">amat</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">isoper</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-        <span class="n">d</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
-        <span class="c1"># d[i]   = eigenvalue i</span>
-        <span class="c1"># v[:,i] = eigenvector i</span>
-
-        <span class="n">qmat</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">amat</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)):</span>
-            <span class="n">qmat1</span> <span class="o">=</span> <span class="n">_qfunc_pure</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">amat</span><span class="p">)</span>
-            <span class="n">qmat</span> <span class="o">+=</span> <span class="n">real</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">qmat1</span><span class="p">)</span>
-
-    <span class="n">qmat</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">qmat</span> <span class="o">*</span> <span class="n">g</span> <span class="o">**</span> <span class="mi">2</span>
-    <span class="k">return</span> <span class="n">qmat</span></div>
-
-
-<span class="c1">#</span>
-<span class="c1"># Q-function for a pure state: Q = |&lt;alpha|psi&gt;|^2 / pi</span>
-<span class="c1">#</span>
-<span class="c1"># |psi&gt;   = the state in fock basis</span>
-<span class="c1"># |alpha&gt; = the coherent state with amplitude alpha</span>
-<span class="c1">#</span>
-<span class="k">def</span> <span class="nf">_qfunc_pure</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">alpha_mat</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate the Q-function for a pure state.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">T</span>
-
-    <span class="n">qmat</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">polyval</span><span class="p">(</span><span class="n">fliplr</span><span class="p">([</span><span class="n">psi</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)))])[</span><span class="mi">0</span><span class="p">],</span>
-                       <span class="n">conjugate</span><span class="p">(</span><span class="n">alpha_mat</span><span class="p">)))</span> <span class="o">**</span> <span class="mi">2</span>
-
-    <span class="k">return</span> <span class="n">real</span><span class="p">(</span><span class="n">qmat</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha_mat</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">_qfunc_check_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span> <span class="o">=</span> <span class="n">_qfunc_check_coordinates</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+    <span class="n">required_memory</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">xvec</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">yvec</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">enough_memory</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">precompute_memory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">precompute_memory</span> <span class="o">&gt;</span> <span class="n">required_memory</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isoper</span> <span class="ow">and</span> <span class="n">enough_memory</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QFunc</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">precompute_memory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Falling back to iterative algorithm due to lack of memory.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; Needed </span><span class="si">{</span><span class="n">required_memory</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB, but only allowed to use&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">precompute_memory</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB.  Increase `precompute_memory` to&quot;</span>
+            <span class="s2">&quot; raise limit, or set to `None` to suppress warning.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">alpha_grid</span> <span class="o">=</span> <span class="n">_QFuncCoherentGrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_qfunc_iterative_single</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">alpha_grid</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="c1"># We don&#39;t use Qobj.eigenstates() to avoid building many unnecessary CSR</span>
+    <span class="c1"># versions of dense matrices.</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">vectors</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+    <span class="n">vectors</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">_qfunc_iterative_single</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha_grid</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">vector</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="n">_qfunc_iterative_single</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">alpha_grid</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">return</span> <span class="n">out</span></div>
 
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># PSEUDO DISTRIBUTION FUNCTIONS FOR SPINS</span>
 <span class="c1">#</span>
-<div class="viewcode-block" id="spin_q_function"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner.spin_q_function">[docs]</a><span class="k">def</span> <span class="nf">spin_q_function</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Husimi Q-function for spins.</span>
+<div class="viewcode-block" id="spin_q_function"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.spin_q_function">[docs]</a><span class="k">def</span> <span class="nf">spin_q_function</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The Husimi Q function for spins is defined as ``Q(theta, phi) =</span>
+<span class="sd">    SCS.dag() * rho * SCS`` for the spin coherent state ``SCS = spin_coherent(</span>
+<span class="sd">    j, theta, phi)`` where j is the spin length.</span>
+<span class="sd">    The implementation here is more efficient as it doesn&#39;t</span>
+<span class="sd">    generate all of the SCS at theta and phi (see references).</span>
+
+<span class="sd">    The spin Q function is normal when integrated over the surface of the</span>
+<span class="sd">    sphere</span>
+
+<span class="sd">    .. math:: \frac{4 \pi}{2j + 1}\int_\phi \int_\theta</span>
+<span class="sd">              Q(\theta, \phi) \sin(\theta) d\theta d\phi = 1</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    state : qobj</span>
 <span class="sd">        A state vector or density matrix for a spin-j quantum system.</span>
 <span class="sd">    theta : array_like</span>
-<span class="sd">        Polar angle at which to calculate the Husimi-Q function.</span>
+<span class="sd">        Polar (colatitude) angle at which to calculate the Husimi-Q function.</span>
 <span class="sd">    phi : array_like</span>
 <span class="sd">        Azimuthal angle at which to calculate the Husimi-Q function.</span>
 
@@ -818,6 +1079,11 @@
 <span class="sd">    Q, THETA, PHI : 2d-array</span>
 <span class="sd">        Values representing the spin Husimi Q function at the values specified</span>
 <span class="sd">        by THETA and PHI.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Lee Loh, Y., &amp; Kim, M. (2015). American J. of Phys., 83(1), 30–35.</span>
+<span class="sd">    https://doi.org/10.1119/1.4898595</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -834,41 +1100,71 @@
 
     <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">THETA</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">Q</span> <span class="o">+=</span> <span class="n">binom</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="n">m1</span><span class="p">))</span> <span class="o">*</span> \
+             <span class="n">sin</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">))</span> <span class="o">*</span> \
+             <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)]</span>
 
-        <span class="n">Q</span> <span class="o">+=</span> <span class="n">binom</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="n">m1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">THETA</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m1</span><span class="p">))</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">THETA</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">m1</span><span class="p">))</span> <span class="o">*</span> \
-             <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="n">m1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">Q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m1</span><span class="p">))</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m2</span><span class="p">))</span> <span class="o">*</span>
+                  <span class="n">cos</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m1</span> <span class="o">+</span> <span class="n">m2</span><span class="p">)</span> <span class="o">*</span>
+                  <span class="n">sin</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">m1</span> <span class="o">-</span> <span class="n">m2</span><span class="p">))</span> <span class="o">*</span> \
+             <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">m1</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)</span> <span class="o">*</span> <span class="n">PHI</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)]</span> <span class="o">+</span>
+              <span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">m2</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">*</span> <span class="n">PHI</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)])</span>
 
-        <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="n">m1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Q</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span></div>
 
-            <span class="n">Q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="n">m1</span><span class="p">))</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="n">m2</span><span class="p">))</span> <span class="o">*</span>
-                  <span class="n">cos</span><span class="p">(</span><span class="n">THETA</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">-</span><span class="n">m1</span><span class="o">-</span><span class="n">m2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">THETA</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="n">m1</span><span class="o">+</span><span class="n">m2</span><span class="p">))</span> <span class="o">*</span> \
-                  <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">m2</span><span class="o">-</span><span class="n">m1</span><span class="p">)</span> <span class="o">*</span> <span class="n">PHI</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m2</span><span class="p">)]</span> <span class="o">+</span>
-                   <span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">m1</span><span class="o">-</span><span class="n">m2</span><span class="p">)</span> <span class="o">*</span> <span class="n">PHI</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">m1</span><span class="p">)])</span>
-
-    <span class="k">return</span> <span class="n">Q</span><span class="o">.</span><span class="n">real</span><span class="o">/</span><span class="n">pi</span><span class="p">,</span> <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span></div>
 
 <span class="k">def</span> <span class="nf">_rho_kq</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="n">j</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This calculates the trace of the multipole operator T_kq and the density</span>
+<span class="sd">    matrix rho for use in the spin Wigner quasiprobability distribution.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rho : qobj</span>
+<span class="sd">        A density matrix for a spin-j quantum system.</span>
+<span class="sd">    j : float</span>
+<span class="sd">        The spin length of the system.</span>
+<span class="sd">    k : int</span>
+<span class="sd">        Spherical harmonic degree</span>
+<span class="sd">    q : int</span>
+<span class="sd">        Spherical harmonic order</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    v : float</span>
+<span class="sd">        Overlap of state with multipole operator T_kq</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="n">j</span>
     <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">v</span> <span class="o">+=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="o">-</span><span class="n">m2</span><span class="p">,</span>
-                                              <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">m1</span> <span class="o">+</span> <span class="n">j</span><span class="p">,</span> <span class="n">m2</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
-
+            <span class="n">v</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="n">m1</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="n">m1</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="o">-</span><span class="n">m2</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)]</span>
+            <span class="p">)</span>
     <span class="k">return</span> <span class="n">v</span>
 
 
-<div class="viewcode-block" id="spin_wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner.spin_wigner">[docs]</a><span class="k">def</span> <span class="nf">spin_wigner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Wigner function for a spin-j system on the 2-sphere of radius j</span>
-<span class="sd">       (for j = 1/2 this is the Bloch sphere).</span>
+<div class="viewcode-block" id="spin_wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.spin_wigner">[docs]</a><span class="k">def</span> <span class="nf">spin_wigner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Wigner function for a spin-j system.</span>
+
+<span class="sd">    The spin W function is normal when integrated over the surface of the</span>
+<span class="sd">    sphere</span>
+
+<span class="sd">    .. math:: \sqrt{\frac{4 \pi}{2j + 1}}\int_\phi \int_\theta</span>
+<span class="sd">              W(\theta,\phi) \sin(\theta) d\theta d\phi = 1</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    state : qobj</span>
 <span class="sd">        A state vector or density matrix for a spin-j quantum system.</span>
 <span class="sd">    theta : array_like</span>
-<span class="sd">        Polar angle at which to calculate the W function.</span>
+<span class="sd">        Polar (colatitude) angle at which to calculate the W function.</span>
 <span class="sd">    phi : array_like</span>
 <span class="sd">        Azimuthal angle at which to calculate the W function.</span>
 
@@ -878,9 +1174,16 @@
 <span class="sd">        Values representing the spin Wigner function at the values specified</span>
 <span class="sd">        by THETA and PHI.</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Experimental.</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Agarwal, G. S. (1981). Phys. Rev. A, 24(6), 2889–2896.</span>
+<span class="sd">    https://doi.org/10.1103/PhysRevA.24.2889</span>
+
+<span class="sd">    [2] Dowling, J. P., Agarwal, G. S., &amp; Schleich, W. P. (1994).</span>
+<span class="sd">    Phys. Rev. A, 49(5), 4101–4109. https://doi.org/10.1103/PhysRevA.49.4101</span>
+
+<span class="sd">    [3] Conversion between Wigner 3-j symbol and Clebsch-Gordan coefficients</span>
+<span class="sd">    taken from Wikipedia (https://en.wikipedia.org/wiki/3-j_symbol)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -902,7 +1205,7 @@
             <span class="c1"># sph_harm takes azimuthal angle then polar angle as arguments</span>
             <span class="n">W</span> <span class="o">+=</span> <span class="n">_rho_kq</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">sph_harm</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">PHI</span><span class="p">,</span> <span class="n">THETA</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span></div>
+    <span class="k">return</span> <span class="n">W</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span></div>
 </pre></div>
 
            </div>
@@ -916,7 +1219,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

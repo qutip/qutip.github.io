@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -261,7 +262,7 @@ However, this method is somewhat less efficient then the previously mentioned me
 However, in contrast to the other options
 this method can be used in implementing time-dependent Hamiltonians that cannot be
 expressed as a function of constant operators with time-dependent coefficients.</p>
-<p>A collection of examples demonstrating the simulation of time-dependent problems can be found on the <a class="reference external" href="https://qutip.org/tutorials.html">tutorials</a> web page.</p>
+<p>A collection of examples demonstrating the simulation of time-dependent problems can be found on the <a class="reference external" href="http://qutip.org/tutorials.html">tutorials</a> web page.</p>
 </div>
 <div class="section" id="function-based-time-dependence">
 <span id="time-function"></span><h2>Function Based Time Dependence<a class="headerlink" href="#function-based-time-dependence" title="Permalink to this headline">¶</a></h2>
@@ -309,39 +310,27 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">H1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma_ue</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sigma_ue</span><span class="p">)</span>  <span class="c1"># time-dependent term</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id1">
-<img alt="../../images/dynamics-time-1_00.png" src="../../images/dynamics-time-1_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-1_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1_00.pdf">pdf</a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id2">
-<img alt="../../images/dynamics-time-1_01.png" src="../../images/dynamics-time-1_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-1_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1_01.pdf">pdf</a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-1.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-1.png" src="../../images/dynamics-time-1.png" />
 </div>
 <p>Given that we have a single time-dependent Hamiltonian term, and constant collapse terms, we need to specify a single Python function for the coefficient <span class="math notranslate nohighlight">\(f(t)\)</span>.  In this case, one can simply do</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">H1_coeff</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
     <span class="k">return</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="mf">5.</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id3">
-<img alt="../../images/dynamics-time-2_00.png" src="../../images/dynamics-time-2_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-2_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2_00.pdf">pdf</a>)</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id4">
-<img alt="../../images/dynamics-time-2_01.png" src="../../images/dynamics-time-2_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-2_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2_01.pdf">pdf</a>)</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-2.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-2.png" src="../../images/dynamics-time-2.png" />
 </div>
 <p>In this case, the return value dependents only on time.  However, when specifying Python functions for coefficients, <strong>the function must have (t,args) as the input variables, in that order</strong>.  Having specified our coefficient function, we can now specify the Hamiltonian in list format and call the solver (in this case <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></a>)</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,[</span><span class="n">H1</span><span class="p">,</span> <span class="n">H1_coeff</span><span class="p">]]</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">ada</span><span class="p">,</span> <span class="n">sigma_UU</span><span class="p">,</span> <span class="n">sigma_GG</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id5">
-<img alt="../../images/dynamics-time-3_00.png" src="../../images/dynamics-time-3_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-3_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3_00.pdf">pdf</a>)</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id6">
-<img alt="../../images/dynamics-time-3_01.png" src="../../images/dynamics-time-3_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-3_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3_01.pdf">pdf</a>)</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-3.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-3.png" src="../../images/dynamics-time-3.png" />
 </div>
 <p>We can call the Monte Carlo solver in the exact same way (if using the default <code class="docutils literal notranslate"><span class="pre">ntraj=500</span></code>):</p>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="go">output = mcsolve(H, psi0, t, c_ops, [ada, sigma_UU, sigma_GG])</span>
@@ -362,13 +351,9 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id7">
-<img alt="../../images/dynamics-time-4_00.png" src="../../images/dynamics-time-4_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-4_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4_00.pdf">pdf</a>)</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id8">
-<img alt="../../images/dynamics-time-4_01.png" src="../../images/dynamics-time-4_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-4_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4_01.pdf">pdf</a>)</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-4.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-4.png" src="../../images/dynamics-time-4.png" />
 </div>
 <div class="section" id="using-the-args-variable">
 <h3>Using the args variable<a class="headerlink" href="#using-the-args-variable" title="Permalink to this headline">¶</a></h3>
@@ -377,13 +362,9 @@ expressed as a function of constant operators with time-dependent coefficients.<
     <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span><span class="o">/</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id9">
-<img alt="../../images/dynamics-time-5_00.png" src="../../images/dynamics-time-5_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-5_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5_00.pdf">pdf</a>)</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id10">
-<img alt="../../images/dynamics-time-5_01.png" src="../../images/dynamics-time-5_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-5_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5_01.pdf">pdf</a>)</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-5.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-5.png" src="../../images/dynamics-time-5.png" />
 </div>
 <p>or equivalently,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">H1_coeff</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
@@ -392,38 +373,26 @@ expressed as a function of constant operators with time-dependent coefficients.<
       <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">sig</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id11">
-<img alt="../../images/dynamics-time-6_00.png" src="../../images/dynamics-time-6_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-6_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6_00.pdf">pdf</a>)</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id12">
-<img alt="../../images/dynamics-time-6_01.png" src="../../images/dynamics-time-6_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-6_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6_01.pdf">pdf</a>)</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-6.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-6.png" src="../../images/dynamics-time-6.png" />
 </div>
 <p>where args is a Python dictionary of <code class="docutils literal notranslate"><span class="pre">key:</span> <span class="pre">value</span></code> pairs <code class="docutils literal notranslate"><span class="pre">args</span> <span class="pre">=</span> <span class="pre">{'A':</span> <span class="pre">a,</span> <span class="pre">'sigma':</span> <span class="pre">b}</span></code> where <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> are the two parameters for the amplitude and width, respectively.  Of course, we can always hardcode the values in the dictionary as well <code class="docutils literal notranslate"><span class="pre">args</span> <span class="pre">=</span> <span class="pre">{'A':</span> <span class="pre">9,</span> <span class="pre">'sigma':</span> <span class="pre">5}</span></code>, but there is much more flexibility by using variables in <code class="docutils literal notranslate"><span class="pre">args</span></code>.  To let the solvers know that we have a set of args to pass we append the <code class="docutils literal notranslate"><span class="pre">args</span></code> to the end of the solver input:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id13">
-<img alt="../../images/dynamics-time-7_00.png" src="../../images/dynamics-time-7_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-7_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7_00.pdf">pdf</a>)</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id14">
-<img alt="../../images/dynamics-time-7_01.png" src="../../images/dynamics-time-7_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-7_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7_01.pdf">pdf</a>)</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-7.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-7.png" src="../../images/dynamics-time-7.png" />
 </div>
 <p>or to keep things looking pretty</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id15">
-<img alt="../../images/dynamics-time-8_00.png" src="../../images/dynamics-time-8_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-8_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8_00.pdf">pdf</a>)</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id16">
-<img alt="../../images/dynamics-time-8_01.png" src="../../images/dynamics-time-8_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-8_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8_01.pdf">pdf</a>)</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-8.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-8.png" src="../../images/dynamics-time-8.png" />
 </div>
 <p>Once again, the Monte Carlo solver <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code></a> works in an identical manner.</p>
 </div>
@@ -466,36 +435,24 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">H1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma_ue</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sigma_ue</span><span class="p">)</span>  <span class="c1"># time-dependent term</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id17">
-<img alt="../../images/dynamics-time-9_00.png" src="../../images/dynamics-time-9_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-9_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9_00.pdf">pdf</a>)</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id18">
-<img alt="../../images/dynamics-time-9_01.png" src="../../images/dynamics-time-9_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-9_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9_01.pdf">pdf</a>)</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-9.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-9.png" src="../../images/dynamics-time-9.png" />
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="s1">&#39;9 * exp(-(t / 5) ** 2)&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id19">
-<img alt="../../images/dynamics-time-10_00.png" src="../../images/dynamics-time-10_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-10_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10_00.pdf">pdf</a>)</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id20">
-<img alt="../../images/dynamics-time-10_01.png" src="../../images/dynamics-time-10_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-10_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10_01.pdf">pdf</a>)</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-10.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-10.png" src="../../images/dynamics-time-10.png" />
 </div>
 <p>Notice that this is a valid Hamiltonian for the string-based format as <code class="docutils literal notranslate"><span class="pre">exp</span></code> is included in the above list of suitable functions. Calling the solvers is the same as before:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id21">
-<img alt="../../images/dynamics-time-11_00.png" src="../../images/dynamics-time-11_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-11_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11_00.pdf">pdf</a>)</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id22">
-<img alt="../../images/dynamics-time-11_01.png" src="../../images/dynamics-time-11_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-11_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11_01.pdf">pdf</a>)</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-11.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-11.png" src="../../images/dynamics-time-11.png" />
 </div>
 <p>We can also use the <code class="docutils literal notranslate"><span class="pre">args</span></code> variable in the same manner as before, however we must rewrite our string term to read: <code class="docutils literal notranslate"><span class="pre">'A</span> <span class="pre">*</span> <span class="pre">exp(-(t</span> <span class="pre">/</span> <span class="pre">sig)</span> <span class="pre">**</span> <span class="pre">2)'</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="s1">&#39;A * exp(-(t / sig) ** 2)&#39;</span><span class="p">]]</span>
@@ -503,13 +460,9 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id23">
-<img alt="../../images/dynamics-time-12_00.png" src="../../images/dynamics-time-12_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-12_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12_00.pdf">pdf</a>)</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id24">
-<img alt="../../images/dynamics-time-12_01.png" src="../../images/dynamics-time-12_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-12_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12_01.pdf">pdf</a>)</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-12.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-12.png" src="../../images/dynamics-time-12.png" />
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -531,17 +484,13 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id25">
+<div class="figure align-default" id="id1">
 <img alt="../../images/dynamics-time-13_00.png" src="../../images/dynamics-time-13_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.pdf">pdf</a>)</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.pdf">pdf</a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-<div class="figure align-default" id="id26">
+<div class="figure align-default" id="id2">
 <img alt="../../images/dynamics-time-13_01.png" src="../../images/dynamics-time-13_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.pdf">pdf</a>)</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
-</div>
-<div class="figure align-default" id="id27">
-<img alt="../../images/dynamics-time-13_02.png" src="../../images/dynamics-time-13_02.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_02.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_02.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_02.pdf">pdf</a>)</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.pdf">pdf</a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>To turn these data points into a function we call the QuTiP <a class="reference internal" href="../../apidoc/classes.html#qutip.interpolate.Cubic_Spline" title="qutip.interpolate.Cubic_Spline"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.interpolate.Cubic_Spline</span></code></a> class using the first and last domain time points, <code class="docutils literal notranslate"><span class="pre">t[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">t[-1]</span></code>, respectively, as well as the entire array of data points:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="n">Cubic_Spline</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">noisy_data</span><span class="p">)</span>
@@ -709,7 +658,7 @@ pre-generated Hamiltonian constructed using the <a class="reference internal" hr
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

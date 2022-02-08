@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/site.css" type="text/css" />
 
   
   
@@ -808,19 +809,25 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        evo_result: :class:`qutip.Result`</span>
-<span class="sd">            An instance of the class</span>
-<span class="sd">            :class:`qutip.Result` will be returned.</span>
+<span class="sd">        U_list: list</span>
+<span class="sd">            A list of propagators obtained for the physical implementation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">init_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">U_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">init_state</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">U_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()</span>
-        <span class="c1"># TODO replace this by get_complete_coeff</span>
         <span class="n">coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_coeffs</span><span class="p">()</span>
+
+        <span class="c1"># Compute drift Hamiltonians</span>
+        <span class="n">H_drift</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">drift_ham</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift</span><span class="o">.</span><span class="n">drift_hamiltonians</span><span class="p">:</span>
+            <span class="n">H_drift</span> <span class="o">+=</span> <span class="n">drift_ham</span><span class="o">.</span><span class="n">get_qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+        <span class="c1"># Compute control Hamiltonians</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">H</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">coeffs</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_drift</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">coeffs</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">))])</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tlist</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
             <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">H</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span>
@@ -829,7 +836,9 @@
 
         <span class="k">try</span><span class="p">:</span>  <span class="c1"># correct_global_phase are defined for ModelProcessor</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_global_phase</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">globalphase</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
+                <span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">globalphase</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
+                <span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
 
@@ -1099,7 +1108,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>
