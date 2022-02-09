@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -209,7 +210,43 @@
 <span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
 
 
-<div class="viewcode-block" id="simdiag"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.simdiag">[docs]</a><span class="k">def</span> <span class="nf">simdiag</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span> <span class="n">evals</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_degen</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">vecs</span><span class="p">,</span> <span class="n">ops</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Private function that finds eigen vals and vecs for degenerate matrices..</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vecs</span>
+
+    <span class="c1"># New eigenvectors are sometime not orthogonal.</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+            <span class="n">dot</span> <span class="o">=</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vecs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="n">vecs</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">vecs</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">dot</span> <span class="o">*</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+                              <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="n">subspace</span> <span class="o">=</span> <span class="n">vecs</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">ops</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">@</span> <span class="n">vecs</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">subspace</span><span class="p">)</span>
+
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)</span>
+    <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">perm</span><span class="p">]</span>
+
+    <span class="n">vecs_new</span> <span class="o">=</span> <span class="n">vecs</span> <span class="o">@</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">perm</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)):</span>
+        <span class="n">vecs_new</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">vecs_new</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vecs_new</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigvals</span><span class="p">):</span>
+        <span class="n">ttol</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">tol</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+        <span class="n">inds</span><span class="p">,</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigvals</span> <span class="o">-</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">ttol</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># if at least 2 eigvals are degenerate</span>
+            <span class="n">vecs_new</span><span class="p">[:,</span> <span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">_degen</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">vecs_new</span><span class="p">[:,</span> <span class="n">inds</span><span class="p">],</span> <span class="n">ops</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">inds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">vecs_new</span>
+
+
+<div class="viewcode-block" id="simdiag"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.simdiag">[docs]</a><span class="k">def</span> <span class="nf">simdiag</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span> <span class="n">evals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+            <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-14</span><span class="p">,</span> <span class="n">safe_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simultaneous diagonalization of commuting Hermitian matrices.</span>
 
 <span class="sd">    Parameters</span>
@@ -217,6 +254,18 @@
 <span class="sd">    ops : list/array</span>
 <span class="sd">        ``list`` or ``array`` of qobjs representing commuting Hermitian</span>
 <span class="sd">        operators.</span>
+
+<span class="sd">    evals : bool [True]</span>
+<span class="sd">        Whether to return the eigenvalues for each ops and eigenvectors or just</span>
+<span class="sd">        the eigenvectors.</span>
+
+<span class="sd">    tol : float [1e-14]</span>
+<span class="sd">        Tolerance for detecting degenerate eigenstates.</span>
+
+<span class="sd">    safe_mode : bool [True]</span>
+<span class="sd">        Whether to check that all ops are Hermitian and commuting. If set to</span>
+<span class="sd">        ``False`` and operators are not commuting, the eigenvectors returned</span>
+<span class="sd">        will often be eigenvectors of only the first operator.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
@@ -226,21 +275,16 @@
 <span class="sd">        operator.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-14</span>
-    <span class="n">start_flag</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Need at least one input operator.&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
-        <span class="n">ops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ops</span><span class="p">])</span>
-    <span class="n">num_ops</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ops</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No input matrices.&quot;</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">num_ops</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span> <span class="k">if</span> <span class="n">safe_mode</span> <span class="k">else</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_ops</span><span class="p">):</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Matricies must be square.&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">start_flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;All matrices. must be the same shape&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">A</span><span class="o">.</span><span class="n">isherm</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Matricies must be Hermitian&#39;</span><span class="p">)</span>
@@ -249,78 +293,37 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">-</span> <span class="n">B</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">A</span> <span class="o">*</span> <span class="n">B</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Matricies must commute.&#39;</span><span class="p">)</span>
 
-    <span class="n">A</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
-    <span class="n">zipped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">-</span><span class="n">eigvals</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigvals</span><span class="p">))))</span>
-    <span class="n">zipped</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-    <span class="n">ds</span><span class="p">,</span> <span class="n">perm</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">zipped</span><span class="p">)</span>
-    <span class="n">ds</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
-    <span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
-    <span class="n">eigvecs_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)</span>
+    <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">perm</span><span class="p">]</span>
+    <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">perm</span><span class="p">]</span>
 
-    <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">perm</span><span class="p">)):</span>  <span class="c1"># matrix with sorted eigvecs in columns</span>
-        <span class="n">eigvecs_array</span><span class="p">[</span><span class="n">kk</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">perm</span><span class="p">[</span><span class="n">kk</span><span class="p">]]</span>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigvals</span><span class="p">))</span>
-    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
         <span class="c1"># find degenerate eigenvalues, get indicies of degenerate eigvals</span>
-        <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ds</span> <span class="o">-</span> <span class="n">ds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">tol</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">k</span><span class="p">])))</span>
-        <span class="n">inds</span> <span class="o">=</span> <span class="n">rng</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
+        <span class="n">ttol</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">tol</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+        <span class="n">inds</span><span class="p">,</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigvals</span> <span class="o">-</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">ttol</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># if at least 2 eigvals are degenerate</span>
-            <span class="n">eigvecs_array</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">degen</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">eigvecs_array</span><span class="p">[</span><span class="n">inds</span><span class="p">],</span> <span class="n">ops</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">eigvals_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_ops</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    <span class="n">kets_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-    <span class="n">kets_out</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">Qobj</span><span class="p">(</span><span class="n">eigvecs_array</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">eigvecs_array</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span>
+            <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">_degen</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">inds</span><span class="p">],</span> <span class="n">ops</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">inds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+
+    <span class="n">kets_out</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Qobj</span><span class="p">(</span><span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span>
              <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="p">]</span>
+    <span class="n">eigvals_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">),</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">evals</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">kets_out</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_ops</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)):</span>
-                <span class="n">eigvals_out</span><span class="p">[</span><span class="n">kk</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-                    <span class="n">eigvecs_array</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                    <span class="n">ops</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="n">eigvecs_array</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">eigvals_out</span><span class="p">[</span><span class="n">kk</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span><span class="o">.</span><span class="n">matrix_element</span><span class="p">(</span><span class="n">kets_out</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                                                            <span class="n">kets_out</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">real</span>
         <span class="k">return</span> <span class="n">eigvals_out</span><span class="p">,</span> <span class="n">kets_out</span></div>
-
-
-<span class="k">def</span> <span class="nf">degen</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">in_vecs</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Private function that finds eigen vals and vecs for degenerate matrices..</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">in_vecs</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span><span class="n">in_vecs</span><span class="p">)</span>
-    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vecs</span><span class="p">)))</span>
-    <span class="n">zipped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">-</span><span class="n">eigvals</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigvals</span><span class="p">))))</span>
-    <span class="n">zipped</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-    <span class="n">ds</span><span class="p">,</span> <span class="n">perm</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">zipped</span><span class="p">)</span>
-    <span class="n">ds</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
-    <span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
-    <span class="n">vecsperm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">perm</span><span class="p">)):</span>  <span class="c1"># matrix with sorted eigvecs in columns</span>
-        <span class="n">vecsperm</span><span class="p">[:,</span> <span class="n">kk</span><span class="p">]</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">perm</span><span class="p">[</span><span class="n">kk</span><span class="p">]]</span>
-    <span class="n">vecs_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vecs</span><span class="p">,</span> <span class="n">vecsperm</span><span class="p">)</span>
-    <span class="n">vecs_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">))])</span>
-    <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">perm</span><span class="p">)):</span>  <span class="c1"># matrix with sorted eigvecs in columns</span>
-        <span class="n">vecs_out</span><span class="p">[</span><span class="n">kk</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vecs_new</span><span class="p">[:,</span> <span class="n">kk</span><span class="p">]</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
-    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
-        <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ds</span> <span class="o">-</span> <span class="n">ds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span>
-            <span class="n">tol</span><span class="p">,</span> <span class="n">tol</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">k</span><span class="p">])))</span>  <span class="c1"># get indicies of degenerate eigvals</span>
-        <span class="n">inds</span> <span class="o">=</span> <span class="n">rng</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># if at least 2 eigvals are degenerate</span>
-            <span class="n">vecs_out</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">degen</span><span class="p">(</span><span class="n">tol</span><span class="p">,</span> <span class="n">vecs_out</span><span class="p">[</span><span class="n">inds</span><span class="p">],</span> <span class="n">ops</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">])</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">vecs_out</span>
 </pre></div>
 
            </div>
@@ -334,7 +337,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

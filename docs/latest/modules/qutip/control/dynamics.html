@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
 
   
   
@@ -389,9 +390,7 @@
 
 <span class="sd">    oper_dtype : type</span>
 <span class="sd">        Data type for internal dynamics generators, propagators and time</span>
-<span class="sd">        evolution operators. This can be ndarray or Qobj, or (in theory) any</span>
-<span class="sd">        other representaion that supports typical matrix methods (e.g. dot)</span>
-<span class="sd">        ndarray performs best for smaller quantum systems.</span>
+<span class="sd">        evolution operators. This can be ndarray or Qobj.</span>
 <span class="sd">        Qobj may perform better for larger systems, and will also</span>
 <span class="sd">        perform better when (custom) fidelity measures use Qobj methods</span>
 <span class="sd">        such as partial trace.</span>
@@ -590,7 +589,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># These internal attributes will be of the internal operator data type</span>
         <span class="c1"># used to compute the evolution</span>
-        <span class="c1"># Note this maybe ndarray, Qobj or some other depending on oper_dtype</span>
+        <span class="c1"># This will be either ndarray or Qobj</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_drift_dyn_gen</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_phased_ctrl_dyn_gen</span> <span class="o">=</span> <span class="kc">None</span>
@@ -888,7 +887,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ctrls</span><span class="p">:</span>
-               <span class="n">dg</span> <span class="o">=</span> <span class="n">dg</span> <span class="o">+</span> <span class="n">c</span>
+                <span class="n">dg</span> <span class="o">=</span> <span class="n">dg</span> <span class="o">+</span> <span class="n">c</span>
 
             <span class="n">N</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">nnz</span>
@@ -928,7 +927,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sys_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="o">.</span><span class="n">shape</span>
         <span class="c1"># Set the phase application method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_phase</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_optimizations</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sys_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Single qubit pulse optimization dynamics cannot use sparse&quot;</span>
+                <span class="s2">&quot; eigenvector decomposition because of limitations in&quot;</span>
+                <span class="s2">&quot; scipy.linalg.eigsh. Pleae set sparse_eigen_decomp to False&quot;</span>
+                <span class="s2">&quot; or increase the size of the system.&quot;</span><span class="p">)</span>
+
         <span class="n">n_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span>
         <span class="n">n_ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_ctrls</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
@@ -952,26 +959,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctrl</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
                                         <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_initial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="o">.</span><span class="n">data</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">data</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_drift</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_drift_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_drift_dyn_gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_dyn_gen</span><span class="o">.</span><span class="n">data</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">n_ts</span><span class="p">,</span> <span class="n">n_ctrls</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ts</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ctrls</span><span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> \
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ctrl_dyn_gen</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctrl</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrl_dyn_gen</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown option &#39;</span><span class="si">{}</span><span class="s2">&#39; for oper_dtype. &quot;</span>
-                <span class="s2">&quot;Assuming that internal drift, ctrls, initial and target &quot;</span>
-                <span class="s2">&quot;have been set correctly&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown oper_dtype </span><span class="si">{!r}</span><span class="s2">. The oper_dtype may be qutip.Qobj or&quot;</span>
+                <span class="s2">&quot; numpy.ndarray.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_phased_dyn_gen</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_depend_ctrl_dyn_gen</span><span class="p">:</span>
@@ -1353,24 +1344,19 @@
             <span class="c1">#Target is operator</span>
             <span class="n">targ</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">targ</span><span class="p">)</span>
+                <span class="n">rev_dims</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">targ</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">rev_dims</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="n">targ</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">targ</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">targ_cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="o">.</span><span class="vm">__class__</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="n">targ_cls</span><span class="p">(</span><span class="n">targ</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unknown oper_dtype </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="si">!r}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">targ_cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="o">.</span><span class="vm">__class__</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span> <span class="o">=</span> <span class="n">targ_cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+                <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unknown oper_dtype </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="si">!r}</span><span class="s2">&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_onto_evo_target</span>
 
@@ -1774,18 +1760,19 @@
             <span class="n">eig_val</span><span class="p">,</span> <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">sp_eigs</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">isherm</span><span class="p">,</span>
                                        <span class="n">sparse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span><span class="p">)</span>
             <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">eig_vec</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparse_eigen_decomp</span><span class="p">:</span>
+                <span class="c1"># when sparse=True, sp_eigs returns an ndarray where each</span>
+                <span class="c1"># element is a sparse matrix so we convert it into a sparse</span>
+                <span class="c1"># matrix we can later pass to Qobj(...)</span>
+                <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">eig_vec</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="c1"># returns row vector of eigenvals, columns with the eigenvecs</span>
             <span class="n">eig_val</span><span class="p">,</span> <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
-                <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="c1"># returns row vector of eigenvals, columns with the eigenvecs</span>
-            <span class="n">eig_val</span><span class="p">,</span> <span class="n">eig_vec</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unknown oper_dtype </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="si">!r}</span><span class="s2">&quot;</span>
 
         <span class="c1"># assuming H is an nxn matrix, find n</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_drift_dim</span><span class="p">()</span>
@@ -1834,7 +1821,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors_adj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors_adj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> \
                             <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prop_eigen</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">prop_eig</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">eig_vec</span>
             <span class="c1"># The _dyn_gen_eigenvectors_adj list is not used in</span>
@@ -1842,6 +1829,8 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors_adj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors_adj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> \
                             <span class="bp">self</span><span class="o">.</span><span class="n">_dyn_gen_eigenvectors</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unknown oper_dtype </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span><span class="si">!r}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">_get_dyn_gen_eigenvectors_adj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="c1"># The _dyn_gen_eigenvectors_adj list is not used in</span>
@@ -1940,10 +1929,8 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">Qobj</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">omg</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dyn_dims</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_omega_qobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper_dtype</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">omg</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">omg</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">omg</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span>
 
     <span class="k">def</span> <span class="nf">_set_phase_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -1992,7 +1979,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -531,6 +532,17 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s1">&#39;super&#39;</span>
 
+        <span class="c1"># While the obvious check would be != that would fail valid</span>
+        <span class="c1"># use cases such as enr_fock and other enr_ functions.</span>
+        <span class="c1"># This does leave open the possibility of data still being</span>
+        <span class="c1"># misused such as Qobj(complex[n**2][1], dims = [[n],[n]])</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="ow">or</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span> <span class="ow">and</span> \
+           <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Qobj has smaller dims </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span>
+                             <span class="sa">f</span><span class="s2">&quot;than underlying shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
         <span class="c1"># clear type cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -896,7 +908,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        POWER operation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Raising a qobj to some power works only for &quot;</span> <span class="o">+</span>
                             <span class="s2">&quot;operators and super-operators (square matrices).&quot;</span><span class="p">)</span>
 
@@ -2731,7 +2743,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

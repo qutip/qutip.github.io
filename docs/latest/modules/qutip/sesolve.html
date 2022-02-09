@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -484,10 +485,18 @@
                     <span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_tsteps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">oper_evo</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">e_ops</span><span class="p">:</span>
-                <span class="n">e_ops_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;e_ops dims (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">) are not compatible&quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot; with the state&#39;s (</span><span class="si">{</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">e_ops_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">e_ops</span><span class="p">:</span>
-                <span class="n">e_ops_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;e_ops dims (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">) are not compatible&quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot; with the state&#39;s (</span><span class="si">{</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">e_ops_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expectation parameter must be a list or a function&quot;</span><span class="p">)</span>
 
@@ -578,7 +587,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

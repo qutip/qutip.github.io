@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -228,12 +229,13 @@
 <span class="eqno">(4)<a class="headerlink" href="#equation-pcn" title="Permalink to this equation">¶</a></span>\[P_{i}(t)=\left&lt;\psi(t)|C_{i}^{+}C_{i}|\psi(t)\right&gt;/\delta p.\]</div>
 <p>Evaluating the MC evolution to first-order in time is quite tedious.  Instead, QuTiP uses the following algorithm to simulate a single realization of a quantum system.  Starting from a pure state <span class="math notranslate nohighlight">\(\left|\psi(0)\right&gt;\)</span>:</p>
 <ul class="simple">
-<li><p><strong>I:</strong> Choose a random number <span class="math notranslate nohighlight">\(r\)</span> between zero and one, representing the probability that a quantum jump occurs.</p></li>
-<li><p><strong>II:</strong> Integrate the Schrödinger equation, using the effective Hamiltonian <a class="reference internal" href="#equation-heff">(1)</a> until a time <span class="math notranslate nohighlight">\(\tau\)</span> such that the norm of the wave function satisfies <span class="math notranslate nohighlight">\(\left&lt;\psi(\tau)\right.\left|\psi(\tau)\right&gt;=r\)</span>, at which point a jump occurs.</p></li>
+<li><p><strong>Ia:</strong> Choose a random number <span class="math notranslate nohighlight">\(r_1\)</span> between zero and one, representing the probability that a quantum jump occurs.</p></li>
+<li><p><strong>Ib:</strong> Choose a random number <span class="math notranslate nohighlight">\(r_2\)</span> between zero and one, used to select which collapse operator was responsible for the jump.</p></li>
+<li><p><strong>II:</strong> Integrate the Schrödinger equation, using the effective Hamiltonian <a class="reference internal" href="#equation-heff">(1)</a> until a time <span class="math notranslate nohighlight">\(\tau\)</span> such that the norm of the wave function satisfies <span class="math notranslate nohighlight">\(\left&lt;\psi(\tau)\right.\left|\psi(\tau)\right&gt; = r_1\)</span>, at which point a jump occurs.</p></li>
 <li><p><strong>III:</strong> The resultant jump projects the system at time <span class="math notranslate nohighlight">\(\tau\)</span> into one of the renormalized states given by Eq. <a class="reference internal" href="#equation-project">(3)</a>.  The corresponding collapse operator <span class="math notranslate nohighlight">\(C_{n}\)</span> is chosen such that <span class="math notranslate nohighlight">\(n\)</span> is the smallest integer satisfying:</p></li>
 </ul>
 <div class="math notranslate nohighlight" id="equation-mc3">
-<span class="eqno">(5)<a class="headerlink" href="#equation-mc3" title="Permalink to this equation">¶</a></span>\[\sum_{i=1}^{n} P_{n}(\tau) \ge r\]</div>
+<span class="eqno">(5)<a class="headerlink" href="#equation-mc3" title="Permalink to this equation">¶</a></span>\[\sum_{i=1}^{n} P_{n}(\tau) \ge r_2\]</div>
 <p>where the individual <span class="math notranslate nohighlight">\(P_{n}\)</span> are given by Eq. <a class="reference internal" href="#equation-pcn">(4)</a>.  Note that the left hand side of Eq. <a class="reference internal" href="#equation-mc3">(5)</a> is, by definition, normalized to unity.</p>
 <ul class="simple">
 <li><p><strong>IV:</strong> Using the renormalized state from step III as the new initial condition at time <span class="math notranslate nohighlight">\(\tau\)</span>, draw a new random number, and repeat the above procedure until the final simulation time is reached.</p></li>
@@ -351,7 +353,7 @@ function for master-equation evolution, except that the initial state must be a 
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

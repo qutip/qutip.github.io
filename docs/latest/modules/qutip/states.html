@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -409,7 +410,7 @@
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">sqrtn</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The method option can only take values &#39;operator&#39; or &#39;analytic&#39;&quot;</span><span class="p">)</span></div>
 
 
@@ -462,17 +463,8 @@
 <span class="sd">    but would in that case give more accurate coefficients.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;operator&quot;</span><span class="p">:</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">coherent</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
-
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;analytic&quot;</span><span class="p">:</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">coherent</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;The method option can only take values &#39;operator&#39; or &#39;analytic&#39;&quot;</span><span class="p">)</span></div>
+    <span class="n">psi</span> <span class="o">=</span> <span class="n">coherent</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="fock_dm"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.states.fock_dm">[docs]</a><span class="k">def</span> <span class="nf">fock_dm</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -625,8 +617,8 @@
             <span class="n">rm</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">spdiags</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">n</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="n">i</span><span class="p">),</span>
                             <span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;&#39;method&#39; keyword argument must be &#39;operator&#39; or &#39;analytic&#39;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The method option can only take &quot;</span>
+                             <span class="s2">&quot;values &#39;operator&#39; or &#39;analytic&#39;&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">rm</span><span class="p">)</span></div>
 
 
@@ -928,7 +920,7 @@
 <span class="c1">#</span>
 <span class="c1"># quantum state number helper functions</span>
 <span class="c1">#</span>
-<div class="viewcode-block" id="state_number_enumerate"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.states.state_number_enumerate">[docs]</a><span class="k">def</span> <span class="nf">state_number_enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="state_number_enumerate"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.states.state_number_enumerate">[docs]</a><span class="k">def</span> <span class="nf">state_number_enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nexc</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An iterator that enumerate all the state number arrays (quantum numbers on</span>
 <span class="sd">    the form [n1, n2, n3, ...]) for a system with dimensions given by dims.</span>
@@ -957,6 +949,9 @@
 <span class="sd">    idx : integer</span>
 <span class="sd">        Current index in the iteration. Used internally.</span>
 
+<span class="sd">    nexc : integer</span>
+<span class="sd">        Number of excitations in modes [0..idx-1]. Used internally.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    state_number : list</span>
@@ -968,17 +963,23 @@
     <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">excitations</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">idx</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">excitations</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">excitations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="n">idx</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">excitations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nlim</span> <span class="o">=</span> <span class="n">dims</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># modes [0..idx-1] have nexc excitations,</span>
+            <span class="c1"># so mode idx can have at most excitations-nexc excitations</span>
+            <span class="n">nlim</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">excitations</span> <span class="o">-</span> <span class="n">nexc</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlim</span><span class="p">):</span>
             <span class="n">state</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">state_number_enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">state_number_enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span>
+                                            <span class="n">state</span><span class="p">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nexc</span> <span class="o">+</span> <span class="n">n</span><span class="p">):</span>
                 <span class="k">yield</span> <span class="n">s</span></div>
 
 
@@ -1392,7 +1393,7 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">        \lvert T_1\rangle = \lvert11\rangle</span>
-<span class="sd">        \lvert T_2\rangle = \frac1{\sqrt2}(\lvert01\rangle - \lvert10\rangle)</span>
+<span class="sd">        \lvert T_2\rangle = \frac1{\sqrt2}(\lvert01\rangle + \lvert10\rangle)</span>
 <span class="sd">        \lvert T_3\rangle = \lvert00\rangle</span>
 
 <span class="sd">    Returns</span>
@@ -1465,7 +1466,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -219,7 +220,7 @@
 <span class="kn">from</span> <span class="nn">qutip.cy.sparse_utils</span> <span class="kn">import</span> <span class="n">unit_row_norm</span>
 <span class="kn">from</span> <span class="nn">qutip.mesolve</span> <span class="kn">import</span> <span class="n">mesolve</span>
 <span class="kn">from</span> <span class="nn">qutip.sesolve</span> <span class="kn">import</span> <span class="n">sesolve</span>
-<span class="kn">from</span> <span class="nn">qutip.states</span> <span class="kn">import</span> <span class="n">basis</span>
+<span class="kn">from</span> <span class="nn">qutip.states</span> <span class="kn">import</span> <span class="n">basis</span><span class="p">,</span> <span class="n">projection</span>
 <span class="kn">from</span> <span class="nn">qutip.solver</span> <span class="kn">import</span> <span class="n">Options</span><span class="p">,</span> <span class="n">_solver_safety_check</span><span class="p">,</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">qutip.parallel</span> <span class="kn">import</span> <span class="n">parallel_map</span><span class="p">,</span> <span class="n">_default_kwargs</span>
 <span class="kn">from</span> <span class="nn">qutip.ui.progressbar</span> <span class="kn">import</span> <span class="n">BaseProgressBar</span><span class="p">,</span> <span class="n">TextProgressBar</span>
@@ -367,22 +368,23 @@
         <span class="n">sqrt_N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="n">H0</span><span class="o">.</span><span class="n">dims</span>
 
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-            <span class="n">output</span> <span class="o">=</span> <span class="n">parallel_map</span><span class="p">(</span><span class="n">_parallel_mesolve</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">),</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">parallel_map</span><span class="p">(</span><span class="n">_parallel_mesolve</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">),</span>
                                   <span class="n">task_args</span><span class="o">=</span><span class="p">(</span>
                                       <span class="n">sqrt_N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span>
                                       <span class="n">options</span><span class="p">),</span>
+                                  <span class="n">task_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="n">H0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span>
                                   <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="n">num_cpus</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">):</span>
+
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tlist</span><span class="p">):</span>
                     <span class="n">u</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">full</span><span class="p">())</span><span class="o">.</span><span class="n">T</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">rho0</span> <span class="o">=</span> <span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-            <span class="n">rho0</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">sqrt_N</span><span class="p">,</span> <span class="n">sqrt_N</span><span class="p">],</span> <span class="p">[</span><span class="n">sqrt_N</span><span class="p">,</span> <span class="n">sqrt_N</span><span class="p">]]</span>
-            <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="p">[],</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
-                             <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">rho0</span> <span class="o">=</span> <span class="n">qeye</span><span class="p">(</span><span class="n">H0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span>
+                <span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">output</span><span class="o">.</span><span class="n">states</span>
 
     <span class="k">else</span><span class="p">:</span>
@@ -398,6 +400,7 @@
             <span class="n">output</span> <span class="o">=</span> <span class="n">parallel_map</span><span class="p">(</span><span class="n">_parallel_mesolve</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">),</span>
                                   <span class="n">task_args</span><span class="o">=</span><span class="p">(</span>
                                       <span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">),</span>
+                                  <span class="n">task_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="n">H0</span><span class="o">.</span><span class="n">dims</span><span class="p">},</span>
                                   <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="n">num_cpus</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tlist</span><span class="p">):</span>
@@ -407,10 +410,11 @@
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">):</span>
                 <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
                 <span class="n">col_idx</span><span class="p">,</span> <span class="n">row_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-                <span class="n">rho0</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(([</span><span class="mi">1</span><span class="p">],</span> <span class="p">([</span><span class="n">row_idx</span><span class="p">],</span> <span class="p">[</span><span class="n">col_idx</span><span class="p">])),</span>
-                                          <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">))</span>
-                <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="p">[],</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
-                                 <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">rho0</span> <span class="o">=</span> <span class="n">projection</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">)</span>
+                <span class="n">rho0</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">H0</span><span class="o">.</span><span class="n">dims</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span>
+                    <span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_op_list</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+                    <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tlist</span><span class="p">):</span>
                     <span class="n">u</span><span class="p">[:,</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">full</span><span class="p">())</span><span class="o">.</span><span class="n">T</span>
             <span class="n">progress_bar</span><span class="o">.</span><span class="n">finished</span><span class="p">()</span>
@@ -473,12 +477,13 @@
     <span class="k">return</span> <span class="n">output</span>
 
 
-<span class="k">def</span> <span class="nf">_parallel_mesolve</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_parallel_mesolve</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">col_idx</span><span class="p">,</span> <span class="n">row_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-    <span class="n">rho0</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(([</span><span class="mi">1</span><span class="p">],</span> <span class="p">([</span><span class="n">row_idx</span><span class="p">],</span> <span class="p">[</span><span class="n">col_idx</span><span class="p">])),</span>
-                              <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">))</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_op_list</span><span class="p">,</span> <span class="p">[],</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
-                     <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rho0</span> <span class="o">=</span> <span class="n">projection</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">)</span>
+    <span class="n">rho0</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span>
+        <span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_op_list</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+        <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">output</span>
 </pre></div>
 
@@ -493,7 +498,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -216,10 +217,8 @@
     <span class="s1">&#39;rand_dm_hs&#39;</span><span class="p">,</span> <span class="s1">&#39;rand_super_bcsz&#39;</span><span class="p">,</span> <span class="s1">&#39;rand_stochastic&#39;</span><span class="p">,</span> <span class="s1">&#39;rand_super&#39;</span>
 <span class="p">]</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arcsin</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">pi</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">sqrtm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
 <span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
 <span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">create</span><span class="p">,</span> <span class="n">destroy</span><span class="p">,</span> <span class="n">jmat</span>
@@ -245,24 +244,27 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Input matrix must be square.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input matrix must be square.&#39;</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">angle</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">angle</span><span class="p">)</span>
     <span class="n">b</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">angle</span><span class="p">)</span>
     <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="n">n</span><span class="p">))</span>
     <span class="n">j</span> <span class="o">=</span> <span class="n">i</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
         <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="n">n</span><span class="p">))</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="o">-</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">),</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="o">-</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">),</span>
                       <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)))</span>
-    <span class="n">diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">diag</span><span class="p">))</span>
-    <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">diag</span><span class="p">))</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="n">diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">diag</span><span class="p">))</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">diag</span><span class="p">))</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">A</span><span class="o">*</span><span class="n">R</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">A</span>
+
 
 <span class="k">def</span> <span class="nf">randnz</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># This function is intended for internal use.</span>
@@ -322,8 +324,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span><span class="nb">list</span><span class="p">)):</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dims</span><span class="p">:</span>
             <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
@@ -341,10 +343,7 @@
             <span class="n">M</span> <span class="o">=</span> <span class="n">_rand_herm_dense</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">pos_def</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input N must be an integer or array_like.&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_rand_herm_sparse</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">pos_def</span><span class="p">):</span>
@@ -354,36 +353,37 @@
     <span class="n">num_elems</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_elems</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_elems</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
            <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_elems</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span>
-    <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span>
-                             <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">N</span><span class="p">,</span>
-                                                 <span class="n">num_elems</span><span class="p">,</span>
-                                                 <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)])</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row_idx</span><span class="p">,</span><span class="n">col_idx</span><span class="p">)),</span>
-                      <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="nb">divmod</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">num_elems</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">)),</span>
+                      <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
     <span class="n">M</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">M</span> <span class="o">+</span> <span class="n">M</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">pos_def</span><span class="p">:</span>
-        <span class="n">M</span><span class="o">.</span><span class="n">setdiag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+        <span class="n">M</span><span class="o">.</span><span class="n">setdiag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
     <span class="n">M</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">M</span>
 
 
 <span class="k">def</span> <span class="nf">_rand_herm_dense</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">pos_def</span><span class="p">):</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
-        <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">M</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">M</span> <span class="o">+</span> <span class="n">M</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
-    <span class="n">target</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">density</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">density</span><span class="o">**</span><span class="mf">0.5</span>
     <span class="n">num_remove</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mf">0.666</span><span class="p">)</span> <span class="o">*</span> <span class="n">target</span> <span class="o">+</span> <span class="mf">0.666</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">density</span><span class="p">)</span>
     <span class="n">num_remove</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">num_remove</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="n">num_remove</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_remove</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-                     <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">N</span><span class="p">,</span>
-                                                   <span class="n">num_remove</span><span class="p">,</span>
-                                                   <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)]:</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">num_remove</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
         <span class="n">M</span><span class="p">[</span><span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">M</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">pos_def</span><span class="p">:</span>
-        <span class="n">as_vec</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-        <span class="n">M</span><span class="p">[::</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">M</span>
 
 
@@ -413,10 +413,7 @@
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
     <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">rand_herm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span>
     <span class="n">U</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">U</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="rand_unitary_haar"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_unitary_haar">[docs]</a><span class="k">def</span> <span class="nf">rand_unitary_haar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -471,35 +468,45 @@
     <span class="k">return</span> <span class="n">U</span></div>
 
 
-<div class="viewcode-block" id="rand_ket"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket">[docs]</a><span class="k">def</span> <span class="nf">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rand_ket"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket">[docs]</a><span class="k">def</span> <span class="nf">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Creates a random Nx1 sparse ket vector.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    N : int</span>
-<span class="sd">        Number of rows for output quantum operator.</span>
-<span class="sd">        If None or 0, N is deduced from dims.</span>
+<span class="sd">        Number of rows for output quantum vector.</span>
+<span class="sd">        If None, N is deduced from dims.</span>
 <span class="sd">    density : float</span>
 <span class="sd">        Density between [0,1] of output ket state.</span>
 <span class="sd">    dims : list</span>
 <span class="sd">        Dimensions of quantum object.  Used for specifying</span>
 <span class="sd">        tensor structure. Default is dims=[[N],[1]].</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        Seed for the random number generator.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    oper : qobj</span>
-<span class="sd">        Nx1 ket state quantum operator.</span>
+<span class="sd">        Nx1 ket quantum state vector.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    -------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If neither `N` or `dims` are specified.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">N</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Specify either the number of rows of state vector&#39;</span>
+                         <span class="s1">&#39;(N) or dimensions of quantum object (dims)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">:</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">X</span><span class="o">.</span><span class="n">nnz</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># ensure that the ket is not all zeros.</span>
@@ -513,7 +520,7 @@
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">X</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="rand_ket_haar"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket_haar">[docs]</a><span class="k">def</span> <span class="nf">rand_ket_haar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rand_ket_haar"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_ket_haar">[docs]</a><span class="k">def</span> <span class="nf">rand_ket_haar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a Haar random pure state of dimension ``dim`` by</span>
 <span class="sd">    applying a Haar random unitary to a fixed pure state.</span>
@@ -522,7 +529,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    N : int</span>
 <span class="sd">        Dimension of the state vector to be returned.</span>
-<span class="sd">        If None or 0, N is deduced from dims.</span>
+<span class="sd">        If None, N is deduced from dims.</span>
 <span class="sd">    dims : list of ints, or None</span>
 <span class="sd">        Dimensions of the resultant quantum object.</span>
 <span class="sd">        If None, [[N],[1]] is used.</span>
@@ -531,14 +538,22 @@
 <span class="sd">    -------</span>
 <span class="sd">    psi : Qobj</span>
 <span class="sd">        A random state vector drawn from the Haar measure.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    -------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If neither `N` or `dims` are specified.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Specify either the number of rows of state vector&#39;</span>
+                         <span class="s1">&#39;(N) or dimensions of quantum object (dims)&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">N</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">:</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">psi</span> <span class="o">=</span> <span class="n">rand_unitary_haar</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">psi</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
     <span class="k">return</span> <span class="n">psi</span></div>
@@ -557,6 +572,8 @@
 <span class="sd">    dims : list</span>
 <span class="sd">        Dimensions of quantum object.  Used for specifying</span>
 <span class="sd">        tensor structure. Default is dims=[[N],[N]].</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        Seed for the random number generator.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -586,8 +603,8 @@
         <span class="k">if</span> <span class="n">dims</span><span class="p">:</span>
             <span class="n">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pure</span><span class="p">:</span>
-            <span class="n">dm_density</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
-            <span class="n">psi</span> <span class="o">=</span> <span class="n">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dm_density</span><span class="p">)</span>
+            <span class="n">dm_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dm_density</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
             <span class="n">H</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">psi</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
             <span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -605,10 +622,7 @@
             <span class="n">H</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input N must be an integer or array_like.&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">H</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="rand_dm_ginibre"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_dm_ginibre">[docs]</a><span class="k">def</span> <span class="nf">rand_dm_ginibre</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -717,11 +731,12 @@
 <span class="sd">        Dimensions of quantum object.  Used for specifying</span>
 <span class="sd">        tensor structure. Default is dims=[[[N],[N]], [[N],[N]]].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.propagator</span> <span class="kn">import</span> <span class="n">propagator</span>
     <span class="k">if</span> <span class="n">dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># TODO: check!</span>
         <span class="k">pass</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">N</span><span class="p">],[</span><span class="n">N</span><span class="p">]],</span> <span class="p">[[</span><span class="n">N</span><span class="p">],[</span><span class="n">N</span><span class="p">]]]</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="n">N</span><span class="p">]],</span> <span class="p">[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="n">N</span><span class="p">]]]</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">rand_herm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">propagator</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(),</span> <span class="p">[</span>
         <span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">jmat</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">)</span>
@@ -763,7 +778,7 @@
         <span class="c1"># TODO: check!</span>
         <span class="k">pass</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">N</span><span class="p">],[</span><span class="n">N</span><span class="p">]],</span> <span class="p">[[</span><span class="n">N</span><span class="p">],[</span><span class="n">N</span><span class="p">]]]</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="n">N</span><span class="p">]],</span> <span class="p">[[</span><span class="n">N</span><span class="p">],</span> <span class="p">[</span><span class="n">N</span><span class="p">]]]</span>
 
     <span class="k">if</span> <span class="n">rank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rank</span> <span class="o">=</span> <span class="n">N</span><span class="o">**</span><span class="mi">2</span>
@@ -793,7 +808,7 @@
         <span class="c1"># matrices directly, as this is important in statistics.</span>
         <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span>
-            <span class="n">sqrtm</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+            <span class="n">la</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
         <span class="p">)</span>
 
         <span class="c1"># Finally, we dot everything together and pack it into a Qobj,</span>
@@ -855,7 +870,7 @@
     <span class="n">col_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">N</span><span class="p">),</span>
                          <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">num_elems</span><span class="o">-</span><span class="n">N</span><span class="p">)])</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">)),</span>
-                      <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+                      <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
     <span class="n">M</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">M</span> <span class="o">+</span> <span class="n">M</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
     <span class="n">num_rows</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">indptr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows</span><span class="p">):</span>
@@ -863,12 +878,9 @@
         <span class="n">row_end</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">row_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">row_start</span><span class="p">:</span><span class="n">row_end</span><span class="p">])</span>
         <span class="n">M</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">row_start</span><span class="p">:</span><span class="n">row_end</span><span class="p">]</span> <span class="o">/=</span> <span class="n">row_sum</span>
-    <span class="k">if</span> <span class="n">kind</span><span class="o">==</span><span class="s1">&#39;left&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">dims</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span></div>
 
 
 <span class="k">def</span> <span class="nf">_check_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">):</span>
@@ -881,10 +893,6 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Qobj dimensions must match matrix shape.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Qobj dimension components must have same length.&quot;</span><span class="p">)</span>
-
-<span class="c1"># TRAILING IMPORTS</span>
-<span class="c1"># qutip.propagator depends on rand_dm, so we need to put this import last.</span>
-<span class="kn">from</span> <span class="nn">qutip.propagator</span> <span class="kn">import</span> <span class="n">propagator</span>
 </pre></div>
 
            </div>
@@ -898,7 +906,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

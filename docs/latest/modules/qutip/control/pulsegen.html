@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
 
   
   
@@ -230,29 +231,29 @@
 <span class="sd">    The pulse generators each produce a different type of pulse,</span>
 <span class="sd">    see the gen_pulse function description for details.</span>
 <span class="sd">    These are the random pulse options:</span>
-<span class="sd">        </span>
+
 <span class="sd">        RND - Independent random value in each timeslot</span>
 <span class="sd">        RNDFOURIER - Fourier series with random coefficients</span>
 <span class="sd">        RNDWAVES - Summation of random waves</span>
 <span class="sd">        RNDWALK1 - Random change in amplitude each timeslot</span>
 <span class="sd">        RNDWALK2 - Random change in amp gradient each timeslot</span>
-<span class="sd">    </span>
+
 <span class="sd">    These are the other non-periodic options:</span>
-<span class="sd">        </span>
+
 <span class="sd">        LIN - Linear, i.e. contant gradient over the time</span>
 <span class="sd">        ZERO - special case of the LIN pulse, where the gradient is 0</span>
-<span class="sd">    </span>
+
 <span class="sd">    These are the periodic options</span>
-<span class="sd">        </span>
+
 <span class="sd">        SINE - Sine wave</span>
 <span class="sd">        SQUARE - Square wave</span>
 <span class="sd">        SAW - Saw tooth wave</span>
 <span class="sd">        TRIANGLE - Triangular wave</span>
-<span class="sd">    </span>
+
 <span class="sd">    If a Dynamics object is passed in then this is used in instantiate</span>
 <span class="sd">    the PulseGen, meaning that some timeslot and amplitude properties</span>
 <span class="sd">    are copied over.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;RND&#39;</span><span class="p">:</span>
@@ -277,11 +278,11 @@
         <span class="k">return</span> <span class="n">PulseGenSaw</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">pulse_params</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;TRIANGLE&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">PulseGenTriangle</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">pulse_params</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;GAUSSIAN&#39;</span><span class="p">:</span>  
+    <span class="k">elif</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;GAUSSIAN&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">PulseGenGaussian</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">pulse_params</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;CRAB_FOURIER&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">PulseGenCrabFourier</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">pulse_params</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;GAUSSIAN_EDGE&#39;</span><span class="p">:</span>  
+    <span class="k">elif</span> <span class="n">pulse_type</span> <span class="o">==</span> <span class="s1">&#39;GAUSSIAN_EDGE&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">PulseGenGaussianEdge</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">pulse_params</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No option for pulse_type &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pulse_type</span><span class="p">))</span></div>
@@ -383,19 +384,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ramping_pulse</span> <span class="o">=</span> <span class="kc">None</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_params</span><span class="p">()</span></div>
-        
+
 <div class="viewcode-block" id="PulseGen.apply_params"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGen.apply_params">[docs]</a>    <span class="k">def</span> <span class="nf">apply_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set object attributes based on the dictionary (if any) passed in the </span>
+<span class="sd">        Set object attributes based on the dictionary (if any) passed in the</span>
 <span class="sd">        instantiation, or passed as a parameter</span>
 <span class="sd">        This is called during the instantiation automatically.</span>
 <span class="sd">        The key value pairs are the attribute name and value</span>
-<span class="sd">        &quot;&quot;&quot;</span>               
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
-        
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
@@ -403,8 +404,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span>        
-        
+        <span class="k">return</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span>
+
     <span class="nd">@log_level</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lvl</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -412,7 +413,7 @@
 <span class="sd">        that is call logger.setLevel(lvl)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">lvl</span><span class="p">)</span>
-        
+
 <div class="viewcode-block" id="PulseGen.gen_pulse"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGen.gen_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">gen_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns the pulse as an array of vales for each timeslot</span>
@@ -430,12 +431,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span> <span class="o">*</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">pulse_time</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span>
-                
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uses_time</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-                
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_initialised</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -444,7 +445,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ubound</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="o">=</span> <span class="kc">None</span>
-        
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ubound cannot be less the lbound&quot;</span><span class="p">)</span></div>
@@ -488,9 +489,9 @@
             <span class="n">ramping_pulse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ramping_pulse</span>
         <span class="k">if</span> <span class="n">ramping_pulse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pulse</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">*</span><span class="n">ramping_pulse</span>
-            
+
         <span class="k">return</span> <span class="n">pulse</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenZero"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenZero">[docs]</a><span class="k">class</span> <span class="nc">PulseGenZero</span><span class="p">(</span><span class="n">PulseGen</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a flat pulse</span>
@@ -822,7 +823,7 @@
 
 <div class="viewcode-block" id="PulseGenLinear.init_pulse"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenLinear.init_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">init_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end_val</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the gradient if pulse is defined by start and </span>
+<span class="sd">        Calculate the gradient if pulse is defined by start and</span>
 <span class="sd">        end point values</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">PulseGen</span><span class="o">.</span><span class="n">init_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1045,7 +1046,7 @@
             <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_bounds_and_offset</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span></div></div>
-        
+
 <div class="viewcode-block" id="PulseGenGaussian"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenGaussian">[docs]</a><span class="k">class</span> <span class="nc">PulseGenGaussian</span><span class="p">(</span><span class="n">PulseGen</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates pulses with a Gaussian profile</span>
@@ -1059,7 +1060,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">variance</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_params</span><span class="p">()</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenGaussian.gen_pulse"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenGaussian.gen_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">gen_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a pulse with Gaussian shape. The peak is centre around the</span>
@@ -1070,7 +1071,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_initialised</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_pulse</span><span class="p">()</span>
-        
+
         <span class="k">if</span> <span class="n">mean</span><span class="p">:</span>
             <span class="n">Tm</span> <span class="o">=</span> <span class="n">mean</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1088,9 +1089,9 @@
 <div class="viewcode-block" id="PulseGenGaussianEdge"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenGaussianEdge">[docs]</a><span class="k">class</span> <span class="nc">PulseGenGaussianEdge</span><span class="p">(</span><span class="n">PulseGen</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate pulses with inverted Gaussian ramping in and out</span>
-<span class="sd">    It&#39;s intended use for a ramping modulation, which is often required in </span>
+<span class="sd">    It&#39;s intended use for a ramping modulation, which is often required in</span>
 <span class="sd">    experimental setups.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">        decay_time : float</span>
@@ -1116,7 +1117,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_initialised</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_pulse</span><span class="p">()</span>
-            
+
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
         <span class="k">if</span> <span class="n">decay_time</span><span class="p">:</span>
             <span class="n">Td</span> <span class="o">=</span> <span class="n">decay_time</span>
@@ -1130,7 +1131,7 @@
 
 
 <span class="c1">### The following are pulse generators for the CRAB algorithm ###</span>
-<span class="c1"># AJGP 2015-05-14: </span>
+<span class="c1"># AJGP 2015-05-14:</span>
 <span class="c1"># The intention is to have a more general base class that allows</span>
 <span class="c1"># setting of general basis functions</span>
 
@@ -1140,19 +1141,19 @@
 <span class="sd">    Note these are more involved in the optimisation process as they are</span>
 <span class="sd">    used to produce piecewise control amplitudes each time new optimisation</span>
 <span class="sd">    parameters are tried</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    num_coeffs : integer</span>
 <span class="sd">        Number of coefficients used for each basis function</span>
-<span class="sd">        </span>
+
 <span class="sd">    num_basis_funcs : integer</span>
 <span class="sd">        Number of basis functions</span>
 <span class="sd">        In this case set at 2 and should not be changed</span>
-<span class="sd">        </span>
+
 <span class="sd">    coeffs : float array[num_coeffs, num_basis_funcs]</span>
 <span class="sd">        The basis coefficient values</span>
-<span class="sd">        </span>
+
 <span class="sd">    randomize_coeffs : bool</span>
 <span class="sd">        If True (default) then the coefficients are set to some random values</span>
 <span class="sd">        when initialised, otherwise they will all be equal to self.scaling</span>
@@ -1162,7 +1163,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span> <span class="o">=</span> <span class="n">num_coeffs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        
+
 <div class="viewcode-block" id="PulseGenCrab.reset"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrab.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reset attributes to default values</span>
@@ -1173,7 +1174,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_BSC_ALL</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_BSC_GT_MEAN</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_BSC_LT_MEAN</span> <span class="o">=</span> <span class="mi">3</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_uses_time</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_basis_funcs</span> <span class="o">=</span> <span class="mi">2</span>
@@ -1185,34 +1186,34 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse_func</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_params</span><span class="p">()</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenCrab.init_pulse"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrab.init_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">init_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the initial freq and coefficient values</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">PulseGen</span><span class="o">.</span><span class="n">init_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_coeffs</span><span class="p">(</span><span class="n">num_coeffs</span><span class="o">=</span><span class="n">num_coeffs</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_guess_pulse</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_bounds</span><span class="p">()</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_coeffs_estimated</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                     <span class="s2">&quot;CRAB pulse initialised with </span><span class="si">{}</span><span class="s2"> coefficients per basis &quot;</span>
                     <span class="s2">&quot;function, which means a total of </span><span class="si">{}</span><span class="s2"> &quot;</span>
                     <span class="s2">&quot;optimisation variables for this pulse&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_optim_vars</span><span class="p">))</span></div>
-        
+
 <span class="c1">#    def generate_guess_pulse(self)</span>
 <span class="c1">#        if isinstance(self.guess_pulsegen, PulseGen):</span>
 <span class="c1">#            self.guess_pulse = self.guess_pulsegen.gen_pulse()</span>
 <span class="c1">#        return self.guess_pulse</span>
-        
+
 <div class="viewcode-block" id="PulseGenCrab.init_coeffs"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrab.init_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">init_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the initial ceofficent values.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        num_coeffs : integer</span>
@@ -1222,7 +1223,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">num_coeffs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span> <span class="o">=</span> <span class="n">num_coeffs</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_coeffs_estimated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">dynamics</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">):</span>
@@ -1232,7 +1233,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEF_NUM_COEFFS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_optim_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_basis_funcs</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_coeffs_estimated</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -1250,14 +1251,14 @@
                         <span class="s2">&quot;optimisation. You can set this level explicitly &quot;</span>
                         <span class="s2">&quot;to suppress this message.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">NUM_COEFFS_WARN_LVL</span><span class="p">))</span>
-                            
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomize_coeffs</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_basis_funcs</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">num_basis_funcs</span><span class="p">])</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">scaling</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenCrab.estimate_num_coeffs"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrab.estimate_num_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_num_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Estimate the number coefficients based on the dimensionality of the</span>
@@ -1269,32 +1270,32 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_coeffs</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">num_coeffs</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenCrab.get_optim_var_vals"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrab.get_optim_var_vals">[docs]</a>    <span class="k">def</span> <span class="nf">get_optim_var_vals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the parameter values to be optimised</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list (or 1d array) of floats </span>
+<span class="sd">        list (or 1d array) of floats</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
-    
+
 <div class="viewcode-block" id="PulseGenCrab.set_optim_var_vals"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrab.set_optim_var_vals">[docs]</a>    <span class="k">def</span> <span class="nf">set_optim_var_vals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_vals</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the values of the any of the pulse generation parameters</span>
 <span class="sd">        based on new values from the optimisation method</span>
 <span class="sd">        Typically this will be the basis coefficients</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Type and size checking avoided here as this is in the </span>
+        <span class="c1"># Type and size checking avoided here as this is in the</span>
         <span class="c1"># main optmisation call sequence</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_coeffs</span><span class="p">(</span><span class="n">param_vals</span><span class="p">)</span></div>
-        
+
     <span class="k">def</span> <span class="nf">set_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_vals</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">param_vals</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
                     <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_basis_funcs</span><span class="p">])</span>
-    
+
     <span class="k">def</span> <span class="nf">init_guess_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse_func</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse_action</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">WARN</span><span class="p">(</span><span class="s2">&quot;No guess pulse action given, hence ignored.&quot;</span><span class="p">)</span>
@@ -1305,15 +1306,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">WARN</span><span class="p">(</span><span class="s2">&quot;No option for guess pulse action &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
                         <span class="s2">&quot;, hence ignored.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse_action</span><span class="p">))</span>
-    
+
     <span class="k">def</span> <span class="nf">guess_pulse_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulse</span><span class="p">):</span>
         <span class="n">pulse</span> <span class="o">=</span> <span class="n">pulse</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span>
         <span class="k">return</span> <span class="n">pulse</span>
-        
+
     <span class="k">def</span> <span class="nf">guess_pulse_modulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulse</span><span class="p">):</span>
         <span class="n">pulse</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">pulse</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span>
         <span class="k">return</span> <span class="n">pulse</span>
-        
+
     <span class="k">def</span> <span class="nf">_init_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">add_guess_pulse_scale</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1347,14 +1348,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_bound_mean</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bound_scale</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ubound</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbound</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bound_scale_cond</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_BSC_ALL</span>
-            
+
     <span class="k">def</span> <span class="nf">get_guess_pulse_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span><span class="p">),</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">scale</span>
-        
+
     <span class="k">def</span> <span class="nf">_apply_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulse</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Scaling the amplitudes using the tanh function if there are bounds</span>
@@ -1374,7 +1375,7 @@
             <span class="k">return</span> <span class="n">pulse</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pulse</span></div>
-       
+
 
 <div class="viewcode-block" id="PulseGenCrabFourier"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrabFourier">[docs]</a><span class="k">class</span> <span class="nc">PulseGenCrabFourier</span><span class="p">(</span><span class="n">PulseGenCrab</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1401,9 +1402,9 @@
 <span class="sd">        Set the initial freq and coefficient values</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">PulseGenCrab</span><span class="o">.</span><span class="n">init_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-            
+
         <span class="bp">self</span><span class="o">.</span><span class="n">init_freqs</span><span class="p">()</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenCrabFourier.init_freqs"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrabFourier.init_freqs">[docs]</a>    <span class="k">def</span> <span class="nf">init_freqs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the frequencies</span>
@@ -1414,15 +1415,15 @@
         <span class="n">ff</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulse_time</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">freqs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ff</span><span class="o">*</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomize_freqs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">freqs</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span></div>
-        
+
 <div class="viewcode-block" id="PulseGenCrabFourier.gen_pulse"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.control.pulsegen.PulseGenCrabFourier.gen_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">gen_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a pulse using the Fourier basis with the freqs and</span>
 <span class="sd">        coeffs attributes.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        coeffs : float array[num_coeffs, num_basis_funcs]</span>
@@ -1432,10 +1433,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">coeffs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span>
-            
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pulse_initialised</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_pulse</span><span class="p">()</span>
-        
+
         <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_tslots</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_coeffs</span><span class="p">):</span>
@@ -1444,15 +1445,14 @@
 <span class="c1">#            basis2comp = self.coeffs[i, 1]*np.cos(phase)</span>
 <span class="c1">#            pulse += basis1comp + basis2comp</span>
             <span class="n">pulse</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span> <span class="o">+</span> \
-                        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span> 
+                        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse_func</span><span class="p">:</span>
             <span class="n">pulse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_pulse_func</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ramping_pulse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pulse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_ramping_pulse</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span>
-            
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_bounds</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span></div></div>
-    
 </pre></div>
 
            </div>
@@ -1466,7 +1466,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

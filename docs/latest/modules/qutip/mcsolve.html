@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
 
   
   
@@ -233,9 +234,11 @@
 <span class="c1"># Internal, global variables for storing references to dynamically loaded</span>
 <span class="c1"># cython functions</span>
 
+
 <span class="c1"># Todo: use real warning</span>
 <span class="k">def</span> <span class="nf">warn</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
 
 <span class="k">class</span> <span class="nc">qutip_zvode</span><span class="p">(</span><span class="n">zvode</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -245,6 +248,7 @@
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">call_args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">itask</span>
         <span class="k">return</span> <span class="n">r</span>
+
 
 <div class="viewcode-block" id="mcsolve"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.mcsolve.mcsolve">[docs]</a><span class="k">def</span> <span class="nf">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -367,7 +371,7 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">num_traj</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntraj</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
         <span class="n">num_traj</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ntraj</span><span class="p">)</span>
 
     <span class="c1"># set the physics</span>
@@ -376,7 +380,6 @@
 
     <span class="c1"># load monte carlo class</span>
     <span class="n">mc</span> <span class="o">=</span> <span class="n">_MC</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">SolverSystem</span><span class="p">):</span>
         <span class="n">mc</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="n">H</span>
@@ -492,7 +495,7 @@
             <span class="n">ss</span><span class="o">.</span><span class="n">set_args</span> <span class="o">=</span> <span class="n">_qobjevo_args</span>
             <span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s2">&quot;QobjEvo&quot;</span>
 
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="n">ss</span><span class="o">.</span><span class="n">h_func</span> <span class="o">=</span> <span class="n">H</span>
             <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="p">)</span>
             <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
@@ -511,9 +514,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">([])</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">check_dims</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
         <span class="n">ss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span>
         <span class="k">if</span> <span class="n">ss</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Diagonal&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">isfunc</span><span class="p">:</span>
-            <span class="n">e_op</span> <span class="o">=</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">e</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">ss</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops</span><span class="p">]</span>
+            <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Qobj</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">e</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">ss</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops</span>
+            <span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="p">:</span>
@@ -523,20 +531,20 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">:</span>
                 <span class="n">c_op</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;c_ops are not consistant with psi0&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;c_ops are not consistant with psi0&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;QobjEvo&quot;</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">H_td</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error calculating H&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error calculating H&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">rhs</span><span class="p">,</span> <span class="n">ode_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">makefunc</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
-                <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">ode_args</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error calculating H&quot;</span><span class="p">)</span>
+                <span class="n">rhs</span><span class="p">,</span> <span class="n">ode_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">makefunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="p">)</span>
+                <span class="n">rhs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">ode_args</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error calculating H&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_traj</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">e_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -601,7 +609,7 @@
 
         <span class="c1"># set arguments for input to monte carlo</span>
         <span class="n">map_kwargs_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;progress_bar&#39;</span><span class="p">:</span> <span class="n">progress_bar</span><span class="p">,</span>
-                      <span class="s1">&#39;num_cpus&#39;</span><span class="p">:</span> <span class="n">options</span><span class="o">.</span><span class="n">num_cpus</span><span class="p">}</span>
+                       <span class="s1">&#39;num_cpus&#39;</span><span class="p">:</span> <span class="n">options</span><span class="o">.</span><span class="n">num_cpus</span><span class="p">}</span>
         <span class="n">map_kwargs_</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">map_kwargs</span><span class="p">)</span>
         <span class="n">map_kwargs</span> <span class="o">=</span> <span class="n">map_kwargs_</span>
 
@@ -609,9 +617,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set_e_ops</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Diagonal&quot;</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">map_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_traj_diag</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_traj</span><span class="p">)),</span> <span class="o">**</span><span class="n">map_kwargs</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">map_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_traj_diag</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_traj</span><span class="p">)),</span>
+                               <span class="o">**</span><span class="n">map_kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">map_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_traj</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_traj</span><span class="p">)),</span> <span class="o">**</span><span class="n">map_kwargs</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">map_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_traj</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_traj</span><span class="p">)),</span>
+                               <span class="o">**</span><span class="n">map_kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span> <span class="o">=</span> <span class="n">num_traj</span>
@@ -646,7 +656,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">dm_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
-                <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">,:]</span> <span class="c1"># .reshape((-1,1))</span>
+                <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
                 <span class="n">dm_t</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">vec</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
             <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dm_t</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
@@ -654,7 +664,7 @@
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)):</span>
                 <span class="n">dm_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
-                    <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="c1"># .reshape((-1,1))</span>
+                    <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
                     <span class="n">dm_t</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">vec</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
                 <span class="n">states</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dm_t</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">])</span>
             <span class="k">return</span> <span class="n">states</span>
@@ -665,7 +675,7 @@
         <span class="n">len_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">dm_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
-            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">dm_t</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">vec</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dm_t</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">])</span>
 
@@ -674,7 +684,7 @@
         <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">psis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
-            <span class="n">psis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dense1D_to_fastcsr_ket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]),</span>
+            <span class="n">psis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dense1D_to_fastcsr_ket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
                            <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">psis</span>
 
@@ -710,7 +720,7 @@
             <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">len_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-                            <span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">],</span> <span class="p">[</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">])</span>
+                        <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">))</span>
         <span class="c1"># TO-DO rebuild steady_state from _psi_out if needed</span>
         <span class="c1"># elif self._psi_out is not None:</span>
         <span class="c1">#     return sum(self.state_average) / self.num_traj</span>
@@ -723,8 +733,8 @@
         <span class="n">psis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)):</span>
-                <span class="n">psis</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dense1D_to_fastcsr_ket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]),</span>
-                                 <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc&#39;</span><span class="p">)</span>
+                <span class="n">psis</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dense1D_to_fastcsr_ket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]),</span>
+                                  <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">psis</span>
 
     <span class="nd">@property</span>
@@ -737,7 +747,7 @@
         <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">:</span>
             <span class="n">col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))</span>
             <span class="n">col</span> <span class="o">=</span> <span class="p">([]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">out</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">]</span>
 
@@ -747,7 +757,7 @@
         <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">:</span>
             <span class="n">col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))</span>
             <span class="n">col</span> <span class="o">=</span> <span class="p">([]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">out</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">]</span>
 
@@ -881,7 +891,10 @@
         <span class="n">solver_safe</span><span class="p">[</span><span class="s2">&quot;mcsolve&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">isfunc</span><span class="p">:</span>
-            <span class="n">e_op</span> <span class="o">=</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">e</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops</span><span class="p">]</span>
+            <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Qobj</span><span class="p">(</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">e</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops</span>
+            <span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -902,8 +915,8 @@
         <span class="n">e_ops</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
 
         <span class="n">cymc</span> <span class="o">=</span> <span class="n">CyMcOdeDiag</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
-        <span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">collapses</span> <span class="o">=</span> <span class="n">cymc</span><span class="o">.</span><span class="n">run_ode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span>
-                                                     <span class="n">e_ops</span><span class="p">,</span> <span class="n">prng</span><span class="p">)</span>
+        <span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">collapses</span> <span class="o">=</span>\
+            <span class="n">cymc</span><span class="o">.</span><span class="n">run_ode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">prng</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">steady_state_average</span><span class="p">:</span>
             <span class="n">ss_out</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">U</span> <span class="o">@</span> <span class="n">ss_out</span> <span class="o">@</span> <span class="n">ss</span><span class="o">.</span><span class="n">Ud</span>
@@ -911,6 +924,7 @@
         <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">steady_state_average</span><span class="p">:</span>
             <span class="n">ss_out</span> <span class="o">/=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">collapses</span><span class="p">)</span>
+
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># CODES FOR PYTHON FUNCTION BASED TIME-DEPENDENT RHS</span>
@@ -920,6 +934,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
     <span class="n">rhs</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">H_td</span><span class="o">.</span><span class="n">compiled_qobjevo</span><span class="o">.</span><span class="n">mul_vec</span>
     <span class="k">return</span> <span class="n">rhs</span><span class="p">,</span> <span class="p">()</span>
+
 
 <span class="k">def</span> <span class="nf">_qobjevo_args</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
     <span class="n">var</span> <span class="o">=</span> <span class="n">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
@@ -931,6 +946,7 @@
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="p">:</span>
         <span class="n">c</span><span class="o">.</span><span class="n">solver_set_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
 
+
 <span class="k">def</span> <span class="nf">_func_set</span><span class="p">(</span><span class="n">HS</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">opt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
@@ -941,6 +957,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">rhs</span> <span class="o">=</span> <span class="n">_funcrhs_with_state</span>
     <span class="k">return</span> <span class="n">rhs</span><span class="p">,</span> <span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">h_func</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
 
 <span class="k">def</span> <span class="nf">_func_args</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
     <span class="n">var</span> <span class="o">=</span> <span class="n">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
@@ -959,10 +976,12 @@
     <span class="n">h_func_term</span> <span class="o">=</span> <span class="n">h_func_data</span> <span class="o">*</span> <span class="n">psi</span>
     <span class="k">return</span> <span class="n">h_func_term</span> <span class="o">+</span> <span class="n">Hc_td</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
 
+
 <span class="k">def</span> <span class="nf">_funcrhs_with_state</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">h_func</span><span class="p">,</span> <span class="n">Hc_td</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
     <span class="n">h_func_data</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">h_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
     <span class="n">h_func_term</span> <span class="o">=</span> <span class="n">h_func_data</span> <span class="o">*</span> <span class="n">psi</span>
     <span class="k">return</span> <span class="n">h_func_term</span> <span class="o">+</span> <span class="n">Hc_td</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+
 
 <span class="k">def</span> <span class="nf">_mc_dm_avg</span><span class="p">(</span><span class="n">psi_list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -974,6 +993,7 @@
     <span class="n">shape</span> <span class="o">=</span> <span class="n">psi_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">out_data</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">psi</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">psi_list</span><span class="p">])</span> <span class="o">/</span> <span class="n">ln</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc-dm&#39;</span><span class="p">)</span>
+
 
 <span class="k">def</span> <span class="nf">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
@@ -995,7 +1015,7 @@
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

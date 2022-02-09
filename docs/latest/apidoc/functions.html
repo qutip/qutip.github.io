@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../static/site.css" type="text/css" />
 
   
   
@@ -987,7 +988,7 @@ enumeration ordering.</p>
 
 <dl class="py function">
 <dt id="qutip.states.state_number_enumerate">
-<code class="sig-name descname"><span class="pre">state_number_enumerate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/states.html#state_number_enumerate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.states.state_number_enumerate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">state_number_enumerate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nexc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/states.html#state_number_enumerate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.states.state_number_enumerate" title="Permalink to this definition">¶</a></dt>
 <dd><p>An iterator that enumerate all the state number arrays (quantum numbers on
 the form [n1, n2, n3, …]) for a system with dimensions given by dims.</p>
 <p class="rubric">Example</p>
@@ -1010,6 +1011,8 @@ the form [n1, n2, n3, …]) for a system with dimensions given by dims.</p>
 equal to this value.</p>
 </dd>
 <dt><strong>idx</strong><span class="classifier">integer</span></dt><dd><p>Current index in the iteration. Used internally.</p>
+</dd>
+<dt><strong>nexc</strong><span class="classifier">integer</span></dt><dd><p>Number of excitations in modes [0..idx-1]. Used internally.</p>
 </dd>
 </dl>
 </dd>
@@ -1148,7 +1151,7 @@ if truncated too aggressively.</p>
 <dd><p>Returns a list of the two particle triplet-states:</p>
 <div class="math notranslate nohighlight">
 \[\lvert T_1\rangle = \lvert11\rangle
-\lvert T_2\rangle = \frac1{\sqrt2}(\lvert01\rangle - \lvert10\rangle)
+\lvert T_2\rangle = \frac1{\sqrt2}(\lvert01\rangle + \lvert10\rangle)
 \lvert T_3\rangle = \lvert00\rangle\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -2315,6 +2318,8 @@ of generated density matrix.</p>
 <dt><strong>dims</strong><span class="classifier">list</span></dt><dd><p>Dimensions of quantum object.  Used for specifying
 tensor structure. Default is dims=[[N],[N]].</p>
 </dd>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>Seed for the random number generator.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2427,24 +2432,32 @@ not be repeatedly used for generating matrices larger than ~1000x1000.</p>
 
 <dl class="py function">
 <dt id="qutip.random_objects.rand_ket">
-<code class="sig-name descname"><span class="pre">rand_ket</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/random_objects.html#rand_ket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.random_objects.rand_ket" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rand_ket</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/random_objects.html#rand_ket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.random_objects.rand_ket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a random Nx1 sparse ket vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of rows for output quantum operator.
-If None or 0, N is deduced from dims.</p>
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of rows for output quantum vector.
+If None, N is deduced from dims.</p>
 </dd>
 <dt><strong>density</strong><span class="classifier">float</span></dt><dd><p>Density between [0,1] of output ket state.</p>
 </dd>
 <dt><strong>dims</strong><span class="classifier">list</span></dt><dd><p>Dimensions of quantum object.  Used for specifying
 tensor structure. Default is dims=[[N],[1]].</p>
 </dd>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>Seed for the random number generator.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>oper</strong><span class="classifier">qobj</span></dt><dd><p>Nx1 ket state quantum operator.</p>
+<dt><strong>oper</strong><span class="classifier">qobj</span></dt><dd><p>Nx1 ket quantum state vector.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If neither <cite>N</cite> or <cite>dims</cite> are specified.</p>
 </dd>
 </dl>
 </dd>
@@ -2453,14 +2466,14 @@ tensor structure. Default is dims=[[N],[1]].</p>
 
 <dl class="py function">
 <dt id="qutip.random_objects.rand_ket_haar">
-<code class="sig-name descname"><span class="pre">rand_ket_haar</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/random_objects.html#rand_ket_haar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.random_objects.rand_ket_haar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rand_ket_haar</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/random_objects.html#rand_ket_haar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.random_objects.rand_ket_haar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a Haar random pure state of dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code> by
 applying a Haar random unitary to a fixed pure state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Dimension of the state vector to be returned.
-If None or 0, N is deduced from dims.</p>
+If None, N is deduced from dims.</p>
 </dd>
 <dt><strong>dims</strong><span class="classifier">list of ints, or None</span></dt><dd><p>Dimensions of the resultant quantum object.
 If None, [[N],[1]] is used.</p>
@@ -2470,6 +2483,12 @@ If None, [[N],[1]] is used.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>psi</strong><span class="classifier">Qobj</span></dt><dd><p>A random state vector drawn from the Haar measure.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If neither <cite>N</cite> or <cite>dims</cite> are specified.</p>
 </dd>
 </dl>
 </dd>
@@ -2843,7 +2862,7 @@ including supermatrix, Kraus, Choi and Chi (process) matrix formalisms.</p>
 <dl class="py function">
 <dt id="qutip.superop_reps.chi_to_choi">
 <code class="sig-name descname"><span class="pre">chi_to_choi</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q_oper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/superop_reps.html#chi_to_choi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.superop_reps.chi_to_choi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a Choi matrix to a Chi matrix in the Pauli basis.</p>
+<dd><p>Converts a Chi matrix to a Choi matrix.</p>
 <p>NOTE: this is only supported for qubits right now. Need to extend to
 Heisenberg-Weyl for other subsystem dimensions.</p>
 </dd></dl>
@@ -3449,7 +3468,7 @@ large and sparse systems (hundreds of quantum states).</p>
 <p class="rubric">References</p>
 <dl class="citation">
 <dt class="label" id="r8ba8a4d22c3a-1"><span class="brackets">1</span></dt>
-<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Concurrence_(quantum_computing">https://en.wikipedia.org/wiki/Concurrence_(quantum_computing</a>)</p>
+<dd><p><a class="reference external" href="http://en.wikipedia.org/wiki/Concurrence_(quantum_computing">http://en.wikipedia.org/wiki/Concurrence_(quantum_computing</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -7432,45 +7451,67 @@ of parameters. The function works well for cases with no band mixing.</p>
 <span id="pseudoprobability-functions"></span><h3>Pseudoprobability Functions<a class="headerlink" href="#module-qutip.wigner" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="qutip.wigner.qfunc">
-<code class="sig-name descname"><span class="pre">qfunc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.4142135623730951</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/wigner.html#qfunc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.wigner.qfunc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Q-function of a given state vector or density matrix
-at points <cite>xvec + i * yvec</cite>.</p>
-<dl class="field-list simple">
+<code class="sig-name descname"><span class="pre">qfunc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">qutip.qobj.Qobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.4142135623730951</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precompute_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/wigner.html#qfunc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.wigner.qfunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Husimi-Q function of a given state vector or density matrix at phase-space
+points <code class="docutils literal notranslate"><span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">g</span> <span class="pre">*</span> <span class="pre">(xvec</span> <span class="pre">+</span> <span class="pre">i*yvec)</span></code>.</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>state</strong><span class="classifier">qobj</span></dt><dd><p>A state vector or density matrix.</p>
+<dd class="field-odd"><dl>
+<dt><strong>state</strong><span class="classifier"><a class="reference internal" href="classes.html#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a></span></dt><dd><p>A state vector or density matrix.  This cannot have tensor-product
+structure.</p>
 </dd>
-<dt><strong>xvec</strong><span class="classifier">array_like</span></dt><dd><p>x-coordinates at which to calculate the Husimi-Q function.</p>
+<dt><strong>xvec, yvec</strong><span class="classifier">array_like</span></dt><dd><p>x- and y-coordinates at which to calculate the Husimi-Q function.</p>
 </dd>
-<dt><strong>yvec</strong><span class="classifier">array_like</span></dt><dd><p>y-coordinates at which to calculate the Husimi-Q function.</p>
+<dt><strong>g</strong><span class="classifier">float, default sqrt(2)</span></dt><dd><p>Scaling factor for <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">g</span> <span class="pre">*</span> <span class="pre">(x</span> <span class="pre">+</span> <span class="pre">iy)</span></code>.  The value of <cite>g</cite> is
+related to the value of <span class="math notranslate nohighlight">\(\hbar\)</span> in the commutation relation
+<span class="math notranslate nohighlight">\([x,\,y] = i\hbar\)</span> via <span class="math notranslate nohighlight">\(\hbar=2/g^2\)</span>, so the default
+corresponds to <span class="math notranslate nohighlight">\(\hbar=1\)</span>.</p>
 </dd>
-<dt><strong>g</strong><span class="classifier">float</span></dt><dd><p>Scaling factor for <cite>a = 0.5 * g * (x + iy)</cite>, default <cite>g = sqrt(2)</cite>.
-The value of <cite>g</cite> is related to the value of <cite>hbar</cite> in the commutation
-relation <cite>[x, y] = 1j * hbar</cite> via <cite>hbar=2/g^2</cite> giving the default
-value <cite>hbar=1</cite>.</p>
+<dt><strong>precompute_memory</strong><span class="classifier">real, default 1024</span></dt><dd><p>Size in MB that may be used during calculations as working space when
+dealing with density-matrix inputs.  This is ignored for state-vector
+inputs.  The bound is not quite exact due to other, order-of-magnitude
+smaller, intermediaries being necessary, but is a good approximation.
+If you want to use the same iterative algorithm for density matrices
+that is used for single kets, set <code class="docutils literal notranslate"><span class="pre">precompute_memory=None</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>Q</strong><span class="classifier">array</span></dt><dd><p>Values representing the Q-function calculated over the specified range
-[xvec,yvec].</p>
+<dt>ndarray</dt><dd><p>Values representing the Husimi-Q function calculated over the specified
+range <code class="docutils literal notranslate"><span class="pre">[xvec,</span> <span class="pre">yvec]</span></code>.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="classes.html#qutip.QFunc" title="qutip.QFunc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QFunc</span></code></a></dt><dd><p>a class-based version, more efficient if you want to calculate the Husimi-Q function for several states over the same coordinates.</p>
+</dd>
+</dl>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt id="qutip.wigner.spin_q_function">
 <code class="sig-name descname"><span class="pre">spin_q_function</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/wigner.html#spin_q_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.wigner.spin_q_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Husimi Q-function for spins.</p>
+<dd><p>The Husimi Q function for spins is defined as <code class="docutils literal notranslate"><span class="pre">Q(theta,</span> <span class="pre">phi)</span> <span class="pre">=</span>
+<span class="pre">SCS.dag()</span> <span class="pre">*</span> <span class="pre">rho</span> <span class="pre">*</span> <span class="pre">SCS</span></code> for the spin coherent state <code class="docutils literal notranslate"><span class="pre">SCS</span> <span class="pre">=</span> <span class="pre">spin_coherent(</span>
+<span class="pre">j,</span> <span class="pre">theta,</span> <span class="pre">phi)</span></code> where j is the spin length.
+The implementation here is more efficient as it doesn’t
+generate all of the SCS at theta and phi (see references).</p>
+<p>The spin Q function is normal when integrated over the surface of the
+sphere</p>
+<div class="math notranslate nohighlight">
+\[\frac{4 \pi}{2j + 1}\int_\phi \int_\theta
+Q(\theta, \phi) \sin(\theta) d\theta d\phi = 1\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>state</strong><span class="classifier">qobj</span></dt><dd><p>A state vector or density matrix for a spin-j quantum system.</p>
 </dd>
-<dt><strong>theta</strong><span class="classifier">array_like</span></dt><dd><p>Polar angle at which to calculate the Husimi-Q function.</p>
+<dt><strong>theta</strong><span class="classifier">array_like</span></dt><dd><p>Polar (colatitude) angle at which to calculate the Husimi-Q function.</p>
 </dd>
 <dt><strong>phi</strong><span class="classifier">array_like</span></dt><dd><p>Azimuthal angle at which to calculate the Husimi-Q function.</p>
 </dd>
@@ -7484,21 +7525,26 @@ by THETA and PHI.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<p>[1] Lee Loh, Y., &amp; Kim, M. (2015). American J. of Phys., 83(1), 30–35.
+<a class="reference external" href="https://doi.org/10.1119/1.4898595">https://doi.org/10.1119/1.4898595</a></p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="qutip.wigner.spin_wigner">
 <code class="sig-name descname"><span class="pre">spin_wigner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/wigner.html#spin_wigner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.wigner.spin_wigner" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Wigner function for a spin-j system on the 2-sphere of radius j</dt><dd><p>(for j = 1/2 this is the Bloch sphere).</p>
-</dd>
-</dl>
+<dd><p>Wigner function for a spin-j system.</p>
+<p>The spin W function is normal when integrated over the surface of the
+sphere</p>
+<div class="math notranslate nohighlight">
+\[\sqrt{\frac{4 \pi}{2j + 1}}\int_\phi \int_\theta
+W(\theta,\phi) \sin(\theta) d\theta d\phi = 1\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>state</strong><span class="classifier">qobj</span></dt><dd><p>A state vector or density matrix for a spin-j quantum system.</p>
 </dd>
-<dt><strong>theta</strong><span class="classifier">array_like</span></dt><dd><p>Polar angle at which to calculate the W function.</p>
+<dt><strong>theta</strong><span class="classifier">array_like</span></dt><dd><p>Polar (colatitude) angle at which to calculate the W function.</p>
 </dd>
 <dt><strong>phi</strong><span class="classifier">array_like</span></dt><dd><p>Azimuthal angle at which to calculate the W function.</p>
 </dd>
@@ -7512,8 +7558,13 @@ by THETA and PHI.</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Experimental.</p>
+<p class="rubric">References</p>
+<p>[1] Agarwal, G. S. (1981). Phys. Rev. A, 24(6), 2889–2896.
+<a class="reference external" href="https://doi.org/10.1103/PhysRevA.24.2889">https://doi.org/10.1103/PhysRevA.24.2889</a></p>
+<p>[2] Dowling, J. P., Agarwal, G. S., &amp; Schleich, W. P. (1994).
+Phys. Rev. A, 49(5), 4101–4109. <a class="reference external" href="https://doi.org/10.1103/PhysRevA.49.4101">https://doi.org/10.1103/PhysRevA.49.4101</a></p>
+<p>[3] Conversion between Wigner 3-j symbol and Clebsch-Gordan coefficients
+taken from Wikipedia (<a class="reference external" href="https://en.wikipedia.org/wiki/3-j_symbol">https://en.wikipedia.org/wiki/3-j_symbol</a>)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -7868,7 +7919,7 @@ the figure.</p>
 <dt class="label" id="r226a66bbc30b-1"><span class="brackets"><a class="fn-backref" href="#id22">1</a></span></dt>
 <dd><p>J. Rodriguez-Laguna, P. Migdal, M. Ibanez Berganza, M. Lewenstein
 and G. Sierra, <em>Qubism: self-similar visualization of many-body
-wavefunctions</em>, <a class="reference external" href="https://dx.doi.org/10.1088/1367-2630/14/5/053028">New J. Phys. 14 053028</a>, arXiv:1112.3560
+wavefunctions</em>, <a class="reference external" href="http://dx.doi.org/10.1088/1367-2630/14/5/053028">New J. Phys. 14 053028</a>, arXiv:1112.3560
 (2012), open access.</p>
 </dd>
 </dl>
@@ -10342,38 +10393,6 @@ for coupling (j1,m1) and (j2,m2) to give (j3,m3).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="qutip.utilities.linspace_with">
-<code class="sig-name descname"><span class="pre">linspace_with</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elems</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/utilities.html#linspace_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.utilities.linspace_with" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an array of numbers sampled over specified interval
-with additional elements added.</p>
-<p>Returns <cite>num</cite> spaced array with elements from <cite>elems</cite> inserted
-if not already included in set.</p>
-<p>Returned sample array is not evenly spaced if addtional elements
-are added.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>start</strong><span class="classifier">int</span></dt><dd><p>The starting value of the sequence.</p>
-</dd>
-<dt><strong>stop</strong><span class="classifier">int</span></dt><dd><p>The stoping values of the sequence.</p>
-</dd>
-<dt><strong>num</strong><span class="classifier">int, optional</span></dt><dd><p>Number of samples to generate.</p>
-</dd>
-<dt><strong>elems</strong><span class="classifier">list/ndarray, optional</span></dt><dd><p>Requested elements to include in array</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>samples</strong><span class="classifier">ndadrray</span></dt><dd><p>Original equally spaced sample array with additional
-elements added.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt id="qutip.utilities.n_thermal">
 <code class="sig-name descname"><span class="pre">n_thermal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_th</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/utilities.html#n_thermal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.utilities.n_thermal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of photons in thermal equilibrium for an harmonic
@@ -10732,13 +10751,22 @@ and MatPlotLib.</p>
 
 <dl class="py function">
 <dt id="qutip.simdiag">
-<code class="sig-name descname"><span class="pre">simdiag</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/simdiag.html#simdiag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.simdiag" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">simdiag</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evals</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1e-14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/simdiag.html#simdiag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.simdiag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simultaneous diagonalization of commuting Hermitian matrices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ops</strong><span class="classifier">list/array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">array</span></code> of qobjs representing commuting Hermitian
 operators.</p>
+</dd>
+<dt><strong>evals</strong><span class="classifier">bool [True]</span></dt><dd><p>Whether to return the eigenvalues for each ops and eigenvectors or just
+the eigenvectors.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float [1e-14]</span></dt><dd><p>Tolerance for detecting degenerate eigenstates.</p>
+</dd>
+<dt><strong>safe_mode</strong><span class="classifier">bool [True]</span></dt><dd><p>Whether to check that all ops are Hermitian and commuting. If set to
+<code class="docutils literal notranslate"><span class="pre">False</span></code> and operators are not commuting, the eigenvectors returned
+will often be eigenvectors of only the first operator.</p>
 </dd>
 </dl>
 </dd>
@@ -10773,7 +10801,7 @@ operator.</p>
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>

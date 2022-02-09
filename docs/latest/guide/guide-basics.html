@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../static/gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../static/site.css" type="text/css" />
 
   
   
@@ -211,23 +212,23 @@
 <p class="admonition-title">Warning</p>
 <p>Do not run QuTiP from the installation directory.</p>
 </div>
-<p>To load the qutip modules, we must first call the import statement:</p>
+<p>To load the qutip modules, first call the import statement:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>that will load all of the user available functions. Often, we also need to import the NumPy and Matplotlib libraries with:</p>
+<p>This will load all of the user available functions. Often, we also need to import the NumPy and Matplotlib libraries with:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<p>Note that, in the rest of the documentation, functions are written using <cite>qutip.module.function()</cite> notation which links to the corresponding function in the QuTiP API: <a class="reference internal" href="../apidoc/functions.html#functions"><span class="std std-ref">Functions</span></a>. However, in calling <cite>import *</cite>, we have already loaded all of the QuTiP modules. Therefore, we will only need the function name and not the complete path when calling the function from the interpreter prompt, Python script, or Jupyter notebook.</p>
+<p>In the rest of the documentation, functions are written using <cite>qutip.module.function()</cite> notation which links to the corresponding function in the QuTiP API: <a class="reference internal" href="../apidoc/functions.html#functions"><span class="std std-ref">Functions</span></a>. However, in calling <cite>import *</cite>, we have already loaded all of the QuTiP modules. Therefore, we will only need the function name and not the complete path when calling the function from the interpreter prompt, Python script, or Jupyter notebook.</p>
 </div>
 <div class="section" id="the-quantum-object-class">
 <span id="basics-qobj"></span><h2>The quantum object class<a class="headerlink" href="#the-quantum-object-class" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="introduction">
 <span id="basics-qobj-intro"></span><h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
-<p>The key difference between classical and quantum mechanics lies in the use of operators instead of numbers as variables. Moreover, we need to specify state vectors and their properties. Therefore, in computing the dynamics of quantum systems we need a data structure that is capable of encapsulating the properties of a quantum operator and ket/bra vectors. The quantum object class, <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, accomplishes this using matrix representation.</p>
+<p>The key difference between classical and quantum mechanics is the use of operators instead of numbers as variables. Moreover, we need to specify state vectors and their properties. Therefore, in computing the dynamics of quantum systems, we need a data structure that encapsulates the properties of a quantum operator and ket/bra vectors. The quantum object class, <a class="reference internal" href="../apidoc/classes.html#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a>, accomplishes this using matrix representation.</p>
 <p>To begin, let us create a blank <code class="docutils literal notranslate"><span class="pre">Qobj</span></code>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Qobj</span><span class="p">())</span>
 </pre></div>
@@ -241,7 +242,7 @@ Qobj data =
 <p>where we see the blank <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> object with dimensions, shape, and data. Here the data corresponds to a 1x1-dimensional matrix consisting of a single zero entry.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>By convention, Class objects in Python such as <code class="docutils literal notranslate"><span class="pre">Qobj()</span></code> differ from functions in the use of a beginning capital letter.</p>
+<p>By convention, the names of Python classes, such as <code class="docutils literal notranslate"><span class="pre">Qobj()</span></code>, are capitalized whereas the names of functions are not.</p>
 </div>
 <p>We can create a <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> with a user defined data set by passing a list or array of data into the <code class="docutils literal notranslate"><span class="pre">Qobj</span></code>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Qobj</span><span class="p">([[</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">]]))</span>
@@ -280,7 +281,9 @@ Qobj data =
  [0.83244264 0.21233911 0.18182497 0.18340451]]
 </pre></div>
 </div>
-<p>Notice how both the dims and shape change according to the input data.  Although dims and shape appear to have the same function, the difference will become quite clear in the section on <a class="reference internal" href="guide-tensor.html#tensor"><span class="std std-ref">tensor products and partial traces</span></a>.</p>
+<p>Notice how both the dims and shape change according to the input data.  Although dims and shape appear to be the same,
+dims keep track of the shapes for individual components of a multipartite system, while shape does not. We refer the reader to the section
+<a class="reference internal" href="guide-tensor.html#tensor"><span class="std std-ref">tensor products and partial traces</span></a> for more information.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you are running QuTiP from a python script you must use the <code class="xref py py-func docutils literal notranslate"><span class="pre">print</span></code> function to view the Qobj attributes.</p>
@@ -288,7 +291,10 @@ Qobj data =
 </div>
 <div class="section" id="states-and-operators">
 <span id="basics-qobj-states"></span><h3>States and operators<a class="headerlink" href="#states-and-operators" title="Permalink to this headline">¶</a></h3>
-<p>Manually specifying the data for each quantum object is inefficient. Even more so when most objects correspond to commonly used types such as the ladder operators of a harmonic oscillator, the Pauli spin operators for a two-level system, or state vectors such as Fock states. Therefore, QuTiP includes predefined objects for a variety of states:</p>
+<p>Manually specifying the data for each quantum object is inefficient. Even more so when most objects correspond to commonly used
+types such as the
+ladder operators of a harmonic oscillator, the Pauli spin operators for a two-level system, or state vectors such as Fock states.
+Therefore, QuTiP includes predefined objects for a variety of states and operators:</p>
 <table class="table-striped docutils align-default">
 <colgroup>
 <col style="width: 26%" />
@@ -330,7 +336,6 @@ for requested coherent state</p></td>
 </tr>
 </tbody>
 </table>
-<p>and operators:</p>
 <table class="table-striped docutils align-default">
 <colgroup>
 <col style="width: 28%" />
@@ -498,7 +503,8 @@ form <span class="math notranslate nohighlight">\(|N&gt;&lt;N+m| + |N+m&gt;&lt;N
 <span class="go"> (4, 4)</span>
 </pre></div>
 </div>
-<p>In general, the attributes (properties) of a <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> object (or any Python class) can be retrieved using the <cite>Q.attribute</cite> notation.  In addition to the attributes shown with the <code class="docutils literal notranslate"><span class="pre">print</span></code> function, the <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> class also has the following:</p>
+<p>In general, the attributes (properties) of a <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> object (or any Python object) can be retrieved using the <cite>Q.attribute</cite> notation.
+In addition to the those shown with the <code class="docutils literal notranslate"><span class="pre">print</span></code> function, an instance of the <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> class also has the following attributes:</p>
 <table class="table-striped docutils align-default">
 <colgroup>
 <col style="width: 21%" />
@@ -540,7 +546,7 @@ products and partial traces).</p></td>
 </table>
 <div class="figure align-center" id="id1">
 <a class="reference internal image-reference" href="../images/quide-basics-qobj-box.png"><img alt="../images/quide-basics-qobj-box.png" src="../images/quide-basics-qobj-box.png" style="width: 3.5in;" /></a>
-<p class="caption"><span class="caption-text">The <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> Class viewed as a container for the properties need to characterize a quantum operator or state vector.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">The <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> Class viewed as a container for the properties needed to characterize a quantum operator or state vector.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>For the destruction operator above:</p>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="go">  &gt;&gt;&gt; q.type</span>
@@ -609,7 +615,7 @@ products and partial traces).</p></td>
 <span class="go">  TypeError: Incompatible Qobj shapes</span>
 </pre></div>
 </div>
-<p>In addition, the logic operators is equal <cite>==</cite> and is not equal <cite>!=</cite> are also supported.</p>
+<p>In addition, the logic operators “is equal” <cite>==</cite> and “is not equal” <cite>!=</cite> are also supported.</p>
 </div>
 </div>
 <div class="section" id="functions-operating-on-qobj-class">
@@ -838,7 +844,7 @@ vector Q/Q.norm().</p></td>
     <p>
         &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
       <span class="lastupdated">
-        Last updated on Jun 02, 2021.
+        Last updated on Feb 08, 2022.
       </span>
 
     </p>
