@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Classes &mdash; QuTiP 4.6 Documentation</title>
+  <title>Classes &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -48,6 +48,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="next" title="Functions" href="functions.html" />
     <link rel="prev" title="API documentation" href="apidoc.html" /> 
 </head>
@@ -73,7 +74,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -127,6 +128,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">Copyright and Licensing</a></li>
 </ul>
 
             
@@ -983,7 +985,7 @@ Use sparse only if memory requirements demand it.</p>
 
 <dl class="py method">
 <dt id="qutip.Qobj.tidyup">
-<code class="sig-name descname"><span class="pre">tidyup</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qobj.html#Qobj.tidyup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.Qobj.tidyup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">tidyup</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qobj.html#Qobj.tidyup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.Qobj.tidyup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes small elements from the quantum object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -1472,7 +1474,7 @@ format.</p>
 
 <dl class="py method">
 <dt id="qutip.QobjEvo.tidyup">
-<code class="sig-name descname"><span class="pre">tidyup</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qobjevo.html#QobjEvo.tidyup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.QobjEvo.tidyup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">tidyup</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qobjevo.html#QobjEvo.tidyup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.QobjEvo.tidyup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes small elements from this quantum object inplace.</p>
 </dd></dl>
 
@@ -1675,8 +1677,66 @@ fontsize, color, horizontalalignment, verticalalignment.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="qutip.bloch.Bloch.add_arc">
+<code class="sig-name descname"><span class="pre">add_arc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'b'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_arc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_arc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an arc between two points on a sphere. The arc is set to be
+blue solid curve by default.</p>
+<p>The start and end points must be on the same sphere (i.e. have the
+same radius) but need not be on the unit sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>start</strong><span class="classifier">Qobj or array-like</span></dt><dd><p>Array with cartesian coordinates of the first point, or a state
+vector or density matrix that can be mapped to a point on or
+within the Bloch sphere.</p>
+</dd>
+<dt><strong>end</strong><span class="classifier">Qobj or array-like</span></dt><dd><p>Array with cartesian coordinates of the second point, or a state
+vector or density matrix that can be mapped to a point on or
+within the Bloch sphere.</p>
+</dd>
+<dt><strong>fmt</strong><span class="classifier">str, default: “b”</span></dt><dd><p>A matplotlib format string for rendering the arc.</p>
+</dd>
+<dt><strong>steps</strong><span class="classifier">int, default: None</span></dt><dd><p>The number of segments to use when rendering the arc. The default
+uses 100 steps times the distance between the start and end points,
+with a minimum of 2 steps.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional parameters to pass to the matplotlib .plot function
+when rendering this arc.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch.Bloch.add_line">
+<code class="sig-name descname"><span class="pre">add_line</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a line segment connecting two points on the bloch sphere.</p>
+<p>The line segment is set to be a black solid line by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>start</strong><span class="classifier">Qobj or array-like</span></dt><dd><p>Array with cartesian coordinates of the first point, or a state
+vector or density matrix that can be mapped to a point on or
+within the Bloch sphere.</p>
+</dd>
+<dt><strong>end</strong><span class="classifier">Qobj or array-like</span></dt><dd><p>Array with cartesian coordinates of the second point, or a state
+vector or density matrix that can be mapped to a point on or
+within the Bloch sphere.</p>
+</dd>
+<dt><strong>fmt</strong><span class="classifier">str, default: “k”</span></dt><dd><p>A matplotlib format string for rendering the line.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional parameters to pass to the matplotlib .plot function
+when rendering this line.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="qutip.bloch.Bloch.add_points">
-<code class="sig-name descname"><span class="pre">add_points</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_points" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_points</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of data points to bloch sphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1686,6 +1746,13 @@ fontsize, color, horizontalalignment, verticalalignment.</p>
 <dt><strong>meth</strong><span class="classifier">{‘s’, ‘m’, ‘l’}</span></dt><dd><p>Type of points to plot, use ‘m’ for multicolored, ‘l’ for points
 connected with a line.</p>
 </dd>
+<dt><strong>alpha</strong><span class="classifier">float, default=1.</span></dt><dd><p>Transparency value for the vectors. Values between 0 and 1.</p>
+</dd>
+<dt><strong>.. note::</strong></dt><dd><p>When using <code class="docutils literal notranslate"><span class="pre">meth=l</span></code> in QuTiP 4.6, the line transparency defaulted
+to <code class="docutils literal notranslate"><span class="pre">0.75</span></code> and there was no way to alter it.
+When the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> parameter was added in QuTiP 4.7, the default
+became <code class="docutils literal notranslate"><span class="pre">alpha=1.0</span></code> for values of <code class="docutils literal notranslate"><span class="pre">meth</span></code>.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -1693,7 +1760,7 @@ connected with a line.</p>
 
 <dl class="py method">
 <dt id="qutip.bloch.Bloch.add_states">
-<code class="sig-name descname"><span class="pre">add_states</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vector'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_states" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_states</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vector'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_states" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a state vector Qobj to Bloch sphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1702,6 +1769,8 @@ connected with a line.</p>
 </dd>
 <dt><strong>kind</strong><span class="classifier">{‘vector’, ‘point’}</span></dt><dd><p>Type of object to plot.</p>
 </dd>
+<dt><strong>alpha</strong><span class="classifier">float, default=1.</span></dt><dd><p>Transparency value for the vectors. Values between 0 and 1.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -1709,12 +1778,14 @@ connected with a line.</p>
 
 <dl class="py method">
 <dt id="qutip.bloch.Bloch.add_vectors">
-<code class="sig-name descname"><span class="pre">add_vectors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_vectors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_vectors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch.html#Bloch.add_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch.Bloch.add_vectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of vectors to Bloch sphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>vectors</strong><span class="classifier">array_like</span></dt><dd><p>Array with vectors of unit length or smaller.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, default=1.</span></dt><dd><p>Transparency value for the vectors. Values between 0 and 1.</p>
 </dd>
 </dl>
 </dd>
@@ -1781,9 +1852,9 @@ This overrides the ‘format’ and ‘dirc’ arguments.</p>
 <li><p>“01”</p></li>
 <li><p>“polarization jones”</p></li>
 <li><p>“polarization jones letters”
-see also: <a class="reference external" href="http://en.wikipedia.org/wiki/Jones_calculus">http://en.wikipedia.org/wiki/Jones_calculus</a></p></li>
+see also: <a class="reference external" href="https://en.wikipedia.org/wiki/Jones_calculus">https://en.wikipedia.org/wiki/Jones_calculus</a></p></li>
 <li><p>“polarization stokes”
-see also: <a class="reference external" href="http://en.wikipedia.org/wiki/Stokes_parameters">http://en.wikipedia.org/wiki/Stokes_parameters</a></p></li>
+see also: <a class="reference external" href="https://en.wikipedia.org/wiki/Stokes_parameters">https://en.wikipedia.org/wiki/Stokes_parameters</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -1929,7 +2000,975 @@ Theory and Applications”, Comput Econ 30, 153 (2007).</p>
 <span id="classes-non-markov"></span><h2>Non-Markovian Solvers<a class="headerlink" href="#non-markovian-solvers" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="qutip.nonmarkov.heom.HEOMSolver">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HEOMSolver</span></code><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HEOMSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HEOMSolver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HEOMSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>HEOM solver that supports multiple baths.</p>
+<p>The baths must be all either bosonic or fermionic baths.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>H_sys</strong><span class="classifier">QObj, QobjEvo or a list</span></dt><dd><p>The system Hamiltonian or Liouvillian specified as either a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code>, a <code class="xref py py-obj docutils literal notranslate"><span class="pre">QobjEvo</span></code>, or a list of elements that may
+be converted to a <code class="xref py py-obj docutils literal notranslate"><span class="pre">ObjEvo</span></code>.</p>
+</dd>
+<dt><strong>bath</strong><span class="classifier">Bath or list of Bath</span></dt><dd><p>A <a class="reference internal" href="#qutip.nonmarkov.heom.Bath" title="qutip.nonmarkov.heom.Bath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bath</span></code></a> containing the exponents of the expansion of the
+bath correlation funcion and their associated coefficients
+and coupling operators, or a list of baths.</p>
+<p>If multiple baths are given, they must all be either fermionic
+or bosonic baths.</p>
+</dd>
+<dt><strong>max_depth</strong><span class="classifier">int</span></dt><dd><p>The maximum depth of the heirarchy (i.e. the maximum number of bath
+exponent “excitations” to retain).</p>
+</dd>
+<dt><strong>options</strong><span class="classifier"><a class="reference internal" href="#qutip.solver.Options" title="qutip.solver.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Options</span></code></a></span></dt><dd><p>Generic solver options. If set to None the default options will be
+used.</p>
+</dd>
+<dt><strong>progress_bar</strong><span class="classifier">None, True or <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProgressBar</span></code></span></dt><dd><p>Optional instance of BaseProgressBar, or a subclass thereof, for
+showing the progress of the solver. If True, an instance of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">TextProgressBar</span></code> is used instead.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl>
+<dt><strong>ados</strong><span class="classifier"><a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOs" title="qutip.nonmarkov.heom.HierarchyADOs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HierarchyADOs</span></code></a></span></dt><dd><p>The description of the hierarchy constructed from the given bath
+and maximum depth.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HEOMSolver.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_ops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ado_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ado_return</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HEOMSolver.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve for the time evolution of the system.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>rho0</strong><span class="classifier">Qobj or HierarchyADOsState or numpy.array</span></dt><dd><p>Initial state (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code> density matrix) of the system
+if <code class="docutils literal notranslate"><span class="pre">ado_init</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">ado_init</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then <code class="docutils literal notranslate"><span class="pre">rho0</span></code> should be an
+instance of <a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOsState" title="qutip.nonmarkov.heom.HierarchyADOsState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HierarchyADOsState</span></code></a> or a numpy array
+giving the initial state of all ADOs. Usually
+the state of the ADOs would be determine from a previous call
+to <code class="docutils literal notranslate"><span class="pre">.run(...,</span> <span class="pre">ado_return=True)</span></code>. For example,
+<code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">solver.run(...,</span> <span class="pre">ado_return=True)</span></code> could be followed
+by <code class="docutils literal notranslate"><span class="pre">solver.run(result.ado_states[-1],</span> <span class="pre">tlist,</span> <span class="pre">ado_init=True)</span></code>.</p>
+<p>If a numpy array is passed its shape must be
+<code class="docutils literal notranslate"><span class="pre">(number_of_ados,</span> <span class="pre">n,</span> <span class="pre">n)</span></code> where <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">n)</span></code> is the system shape
+(i.e. shape of the system density matrix) and the ADOs must be
+in the same order as in <code class="docutils literal notranslate"><span class="pre">.ados.labels</span></code>.</p>
+</dd>
+<dt><strong>tlist</strong><span class="classifier">list</span></dt><dd><p>An ordered list of times at which to return the value of the state.</p>
+</dd>
+<dt><strong>e_ops</strong><span class="classifier">Qobj / callable / list / dict / None, optional</span></dt><dd><p>A list or dictionary of operators as <cite>Qobj</cite> and/or callable
+functions (they can be mixed) or a single operator or callable
+function. For an operator <code class="docutils literal notranslate"><span class="pre">op</span></code>, the result will be computed
+using <code class="docutils literal notranslate"><span class="pre">(state</span> <span class="pre">*</span> <span class="pre">op).tr()</span></code> and the state at each time <code class="docutils literal notranslate"><span class="pre">t</span></code>. For
+callable functions, <code class="docutils literal notranslate"><span class="pre">f</span></code>, the result is computed using
+<code class="docutils literal notranslate"><span class="pre">f(t,</span> <span class="pre">ado_state)</span></code>. The values are stored in <code class="docutils literal notranslate"><span class="pre">expect</span></code> on
+(see the return section below).</p>
+</dd>
+<dt><strong>ado_init: bool, default False</strong></dt><dd><p>Indicates if initial condition is just the system state, or a
+numpy array including all ADOs.</p>
+</dd>
+<dt><strong>ado_return: bool, default True</strong></dt><dd><p>Whether to also return as output the full state of all ADOs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>The results of the simulation run, with the following attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">times</span></code>: the times <code class="docutils literal notranslate"><span class="pre">t</span></code> (i.e. the <code class="docutils literal notranslate"><span class="pre">tlist</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">states</span></code>: the system state at each time <code class="docutils literal notranslate"><span class="pre">t</span></code> (only available
+if <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> was <code class="docutils literal notranslate"><span class="pre">None</span></code> or if the solver option
+<code class="docutils literal notranslate"><span class="pre">store_states</span></code> was set to <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ado_states</span></code>: the full ADO state at each time (only available
+if <code class="docutils literal notranslate"><span class="pre">ado_return</span></code> was set to <code class="docutils literal notranslate"><span class="pre">True</span></code>). Each element is an
+instance of <a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOsState" title="qutip.nonmarkov.heom.HierarchyADOsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">HierarchyADOsState</span></code></a>.            .
+The state of a particular ADO may be extracted from
+<code class="docutils literal notranslate"><span class="pre">result.ado_states[i]</span></code> by calling <a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOsState.extract" title="qutip.nonmarkov.heom.HierarchyADOsState.extract"><code class="xref py py-meth docutils literal notranslate"><span class="pre">extract</span></code></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expect</span></code>: the value of each <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> at time <code class="docutils literal notranslate"><span class="pre">t</span></code> (only
+available if <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> were given). If <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> was passed
+as a dictionary, then <code class="docutils literal notranslate"><span class="pre">expect</span></code> will be a dictionary with
+the same keys as <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> and values giving the list of
+outcomes for the corresponding key.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HEOMSolver.steady_state">
+<code class="sig-name descname"><span class="pre">steady_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_mkl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mkl_max_iter_refine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mkl_weighted_matching</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HEOMSolver.steady_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver.steady_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the steady state of the system.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>use_mkl</strong><span class="classifier">bool, default=False</span></dt><dd><p>Whether to use mkl or not. If mkl is not installed or if
+this is false, use the scipy splu solver instead.</p>
+</dd>
+<dt><strong>mkl_max_iter_refine</strong><span class="classifier">int</span></dt><dd><p>Specifies the the maximum number of iterative refinement steps that
+the MKL PARDISO solver performs.</p>
+<p>For a complete description, see iparm(8) in
+<a class="reference external" href="http://cali2.unilim.fr/intel-xe/mkl/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm">http://cali2.unilim.fr/intel-xe/mkl/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm</a>.</p>
+</dd>
+<dt><strong>mkl_weighted_matching</strong><span class="classifier">bool</span></dt><dd><p>MKL PARDISO can use a maximum weighted matching algorithm to
+permute large elements close the diagonal. This strategy adds an
+additional level of reliability to the factorization methods.</p>
+<p>For a complete description, see iparm(13) in
+<a class="reference external" href="http://cali2.unilim.fr/intel-xe/mkl/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm">http://cali2.unilim.fr/intel-xe/mkl/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm</a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>steady_state</strong><span class="classifier">Qobj</span></dt><dd><p>The steady state density matrix of the system.</p>
+</dd>
+<dt><strong>steady_ados</strong><span class="classifier"><a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOsState" title="qutip.nonmarkov.heom.HierarchyADOsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">HierarchyADOsState</span></code></a></span></dt><dd><p>The steady state of the full ADO hierarchy. A particular ADO may be
+extracted from the full state by calling <a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOsState.extract" title="qutip.nonmarkov.heom.HierarchyADOsState.extract"><code class="xref py py-meth docutils literal notranslate"><span class="pre">extract</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.HSolverDL">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HSolverDL</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HSolverDL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HSolverDL" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for creating an <a class="reference internal" href="#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> that is backwards
+compatible with the <code class="docutils literal notranslate"><span class="pre">HSolverDL</span></code> provided in <code class="docutils literal notranslate"><span class="pre">qutip.nonmarkov.heom</span></code>
+in QuTiP 4.6 and below.</p>
+<p>See <a class="reference internal" href="#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> and <a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> for more
+descriptions of the underlying solver and bath construction.</p>
+<p>An exact copy of the QuTiP 4.6 HSolverDL is provided in
+<code class="docutils literal notranslate"><span class="pre">qutip.nonmarkov.dlheom_solver</span></code> for cases where the functionality of
+the older solver is required. The older solver will be completely
+removed in QuTiP 5.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike the version of <code class="docutils literal notranslate"><span class="pre">HSolverDL</span></code> in QuTiP 4.6, this solver
+supports supplying a time-dependent or Liouvillian <code class="docutils literal notranslate"><span class="pre">H_sys</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For compatibility with <code class="docutils literal notranslate"><span class="pre">HSolverDL</span></code> in QuTiP 4.6 and below, the
+parameter <code class="docutils literal notranslate"><span class="pre">N_exp</span></code> specifying the number of exponents to keep in
+the expansion of the bath correlation function is one more than
+the equivalent <code class="docutils literal notranslate"><span class="pre">Nk</span></code> used in the <a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a>. I.e.,
+<code class="docutils literal notranslate"><span class="pre">Nk</span> <span class="pre">=</span> <span class="pre">N_exp</span> <span class="pre">-</span> <span class="pre">1</span></code>. The <code class="docutils literal notranslate"><span class="pre">Nk</span></code> parameter in the
+<a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> does not count the zeroeth exponent in
+order to better match common usage in the literature.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">stats</span></code> and <code class="docutils literal notranslate"><span class="pre">renorm</span></code> arguments accepted in QuTiP 4.6 and below
+are no longer supported.</p>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>H_sys</strong><span class="classifier">Qobj or QobjEvo or list</span></dt><dd><p>The system Hamiltonian or Liouvillian. See <a class="reference internal" href="#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> for
+a complete description.</p>
+</dd>
+<dt><strong>coup_op</strong><span class="classifier">Qobj</span></dt><dd><p>Operator describing the coupling between system and bath.
+See parameter <code class="docutils literal notranslate"><span class="pre">Q</span></code> in <a class="reference internal" href="#qutip.nonmarkov.heom.BosonicBath" title="qutip.nonmarkov.heom.BosonicBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">BosonicBath</span></code></a> for a complete description.</p>
+</dd>
+<dt><strong>coup_strength</strong><span class="classifier">float</span></dt><dd><p>Coupling strength. Referred to as <code class="docutils literal notranslate"><span class="pre">lam</span></code> in <a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a>.</p>
+</dd>
+<dt><strong>temperature</strong><span class="classifier">float</span></dt><dd><p>Bath temperature. Referred to as <code class="docutils literal notranslate"><span class="pre">T</span></code> in <a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a>.</p>
+</dd>
+<dt><strong>N_cut</strong><span class="classifier">int</span></dt><dd><p>The maximum depth of the hierarchy. See <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> in
+<a class="reference internal" href="#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> for a full description.</p>
+</dd>
+<dt><strong>N_exp</strong><span class="classifier">int</span></dt><dd><p>Number of exponential terms used to approximate the bath correlation
+functions. The equivalent <code class="docutils literal notranslate"><span class="pre">Nk</span></code> in <a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> is one
+less than <code class="docutils literal notranslate"><span class="pre">N_exp</span></code> (see note above).</p>
+</dd>
+<dt><strong>cut_freq</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density cutoff frequency. Referred to as <code class="docutils literal notranslate"><span class="pre">gamma</span></code> in
+<a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a>.</p>
+</dd>
+<dt><strong>bnd_cut_approx</strong><span class="classifier">bool</span></dt><dd><p>Use boundary cut off approximation. If true, the Matsubara
+terminator is added to the system Liouvillian (and H_sys is
+promoted to a Liouvillian if it was a Hamiltonian).</p>
+</dd>
+<dt><strong>progress_bar</strong><span class="classifier">None, True or <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProgressBar</span></code></span></dt><dd><p>Optional instance of BaseProgressBar, or a subclass thereof, for
+showing the progress of the solver. If True, an instance of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">TextProgressBar</span></code> is used instead.</p>
+</dd>
+<dt><strong>options</strong><span class="classifier"><a class="reference internal" href="#qutip.solver.Options" title="qutip.solver.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Options</span></code></a></span></dt><dd><p>Generic solver options.
+If set to None the default options will be used.</p>
+</dd>
+<dt><strong>progress_bar</strong><span class="classifier">None, True or <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProgressBar</span></code></span></dt><dd><p>Optional instance of BaseProgressBar, or a subclass thereof, for
+showing the progress of the solver. If True, an instance of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">TextProgressBar</span></code> is used instead.</p>
+</dd>
+<dt><strong>combine</strong><span class="classifier">bool, default True</span></dt><dd><p>Whether to combine exponents with the same frequency (and coupling
+operator). See <a class="reference internal" href="#qutip.nonmarkov.heom.BosonicBath.combine" title="qutip.nonmarkov.heom.BosonicBath.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BosonicBath.combine</span></code></a> for details.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.BathExponent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BathExponent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ck2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_bar_k_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#BathExponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.BathExponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a single exponent (naively, an excitation mode) within the
+decomposition of the correlation functions of a bath.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>type</strong><span class="classifier">{“R”, “I”, “RI”, “+”, “-“} or BathExponent.ExponentType</span></dt><dd><p>The type of bath exponent.</p>
+<p>“R” and “I” are bosonic bath exponents that appear in the real and
+imaginary parts of the correlation expansion.</p>
+<p>“RI” is combined bosonic bath exponent that appears in both the real
+and imaginary parts of the correlation expansion. The combined exponent
+has a single <code class="docutils literal notranslate"><span class="pre">vk</span></code>. The <code class="docutils literal notranslate"><span class="pre">ck</span></code> is the coefficient in the real
+expansion and <code class="docutils literal notranslate"><span class="pre">ck2</span></code> is the coefficient in the imaginary expansion.</p>
+<p>“+” and “-” are fermionic bath exponents. These fermionic bath
+exponents must specify <code class="docutils literal notranslate"><span class="pre">sigma_bar_k_offset</span></code> which specifies
+the amount to add to <code class="docutils literal notranslate"><span class="pre">k</span></code> (the exponent index within the bath of this
+exponent) to determine the <code class="docutils literal notranslate"><span class="pre">k</span></code> of the corresponding exponent with
+the opposite sign (i.e. “-” or “+”).</p>
+</dd>
+<dt><strong>dim</strong><span class="classifier">int or None</span></dt><dd><p>The dimension (i.e. maximum number of excitations for this exponent).
+Usually <code class="docutils literal notranslate"><span class="pre">2</span></code> for fermionic exponents or <code class="docutils literal notranslate"><span class="pre">None</span></code> (i.e. unlimited) for
+bosonic exponents.</p>
+</dd>
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>The coupling operator for this excitation mode.</p>
+</dd>
+<dt><strong>vk</strong><span class="classifier">complex</span></dt><dd><p>The frequency of the exponent of the excitation term.</p>
+</dd>
+<dt><strong>ck</strong><span class="classifier">complex</span></dt><dd><p>The coefficient of the excitation term.</p>
+</dd>
+<dt><strong>ck2</strong><span class="classifier">optional, complex</span></dt><dd><p>For exponents of type “RI” this is the coefficient of the term in the
+imaginary expansion (and <code class="docutils literal notranslate"><span class="pre">ck</span></code> is the coefficient in the real
+expansion).</p>
+</dd>
+<dt><strong>sigma_bar_k_offset</strong><span class="classifier">optional, int</span></dt><dd><p>For exponents of type “+” this gives the offset (within the list of
+exponents within the bath) of the corresponding “-” bath exponent.
+For exponents of type “-” it gives the offset of the corresponding
+“+” exponent.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the exponent (often the name of the bath). It
+defaults to None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>All of the parameters are available as attributes.</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="qutip.nonmarkov.heom.BathExponent.types">
+<code class="sig-name descname"><span class="pre">types</span></code><a class="headerlink" href="#qutip.nonmarkov.heom.BathExponent.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.nonmarkov.bofin_baths.ExponentType</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.Bath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Bath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exponents</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#Bath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.Bath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a list of bath expansion exponents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>exponents</strong><span class="classifier">list of BathExponent</span></dt><dd><p>The exponents of the correlation function describing the bath.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>All of the parameters are available as attributes.</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.BosonicBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BosonicBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ck_real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vk_real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ck_imag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vk_imag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#BosonicBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.BosonicBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing a bosonic bath from the expansion
+coefficients and frequencies for the real and imaginary parts of
+the bath correlation function.</p>
+<p>If the correlation functions <code class="docutils literal notranslate"><span class="pre">C(t)</span></code> is split into real and imaginary
+parts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">C_real</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">C_imag</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C_real</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ck_real</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">vk_real</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
+<span class="n">C_imag</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ck_imag</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">vk_imag</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Defines the coefficients <code class="docutils literal notranslate"><span class="pre">ck</span></code> and the frequencies <code class="docutils literal notranslate"><span class="pre">vk</span></code>.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">ck</span></code> and <code class="docutils literal notranslate"><span class="pre">vk</span></code> may be complex, even through <code class="docutils literal notranslate"><span class="pre">C_real(t)</span></code>
+and <code class="docutils literal notranslate"><span class="pre">C_imag(t)</span></code> (i.e. the sum) is real.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>The coupling operator for the bath.</p>
+</dd>
+<dt><strong>ck_real</strong><span class="classifier">list of complex</span></dt><dd><p>The coefficients of the expansion terms for the real part of the
+correlation function. The corresponding frequencies are passed as
+vk_real.</p>
+</dd>
+<dt><strong>vk_real</strong><span class="classifier">list of complex</span></dt><dd><p>The frequencies (exponents) of the expansion terms for the real part of
+the correlation function. The corresponding ceofficients are passed as
+ck_real.</p>
+</dd>
+<dt><strong>ck_imag</strong><span class="classifier">list of complex</span></dt><dd><p>The coefficients of the expansion terms in the imaginary part of the
+correlation function. The corresponding frequencies are passed as
+vk_imag.</p>
+</dd>
+<dt><strong>vk_imag</strong><span class="classifier">list of complex</span></dt><dd><p>The frequencies (exponents) of the expansion terms for the imaginary
+part of the correlation function. The corresponding ceofficients are
+passed as ck_imag.</p>
+</dd>
+<dt><strong>combine</strong><span class="classifier">bool, default True</span></dt><dd><p>Whether to combine exponents with the same frequency (and coupling
+operator). See <a class="reference internal" href="#qutip.nonmarkov.heom.BosonicBath.combine" title="qutip.nonmarkov.heom.BosonicBath.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">combine</span></code></a> for details.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.BosonicBath.combine">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">combine</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exponents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#BosonicBath.combine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.BosonicBath.combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group bosonic exponents with the same frequency and return a
+single exponent for each frequency present.</p>
+<p>Exponents with the same frequency are only combined if they share the
+same coupling operator <code class="docutils literal notranslate"><span class="pre">.Q</span></code>.</p>
+<p>Note that combined exponents take their tag from the first
+exponent in the group being combined (i.e. the one that occurs first
+in the given exponents list).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>exponents</strong><span class="classifier">list of BathExponent</span></dt><dd><p>The list of exponents to combine.</p>
+</dd>
+<dt><strong>rtol</strong><span class="classifier">float, default 1e-5</span></dt><dd><p>The relative tolerance to use to when comparing frequencies and
+coupling operators.</p>
+</dd>
+<dt><strong>atol</strong><span class="classifier">float, default 1e-7</span></dt><dd><p>The absolute tolerance to use to when comparing frequencies and
+coupling operators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>list of BathExponent</dt><dd><p>The new reduced list of exponents.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.DrudeLorentzBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DrudeLorentzBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#DrudeLorentzBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing a Drude-Lorentz bosonic bath from the
+bath parameters (see parameters below).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>Operator describing the coupling between system and bath.</p>
+</dd>
+<dt><strong>lam</strong><span class="classifier">float</span></dt><dd><p>Coupling strength.</p>
+</dd>
+<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density cutoff frequency.</p>
+</dd>
+<dt><strong>T</strong><span class="classifier">float</span></dt><dd><p>Bath temperature.</p>
+</dd>
+<dt><strong>Nk</strong><span class="classifier">int</span></dt><dd><p>Number of exponential terms used to approximate the bath correlation
+functions.</p>
+</dd>
+<dt><strong>combine</strong><span class="classifier">bool, default True</span></dt><dd><p>Whether to combine exponents with the same frequency (and coupling
+operator). See <a class="reference internal" href="#qutip.nonmarkov.heom.BosonicBath.combine" title="qutip.nonmarkov.heom.BosonicBath.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BosonicBath.combine</span></code></a> for details.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.DrudeLorentzBath.terminator">
+<code class="sig-name descname"><span class="pre">terminator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#DrudeLorentzBath.terminator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.DrudeLorentzBath.terminator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Matsubara terminator for the bath and the calculated
+approximation discrepancy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>delta: float</dt><dd><p>The approximation discrepancy. That is, the difference between the
+true correlation function of the Drude-Lorentz bath and the sum of
+the <code class="docutils literal notranslate"><span class="pre">Nk</span></code> exponential terms is approximately <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">delta</span> <span class="pre">*</span>
+<span class="pre">dirac(t)</span></code>, where <code class="docutils literal notranslate"><span class="pre">dirac(t)</span></code> denotes the Dirac delta function.</p>
+</dd>
+<dt><strong>terminator</strong><span class="classifier">Qobj</span></dt><dd><p>The Matsubara terminator – i.e. a liouvillian term representing
+the contribution to the system-bath dynamics of all exponential
+expansion terms beyond <code class="docutils literal notranslate"><span class="pre">Nk</span></code>. It should be used by adding it to
+the system liouvillian (i.e. <code class="docutils literal notranslate"><span class="pre">liouvillian(H_sys)</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.DrudeLorentzPadeBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DrudeLorentzPadeBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#DrudeLorentzPadeBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.DrudeLorentzPadeBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing a Padé expansion for a Drude-Lorentz
+bosonic bath from the bath parameters (see parameters below).</p>
+<p>A Padé approximant is a sum-over-poles expansion (
+see <a class="reference external" href="https://en.wikipedia.org/wiki/Pad%C3%A9_approximant">https://en.wikipedia.org/wiki/Pad%C3%A9_approximant</a>).</p>
+<p>The application of the Padé method to spectrum decompoisitions is described
+in “Padé spectrum decompositions of quantum distribution functions and
+optimal hierarchical equations of motion construction for quantum open
+systems” [1].</p>
+<p>The implementation here follows the approach in the paper.</p>
+<p>[1] J. Chem. Phys. 134, 244106 (2011); <a class="reference external" href="https://doi.org/10.1063/1.3602466">https://doi.org/10.1063/1.3602466</a></p>
+<p>This is an alternative to the <a class="reference internal" href="#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> which constructs
+a simpler exponential expansion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>Operator describing the coupling between system and bath.</p>
+</dd>
+<dt><strong>lam</strong><span class="classifier">float</span></dt><dd><p>Coupling strength.</p>
+</dd>
+<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density cutoff frequency.</p>
+</dd>
+<dt><strong>T</strong><span class="classifier">float</span></dt><dd><p>Bath temperature.</p>
+</dd>
+<dt><strong>Nk</strong><span class="classifier">int</span></dt><dd><p>Number of Padé exponentials terms used to approximate the bath
+correlation functions.</p>
+</dd>
+<dt><strong>combine</strong><span class="classifier">bool, default True</span></dt><dd><p>Whether to combine exponents with the same frequency (and coupling
+operator). See <a class="reference internal" href="#qutip.nonmarkov.heom.BosonicBath.combine" title="qutip.nonmarkov.heom.BosonicBath.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BosonicBath.combine</span></code></a> for details.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.DrudeLorentzPadeBath.terminator">
+<code class="sig-name descname"><span class="pre">terminator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#DrudeLorentzPadeBath.terminator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.DrudeLorentzPadeBath.terminator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Padé terminator for the bath and the calculated
+approximation discrepancy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>delta: float</dt><dd><p>The approximation discrepancy. That is, the difference between the
+true correlation function of the Drude-Lorentz bath and the sum of
+the <code class="docutils literal notranslate"><span class="pre">Nk</span></code> exponential terms is approximately <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">delta</span> <span class="pre">*</span>
+<span class="pre">dirac(t)</span></code>, where <code class="docutils literal notranslate"><span class="pre">dirac(t)</span></code> denotes the Dirac delta function.</p>
+</dd>
+<dt><strong>terminator</strong><span class="classifier">Qobj</span></dt><dd><p>The Padé terminator – i.e. a liouvillian term representing
+the contribution to the system-bath dynamics of all exponential
+expansion terms beyond <code class="docutils literal notranslate"><span class="pre">Nk</span></code>. It should be used by adding it to
+the system liouvillian (i.e. <code class="docutils literal notranslate"><span class="pre">liouvillian(H_sys)</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.UnderDampedBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">UnderDampedBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#UnderDampedBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.UnderDampedBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing an under-damped bosonic bath from the
+bath parameters (see parameters below).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>Operator describing the coupling between system and bath.</p>
+</dd>
+<dt><strong>lam</strong><span class="classifier">float</span></dt><dd><p>Coupling strength.</p>
+</dd>
+<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density cutoff frequency.</p>
+</dd>
+<dt><strong>w0</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density resonance frequency.</p>
+</dd>
+<dt><strong>T</strong><span class="classifier">float</span></dt><dd><p>Bath temperature.</p>
+</dd>
+<dt><strong>Nk</strong><span class="classifier">int</span></dt><dd><p>Number of exponential terms used to approximate the bath correlation
+functions.</p>
+</dd>
+<dt><strong>combine</strong><span class="classifier">bool, default True</span></dt><dd><p>Whether to combine exponents with the same frequency (and coupling
+operator). See <a class="reference internal" href="#qutip.nonmarkov.heom.BosonicBath.combine" title="qutip.nonmarkov.heom.BosonicBath.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BosonicBath.combine</span></code></a> for details.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.FermionicBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FermionicBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ck_plus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vk_plus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ck_minus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vk_minus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#FermionicBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.FermionicBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing a fermionic bath from the expansion
+coefficients and frequencies for the <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code> modes of
+the bath correlation function.</p>
+<p>There must be the same number of <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code> modes and their
+coefficients must be specified in the same order so that <code class="docutils literal notranslate"><span class="pre">ck_plus[i],</span>
+<span class="pre">vk_plus[i]</span></code> are the plus coefficient and frequency corresponding
+to the minus mode <code class="docutils literal notranslate"><span class="pre">ck_minus[i],</span> <span class="pre">vk_minus[i]</span></code>.</p>
+<p>In the fermionic case the order in which excitations are created or
+destroyed is important, resulting in two different correlation functions
+labelled <code class="docutils literal notranslate"><span class="pre">C_plus(t)</span></code> and <code class="docutils literal notranslate"><span class="pre">C_plus(t)</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C_plus</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ck_plus</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">vk_plus</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
+<span class="n">C_minus</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ck_minus</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">vk_minus</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>where the expansions above define the coeffiients <code class="docutils literal notranslate"><span class="pre">ck</span></code> and the
+frequencies <code class="docutils literal notranslate"><span class="pre">vk</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>The coupling operator for the bath.</p>
+</dd>
+<dt><strong>ck_plus</strong><span class="classifier">list of complex</span></dt><dd><p>The coefficients of the expansion terms for the <code class="docutils literal notranslate"><span class="pre">+</span></code> part of the
+correlation function. The corresponding frequencies are passed as
+vk_plus.</p>
+</dd>
+<dt><strong>vk_plus</strong><span class="classifier">list of complex</span></dt><dd><p>The frequencies (exponents) of the expansion terms for the <code class="docutils literal notranslate"><span class="pre">+</span></code> part
+of the correlation function. The corresponding ceofficients are passed
+as ck_plus.</p>
+</dd>
+<dt><strong>ck_minus</strong><span class="classifier">list of complex</span></dt><dd><p>The coefficients of the expansion terms for the <code class="docutils literal notranslate"><span class="pre">-</span></code> part of the
+correlation function. The corresponding frequencies are passed as
+vk_minus.</p>
+</dd>
+<dt><strong>vk_minus</strong><span class="classifier">list of complex</span></dt><dd><p>The frequencies (exponents) of the expansion terms for the <code class="docutils literal notranslate"><span class="pre">-</span></code> part
+of the correlation function. The corresponding ceofficients are passed
+as ck_minus.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.LorentzianBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">LorentzianBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#LorentzianBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.LorentzianBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing a Lorentzian fermionic bath from the
+bath parameters (see parameters below).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This Matsubara expansion used in this bath converges very slowly
+and <code class="docutils literal notranslate"><span class="pre">Nk</span> <span class="pre">&gt;</span> <span class="pre">20</span></code> may be required to get good convergence. The
+Padé expansion used by <a class="reference internal" href="#qutip.nonmarkov.heom.LorentzianPadeBath" title="qutip.nonmarkov.heom.LorentzianPadeBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianPadeBath</span></code></a> converges much
+more quickly.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>Operator describing the coupling between system and bath.</p>
+</dd>
+<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The coupling strength between the system and the bath.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">float</span></dt><dd><p>The width of the environment.</p>
+</dd>
+<dt><strong>mu</strong><span class="classifier">float</span></dt><dd><p>The chemical potential of the bath.</p>
+</dd>
+<dt><strong>T</strong><span class="classifier">float</span></dt><dd><p>Bath temperature.</p>
+</dd>
+<dt><strong>Nk</strong><span class="classifier">int</span></dt><dd><p>Number of exponential terms used to approximate the bath correlation
+functions.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.LorentzianPadeBath">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">LorentzianPadeBath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_baths.html#LorentzianPadeBath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.LorentzianPadeBath" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for constructing a Padé expansion for Lorentzian fermionic
+bath from the bath parameters (see parameters below).</p>
+<p>A Padé approximant is a sum-over-poles expansion (
+see <a class="reference external" href="https://en.wikipedia.org/wiki/Pad%C3%A9_approximant">https://en.wikipedia.org/wiki/Pad%C3%A9_approximant</a>).</p>
+<p>The application of the Padé method to spectrum decompoisitions is described
+in “Padé spectrum decompositions of quantum distribution functions and
+optimal hierarchical equations of motion construction for quantum open
+systems” [1].</p>
+<p>The implementation here follows the approach in the paper.</p>
+<p>[1] J. Chem. Phys. 134, 244106 (2011); <a class="reference external" href="https://doi.org/10.1063/1.3602466">https://doi.org/10.1063/1.3602466</a></p>
+<p>This is an alternative to the <a class="reference internal" href="#qutip.nonmarkov.heom.LorentzianBath" title="qutip.nonmarkov.heom.LorentzianBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianBath</span></code></a> which constructs
+a simpler exponential expansion that converges much more slowly in
+this particular case.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Q</strong><span class="classifier">Qobj</span></dt><dd><p>Operator describing the coupling between system and bath.</p>
+</dd>
+<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The coupling strength between the system and the bath.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">float</span></dt><dd><p>The width of the environment.</p>
+</dd>
+<dt><strong>mu</strong><span class="classifier">float</span></dt><dd><p>The chemical potential of the bath.</p>
+</dd>
+<dt><strong>T</strong><span class="classifier">float</span></dt><dd><p>Bath temperature.</p>
+</dd>
+<dt><strong>Nk</strong><span class="classifier">int</span></dt><dd><p>Number of exponential terms used to approximate the bath correlation
+functions.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">optional, str, tuple or any other object</span></dt><dd><p>A label for the bath exponents (for example, the name of the
+bath). It defaults to None but can be set to help identify which
+bath an exponent is from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.HierarchyADOs">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HierarchyADOs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exponents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A description of ADOs (auxilliary density operators) with the
+hierarchical equations of motion.</p>
+<p>The list of ADOs is constructed from a list of bath exponents
+(corresponding to one or more baths). Each ADO is referred to by a label
+that lists the number of “excitations” of each bath exponent. The
+level of a label within the hierarchy is the sum of the “excitations”
+within the label.</p>
+<p>For example the label <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">...,</span> <span class="pre">0)</span></code> represents the density matrix
+of the system being solved and is the only 0th level label.</p>
+<p>The labels with a single 1, i.e. <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">0,</span> <span class="pre">...,</span> <span class="pre">0)</span></code>, <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">...</span> <span class="pre">0)</span></code>,
+etc. are the 1st level labels.</p>
+<p>The second level labels all have either two 1s or a single 2, and so on
+for the third and higher levels of the hierarchy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>exponents</strong><span class="classifier">list of BathExponent</span></dt><dd><p>The exponents of the correlation function describing the bath or
+baths.</p>
+</dd>
+<dt><strong>max_depth</strong><span class="classifier">int</span></dt><dd><p>The maximum depth of the hierarchy (i.e. the maximum sum of
+“excitations” in the hierarchy ADO labels or maximum ADO level).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>exponents</strong><span class="classifier">list of BathExponent</span></dt><dd><p>The exponents of the correlation function describing the bath or
+baths.</p>
+</dd>
+<dt><strong>max_depth</strong><span class="classifier">int</span></dt><dd><p>The maximum depth of the hierarchy (i.e. the maximum sum of
+“excitations” in the hierarchy ADO labels).</p>
+</dd>
+<dt><strong>dims</strong><span class="classifier">list of int</span></dt><dd><p>The dimensions of each exponent within the bath(s).</p>
+</dd>
+<dt><strong>vk</strong><span class="classifier">list of complex</span></dt><dd><p>The frequency of each exponent within the bath(s).</p>
+</dd>
+<dt><strong>ck</strong><span class="classifier">list of complex</span></dt><dd><p>The coefficient of each exponent within the bath(s).</p>
+</dd>
+<dt><strong>ck2: list of complex</strong></dt><dd><p>For exponents of type “RI”, the coefficient of the exponent within
+the imaginary expansion. For other exponent types, the entry is None.</p>
+</dd>
+<dt><strong>sigma_bar_k_offset: list of int</strong></dt><dd><p>For exponents of type “+” or “-” the offset within the list of modes
+of the corresponding “-” or “+” exponent. For other exponent types,
+the entry is None.</p>
+</dd>
+<dt><strong>labels: list of tuples</strong></dt><dd><p>A list of the ADO labels within the hierarchy.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HierarchyADOs.exps">
+<code class="sig-name descname"><span class="pre">exps</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOs.exps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOs.exps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an ADO label into a tuple of exponents, with one exponent
+for each “excitation” within the label.</p>
+<p>The number of exponents returned is always equal to the level of the
+label within the hierarchy (i.e. the sum of the indices within the
+label).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>label</strong><span class="classifier">tuple</span></dt><dd><p>The ADO label to convert to a list of exponents.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple of BathExponent</dt><dd><p>A tuple of BathExponents.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">ados.exps((1,</span> <span class="pre">0,</span> <span class="pre">0))</span></code> would return <code class="docutils literal notranslate"><span class="pre">[ados.exponents[0]]</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">ados.exps((2,</span> <span class="pre">0,</span> <span class="pre">0))</span></code> would return
+<code class="docutils literal notranslate"><span class="pre">[ados.exponents[0],</span> <span class="pre">ados.exponents[0]]</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ados.exps((1,</span> <span class="pre">2,</span> <span class="pre">1))</span></code> would return
+<code class="docutils literal notranslate"><span class="pre">[ados.exponents[0],</span> <span class="pre">ados.exponents[1],</span> <span class="pre">ados.exponents[1],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">ados.exponents[2]]</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HierarchyADOs.filter">
+<code class="sig-name descname"><span class="pre">filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOs.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOs.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of ADO labels for ADOs whose “excitations”
+match the given patterns.</p>
+<p>Each of the filter parameters (tags, dims, types) may be either
+unspecified (None) or a list. Unspecified parameters are excluded
+from the filtering.</p>
+<p>All specified filter parameters must be lists of the same length.
+Each position in the lists describes a particular excitation and
+any exponent that matches the filters may supply that excitation.
+The level of all labels returned is thus equal to the length of
+the filter parameter lists.</p>
+<p>Within a filter parameter list, items that are None represent
+wildcards and match any value of that exponent attribute</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int</span></dt><dd><p>The hierarchy depth to return ADOs from.</p>
+</dd>
+<dt><strong>tags</strong><span class="classifier">list of object or None</span></dt><dd><p>Filter parameter that matches the <code class="docutils literal notranslate"><span class="pre">.tag</span></code> attribute of
+exponents.</p>
+</dd>
+<dt><strong>dims</strong><span class="classifier">list of int</span></dt><dd><p>Filter parameter that matches the <code class="docutils literal notranslate"><span class="pre">.dim</span></code> attribute of
+exponents.</p>
+</dd>
+<dt><strong>types</strong><span class="classifier">list of BathExponent types or list of str</span></dt><dd><p>Filter parameter that matches the <code class="docutils literal notranslate"><span class="pre">.type</span></code> attribute
+of exponents. Types may be supplied by name (e.g. “R”, “I”, “+”)
+instead of by the actual type (e.g. <code class="docutils literal notranslate"><span class="pre">BathExponent.types.R</span></code>).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>list of tuple</dt><dd><p>The ADO label for each ADO whose exponent excitations
+(i.e. label) match the given filters or level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HierarchyADOs.idx">
+<code class="sig-name descname"><span class="pre">idx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOs.idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOs.idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the index of the ADO label within the list of labels,
+i.e. within <code class="docutils literal notranslate"><span class="pre">self.labels</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>label</strong><span class="classifier">tuple</span></dt><dd><p>The label to look up.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>The index of the label within the list of ADO labels.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HierarchyADOs.next">
+<code class="sig-name descname"><span class="pre">next</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOs.next"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOs.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ADO label with one more excitation in the k’th exponent
+dimension or <code class="docutils literal notranslate"><span class="pre">None</span></code> if adding the excitation would exceed the
+dimension or maximum depth of the hierarchy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>label</strong><span class="classifier">tuple</span></dt><dd><p>The ADO label to add an excitation to.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The exponent to add the excitation to.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple or None</dt><dd><p>The next label.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HierarchyADOs.prev">
+<code class="sig-name descname"><span class="pre">prev</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOs.prev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOs.prev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ADO label with one fewer excitation in the k’th
+exponent dimension or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the label has no exciations in the
+k’th exponent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>label</strong><span class="classifier">tuple</span></dt><dd><p>The ADO label to remove the excitation from.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The exponent to remove the excitation from.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple or None</dt><dd><p>The previous label.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.heom.HierarchyADOsState">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HierarchyADOsState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ados</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ado_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOsState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOsState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides convenient access to the full hierarchy ADO state at a particular
+point in time, <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>rho</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code></span></dt><dd><p>The current state of the system (i.e. the 0th component of the
+hierarchy).</p>
+</dd>
+<dt><strong>ados</strong><span class="classifier"><a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOs" title="qutip.nonmarkov.heom.HierarchyADOs"><code class="xref py py-class docutils literal notranslate"><span class="pre">HierarchyADOs</span></code></a></span></dt><dd><p>The description of the hierarchy.</p>
+</dd>
+<dt><strong>ado_state</strong><span class="classifier">numpy.array</span></dt><dd><p>The full state of the hierarchy.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rho</strong><span class="classifier">Qobj</span></dt><dd><p>The system state.</p>
+</dd>
+<dt><strong>In addition, all of the attributes of the hierarchy description,</strong></dt><dd></dd>
+<dt><strong>i.e. ``HierarchyADOs``, are provided directly on this class for</strong></dt><dd></dd>
+<dt><strong>convenience. E.g. one can access ``.labels``, or ``.exponents`` or</strong></dt><dd></dd>
+<dt><strong>call ``.idx(label)`` directly.</strong></dt><dd></dd>
+<dt><strong>See :class:`HierarchyADOs` for a full list of the available attributes</strong></dt><dd></dd>
+<dt><strong>and methods.</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.heom.HierarchyADOsState.extract">
+<code class="sig-name descname"><span class="pre">extract</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_or_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/bofin_solvers.html#HierarchyADOsState.extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HierarchyADOsState.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a Qobj representing specified ADO from a full representation of
+the ADO states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>idx</strong><span class="classifier">int or label</span></dt><dd><p>The index of the ADO to extract. If an ADO label, e.g.
+<code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">...)</span></code> is supplied instead, then the ADO
+is extracted by label instead.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Qobj</dt><dd><p>A <code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code> representing the state of the specified ADO.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.dlheom_solver.HSolverDL">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HSolverDL</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boltzmann</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renorm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HSolverDL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HSolverDL" title="Permalink to this definition">¶</a></dt>
+<dd><p>HEOM solver based on the Drude-Lorentz model for spectral density.
+Drude-Lorentz bath the correlation functions can be exactly analytically
+expressed as an infinite sum of exponentials which depend on the
+temperature, these are called the Matsubara terms or Matsubara frequencies</p>
+<p>For practical computation purposes an approximation must be used based
+on a small number of Matsubara terms (typically &lt; 4).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cut_freq</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density cutoff frequency.</p>
+</dd>
+<dt><strong>renorm</strong><span class="classifier">bool</span></dt><dd><p>Apply renormalisation to coupling terms
+Can be useful if using SI units for planck and boltzmann</p>
+</dd>
+<dt><strong>bnd_cut_approx</strong><span class="classifier">bool</span></dt><dd><p>Use boundary cut off approximation
+Can be</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.nonmarkov.dlheom_solver.HSolverDL.configure">
+<code class="sig-name descname"><span class="pre">configure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boltzmann</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renorm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HSolverDL.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HSolverDL.configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls configure from <a class="reference internal" href="#qutip.nonmarkov.dlheom_solver.HEOMSolver" title="qutip.nonmarkov.dlheom_solver.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> and sets any attributes
+that are specific to this subclass</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.dlheom_solver.HSolverDL.reset">
+<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HSolverDL.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HSolverDL.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset any attributes to default values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.nonmarkov.dlheom_solver.HSolverDL.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tlist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HSolverDL.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HSolverDL.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to solve for an open quantum system using the
+HEOM model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rho0</strong><span class="classifier">Qobj</span></dt><dd><p>Initial state (density matrix) of the system.</p>
+</dd>
+<dt><strong>tlist</strong><span class="classifier">list</span></dt><dd><p>Time over which system evolves.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>results</strong><span class="classifier"><a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></span></dt><dd><p>Object storing all results from the simulation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="qutip.nonmarkov.dlheom_solver.HEOMSolver">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HEOMSolver</span></code><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HEOMSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HEOMSolver" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is superclass for all solvers that use the HEOM method for
 calculating the dynamics evolution. There are many references for this.
 A good introduction, and perhaps closest to the notation used here is:
@@ -1985,8 +3024,8 @@ There may be an overhead in collecting statistics</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="qutip.nonmarkov.heom.HEOMSolver.configure">
-<code class="sig-name descname"><span class="pre">configure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boltzmann</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renorm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HEOMSolver.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver.configure" title="Permalink to this definition">¶</a></dt>
+<dt id="qutip.nonmarkov.dlheom_solver.HEOMSolver.configure">
+<code class="sig-name descname"><span class="pre">configure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boltzmann</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renorm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HEOMSolver.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HEOMSolver.configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configure the solver using the passed parameters
 The parameters are described in the class attributes, unless there
 is some specific behaviour</p>
@@ -2012,8 +3051,8 @@ Set to False for no stats</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="qutip.nonmarkov.heom.HEOMSolver.create_new_stats">
-<code class="sig-name descname"><span class="pre">create_new_stats</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HEOMSolver.create_new_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver.create_new_stats" title="Permalink to this definition">¶</a></dt>
+<dt id="qutip.nonmarkov.dlheom_solver.HEOMSolver.create_new_stats">
+<code class="sig-name descname"><span class="pre">create_new_stats</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HEOMSolver.create_new_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HEOMSolver.create_new_stats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new stats object suitable for use with this solver
 Note: this solver expects the stats object to have sections</p>
 <ul class="simple">
@@ -2023,70 +3062,9 @@ Note: this solver expects the stats object to have sections</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="qutip.nonmarkov.heom.HEOMSolver.reset">
-<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HEOMSolver.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HEOMSolver.reset" title="Permalink to this definition">¶</a></dt>
+<dt id="qutip.nonmarkov.dlheom_solver.HEOMSolver.reset">
+<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/dlheom_solver.html#HEOMSolver.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.dlheom_solver.HEOMSolver.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset any attributes to default values</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="qutip.nonmarkov.heom.HSolverDL">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HSolverDL</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boltzmann</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renorm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HSolverDL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HSolverDL" title="Permalink to this definition">¶</a></dt>
-<dd><p>HEOM solver based on the Drude-Lorentz model for spectral density.
-Drude-Lorentz bath the correlation functions can be exactly analytically
-expressed as an infinite sum of exponentials which depend on the
-temperature, these are called the Matsubara terms or Matsubara frequencies</p>
-<p>For practical computation purposes an approximation must be used based
-on a small number of Matsubara terms (typically &lt; 4).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>cut_freq</strong><span class="classifier">float</span></dt><dd><p>Bath spectral density cutoff frequency.</p>
-</dd>
-<dt><strong>renorm</strong><span class="classifier">bool</span></dt><dd><p>Apply renormalisation to coupling terms
-Can be useful if using SI units for planck and boltzmann</p>
-</dd>
-<dt><strong>bnd_cut_approx</strong><span class="classifier">bool</span></dt><dd><p>Use boundary cut off approximation
-Can be</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="qutip.nonmarkov.heom.HSolverDL.configure">
-<code class="sig-name descname"><span class="pre">configure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coup_strength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boltzmann</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renorm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bnd_cut_approx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HSolverDL.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HSolverDL.configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calls configure from <a class="reference internal" href="#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> and sets any attributes
-that are specific to this subclass</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="qutip.nonmarkov.heom.HSolverDL.reset">
-<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HSolverDL.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HSolverDL.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset any attributes to default values</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="qutip.nonmarkov.heom.HSolverDL.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tlist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/nonmarkov/heom.html#HSolverDL.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.nonmarkov.heom.HSolverDL.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to solve for an open quantum system using the
-HEOM model.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>rho0</strong><span class="classifier">Qobj</span></dt><dd><p>Initial state (density matrix) of the system.</p>
-</dd>
-<dt><strong>tlist</strong><span class="classifier">list</span></dt><dd><p>Time over which system evolves.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl>
-<dt><strong>results</strong><span class="classifier"><a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></span></dt><dd><p>Object storing all results from the simulation.</p>
-</dd>
-</dl>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -11243,9 +12221,9 @@ as numpy.savetxt is used, and requires this.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+        &#169; <a href="../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Feb 08, 2022.
+        Last updated on Apr 13, 2022.
       </span>
 
     </p>

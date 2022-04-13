@@ -1,0 +1,612 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Pulse-level circuit simulation &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bra": ["\\left\\langle{#1}\\right\\rvert", 1], "ket": ["\\left\\lvert{#1}\\right\\rangle", 1], "tr": "\\operatorname{tr}"}}})</script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Measurement of Quantum Objects" href="../guide-measurement.html" />
+    <link rel="prev" title="Operator-level circuit simulation" href="qip-simulator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-qip.html">Quantum Information Processing</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qip-basics.html">Quantum Information Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qip-simulator.html">Operator-level circuit simulation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Pulse-level circuit simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modelling-quantum-hardware-with-processor">Modelling quantum hardware with Processor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiler-and-scheduler">Compiler and scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#noise-simulation">Noise Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#customize-the-simulator">Customize the simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-workflow-of-the-simulator">The workflow of the simulator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+        
+          <li><a href="../guide-qip.html">Quantum Information Processing</a> &raquo;</li>
+        
+      <li>Pulse-level circuit simulation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pulse-level-circuit-simulation">
+<span id="qip-processor"></span><h1>Pulse-level circuit simulation<a class="headerlink" href="#pulse-level-circuit-simulation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="modelling-quantum-hardware-with-processor">
+<h2>Modelling quantum hardware with Processor<a class="headerlink" href="#modelling-quantum-hardware-with-processor" title="Permalink to this headline">¶</a></h2>
+<p>Based on the open system solver, <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a> in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">qutip.qip</span></code> module simulates quantum circuits at the level of time evolution. One can consider the processor as a simulator of a quantum device, on which the quantum circuit is to be implemented.</p>
+<p>The procedure is illustrated in the figure below.
+It first compiles circuit into a Hamiltonian model, adds noisy dynamics and then uses the QuTiP open time evolution solvers to simulation the evolution.</p>
+<img alt="../../images/illustration.png" src="../../images/illustration.png" />
+<p>Like a real quantum device, the processor is determined by a list of Hamiltonians, i.e. the control pulses driving the evolution. Given the intensity of the control pulses and the corresponding time slices for each pulse, the evolution is then computed. A control pulse is characterized by <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.pulse.Pulse" title="qutip.qip.pulse.Pulse"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pulse</span></code></a>, consisting of the control Hamiltonian, the targets qubit, the pulse coefficients and the time sequence. We can either use the coefficients as a step function or with cubic spline. For step function, <code class="docutils literal notranslate"><span class="pre">tlist</span></code> specifies the start and the end of each pulse and thus is one element longer the <code class="docutils literal notranslate"><span class="pre">coeffs</span></code>. One example of defining the control pulse coefficients and the time array is as follows:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">sigmaz</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device</span> <span class="kn">import</span> <span class="n">Processor</span>
+
+<span class="n">processor</span> <span class="o">=</span> <span class="n">Processor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">cyclic_permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># sigmaz for all qubits</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]])</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>It defines a <span class="math notranslate nohighlight">\(\sigma_z\)</span> operator on both qubits and a pulse that acts on the first qubit.
+An equivalent approach is using the <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor.add_pulse" title="qutip.qip.device.Processor.add_pulse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_pulse</span></code></a> method.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.qip.pulse</span> <span class="kn">import</span> <span class="n">Pulse</span>
+
+<span class="n">processor</span> <span class="o">=</span> <span class="n">Processor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">coeff</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="n">tlist</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]])</span>
+<span class="n">pulse</span> <span class="o">=</span> <span class="n">Pulse</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">coeff</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_pulse</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One can also use choose the <code class="docutils literal notranslate"><span class="pre">pulse_mode</span></code> attribute of <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a>
+between <code class="docutils literal notranslate"><span class="pre">&quot;discrete&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;continuous&quot;</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the coefficients represent dicrete pulse, the length of each array is 1 element shorter than <code class="docutils literal notranslate"><span class="pre">tlist</span></code>. If it is supposed to be a continuous function, the length should be the same as <code class="docutils literal notranslate"><span class="pre">tlist</span></code>.</p>
+</div>
+<p>The above example shows the framework and the most essential part of the simulator’s API. So far, it looks like just a wrapper for the open system solvers. However, based on this, we can implement different physical realizations. They differ mainly in how to find the control pulse for a quantum circuit, which gives birth to different sub-classes:</p>
+<div class="line-block">
+<div class="line">Processor</div>
+<div class="line">├── ModelProcessor</div>
+<div class="line">│   ├── DispersiveCavityQED</div>
+<div class="line">│   └── SpinChain</div>
+<div class="line">└── OptPulseProcessor</div>
+</div>
+<p>In general, there are two ways to find the control pulses. The first one, <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.ModelProcessor" title="qutip.qip.device.ModelProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelProcessor</span></code></a>, is more experiment-oriented and based on physical models. A universal set of
+gates is defined in the processor as well as the pulse implementing them in this particular physical model. This is usually the case where control pulses realizing those gates are well known and can be concatenated to realize the whole quantum circuits. Two realizations have already been implemented: the spin chain and the Cavity QED model for quantum computing. In those models, the driving Hamiltonians are predefined. Another approach, based on the optimal control module in QuTiP (see <a class="reference internal" href="../guide-control.html#control"><span class="std std-ref">Quantum Optimal Control</span></a>), is called <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.OptPulseProcessor" title="qutip.qip.device.OptPulseProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptPulseProcessor</span></code></a>. In this subclass, one only defines the available Hamiltonians in their system. The processor then uses algorithms to find the optimal control pulses that realize the desired unitary evolution.</p>
+<p>Despite this difference, the logic behind all processors is the same:</p>
+<ul class="simple">
+<li><p>One defines a processor by a list of available Hamiltonians and, as explained later, hardware-dependent noise. In model based processors, the Hamiltonians are predefined and one only needs to give the device parameters like frequency and interaction strength.</p></li>
+<li><p>The control pulse coefficients and time slices are either specified by the user or calculated by the method <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor.load_circuit" title="qutip.qip.device.Processor.load_circuit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_circuit</span></code></a>, which takes a <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit" title="qutip.qip.circuit.QubitCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code></a> and find the control pulse for this evolution.</p></li>
+<li><p>The processor calculates the evolution using the QuTiP solvers. Collapse operators can be added to simulate decoherence. The method <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor.run_state" title="qutip.qip.device.Processor.run_state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run_state</span></code></a> returns a object <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a>.</p></li>
+</ul>
+<p>It is also possible to calculate the evolution analytically with matrix exponentiation by setting <code class="docutils literal notranslate"><span class="pre">analytical=True</span></code>. A list of the matrices representing the gates is returned just like for <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.propagators" title="qutip.qip.circuit.QubitCircuit.propagators"><code class="xref py py-meth docutils literal notranslate"><span class="pre">propagators</span></code></a>. However, this does not consider the collapse operators or other noise. As the system size gets larger, this approach will become very inefficient.</p>
+<p>In the following we describe the predefined subclasses for <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a>:</p>
+<p><strong>SpinChain</strong></p>
+<p><a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.LinearSpinChain" title="qutip.qip.device.LinearSpinChain"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearSpinChain</span></code></a> and <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.CircularSpinChain" title="qutip.qip.device.CircularSpinChain"><code class="xref py py-class docutils literal notranslate"><span class="pre">CircularSpinChain</span></code></a> are quantum computing models base on the spin chain realization. The control Hamiltonians are <span class="math notranslate nohighlight">\(\sigma_x\)</span>, <span class="math notranslate nohighlight">\(\sigma_z\)</span> and <span class="math notranslate nohighlight">\(\sigma_x \sigma_x + \sigma_y \sigma_y\)</span>. This processor will first decompose the gate into the universal gate set with ISWAP or SQRTISWAP as two-qubit gates, resolve them into quantum gates of adjacent qubits and then calculate the pulse coefficients.</p>
+<p>An example of simulating a simple circuit is shown below:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">basis</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device</span> <span class="kn">import</span> <span class="n">LinearSpinChain</span>
+
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">LinearSpinChain</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_state</span><span class="p">(</span><span class="n">basis</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tidyup</span><span class="p">(</span><span class="mf">1.0e-6</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Quantum object: dims = [[2, 2], [1, 1]], shape = (4, 1), type = ket
+Qobj data =
+[[ 0.]
+[ 0.]
+[ 0.]
+[-1.]]
+</pre></div>
+</div>
+<p>We can also visualize the pulses implementing this circuit:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">basis</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device</span> <span class="kn">import</span> <span class="n">LinearSpinChain</span>
+
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">LinearSpinChain</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">plot_pulses</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../guide/qip/qip-processor-1.png">png</a>, <a class="reference external" href="../../guide/qip/qip-processor-1.hires.png">hires.png</a>, <a class="reference external" href="../../guide/qip/qip-processor-1.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/qip-processor-1.png" src="../../images/qip-processor-1.png" />
+</div>
+<p><strong>DispersiveCavityQED</strong></p>
+<p>Same as above, <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.DispersiveCavityQED" title="qutip.qip.device.DispersiveCavityQED"><code class="xref py py-class docutils literal notranslate"><span class="pre">DispersiveCavityQED</span></code></a> is a simulator based on Cavity Quantum Electrodynamics. The workflow is similar to the one for the spin chain, except that the component systems are a multi-level cavity and a qubits system. The control Hamiltonians are the single-qubit rotation together with the qubits-cavity interaction <span class="math notranslate nohighlight">\(a^{\dagger} \sigma^{-} + a \sigma^{+}\)</span>. The device parameters including the cavity frequency, qubits frequency, detuning and interaction strength etc.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.DispersiveCavityQED.run_state" title="qutip.qip.device.DispersiveCavityQED.run_state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run_state</span></code></a> method of <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.DispersiveCavityQED" title="qutip.qip.device.DispersiveCavityQED"><code class="xref py py-class docutils literal notranslate"><span class="pre">DispersiveCavityQED</span></code></a>
+returns the full simulation result of the solver,
+hence including the cavity.
+To obtain the circuit result, one needs to first trace out the cavity state.</p>
+</div>
+<p><strong>OptPulseProcessor</strong></p>
+<p>The <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.OptPulseProcessor" title="qutip.qip.device.OptPulseProcessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptPulseProcessor</span></code></a> uses the function in <a class="reference internal" href="../../apidoc/functions.html#qutip.control.pulseoptim.optimize_pulse_unitary" title="qutip.control.pulseoptim.optimize_pulse_unitary"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimize_pulse_unitary</span></code></a> in the optimal control module to find the control pulses. The Hamiltonian includes a drift part and a control part and only the control part will be optimized. The unitary evolution follows</p>
+<div class="math notranslate nohighlight">
+\[U(\Delta t)=\exp(\rm{i} \cdot \Delta t [H_d  + \sum_j u_j H_j] )\]</div>
+<p>To let it find the optimal pulses, we need to give the parameters for <a class="reference internal" href="../../apidoc/functions.html#qutip.control.pulseoptim.optimize_pulse_unitary" title="qutip.control.pulseoptim.optimize_pulse_unitary"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimize_pulse_unitary</span></code></a> as keyword arguments to <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.OptPulseProcessor.load_circuit" title="qutip.qip.device.OptPulseProcessor.load_circuit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_circuit</span></code></a>. Usually, the minimal requirements are the evolution time <code class="docutils literal notranslate"><span class="pre">evo_time</span></code> and the number of time slices <code class="docutils literal notranslate"><span class="pre">num_tslots</span></code> for each gate. Other parameters can also be given in the keyword arguments. For available choices, see <a class="reference internal" href="../../apidoc/functions.html#qutip.control.pulseoptim.optimize_pulse_unitary" title="qutip.control.pulseoptim.optimize_pulse_unitary"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimize_pulse_unitary</span></code></a>. It is also possible to specify different parameters for different gates, as shown in the following example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.qip.device</span> <span class="kn">import</span> <span class="n">OptPulseProcessor</span>
+<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">sigmaz</span><span class="p">,</span> <span class="n">sigmax</span><span class="p">,</span> <span class="n">sigmay</span>
+<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
+
+<span class="c1"># Same parameter for all the gates</span>
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">num_tslots</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">evo_time</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">OptPulseProcessor</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="n">sigmaz</span><span class="p">())</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">sigmax</span><span class="p">())</span>
+<span class="c1"># num_tslots and evo_time are two keyword arguments</span>
+<span class="n">tlist</span><span class="p">,</span> <span class="n">coeffs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span>
+<span class="n">qc</span><span class="p">,</span> <span class="n">num_tslots</span><span class="o">=</span><span class="n">num_tslots</span><span class="p">,</span> <span class="n">evo_time</span><span class="o">=</span><span class="n">evo_time</span><span class="p">)</span>
+
+<span class="c1"># Different parameters for different gates</span>
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s1">&#39;CNOT&#39;</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">processor</span> <span class="o">=</span> <span class="n">OptPulseProcessor</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="n">tensor</span><span class="p">([</span><span class="n">sigmaz</span><span class="p">()]</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">cyclic_permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">sigmay</span><span class="p">(),</span> <span class="n">cyclic_permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">tensor</span><span class="p">([</span><span class="n">sigmay</span><span class="p">(),</span> <span class="n">sigmay</span><span class="p">()]))</span>
+
+<span class="n">setting_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;SNOT&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;num_tslots&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;evo_time&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+                <span class="s2">&quot;SWAP&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;num_tslots&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;evo_time&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+                <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;num_tslots&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;evo_time&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}</span>
+
+<span class="n">tlist</span><span class="p">,</span> <span class="n">coeffs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span>
+                <span class="n">qc</span><span class="p">,</span> <span class="n">setting_args</span><span class="o">=</span><span class="n">setting_args</span><span class="p">,</span> <span class="n">merge_gates</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="compiler-and-scheduler">
+<h2>Compiler and scheduler<a class="headerlink" href="#compiler-and-scheduler" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>New in QuTiP 4.6</p>
+</div>
+<p>In order to simulate quantum circuits at the level of time evolution.
+We need to first compile the circuit into the Hamiltonian model, i.e.
+the control pulses.
+Hence each <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a> has a corresponding
+<a class="reference internal" href="../../apidoc/classes.html#qutip.qip.compiler.GateCompiler" title="qutip.qip.compiler.GateCompiler"><code class="xref py py-class docutils literal notranslate"><span class="pre">GateCompiler</span></code></a> class.
+The compiler takes a <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit" title="qutip.qip.circuit.QubitCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code></a>
+and returns the compiled <code class="docutils literal notranslate"><span class="pre">tlist</span></code> and <code class="docutils literal notranslate"><span class="pre">coeffs</span></code>.
+It is called implicitly when calling the method
+<a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor.run_state" title="qutip.qip.device.Processor.run_state"><code class="xref py py-class docutils literal notranslate"><span class="pre">run_state</span></code></a>.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.qip.compiler</span> <span class="kn">import</span> <span class="n">SpinChainCompiler</span>
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">processor</span> <span class="o">=</span> <span class="n">LinearSpinChain</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">compiler</span> <span class="o">=</span> <span class="n">SpinChainCompiler</span><span class="p">(</span>
+    <span class="mi">2</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">processor</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">pulse_dict</span><span class="o">=</span><span class="n">processor</span><span class="o">.</span><span class="n">pulse_dict</span><span class="p">)</span>
+<span class="n">resolved_qc</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">resolve_gates</span><span class="p">([</span><span class="s2">&quot;RX&quot;</span><span class="p">,</span> <span class="s2">&quot;RZ&quot;</span><span class="p">,</span> <span class="s2">&quot;ISWAP&quot;</span><span class="p">])</span>
+<span class="n">tlists</span><span class="p">,</span> <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">resolved_qc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tlists</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[array([0., 1.]), array([0., 1., 2.]), None, None, None]
+[array([1.57079633]), array([0.        , 1.57079633]), None, None, None]
+</pre></div>
+</div>
+<p>Here we first use <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.resolve_gates" title="qutip.qip.circuit.QubitCircuit.resolve_gates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">resolve_gates</span></code></a>
+to decompose the X gate to its natural gate on Spin Chain model,
+the rotation over X-axis.
+We pass the hardware parameters of the <code class="xref py py-class docutils literal notranslate"><span class="pre">SpinChain</span> <span class="pre">`</span></code> model, <code class="docutils literal notranslate"><span class="pre">processor.params</span></code>, as well as a map between the pulse name and pulse index <code class="docutils literal notranslate"><span class="pre">pulse_dict</span></code> to the compiler.
+The later one allows one to address the pulse more conveniently in the compiler.</p>
+<p>The compiler returns a list of <code class="docutils literal notranslate"><span class="pre">tlist</span></code> and <code class="docutils literal notranslate"><span class="pre">coeff</span></code>, corresponding to each pulse.
+The first pulse starts from <code class="docutils literal notranslate"><span class="pre">t=0</span></code> and ends at <code class="docutils literal notranslate"><span class="pre">t=1</span></code>, with the strengh <span class="math notranslate nohighlight">\(\pi/2\)</span>.
+The second one is turned on from <code class="docutils literal notranslate"><span class="pre">t=1</span></code> to <code class="docutils literal notranslate"><span class="pre">t=2</span></code> with the same strength.
+The compiled pulse here is different from what is shown in the plot
+in the previous subsection because the scheduler is turned off by default.</p>
+<p>The scheduler is implemented in the class <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.compiler.Scheduler" title="qutip.qip.compiler.Scheduler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheduler</span></code></a>,
+based on the idea of <a class="reference external" href="https://doi.org/10.1117/12.666419">https://doi.org/10.1117/12.666419</a>.
+It schedules the order of quantum gates and instructions for the
+shortest execution time.
+It works not only for quantum gates but also for pulse implementation of gates
+(<a class="reference internal" href="../../apidoc/classes.html#qutip.qip.compiler.Instruction" title="qutip.qip.compiler.Instruction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Instruction</span></code></a>) with varying pulse duration.</p>
+<p>The scheduler first generates a quantum gates dependency graph,
+containing information about which gates have to be executed before some other gates.
+The graph preserves the mobility of the gates,
+i.e. commuting gates are not dependent on each other, even if they use the same qubits.
+Next, it computes the longest distance of each node to the start and end nodes.
+The distance for each dependency arrow is defined by the execution time of the instruction
+(By default, it is 1 for all gates).
+This is used as a priority measure in the next step.
+The gate with a longer distance to the end node and a shorter distance to the start node has higher priority.
+In the last step, it uses a list-schedule algorithm with hardware constraint and
+priority and returns a list of cycles for gates/instructions.
+Since the algorithm is heuristics, sometimes it does not find the optimal solution.
+Hence, we offer an option that randomly shuffles the commuting gates and
+repeats the scheduling a few times to get a better result.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.compiler</span> <span class="kn">import</span> <span class="n">Scheduler</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># gate0</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CZ&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># gate1</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CZ&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># gate2</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CZ&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># gate3</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CZ&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># gate4</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CZ&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># gate5</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;ISWAP&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># gate6</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">Scheduler</span><span class="p">(</span><span class="s2">&quot;ASAP&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">scheduler</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gates_schedule</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[0, 1, 3, 2, 2, 3, 4]
+</pre></div>
+</div>
+<p>The result shows the scheduling order of each gate in the original circuit.</p>
+<p>For pulse schedule, or scheduling gates with different duration,
+one will need to wrap the <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.qip.circuit.Gate</span></code> object with <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.qip.compiler.instruction</span></code> object,
+with a parameter <cite>duration</cite>.
+The result will then be the start time of each instruction.</p>
+</div>
+<div class="section" id="noise-simulation">
+<h2>Noise Simulation<a class="headerlink" href="#noise-simulation" title="Permalink to this headline">¶</a></h2>
+<p>In the common way of QIP simulation, where evolution is carried out by gate matrix product, the noise is usually simulated with bit flipping and sign flipping errors.
+The typical approaches are either applying bit/sign flipping gate probabilistically
+or applying Kraus operators representing different noisy channels (e.g. amplitude damping, dephasing) after each unitary gate evolution. In the case of a single qubit, they have the same effect and the parameters in the Kraus operators are exactly the probability of a flipping error happens during the gate operation time.</p>
+<p>Since the processor simulates the state evolution at the level of the driving Hamiltonian, there is no way to apply an error operator to the continuous-time evolution. Instead, the error is added to the pulses (coherent control error) or the collapse operators (Lindblad error) contributing to the evolution. Mathematically, this is no different from adding error channel probabilistically (it is actually how <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code></a> works internally). The collapse operator for single-qubit amplitude damping and dephasing are exactly the destroying operator and the sign-flipping operator. One just needs to choose the correct coefficients for them to simulate the noise, e.g. the relaxation time T1 and dephasing time T2. Because it is based on the open system evolution instead of abstract operators, this simulation is closer to the physical implementation and requires less pre-analysis of the system.</p>
+<p>Compared to the approach of Kraus operators, this way of simulating noise is more computationally expensive. If you only want to simulate the decoherence of single-qubit relaxation and the relaxation time is much longer than the gate duration, there is no need to go through all the calculations. However, this simulator is closer to the real experiment and, therefore, more convenient in some cases, such as when coherent noise or correlated noise exist. For instance, a pulse on one qubit might affect the neighbouring qubits, the evolution is still unitary but the gate fidelity will decrease. It is not always easy or even possible to define a noisy gate matrix. In our simulator, it can be done by defining a <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.noise.ControlAmpNoise" title="qutip.qip.noise.ControlAmpNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlAmpNoise</span></code></a> (Control Amplitude Noise).</p>
+<p>In the simulation, noise can be added to the processor at different levels:</p>
+<ul class="simple">
+<li><p>The decoherence time T1 and T2 can be defined for the processor or for each qubit. When calculating the evolution, the corresponding collapse operators will be added automatically to the solver.</p></li>
+<li><p>The noise of the physical parameters (e.g. detuned frequency) can be simulated by changing the parameters in the model, e.g. laser frequency in cavity QED. (This can only be time-independent since QuTiP open system solver only allows varying coefficients, not varying Hamiltonian operators.)</p></li>
+<li><p>The noise of the pulse intensity can be simulated by modifying the coefficients of the Hamiltonian operators or even adding new Hamiltonians.</p></li>
+</ul>
+<p>To add noise to a processor, one needs to first define a noise object <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.noise.Noise" title="qutip.qip.noise.Noise"><code class="xref py py-class docutils literal notranslate"><span class="pre">Noise</span></code></a>. The simplest relaxation noise can be defined directly in the processor with relaxation time. Other pre-defined noise can be found as subclasses of  <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.noise.Noise" title="qutip.qip.noise.Noise"><code class="xref py py-class docutils literal notranslate"><span class="pre">Noise</span></code></a>. We can add noise to the simulator with the method <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor.add_noise" title="qutip.qip.device.Processor.add_noise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_noise</span></code></a>.</p>
+<p>Below, we show two examples.</p>
+<p>The first example is a processor with one qubit under rotation around the z-axis and relaxation time <span class="math notranslate nohighlight">\(T_2=5\)</span>. We measure the population of the <span class="math notranslate nohighlight">\(\left| + \right\rangle\)</span> state and observe the Ramsey signal:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">sigmaz</span><span class="p">,</span> <span class="n">destroy</span><span class="p">,</span> <span class="n">basis</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device</span> <span class="kn">import</span> <span class="n">Processor</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.operations</span> <span class="kn">import</span> <span class="n">snot</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">snot</span><span class="p">()</span>
+<span class="n">plus_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">20.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">T2</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">Processor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">T2</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">())</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_state</span><span class="p">(</span>
+    <span class="n">plus_state</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">Hadamard</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">Hadamard</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="c1"># detail about length of tlist needs to be fixed</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;simulation&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="n">T2</span><span class="o">*</span><span class="n">tlist</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;theory&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Ramsey signal&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Relaxation T2=5&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../guide/qip/qip-processor-2.png">png</a>, <a class="reference external" href="../../guide/qip/qip-processor-2.hires.png">hires.png</a>, <a class="reference external" href="../../guide/qip/qip-processor-2.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../images/qip-processor-2.png" src="../../images/qip-processor-2.png" />
+</div>
+<p>The second example demonstrates a biased Gaussian noise on the pulse amplitude. For visualization purposes, we plot the noisy pulse intensity instead of the state fidelity. The three pulses can, for example, be a zyz-decomposition of an arbitrary single-qubit gate:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">sigmaz</span><span class="p">,</span> <span class="n">sigmay</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device</span> <span class="kn">import</span> <span class="n">Processor</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.noise</span> <span class="kn">import</span> <span class="n">RandomNoise</span>
+
+<span class="c1"># add control Hamiltonians</span>
+<span class="n">processor</span> <span class="o">=</span> <span class="n">Processor</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_control</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># define pulse coefficients and tlist for all pulses</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.</span> <span class="p">])</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">set_all_tlist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="c1"># define noise, loc and scale are keyword arguments for np.random.normal</span>
+<span class="n">gaussnoise</span> <span class="o">=</span> <span class="n">RandomNoise</span><span class="p">(</span>
+            <span class="n">dt</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">rand_gen</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_noise</span><span class="p">(</span><span class="n">gaussnoise</span><span class="p">)</span>
+
+<span class="c1"># Plot the ideal pulse</span>
+<span class="n">fig1</span><span class="p">,</span> <span class="n">axis1</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">plot_pulses</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Original control amplitude&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># Plot the noisy pulse</span>
+<span class="n">qobjevo</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get_qobjevo</span><span class="p">(</span><span class="n">noisy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">noisy_coeff</span> <span class="o">=</span> <span class="n">qobjevo</span><span class="o">.</span><span class="n">to_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">qobjevo</span><span class="o">.</span><span class="n">to_list</span><span class="p">()[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">fig2</span><span class="p">,</span> <span class="n">axis2</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">plot_pulses</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Noisy control amplitude&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">axis2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">qobjevo</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="n">noisy_coeff</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default" id="id1">
+<img alt="../../images/qip-processor-3_00.png" src="../../images/qip-processor-3_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/qip/qip-processor-3_00.png">png</a>, <a class="reference external" href="../../guide/qip/qip-processor-3_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/qip/qip-processor-3_00.pdf">pdf</a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id2">
+<img alt="../../images/qip-processor-3_01.png" src="../../images/qip-processor-3_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/qip/qip-processor-3_01.png">png</a>, <a class="reference external" href="../../guide/qip/qip-processor-3_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/qip/qip-processor-3_01.pdf">pdf</a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="customize-the-simulator">
+<h2>Customize the simulator<a class="headerlink" href="#customize-the-simulator" title="Permalink to this headline">¶</a></h2>
+<p>The number of predefined physical models and compilers are limited.
+However, it is designed for easy customization and one can easily build customized model and compiling routines.
+For guide and examples, please refer to the tutorial notebooks
+at <a class="reference external" href="http://qutip.org/tutorials.html">http://qutip.org/tutorials.html</a></p>
+</div>
+<div class="section" id="the-workflow-of-the-simulator">
+<h2>The workflow of the simulator<a class="headerlink" href="#the-workflow-of-the-simulator" title="Permalink to this headline">¶</a></h2>
+<p>The following plot demonstrates the workflow of the simulator.</p>
+<img alt="../../images/workflow.png" src="../../images/workflow.png" />
+<p>The core of the simulator is <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a>,
+which characterizes the quantum hardware of interest,
+containing the information such as the non-controllable drift Hamiltonian and
+the control Hamiltonian.
+Apart from the ideal system representing the qubits, one can also define
+hardware-dependent or pulse-dependent noise in <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.noise.Noise" title="qutip.qip.noise.Noise"><code class="xref py py-class docutils literal notranslate"><span class="pre">Noise</span></code></a>.
+It describes how noisy terms such as imperfect control
+and decoherence can be added once the ideal control pulse is defined.
+When loading a quantum circuit, a <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.compiler.GateCompiler" title="qutip.qip.compiler.GateCompiler"><code class="xref py py-class docutils literal notranslate"><span class="pre">GateCompiler</span></code></a> compiles the circuit into a sequence of control pulse signals and schedule the pulse for parallel execution.
+For each control Hamiltonian, a <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.pulse.Pulse" title="qutip.qip.pulse.Pulse"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pulse</span></code></a> instance is created that including the ideal evolution and associated noise.
+They will then be sent to the QuTiP solvers for the computation.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../guide-measurement.html" class="btn btn-neutral float-right" title="Measurement of Quantum Objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="qip-simulator.html" class="btn btn-neutral float-left" title="Operator-level circuit simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Feb 08, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Monte Carlo Solver &mdash; QuTiP 4.6 Documentation</title>
+  <title>Monte Carlo Solver &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -48,6 +48,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="next" title="Stochastic Solver - Photocurrent" href="dynamics-photocurrent.html" />
     <link rel="prev" title="Lindblad Master Equation Solver" href="dynamics-master.html" /> 
 </head>
@@ -73,7 +74,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -123,6 +124,7 @@
 <li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
@@ -142,6 +144,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
 </ul>
 
             
@@ -262,13 +265,11 @@ function for master-equation evolution, except that the initial state must be a 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id1">
+<div class="figure align-default">
 <img alt="../../images/dynamics-monte-1_00.png" src="../../images/dynamics-monte-1_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-monte-1_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-monte-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-monte-1_00.pdf">pdf</a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-<div class="figure align-default" id="id2">
+<div class="figure align-default">
 <img alt="../../images/dynamics-monte-1_01.png" src="../../images/dynamics-monte-1_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-monte-1_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-monte-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-monte-1_01.pdf">pdf</a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>The advantage of the Monte Carlo method over the master equation approach is that only the state vector is required to be kept in the computers memory, as opposed to the entire density matrix. For large quantum system this becomes a significant advantage, and the Monte Carlo solver is therefore generally recommended for such systems. For example, simulating a Heisenberg spin-chain consisting of 10 spins with random parameters and initial states takes almost 7 times longer using the master equation rather than Monte Carlo approach with the default number of trajectories running on a quad-CPU machine.  Furthermore, it takes about 7 times the memory as well. However, for small systems, the added overhead of averaging a large number of stochastic trajectories to obtain the open system dynamics, as well as starting the multiprocessing functionality, outweighs the benefit of the minor (in this case) memory saving. Master equation methods are therefore generally more efficient when Hilbert space sizes are on the order of a couple of hundred states or smaller.</p>
 <p>Like the master equation solver <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></a>, the Monte Carlo solver returns a <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> object consisting of expectation values, if the user has defined expectation value operators in the 5th argument to <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code>, or state vectors if no expectation value operators are given.  If state vectors are returned, then the <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> returned by <a class="reference internal" href="../../apidoc/functions.html#module-qutip.mcsolve" title="qutip.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code></a> will be an array of length <code class="docutils literal notranslate"><span class="pre">ntraj</span></code>, with each element containing an array of ket-type qobjs with the same number of elements as <code class="docutils literal notranslate"><span class="pre">times</span></code>.  Furthermore, the output <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> object will also contain a list of times at which collapse occurred, and which collapse operators did the collapse, in the <code class="docutils literal notranslate"><span class="pre">col_times</span></code> and <code class="docutils literal notranslate"><span class="pre">col_which</span></code> properties, respectively.</p>
@@ -328,7 +329,6 @@ function for master-equation evolution, except that the initial state must be a 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-monte-7.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-monte-7.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-monte-7.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-monte-7.png" src="../../images/dynamics-monte-7.png" />
 </div>
@@ -351,9 +351,9 @@ function for master-equation evolution, except that the initial state must be a 
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Feb 08, 2022.
+        Last updated on Apr 13, 2022.
       </span>
 
     </p>

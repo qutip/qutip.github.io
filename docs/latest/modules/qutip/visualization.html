@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.visualization &mdash; QuTiP 4.6 Documentation</title>
+  <title>qutip.visualization &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -45,7 +45,8 @@
 
     
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -104,6 +105,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
 </ul>
 
             
@@ -170,39 +172,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for qutip.visualization</h1><div class="highlight"><pre>
-<span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
-<span class="c1">#</span>
-<span class="c1">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
-<span class="c1">#    All rights reserved.</span>
-<span class="c1">#</span>
-<span class="c1">#    Redistribution and use in source and binary forms, with or without</span>
-<span class="c1">#    modification, are permitted provided that the following conditions are</span>
-<span class="c1">#    met:</span>
-<span class="c1">#</span>
-<span class="c1">#    1. Redistributions of source code must retain the above copyright notice,</span>
-<span class="c1">#       this list of conditions and the following disclaimer.</span>
-<span class="c1">#</span>
-<span class="c1">#    2. Redistributions in binary form must reproduce the above copyright</span>
-<span class="c1">#       notice, this list of conditions and the following disclaimer in the</span>
-<span class="c1">#       documentation and/or other materials provided with the distribution.</span>
-<span class="c1">#</span>
-<span class="c1">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
-<span class="c1">#       of its contributors may be used to endorse or promote products derived</span>
-<span class="c1">#       from this software without specific prior written permission.</span>
-<span class="c1">#</span>
-<span class="c1">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
-<span class="c1">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
-<span class="c1">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
-<span class="c1">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
-<span class="c1">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
-<span class="c1">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
-<span class="c1">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
-<span class="c1">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
-<span class="c1">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
-<span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
-<span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
-<span class="c1">###############################################################################</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functions for visualizing results of quantum dynamics simulations,</span>
 <span class="sd">visualizations of quantum states and processes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -219,7 +189,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">log2</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">log2</span>
 
 <span class="kn">from</span> <span class="nn">packaging.version</span> <span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">parse_version</span>
 
@@ -229,8 +199,7 @@
 <span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
 <span class="kn">from</span> <span class="nn">qutip.matplotlib_utilities</span> <span class="kn">import</span> <span class="n">complex_phase_cmap</span>
 <span class="kn">from</span> <span class="nn">qutip.superoperator</span> <span class="kn">import</span> <span class="n">vector_to_operator</span>
-<span class="kn">from</span> <span class="nn">qutip.superop_reps</span> <span class="kn">import</span> <span class="n">to_super</span><span class="p">,</span> <span class="n">_super_to_superpauli</span><span class="p">,</span> <span class="n">_isqubitdims</span><span class="p">,</span> <span class="n">_pauli_basis</span>
-<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">flatten</span>
+<span class="kn">from</span> <span class="nn">qutip.superop_reps</span> <span class="kn">import</span> <span class="n">_super_to_superpauli</span><span class="p">,</span> <span class="n">_isqubitdims</span>
 
 <span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">settings</span>
 
@@ -330,7 +299,7 @@
 
 
 <span class="c1"># Adopted from the SciPy Cookbook.</span>
-<span class="k">def</span> <span class="nf">_blob</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">w_max</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_blob</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">w_max</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">color_fn</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draws a square-shaped blob with the given area (&lt; 1) at</span>
 <span class="sd">    the given coordinates.</span>
@@ -345,7 +314,7 @@
         <span class="n">handle</span> <span class="o">=</span> <span class="n">plt</span>
 
     <span class="n">handle</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">xcorners</span><span class="p">,</span> <span class="n">ycorners</span><span class="p">,</span>
-             <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">w</span> <span class="o">+</span> <span class="n">w_max</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_max</span><span class="p">))))</span>
+             <span class="n">color</span><span class="o">=</span><span class="n">color_fn</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_cb_labels</span><span class="p">(</span><span class="n">left_dims</span><span class="p">):</span>
@@ -379,7 +348,7 @@
 
 <span class="c1"># Adopted from the SciPy Cookbook.</span>
 <div class="viewcode-block" id="hinton"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.visualization.hinton">[docs]</a><span class="k">def</span> <span class="nf">hinton</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-           <span class="n">label_top</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+           <span class="n">label_top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color_style</span><span class="o">=</span><span class="s2">&quot;scaled&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Draws a Hinton diagram for visualizing a density matrix or superoperator.</span>
 
 <span class="sd">    Parameters</span>
@@ -406,6 +375,19 @@
 <span class="sd">        If True, x-axis labels will be placed on top, otherwise</span>
 <span class="sd">        they will appear below the plot.</span>
 
+<span class="sd">    color_style : string</span>
+<span class="sd">        Determines how colors are assigned to each square:</span>
+
+<span class="sd">        -  If set to ``&quot;scaled&quot;`` (default), each color is chosen by</span>
+<span class="sd">           passing the absolute value of the corresponding matrix</span>
+<span class="sd">           element into `cmap` with the sign of the real part.</span>
+<span class="sd">        -  If set to ``&quot;threshold&quot;``, each square is plotted as</span>
+<span class="sd">           the maximum of `cmap` for the positive real part and as</span>
+<span class="sd">           the minimum for the negative part of the matrix element;</span>
+<span class="sd">           note that this generalizes `&quot;threshold&quot;` to complex numbers.</span>
+<span class="sd">        -  If set to ``&quot;phase&quot;``, each color is chosen according to</span>
+<span class="sd">           the angle of the corresponding matrix element.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fig, ax : tuple</span>
@@ -417,6 +399,21 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        Input argument is not a quantum object.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import qutip</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dm = qutip.rand_dm(4)</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = qutip.hinton(dm)</span>
+<span class="sd">    &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; qutip.settings.colorblind_safe = True</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = qutip.hinton(dm, color_style=&quot;threshold&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &gt;&gt;&gt; qutip.settings.colorblind_safe = False</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; fig, ax = qutip.hinton(dm, color_style=&quot;phase&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; fig.show()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Apply default colormaps.</span>
@@ -472,6 +469,8 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">xlabels</span> <span class="ow">or</span> <span class="n">ylabels</span><span class="p">):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -482,21 +481,36 @@
     <span class="k">if</span> <span class="n">w_max</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
         <span class="n">w_max</span> <span class="o">=</span> <span class="mf">1.0</span>
 
+    <span class="c1"># Set color_fn here.</span>
+    <span class="k">if</span> <span class="n">color_style</span> <span class="o">==</span> <span class="s2">&quot;scaled&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">color_fn</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">cmap</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">w</span> <span class="o">+</span> <span class="n">w_max</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_max</span><span class="p">)))</span>
+    <span class="k">elif</span> <span class="n">color_style</span> <span class="o">==</span> <span class="s2">&quot;threshold&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">color_fn</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cmap</span><span class="p">(</span><span class="mi">255</span> <span class="k">if</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">color_style</span> <span class="o">==</span> <span class="s2">&quot;phase&quot;</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">color_fn</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cmap</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Unknown color style </span><span class="si">{}</span><span class="s2"> for Hinton diagrams.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">color_style</span><span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">height</span><span class="p">]),</span>
             <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
             <span class="n">_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
-                <span class="n">_blob</span><span class="p">(</span><span class="n">_x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">_y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]),</span> <span class="n">w_max</span><span class="p">,</span>
-                      <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span> <span class="o">/</span> <span class="n">w_max</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">_blob</span><span class="p">(</span><span class="n">_x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">_y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">[</span>
-                      <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]),</span> <span class="n">w_max</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span> <span class="o">/</span> <span class="n">w_max</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">_blob</span><span class="p">(</span>
+                <span class="n">_x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">_y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">w_max</span><span class="p">,</span>
+                <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span> <span class="o">/</span> <span class="n">w_max</span><span class="p">),</span> <span class="n">color_fn</span><span class="o">=</span><span class="n">color_fn</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
     <span class="c1"># color axis</span>
-    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="k">if</span> <span class="n">color_style</span> <span class="o">==</span> <span class="s2">&quot;phase&quot;</span> <span class="k">else</span> <span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="o">-</span><span class="n">vmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
     <span class="n">cax</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">make_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">pad</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
 
@@ -586,8 +600,103 @@
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
 
 
+<span class="k">def</span> <span class="nf">_remove_margins</span><span class="p">(</span><span class="n">axis</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    removes margins about z = 0 and improves the style</span>
+<span class="sd">    by monkey patching</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_get_coord_info_new</span><span class="p">(</span><span class="n">renderer</span><span class="p">):</span>
+        <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">,</span> <span class="n">centers</span><span class="p">,</span> <span class="n">deltas</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span> <span class="n">highs</span> <span class="o">=</span> \
+            <span class="n">_get_coord_info_old</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+        <span class="n">mins</span> <span class="o">+=</span> <span class="n">deltas</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="n">maxs</span> <span class="o">-=</span> <span class="n">deltas</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="k">return</span> <span class="n">mins</span><span class="p">,</span> <span class="n">maxs</span><span class="p">,</span> <span class="n">centers</span><span class="p">,</span> <span class="n">deltas</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span> <span class="n">highs</span>
+
+    <span class="n">_get_coord_info_old</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">_get_coord_info</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">_get_coord_info</span> <span class="o">=</span> <span class="n">_get_coord_info_new</span>
+
+
+<span class="k">def</span> <span class="nf">_truncate_colormap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    truncates portion of a colormap and returns the new one</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">new_cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+        <span class="s1">&#39;trunc(</span><span class="si">{n}</span><span class="s1">,</span><span class="si">{a:.2f}</span><span class="s1">,</span><span class="si">{b:.2f}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">minval</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">maxval</span><span class="p">),</span>
+        <span class="n">cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">new_cmap</span>
+
+
+<span class="k">def</span> <span class="nf">_stick_to_planes</span><span class="p">(</span><span class="n">stick</span><span class="p">,</span> <span class="n">azim</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">spacing</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;adjusts xlim and ylim in way that bars will</span>
+<span class="sd">    Stick to xz and yz planes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">stick</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span> <span class="o">%</span> <span class="mi">360</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">azim</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">,)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">,)</span>
+        <span class="k">elif</span> <span class="mi">90</span> <span class="o">&lt;</span> <span class="n">azim</span> <span class="o">&lt;=</span> <span class="mi">180</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">,)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span> <span class="n">spacing</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="mi">180</span> <span class="o">&lt;</span> <span class="n">azim</span> <span class="o">&lt;=</span> <span class="mi">270</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span> <span class="n">spacing</span><span class="p">))</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span> <span class="n">spacing</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="mi">270</span> <span class="o">&lt;</span> <span class="n">azim</span> <span class="o">&lt;</span> <span class="mi">360</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span> <span class="n">spacing</span><span class="p">))</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">,)</span>
+
+
+<span class="k">def</span> <span class="nf">_update_yaxis</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ylabels</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    updates the y-axis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ytics</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">spacing</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">w_yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">FixedLocator</span><span class="p">(</span><span class="n">ytics</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">ylabels</span><span class="p">:</span>
+        <span class="n">nylabels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ylabels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nylabels</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ytics</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">nylabels</span><span class="si">}</span><span class="s2"> ylabels but needed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ytics</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ylabels</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">spacing</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+
+<span class="k">def</span> <span class="nf">_update_xaxis</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlabels</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    updates the x-axis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xtics</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">spacing</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">w_xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">FixedLocator</span><span class="p">(</span><span class="n">xtics</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">xlabels</span><span class="p">:</span>
+        <span class="n">nxlabels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xlabels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nxlabels</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xtics</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">nxlabels</span><span class="si">}</span><span class="s2"> xlabels but needed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">xtics</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">xlabels</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">spacing</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+
+
+<span class="k">def</span> <span class="nf">_update_zaxis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">,</span> <span class="n">zticks</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    updates the z-axis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">w_zaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">IndexLocator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zticks</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">(</span><span class="n">zticks</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim3d</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">z_max</span><span class="p">])</span>
+
+
 <div class="viewcode-block" id="matrix_histogram"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.visualization.matrix_histogram">[docs]</a><span class="k">def</span> <span class="nf">matrix_histogram</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">xlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                     <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draw a histogram for the matrix M, with the given x and y labels and title.</span>
 
@@ -611,7 +720,74 @@
 <span class="sd">    ax : a matplotlib axes instance</span>
 <span class="sd">        The axes context in which the plot will be drawn.</span>
 
-<span class="sd">    Returns</span>
+<span class="sd">    colorbar : bool (default: True)</span>
+<span class="sd">        show colorbar</span>
+
+<span class="sd">    options : dict</span>
+<span class="sd">        A dictionary containing extra options for the plot.</span>
+<span class="sd">        The names (keys) and values of the options are</span>
+<span class="sd">        described below:</span>
+
+<span class="sd">        &#39;zticks&#39; : list of numbers</span>
+<span class="sd">            A list of z-axis tick locations.</span>
+
+<span class="sd">        &#39;cmap&#39; : string (default: &#39;jet&#39;)</span>
+<span class="sd">            The name of the color map to use.</span>
+
+<span class="sd">        &#39;cmap_min&#39; : float (default: 0.0)</span>
+<span class="sd">            The lower bound to truncate the color map at.</span>
+<span class="sd">            A value in range 0 - 1. The default, 0, leaves the lower</span>
+<span class="sd">            bound of the map unchanged.</span>
+
+<span class="sd">        &#39;cmap_max&#39; : float (default: 1.0)</span>
+<span class="sd">            The upper bound to truncate the color map at.</span>
+<span class="sd">            A value in range 0 - 1. The default, 1, leaves the upper</span>
+<span class="sd">            bound of the map unchanged.</span>
+
+<span class="sd">        &#39;bars_spacing&#39; : float (default: 0.1)</span>
+<span class="sd">            spacing between bars.</span>
+
+<span class="sd">        &#39;bars_alpha&#39; : float (default: 1.)</span>
+<span class="sd">            transparency of bars, should be in range 0 - 1</span>
+
+<span class="sd">        &#39;bars_lw&#39; : float (default: 0.5)</span>
+<span class="sd">            linewidth of bars&#39; edges.</span>
+
+<span class="sd">        &#39;bars_edgecolor&#39; : color (default: &#39;k&#39;)</span>
+<span class="sd">            The colors of the bars&#39; edges.</span>
+<span class="sd">            Examples: &#39;k&#39;, (0.1, 0.2, 0.5) or &#39;#0f0f0f80&#39;.</span>
+
+<span class="sd">        &#39;shade&#39; : bool (default: True)</span>
+<span class="sd">            Whether to shade the dark sides of the bars (True) or not (False).</span>
+<span class="sd">            The shading is relative to plot&#39;s source of light.</span>
+
+<span class="sd">        &#39;azim&#39; : float</span>
+<span class="sd">            The azimuthal viewing angle.</span>
+
+<span class="sd">        &#39;elev&#39; : float</span>
+<span class="sd">            The elevation viewing angle.</span>
+
+<span class="sd">        &#39;proj_type&#39; : string (default: &#39;ortho&#39; if ax is not passed)</span>
+<span class="sd">            The type of projection (&#39;ortho&#39; or &#39;persp&#39;)</span>
+
+<span class="sd">        &#39;stick&#39; : bool (default: False)</span>
+<span class="sd">            Changes xlim and ylim in such a way that bars next to</span>
+<span class="sd">            XZ and YZ planes will stick to those planes.</span>
+<span class="sd">            This option has no effect if ``ax`` is passed as a parameter.</span>
+
+<span class="sd">        &#39;cbar_pad&#39; : float (default: 0.04)</span>
+<span class="sd">            The fraction of the original axes between the colorbar</span>
+<span class="sd">            and the new image axes.</span>
+<span class="sd">            (i.e. the padding between the 3D figure and the colorbar).</span>
+
+<span class="sd">        &#39;cbar_to_z&#39; : bool (default: False)</span>
+<span class="sd">            Whether to set the color of maximum and minimum z-values to the</span>
+<span class="sd">            maximum and minimum colors in the colorbar (True) or not (False).</span>
+
+<span class="sd">        &#39;figsize&#39; : tuple of two numbers</span>
+<span class="sd">            The size of the figure.</span>
+
+<span class="sd">    Returns :</span>
 <span class="sd">    -------</span>
 <span class="sd">    fig, ax : tuple</span>
 <span class="sd">        A tuple of the matplotlib figure and axes instances used to produce</span>
@@ -624,16 +800,38 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># default options</span>
+    <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;figsize&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;cmap&#39;</span><span class="p">:</span> <span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="s1">&#39;cmap_min&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                    <span class="s1">&#39;cmap_max&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;zticks&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;bars_spacing&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+                    <span class="s1">&#39;bars_alpha&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;bars_lw&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;bars_edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;shade&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;azim&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">35</span><span class="p">,</span> <span class="s1">&#39;elev&#39;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+                    <span class="s1">&#39;proj_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ortho&#39;</span><span class="p">,</span> <span class="s1">&#39;stick&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s1">&#39;cbar_pad&#39;</span><span class="p">:</span> <span class="mf">0.04</span><span class="p">,</span> <span class="s1">&#39;cbar_to_z&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="c1"># update default_opts from input options</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># check if keys in options dict are valid</span>
+        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">default_opts</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid key(s) found in options: &quot;</span>
+                             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">default_opts</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># updating default options</span>
+            <span class="n">default_opts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;options must be a dictionary&quot;</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="c1"># extract matrix data from Qobj</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
     <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">xpos</span> <span class="o">=</span> <span class="n">xpos</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span>
-    <span class="n">ypos</span> <span class="o">=</span> <span class="n">ypos</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span>
+    <span class="n">xpos</span> <span class="o">=</span> <span class="n">xpos</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span>
+    <span class="n">ypos</span> <span class="o">=</span> <span class="n">ypos</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span>
     <span class="n">zpos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_spacing&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
     <span class="n">dz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">limits</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -646,47 +844,58 @@
             <span class="n">z_min</span> <span class="o">-=</span> <span class="mf">0.1</span>
             <span class="n">z_max</span> <span class="o">+=</span> <span class="mf">0.1</span>
 
-    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">)</span>
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>  <span class="c1"># Spectral</span>
+    <span class="k">if</span> <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;cbar_to_z&#39;</span><span class="p">]:</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">dz</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">dz</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">_truncate_colormap</span><span class="p">(</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                              <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;cmap_min&#39;</span><span class="p">],</span>
+                              <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;cmap_max&#39;</span><span class="p">])</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">dz</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">_axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">])</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">_axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span>
+                     <span class="n">azim</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;azim&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span>
+                     <span class="n">elev</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;elev&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_proj_type</span><span class="p">(</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;proj_type&#39;</span><span class="p">])</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">bar3d</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="n">zpos</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar3d</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="n">zpos</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+             <span class="n">edgecolors</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_edgecolor&#39;</span><span class="p">],</span>
+             <span class="n">linewidths</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_lw&#39;</span><span class="p">],</span>
+             <span class="n">alpha</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_alpha&#39;</span><span class="p">],</span>
+             <span class="n">shade</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;shade&#39;</span><span class="p">])</span>
+    <span class="c1"># remove vertical lines on xz and yz plane</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">_axinfo</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">][</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">_axinfo</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">][</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span> <span class="n">title</span> <span class="ow">and</span> <span class="n">fig</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
     <span class="c1"># x axis</span>
-    <span class="n">xtics</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">w_xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">FixedLocator</span><span class="p">(</span><span class="n">xtics</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">xlabels</span><span class="p">:</span>
-        <span class="n">nxlabels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xlabels</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">nxlabels</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xtics</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">nxlabels</span><span class="si">}</span><span class="s2"> xlabels but needed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">xtics</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">xlabels</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">_update_xaxis</span><span class="p">(</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_spacing&#39;</span><span class="p">],</span> <span class="n">M</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlabels</span><span class="p">)</span>
 
     <span class="c1"># y axis</span>
-    <span class="n">ytics</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">w_yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">FixedLocator</span><span class="p">(</span><span class="n">ytics</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">ylabels</span><span class="p">:</span>
-        <span class="n">nylabels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ylabels</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">nylabels</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ytics</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">nylabels</span><span class="si">}</span><span class="s2"> ylabels but needed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ytics</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ylabels</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">_update_yaxis</span><span class="p">(</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_spacing&#39;</span><span class="p">],</span> <span class="n">M</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ylabels</span><span class="p">)</span>
 
     <span class="c1"># z axis</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">w_zaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">IndexLocator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim3d</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">z_max</span><span class="p">])</span>
+    <span class="n">_update_zaxis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">,</span> <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;zticks&#39;</span><span class="p">])</span>
+
+    <span class="c1"># stick to xz and yz plane</span>
+    <span class="n">_stick_to_planes</span><span class="p">(</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;stick&#39;</span><span class="p">],</span>
+                     <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;azim&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span>
+                     <span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;bars_spacing&#39;</span><span class="p">])</span>
 
     <span class="c1"># color axis</span>
     <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
-        <span class="n">cax</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">make_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span> <span class="n">pad</span><span class="o">=.</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cax</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">make_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span>
+                                         <span class="n">pad</span><span class="o">=</span><span class="n">default_opts</span><span class="p">[</span><span class="s1">&#39;cbar_pad&#39;</span><span class="p">])</span>
         <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+
+    <span class="c1"># removing margins</span>
+    <span class="n">_remove_margins</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="p">)</span>
+    <span class="n">_remove_margins</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="p">)</span>
+    <span class="n">_remove_margins</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">zaxis</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
 
@@ -777,7 +986,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">bar3d</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="n">zpos</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">title</span> <span class="ow">and</span> <span class="n">fig</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
     <span class="c1"># x axis</span>
@@ -1216,7 +1425,7 @@
                                 <span class="n">label</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> [</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">e_idx</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
     <span class="n">axes</span><span class="p">[</span><span class="n">n_e_ops</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_e_ops</span><span class="p">):</span>
@@ -1357,7 +1566,7 @@
 <span class="sd">    For more info on coloring, see:</span>
 <span class="sd">        Emilia Petrisor,</span>
 <span class="sd">        Visualizing complex-valued functions with Matplotlib and Mayavi</span>
-<span class="sd">        http://nbviewer.ipython.org/github/empet/Math/blob/master/DomainColoring.ipynb</span>
+<span class="sd">        https://nbviewer.ipython.org/github/empet/Math/blob/master/DomainColoring.ipynb</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1578,7 +1787,7 @@
 <span class="sd">    .. [1] J. Rodriguez-Laguna, P. Migdal, M. Ibanez Berganza, M. Lewenstein</span>
 <span class="sd">       and G. Sierra, *Qubism: self-similar visualization of many-body</span>
 <span class="sd">       wavefunctions*, `New J. Phys. 14 053028</span>
-<span class="sd">       &lt;http://dx.doi.org/10.1088/1367-2630/14/5/053028&gt;`_, arXiv:1112.3560</span>
+<span class="sd">       &lt;https://dx.doi.org/10.1088/1367-2630/14/5/053028&gt;`_, arXiv:1112.3560</span>
 <span class="sd">       (2012), open access.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1795,9 +2004,9 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Feb 08, 2022.
+        Last updated on Apr 13, 2022.
       </span>
 
     </p>

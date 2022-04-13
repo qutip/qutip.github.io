@@ -1,0 +1,527 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Release and Distribution &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../static/documentation_options.js"></script>
+        <script src="../static/jquery.js"></script>
+        <script src="../static/underscore.js"></script>
+        <script src="../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bibliography" href="../biblio.html" />
+    <link rel="prev" title="Working with the QuTiP Documentation" href="docs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="development.html">Development Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to QuTiP Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html">QuTiP Development Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideas.html">Ideas for future QuTiP development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs.html">Working with the QuTiP Documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release and Distribution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preamble">Preamble</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#git-workflow">Git workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#apply-bug-fix-to-latest-release">Apply bug fix to latest release</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-new-micro-release">Create a new micro release</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-new-minor-or-major-release">Create a new minor or major release</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-build">Documentation build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-release-distribution-and-deploy">Build release distribution and deploy</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-and-deploy">Build and deploy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#download-built-files">Download built files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#monitoring-progress-optional">Monitoring progress (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#making-a-release-on-github">Making a release on GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#website">Website</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#copying-new-files">Copying new files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#html-file-updates">HTML file updates</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conda-forge">Conda-forge</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="development.html">Development Documentation</a> &raquo;</li>
+        
+      <li>Release and Distribution</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="release-and-distribution">
+<span id="release-distribution"></span><h1>Release and Distribution<a class="headerlink" href="#release-and-distribution" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="preamble">
+<h2>Preamble<a class="headerlink" href="#preamble" title="Permalink to this headline">¶</a></h2>
+<p>This document covers the process for managing updates to the current minor release and making new releases.
+Within this document, the git remote <code class="docutils literal notranslate"><span class="pre">upstream</span></code> refers to the main QuTiP organsiation repository, and <code class="docutils literal notranslate"><span class="pre">origin</span></code> refers to your personal fork.</p>
+<p>Instructions on how to backport bugfixes to a release branch are detailed in <a class="reference internal" href="#bugfix">bugfix</a>.
+You need to do this to make changes to a current release that cannot wait until the next minor release, but need to go out in a micro release as soon as possible.</p>
+<p>Follow either <a class="reference internal" href="#release">release</a> if you are making a major or minor release, or <a class="reference internal" href="#microrelease">microrelease</a> instead if it is only a bugfix patch to a current release.
+For both, then do the following steps in order:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#docbuild">docbuild</a>, to build the documentation</p></li>
+<li><p><a class="reference internal" href="#deploy">deploy</a>, to build the binary and source versions of the package, and deploy it to PyPI (<code class="docutils literal notranslate"><span class="pre">pip</span></code>)</p></li>
+<li><p><a class="reference internal" href="#github">github</a>, to release the files on the QuTiP GitHub page</p></li>
+<li><p><a class="reference internal" href="#web">web</a>, to update <a class="reference external" href="http://qutip.org/">qutip.org</a> with the new links and documentation</p></li>
+<li><p><a class="reference internal" href="#cforge">cforge</a>, to update the conda feedstock, deploying the package to <code class="docutils literal notranslate"><span class="pre">conda</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="git-workflow">
+<span id="gitwf"></span><h2>Git workflow<a class="headerlink" href="#git-workflow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="apply-bug-fix-to-latest-release">
+<span id="bugfix"></span><h3>Apply bug fix to latest release<a class="headerlink" href="#apply-bug-fix-to-latest-release" title="Permalink to this headline">¶</a></h3>
+<p>Assuming that the bug(s) has been fixed in some commit on the master,
+then this bug(s) fix should now be applied to the latest release.
+First checkout <code class="docutils literal notranslate"><span class="pre">master</span></code>, use <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">git</span> <span class="pre">log</span></code> to list the commits,
+and copy the hash(es) for the bug fix commit(s) to some temporary file or similar.</p>
+<p>Now check out latest version branch, e.g.</p>
+<p>If you have checked out this branch previously, then</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git checkout qutip-4.0.X
+$ git pull upstream qutip-4.0.X
+</pre></div>
+</div>
+<p>Otherwise</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git fetch upstream
+$ git checkout -b qutip-4.0.X upstream/qutip-4.0.X
+$ git push -u origin qutip-4.0.X
+</pre></div>
+</div>
+<p>Create a branch for the patch</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git checkout -b patch4.0-fix_bug123 qutip-4.0.X
+</pre></div>
+</div>
+<p>Pick the commit(s) to be applied to the release.
+Using the commit hash(es) copied earlier, cherry pick them into the current bug fix branch, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git cherry-pick 69d1641239b897eeca158a93b121553284a29ee1
+</pre></div>
+</div>
+<p>for further info see <a class="reference external" href="https://www.kernel.org/pub/software/scm/git/docs/git-cherry-pick.html">https://www.kernel.org/pub/software/scm/git/docs/git-cherry-pick.html</a></p>
+<p>push changes to your fork</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git push --set-upstream origin patch4.0-fix_bug123
+</pre></div>
+</div>
+<p>Make a Pull Request to the latest release branch on Github.
+That is make a PR from the bug fix branch to the release branch (not the master), e.g. <cite>qutip-4.0.X</cite></p>
+<p>Merge this PR when the tests have passed.</p>
+</div>
+<div class="section" id="create-a-new-micro-release">
+<span id="microrelease"></span><h3>Create a new micro release<a class="headerlink" href="#create-a-new-micro-release" title="Permalink to this headline">¶</a></h3>
+<p>Commit a change to the <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file, setting it to the new version.
+The only change should be in the third identifier, i.e. if the previous version was 4.5.2, then the next micro release must be 4.5.3.
+It is ok to have two-digit identifiers; 4.6.10 is the next number after 4.6.9.
+The file should contain only the version number in this format, with no extra characters (the automatic line-break at the end is fine).</p>
+</div>
+<div class="section" id="create-a-new-minor-or-major-release">
+<span id="release"></span><h3>Create a new minor or major release<a class="headerlink" href="#create-a-new-minor-or-major-release" title="Permalink to this headline">¶</a></h3>
+<p>Create a new branch on the <code class="docutils literal notranslate"><span class="pre">qutip/qutip</span></code> repository using GitHub, e.g. ‘qutip-4.1.X’, beginning at the commit you want to use as the base of the release.
+This will likely be something fairly recent on the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch.
+See <a class="reference external" href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository#creating-a-branch">the GitHub help pages</a> for more information.
+Checkout the branch and push to your fork</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git fetch upstream
+$ git checkout -b qutip-4.1.X upstream/qutip-4.1.X
+$ git push -u origin qutip-4.1.X
+</pre></div>
+</div>
+<p>Create a new branch from this, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git checkout -b 4.1-release_ready qutip-4.1.X
+</pre></div>
+</div>
+<p>First change the <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file to contain the new version number, and remove any <code class="docutils literal notranslate"><span class="pre">dev</span></code> postfix if present.
+A major release increments the first number, while a minor release increments the second.
+All numbers after the change digit are reset to 0, so the next minor release after 4.5.3 is 4.6.0, and the next major release after either of these is 5.0.0.
+Alpha, beta and release-candidate releases have a postfix <code class="docutils literal notranslate"><span class="pre">.a&lt;n&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">.b&lt;n&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">.rc&lt;n&gt;</span></code> repsectively, where <code class="docutils literal notranslate"><span class="pre">&lt;n&gt;</span></code> is a counter for the pre-release status, starting from 0.
+For example, the third beta release of version 5.2.1 would have a version of <code class="docutils literal notranslate"><span class="pre">5.2.1.b2</span></code>.
+The file should contain only the version number in this format, with no extra characters (the automatic line-break at the end is fine).</p>
+<p>Next edit <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>.
+Change the “Development Status” line in the <code class="docutils literal notranslate"><span class="pre">classifiers</span></code> section to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Development</span> <span class="n">Status</span> <span class="p">::</span> <span class="mi">5</span> <span class="o">-</span> <span class="n">Production</span><span class="o">/</span><span class="n">Stable</span>
+</pre></div>
+</div>
+<p>Commit both changes, and then push them to your fork</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git push --set-upstream origin 4.1-release_ready
+</pre></div>
+</div>
+<p>Make a Pull Request to the release branch.</p>
+<p>The “Development Status” of <code class="docutils literal notranslate"><span class="pre">master</span></code> should remain</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Development</span> <span class="n">Status</span> <span class="p">::</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">Pre</span><span class="o">-</span><span class="n">Alpha</span>
+</pre></div>
+</div>
+<p>because it is never directly released.
+The <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file on <code class="docutils literal notranslate"><span class="pre">master</span></code> should reflect the last major or minor release, with a trailing <code class="docutils literal notranslate"><span class="pre">.dev</span></code> to indicate that this is a development branch.</p>
+</div>
+</div>
+<div class="section" id="documentation-build">
+<span id="docbuild"></span><h2>Documentation build<a class="headerlink" href="#documentation-build" title="Permalink to this headline">¶</a></h2>
+<p>Documentation should be rebuilt for a minor or major release.
+If there have been any documentation updates as part of a micro release, then it should also be built for this.
+The documentation repository is now inside <code class="docutils literal notranslate"><span class="pre">qutip/qutip</span></code>, in the <code class="docutils literal notranslate"><span class="pre">doc</span></code> directory..</p>
+<p>Ensure that the following steps are complete:</p>
+<ul class="simple">
+<li><p>The version should be changed in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code>.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">api_doc/classes.rst</span></code> for any new / deleted classes.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">api_doc/functions.rst</span></code> for any new / deleted functions.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">changelog.rst</span></code> including all changes that are going into the new release.</p></li>
+</ul>
+<p>Then, fully rebuild the QuTiP documentation using <a class="reference external" href="https://github.com/qutip/qutip/blob/master/doc/README.md">the guide in the documentation README</a>.</p>
+</div>
+<div class="section" id="build-release-distribution-and-deploy">
+<span id="deploy"></span><h2>Build release distribution and deploy<a class="headerlink" href="#build-release-distribution-and-deploy" title="Permalink to this headline">¶</a></h2>
+<p>This step builds the source (sdist) and binary (wheel) distributions, and uploads them to PyPI (pip).
+You will also be able to download the built files yourself in order to upload them to the QuTiP website.</p>
+<div class="section" id="build-and-deploy">
+<h3>Build and deploy<a class="headerlink" href="#build-and-deploy" title="Permalink to this headline">¶</a></h3>
+<p>This is handled entirely by a GitHub Action.
+Go to the <a class="reference external" href="https://github.com/qutip/qutip/actions">“Actions” tab at the top of the QuTiP code repository</a>.
+Click on the “Build wheels, optionally deploy to PyPI” action in the left-hand sidebar.
+Click the “Run workflow” dropdown in the header notification; it should look like the image below.</p>
+<img alt="../images/release_guide_run_build_workflow.png" src="../images/release_guide_run_build_workflow.png" />
+<ul class="simple">
+<li><p>Use the drop-down menu to choose the branch or tag you want to release from.
+This should be called <code class="docutils literal notranslate"><span class="pre">qutip-4.5.X</span></code> or similar, depending on what you made earlier.
+This must <em>never</em> be <code class="docutils literal notranslate"><span class="pre">master</span></code>.</p></li>
+<li><p>To make the release to PyPI, type the branch name (e.g. <code class="docutils literal notranslate"><span class="pre">qutip-4.5.X</span></code>) into the “Confirm chosen branch name […]” field.
+You <em>may</em> leave this field blank to skip the deployment and only build the package.</p></li>
+<li><p>(Special circumstances) If for some reason you need to override the version number (for example if the previous deployment to PyPI only partially succeeded), you can type a valid Python version identifier into the “Override version number” field.
+You probably do not need to do this.
+The mechanism is designed to make alpha-testing major upgrades with nightly releases easier.
+For even a bugfix release, you should commit the change to the <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file.</p></li>
+<li><p>Click the lower “Run workflow” to perform the build and deployment.</p></li>
+</ul>
+<p>At this point, the deployment will take care of itself.
+It should take between 30 minutes and an hour, after which the new version will be available for install by <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">qutip</span></code>.
+You should see the new version appear on <a class="reference external" href="https://pypi.org/project/qutip">QuTiP’s PyPI page</a>.</p>
+</div>
+<div class="section" id="download-built-files">
+<h3>Download built files<a class="headerlink" href="#download-built-files" title="Permalink to this headline">¶</a></h3>
+<p>When the build is complete, click into its summary screen.
+This is the main screen used to both monitor the build and see its output, and should look like the below image on a success.</p>
+<img alt="../images/release_guide_after_workflow.png" src="../images/release_guide_after_workflow.png" />
+<p>The built binary wheels and the source distribution are the “build artifacts” at the bottom.
+You need to download both the wheels and the source distribution.
+Save them on your computer, and unzip both files; you should have many wheel <code class="docutils literal notranslate"><span class="pre">qutip-*.whl</span></code> files, and two sdist files: <code class="docutils literal notranslate"><span class="pre">qutip-*.tar.gz</span></code> and <code class="docutils literal notranslate"><span class="pre">qutip-*.zip</span></code>.
+These are the same files that have just been uploaded to PyPI.</p>
+</div>
+<div class="section" id="monitoring-progress-optional">
+<h3>Monitoring progress (optional)<a class="headerlink" href="#monitoring-progress-optional" title="Permalink to this headline">¶</a></h3>
+<p>While the build is in progress, you can monitor its progress by clicking on its entry in the list below the “Run workflow” button.
+You should see several subjobs, like the completed screen, except they might not yet be completed.</p>
+<p>The “Verify PyPI deployment confirmation” should get ticked, no matter what.
+If it fails, you have forgotten to choose the correct branch in the drop-down menu or you made a typo when confirming the correct branch, and you will need to restart this step.
+You can check that the deployment instruction has been understood by clicking the “Verify PyPI deployment confirmation” job, and opening the “Compare confirmation to current reference” subjob.
+You will see a message saying “Built wheels will be deployed” if you typed in the confirmation, or “Only building wheels” if you did not.
+If you see “Only building wheels” but you meant to deploy the release to PyPI, you can cancel the workflow and re-run it after typing the confirmation.</p>
+</div>
+</div>
+<div class="section" id="making-a-release-on-github">
+<span id="github"></span><h2>Making a release on GitHub<a class="headerlink" href="#making-a-release-on-github" title="Permalink to this headline">¶</a></h2>
+<p>This is all done through <a class="reference external" href="https://github.com/qutip/qutip/releases">the “Releases” section</a> of the <code class="docutils literal notranslate"><span class="pre">qutip/qutip</span></code> repository on GitHub.</p>
+<ul class="simple">
+<li><p>Click the “Draft a new release” button.</p></li>
+<li><p>Choose the correct branch for your release (e.g. <code class="docutils literal notranslate"><span class="pre">qutip-4.5.X</span></code>) in the drop-down.</p></li>
+<li><p>For the tag name, use <code class="docutils literal notranslate"><span class="pre">v&lt;your-version&gt;</span></code>, where the version matches the contents of the <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file.
+In other words, if you are releasing a micro version 4.5.3, use <code class="docutils literal notranslate"><span class="pre">v4.5.3</span></code> as the tag, or if you are releasing major version 5.0.0, use <code class="docutils literal notranslate"><span class="pre">v5.0.0</span></code>.</p></li>
+<li><p>The title is “QuTiP &lt;your-version”, e.g. “QuTiP 4.6.0”.</p></li>
+<li><p>For the description, write a short (~two-line for a micro release) summary of the reason for this release, and note down any particular user-facing changes that need special attention.
+Underneath, put the changelog you wrote when you did the documentation release.
+Note that there may be some syntax differences between the <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file of the changelog and the Markdown of this description field.</p></li>
+<li><p>Drag-and-drop all the <code class="docutils literal notranslate"><span class="pre">qutip-*.whl</span></code>, <code class="docutils literal notranslate"><span class="pre">qutip-*.tar.gz</span></code> and <code class="docutils literal notranslate"><span class="pre">qutip-*.zip</span></code> files you got after the build step into the assets box.
+You may need to unzip the files <code class="docutils literal notranslate"><span class="pre">wheels.zip</span></code> and <code class="docutils literal notranslate"><span class="pre">sdist.zip</span></code> to find them if you haven’t already; <strong>don’t</strong> upload those two zip files.</p></li>
+</ul>
+<p>Click on the “Publish release” button to finalise.</p>
+</div>
+<div class="section" id="website">
+<span id="web"></span><h2>Website<a class="headerlink" href="#website" title="Permalink to this headline">¶</a></h2>
+<p>This assumes that qutip.github.io has already been forked and familiarity with the website updating workflow.
+The documentation need not be updated for every micro release.</p>
+<div class="section" id="copying-new-files">
+<h3>Copying new files<a class="headerlink" href="#copying-new-files" title="Permalink to this headline">¶</a></h3>
+<p>You only need to copy in new documentation to the website repository.
+Do not copy the <code class="docutils literal notranslate"><span class="pre">.whl</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> or <code class="docutils literal notranslate"><span class="pre">.zip</span></code> files into the git repository, because we can access the public links from the GitHub release stage, and this keeps the website <code class="docutils literal notranslate"><span class="pre">.git</span></code> folder a reasonable size.</p>
+<p>For all releases move (no new docs) or copy (for new docs) the <code class="docutils literal notranslate"><span class="pre">qutip-doc-&lt;MAJOR&gt;.&lt;MINOR&gt;.pdf</span></code> into the folder <code class="docutils literal notranslate"><span class="pre">downloads/&lt;MAJOR&gt;.&lt;MINOR&gt;.&lt;MICRO&gt;</span></code>.</p>
+<p>The legacy html documentation should be in a subfolder like</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docs</span><span class="o">/&lt;</span><span class="n">MAJOR</span><span class="o">&gt;.&lt;</span><span class="n">MINOR</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>For a major or minor release the previous version documentation should be moved into this folder.</p>
+<p>The latest version HTML documentation should be the folder</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docs</span><span class="o">/</span><span class="n">latest</span>
+</pre></div>
+</div>
+<p>For any release which new documentation is included
+- copy the contents <code class="docutils literal notranslate"><span class="pre">qutip/doc/_build/html</span></code> into this folder. <strong>Note that the underscores at start of the subfolder names will need to be removed, otherwise Jekyll will ignore the folders</strong>. There is a script in the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder for this.
+<a class="reference external" href="https://github.com/qutip/qutip.github.io/blob/master/docs/remove_leading_underscores.py">https://github.com/qutip/qutip.github.io/blob/master/docs/remove_leading_underscores.py</a></p>
+</div>
+<div class="section" id="html-file-updates">
+<h3>HTML file updates<a class="headerlink" href="#html-file-updates" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">download.html</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The ‘Latest release’ version and date should be updated.</p></li>
+<li><p>The tar.gz and zip links need to have their micro release numbers updated in their filenames, labels and trackEvent javascript.
+These links should point to the “Source code” links that appeared when you made in the GitHub Releases section.
+They should look something like <code class="docutils literal notranslate"><span class="pre">https://github.com/qutip/qutip/archive/refs/tags/v4.6.0.tar.gz</span></code>.</p></li>
+<li><p>For a minor or major release links to the last micro release of the previous version will need to be moved (copied) to the ‘Previous releases’ section.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">_includes/sidebar.html</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The ‘Latest release’ version should be updated. The gztar and zip file links will need the micro release number updating in the traceEvent and file name.</p></li>
+<li><p>The link to the documentation folder and PDF file (if created) should be updated.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">documentation.html</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The previous release tags should be moved (copied) to the ‘Previous releases’ section.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="conda-forge">
+<span id="cforge"></span><h2>Conda-forge<a class="headerlink" href="#conda-forge" title="Permalink to this headline">¶</a></h2>
+<p>If not done previously then fork the qutip-feedstock:
+<a class="reference external" href="https://github.com/conda-forge/qutip-feedstock">https://github.com/conda-forge/qutip-feedstock</a></p>
+<p>Checkout a new branch on your fork, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git checkout -b version-4.0.2
+</pre></div>
+</div>
+<p>Generate a new sha256 code from the gztar for this version, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl sha256 qutip-4.0.2.tar.gz
+</pre></div>
+</div>
+<p>Edit the <code class="docutils literal notranslate"><span class="pre">recipe/meta.yaml</span></code> file.
+Change the version. Update the sha256 code.
+Check that the recipe package version requirements at least match those in the setup.cfg.
+Also ensure that the build number is reset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">build</span><span class="p">:</span>
+    <span class="n">number</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Push changes to your fork, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git push --set-upstream origin version-4.0.2
+</pre></div>
+</div>
+<p>Make a Pull Request.
+This will trigger tests of the package build process.</p>
+<p>If (when) the tests pass, the PR can be merged, which will trigger the upload of the packages to the conda-forge channel.
+To test the packages, add the conda-forge channel with lowest priority</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda config --append channels conda-forge
+</pre></div>
+</div>
+<p>This should mean that the prerequistes come from the default channel, but the qutip packages are found in conda-forge.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../biblio.html" class="btn btn-neutral float-right" title="Bibliography" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="docs.html" class="btn btn-neutral float-left" title="Working with the QuTiP Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Feb 08, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1146 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.qip.device.processor &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../static/documentation_options.js"></script>
+        <script src="../../../../static/jquery.js"></script>
+        <script src="../../../../static/underscore.js"></script>
+        <script src="../../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.qip.device.processor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.qip.device.processor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
+<span class="c1">#    All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c1">#    modification, are permitted provided that the following conditions are</span>
+<span class="c1">#    met:</span>
+<span class="c1">#</span>
+<span class="c1">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c1">#       this list of conditions and the following disclaimer.</span>
+<span class="c1">#</span>
+<span class="c1">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c1">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c1">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c1">#</span>
+<span class="c1">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c1">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c1">#       from this software without specific prior written permission.</span>
+<span class="c1">#</span>
+<span class="c1">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c1">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c1">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c1">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c1">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c1">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c1">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c1">###############################################################################</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">CubicSpline</span>
+
+<span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
+<span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+<span class="kn">from</span> <span class="nn">qutip.operators</span> <span class="kn">import</span> <span class="n">identity</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.operations.gates</span> <span class="kn">import</span> <span class="n">expand_operator</span><span class="p">,</span> <span class="n">globalphase</span>
+<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
+<span class="kn">from</span> <span class="nn">qutip.mesolve</span> <span class="kn">import</span> <span class="n">mesolve</span>
+<span class="kn">from</span> <span class="nn">qutip.mcsolve</span> <span class="kn">import</span> <span class="n">mcsolve</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.noise</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Noise</span><span class="p">,</span> <span class="n">RelaxationNoise</span><span class="p">,</span> <span class="n">DecoherenceNoise</span><span class="p">,</span>
+    <span class="n">ControlAmpNoise</span><span class="p">,</span> <span class="n">RandomNoise</span><span class="p">,</span> <span class="n">process_noise</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.pulse</span> <span class="kn">import</span> <span class="n">Pulse</span><span class="p">,</span> <span class="n">Drift</span><span class="p">,</span> <span class="n">_merge_qobjevo</span><span class="p">,</span> <span class="n">_fill_coeff</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Processor&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Processor"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor">[docs]</a><span class="k">class</span> <span class="nc">Processor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simulator of a quantum device based on the QuTiP solver</span>
+<span class="sd">    :func:`qutip.mesolve`.  It is defined by the available driving Hamiltonian</span>
+<span class="sd">    and the decoherence time for each component systems.  The processor can</span>
+<span class="sd">    simulate the evolution under the given control pulses. Noisy evolution is</span>
+<span class="sd">    supported by :class:`.Noise` and can be added to the processor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of component systems.</span>
+
+<span class="sd">    t1: list or float, optional</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    t2: list of float, optional</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    dims: list, optional</span>
+<span class="sd">        The dimension of each component system.</span>
+<span class="sd">        Default value is a</span>
+<span class="sd">        qubit system of ``dim=[2,2,2,...,2]``</span>
+
+<span class="sd">    spline_kind: str, optional</span>
+<span class="sd">        Type of the coefficient interpolation. Default is &quot;step_func&quot;</span>
+<span class="sd">        Note that they have different requirement for the length of ``coeff``.</span>
+
+<span class="sd">        - &quot;step_func&quot;:</span>
+<span class="sd">          The coefficient will be treated as a step function.  E.g.</span>
+<span class="sd">          ``tlist=[0,1,2]`` and ``coeff=[3,2]``, means that the coefficient is</span>
+<span class="sd">          3 in t=[0,1) and 2 in t=[2,3). It requires</span>
+<span class="sd">          ``len(coeff)=len(tlist)-1`` or ``len(coeff)=len(tlist)``, but in the</span>
+<span class="sd">          second case the last element of `coeff` has no effect.</span>
+
+<span class="sd">        - &quot;cubic&quot;: Use cubic interpolation for the coefficient. It requires</span>
+<span class="sd">          ``len(coeff)=len(tlist)``</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of component systems.</span>
+
+<span class="sd">    pulses: list of :class:`.Pulse`</span>
+<span class="sd">        A list of control pulses of this device</span>
+
+<span class="sd">    t1: float or list</span>
+<span class="sd">        Characterize the decoherence of amplitude damping of</span>
+<span class="sd">        each qubit.</span>
+
+<span class="sd">    t2: float or list</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit.</span>
+
+<span class="sd">    noise: :class:`.Noise`, optional</span>
+<span class="sd">        A list of noise objects. They will be processed when creating the</span>
+<span class="sd">        noisy :class:`qutip.QobjEvo` from the processor or run the simulation.</span>
+
+<span class="sd">    drift: :class:`qutip.qip.pulse.Drift`</span>
+<span class="sd">        A `Drift` object representing the drift Hamiltonians.</span>
+
+<span class="sd">    dims: list</span>
+<span class="sd">        The dimension of each component system.</span>
+<span class="sd">        Default value is a</span>
+<span class="sd">        qubit system of ``dim=[2,2,2,...,2]``</span>
+
+<span class="sd">    spline_kind: str</span>
+<span class="sd">        Type of the coefficient interpolation.</span>
+<span class="sd">        See parameters of :class:`.Processor` for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kind</span><span class="o">=</span><span class="s2">&quot;step_func&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="n">t1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">t2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drift</span> <span class="o">=</span> <span class="n">Drift</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulse_mode</span> <span class="o">=</span> <span class="s2">&quot;discrete&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">=</span> <span class="n">spline_kind</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span>
+
+    <span class="nd">@num_qubits</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">num_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Processor.add_drift"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.add_drift">[docs]</a>    <span class="k">def</span> <span class="nf">add_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">cyclic_permutation</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a drift Hamiltonians. The drift Hamiltonians are intrinsic</span>
+<span class="sd">        of the quantum system and cannot be controlled by external field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qobj: :class:`qutip.Qobj`</span>
+<span class="sd">            The drift Hamiltonian.</span>
+<span class="sd">        targets: list</span>
+<span class="sd">            The indices of the target qubits</span>
+<span class="sd">            (or subquantum system of other dimensions).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The drift Hamiltonian must be a qutip.Qobj.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">qobj</span><span class="o">.</span><span class="n">isherm</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The drift Hamiltonian must be Hermitian.&quot;</span><span class="p">)</span>
+
+        <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qobj</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cyclic_permutation</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">temp_targets</span> <span class="o">=</span> <span class="p">[(</span><span class="n">t</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">drift</span><span class="o">.</span><span class="n">add_drift</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">temp_targets</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drift</span><span class="o">.</span><span class="n">add_drift</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.add_control"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.add_control">[docs]</a>    <span class="k">def</span> <span class="nf">add_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cyclic_permutation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a control Hamiltonian to the processor. It creates a new</span>
+<span class="sd">        :class:`.Pulse`</span>
+<span class="sd">        object for the device that is turned off</span>
+<span class="sd">        (``tlist = None``, ``coeff = None``). To activate the pulse, one</span>
+<span class="sd">        can set its `tlist` and `coeff`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qobj: :class:`qutip.Qobj`</span>
+<span class="sd">            The Hamiltonian for the control pulse..</span>
+
+<span class="sd">        targets: list, optional</span>
+<span class="sd">            The indices of the target qubits</span>
+<span class="sd">            (or subquantum system of other dimensions).</span>
+
+<span class="sd">        cyclic_permutation: bool, optional</span>
+<span class="sd">            If true, the Hamiltonian will be expanded for</span>
+<span class="sd">            all cyclic permutation of the target qubits.</span>
+
+<span class="sd">        label: str, optional</span>
+<span class="sd">            The label (name) of the pulse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check validity of ctrl</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The control Hamiltonian must be a qutip.Qobj.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">qobj</span><span class="o">.</span><span class="n">isherm</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The control Hamiltonian must be Hermitian.&quot;</span><span class="p">)</span>
+
+        <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qobj</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cyclic_permutation</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">temp_targets</span> <span class="o">=</span> <span class="p">[(</span><span class="n">t</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">temp_label</span> <span class="o">=</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">temp_targets</span><span class="p">)</span>
+                <span class="n">temp_label</span> <span class="o">=</span> <span class="n">label</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Pulse</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">temp_targets</span><span class="p">,</span> <span class="n">spline_kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span><span class="p">,</span>
+                          <span class="n">label</span><span class="o">=</span><span class="n">temp_label</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Pulse</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">spline_kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+                <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">find_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulse_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pulse_dict</span><span class="p">[</span><span class="n">pulse_name</span><span class="p">]]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                    <span class="s2">&quot;Pulse name </span><span class="si">{}</span><span class="s2"> undefined. &quot;</span>
+                    <span class="s2">&quot;Please define it in the attribute &quot;</span>
+                    <span class="s2">&quot;`pulse_dict`.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pulse_name</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse_name</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="n">pulse_name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;pulse_name is either a string or an integer, not &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">pulse_name</span><span class="p">))</span>
+                <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ctrls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of Hamiltonians of all pulses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">get_ideal_qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of the coefficients for all control pulses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">coeffs_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span> <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">coeffs_list</span>
+
+    <span class="nd">@coeffs</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeffs_list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coeffs_list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pulse_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">==</span> <span class="s2">&quot;step_func&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;discrete&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">==</span> <span class="s2">&quot;cubic&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;continuous&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Saved spline_kind not understood.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@pulse_mode</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pulse_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;discrete&quot;</span><span class="p">:</span>
+            <span class="n">spline_kind</span> <span class="o">=</span> <span class="s2">&quot;step_func&quot;</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+            <span class="n">spline_kind</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pulse mode must be either discrete or continuous.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">=</span> <span class="n">spline_kind</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="n">pulse</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">=</span> <span class="n">spline_kind</span>
+
+<div class="viewcode-block" id="Processor.get_full_tlist"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.get_full_tlist">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_tlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the full tlist of the ideal pulses.</span>
+<span class="sd">        If different pulses have different time steps,</span>
+<span class="sd">        it will collect all the time steps in a sorted array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        full_tlist: array-like 1d</span>
+<span class="sd">            The full time sequence for the ideal evolution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_tlist</span> <span class="o">=</span> <span class="p">[</span><span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span>
+                      <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span> <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">full_tlist</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">full_tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)))</span>
+        <span class="c1"># account for inaccuracy in float-point number</span>
+        <span class="n">full_tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">full_tlist</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">full_tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">full_tlist</span></div>
+
+<div class="viewcode-block" id="Processor.get_full_coeffs"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.get_full_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full_tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the full coefficients in a 2d matrix form.</span>
+<span class="sd">        Each row corresponds to one pulse. If the `tlist` are</span>
+<span class="sd">        different for different pulses, the length of each row</span>
+<span class="sd">        will be same as the `full_tlist` (see method</span>
+<span class="sd">        `get_full_tlist`). Interpolation is used for</span>
+<span class="sd">        adding the missing coefficient according to `spline_kind`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        coeffs: array-like 2d</span>
+<span class="sd">            The coefficients for all ideal pulses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO add tests</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulses_valid</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">full_tlist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">full_tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()</span>
+        <span class="n">coeffs_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">coeffs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)))</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;get_full_coeffs only works for &quot;</span>
+                    <span class="s2">&quot;NumPy array or bool coeff.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">:</span>
+                    <span class="n">coeffs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">coeffs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">full_tlist</span><span class="p">)))</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">==</span> <span class="s2">&quot;step_func&quot;</span><span class="p">:</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_step_func_coeff&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+                <span class="n">coeffs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">_fill_coeff</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="n">full_tlist</span><span class="p">,</span> <span class="n">arg</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">==</span> <span class="s2">&quot;cubic&quot;</span><span class="p">:</span>
+                <span class="n">coeffs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">_fill_coeff</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="n">full_tlist</span><span class="p">,</span> <span class="p">{}))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown spline kind.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coeffs_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.set_all_tlist"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.set_all_tlist">[docs]</a>    <span class="k">def</span> <span class="nf">set_all_tlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tlist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the same `tlist` for all the pulses.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tlist: array-like, optional</span>
+<span class="sd">            A list of time at which the time-dependent coefficients are</span>
+<span class="sd">            applied. See :class:`.Pulse` for detailed information`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">):</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span></div>
+
+<div class="viewcode-block" id="Processor.add_pulse"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.add_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">add_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulse</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new pulse to the device.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pulse: :class:`.Pulse`</span>
+<span class="sd">            `Pulse` object to be added.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse</span><span class="p">,</span> <span class="n">Pulse</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">spline_kind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pulse</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spline_kind</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid input, pulse must be a Pulse object&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.remove_pulse"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.remove_pulse">[docs]</a>    <span class="k">def</span> <span class="nf">remove_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove the control pulse with given indices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: int or list of int</span>
+<span class="sd">            The indices of the control Hamiltonians to be removed.</span>
+<span class="sd">        label: str</span>
+<span class="sd">            The label of the pulse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+            <span class="n">indices</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">label</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_is_pulses_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the pulses are in the correct shape.</span>
+
+<span class="sd">        Returns: bool</span>
+<span class="sd">            If they are valid or not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="c1"># constant pulse</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Pulse id=</span><span class="si">{}</span><span class="s2"> is invalid. &quot;</span>
+                    <span class="s2">&quot;Please define a tlist for the pulse.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Pulse id=</span><span class="si">{}</span><span class="s2"> is invalid. &quot;</span>
+                    <span class="s2">&quot;Please define a coeff for the pulse.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="n">coeff_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">)</span>
+            <span class="n">tlist_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">==</span> <span class="s2">&quot;step_func&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">coeff_len</span> <span class="o">==</span> <span class="n">tlist_len</span><span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">coeff_len</span> <span class="o">==</span> <span class="n">tlist_len</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;The length of tlist and coeff of the pulse &quot;</span>
+                        <span class="s2">&quot;labelled </span><span class="si">{}</span><span class="s2"> is invalid. &quot;</span>
+                        <span class="s2">&quot;It&#39;s either len(tlist)=len(coeff) or &quot;</span>
+                        <span class="s2">&quot;len(tlist)-1=len(coeff) for coefficients &quot;</span>
+                        <span class="s2">&quot;as step function&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">coeff_len</span> <span class="o">==</span> <span class="n">tlist_len</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;The length of tlist and coeff of the pulse &quot;</span>
+                        <span class="s2">&quot;labelled </span><span class="si">{}</span><span class="s2"> is invalid. &quot;</span>
+                        <span class="s2">&quot;It should be either len(tlist)=len(coeff)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="Processor.add_noise"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.add_noise">[docs]</a>    <span class="k">def</span> <span class="nf">add_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noise</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a noise object to the processor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        noise: :class:`.Noise`</span>
+<span class="sd">            The noise object defined outside the processor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">Noise</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input is not a Noise object.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.save_coeff"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.save_coeff">[docs]</a>    <span class="k">def</span> <span class="nf">save_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">inctime</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a file with the control amplitudes in each timeslot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: string</span>
+<span class="sd">            Name of the file.</span>
+
+<span class="sd">        inctime: bool, optional</span>
+<span class="sd">            True if the time list should be included in the first column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulses_valid</span><span class="p">()</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_full_coeffs</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">inctime</span><span class="p">:</span>
+            <span class="n">shp</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">shp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()</span>
+            <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.16f</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.read_coeff"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.read_coeff">[docs]</a>    <span class="k">def</span> <span class="nf">read_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">inctime</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the control amplitudes matrix and time list</span>
+<span class="sd">        saved in the file by `save_amp`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: string</span>
+<span class="sd">            Name of the file.</span>
+
+<span class="sd">        inctime: bool, optional</span>
+<span class="sd">            True if the time list in included in the first column.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tlist: array_like</span>
+<span class="sd">            The time list read from the file.</span>
+
+<span class="sd">        coeffs: array_like</span>
+<span class="sd">            The pulse matrix read from the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inctime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_all_tlist</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span></div>
+
+<div class="viewcode-block" id="Processor.get_noisy_pulses"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.get_noisy_pulses">[docs]</a>    <span class="k">def</span> <span class="nf">get_noisy_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_noise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        It takes the pulses defined in the `Processor` and</span>
+<span class="sd">        adds noise according to `Processor.noise`. It does not modify the</span>
+<span class="sd">        pulses saved in `Processor.pulses` but returns a new list.</span>
+<span class="sd">        The length of the new list of noisy pulses might be longer</span>
+<span class="sd">        because of drift Hamiltonian and device noise. They will be</span>
+<span class="sd">        added to the end of the pulses list.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        device_noise: bool, optional</span>
+<span class="sd">            If true, include pulse independent noise such as single qubit</span>
+<span class="sd">            Relaxation. Default is False.</span>
+<span class="sd">        drift: bool, optional</span>
+<span class="sd">            If true, include drift Hamiltonians. Default is False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        noisy_pulses: list of :class:`.Pulse`</span>
+<span class="sd">            A list of noisy pulses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pulses</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">)</span>
+        <span class="n">noisy_pulses</span> <span class="o">=</span> <span class="n">process_noise</span><span class="p">(</span>
+            <span class="n">pulses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t2</span><span class="p">,</span>
+            <span class="n">device_noise</span><span class="o">=</span><span class="n">device_noise</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">drift</span><span class="p">:</span>
+            <span class="n">noisy_pulses</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">drift</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">noisy_pulses</span></div>
+
+<div class="viewcode-block" id="Processor.get_qobjevo"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.get_qobjevo">[docs]</a>    <span class="k">def</span> <span class="nf">get_qobjevo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noisy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`qutip.QobjEvo` representation of the evolution.</span>
+<span class="sd">        It calls the method `get_noisy_pulses` and create the `QobjEvo`</span>
+<span class="sd">        from it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        args: dict, optional</span>
+<span class="sd">            Arguments for :class:`qutip.QobjEvo`</span>
+<span class="sd">        noisy: bool, optional</span>
+<span class="sd">            If noise are included. Default is False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        qobjevo: :class:`qutip.QobjEvo`</span>
+<span class="sd">            The :class:`qutip.QobjEvo` representation of the unitary evolution.</span>
+<span class="sd">        c_ops: list of :class:`qutip.QobjEvo`</span>
+<span class="sd">            A list of lindblad operators is also returned. if ``noisy==Flase``,</span>
+<span class="sd">            it is always an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO test it for non array-like coeff</span>
+        <span class="c1"># check validity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_pulses_valid</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="c1"># set step function</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">noisy</span><span class="p">:</span>
+            <span class="n">dynamics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dynamics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_noisy_pulses</span><span class="p">(</span>
+                <span class="n">device_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">qu_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">dynamics</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">noisy</span><span class="p">:</span>
+                <span class="n">qu</span><span class="p">,</span> <span class="n">new_c_ops</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">.</span><span class="n">get_noisy_qobjevo</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="n">c_ops</span> <span class="o">+=</span> <span class="n">new_c_ops</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">qu</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">.</span><span class="n">get_ideal_qobjevo</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+            <span class="n">qu_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qu</span><span class="p">)</span>
+
+        <span class="n">final_qu</span> <span class="o">=</span> <span class="n">_merge_qobjevo</span><span class="p">(</span><span class="n">qu_list</span><span class="p">)</span>
+        <span class="n">final_qu</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="c1"># bring all c_ops to the same tlist, won&#39;t need it in QuTiP 5</span>
+        <span class="n">full_tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_merge_qobjevo</span><span class="p">([</span><span class="n">c_op</span><span class="p">],</span> <span class="n">full_tlist</span><span class="p">))</span>
+        <span class="n">c_ops</span> <span class="o">=</span> <span class="n">temp</span>
+
+        <span class="k">if</span> <span class="n">noisy</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">final_qu</span><span class="p">,</span> <span class="n">c_ops</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">final_qu</span><span class="p">,</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Processor.run_analytically"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.run_analytically">[docs]</a>    <span class="k">def</span> <span class="nf">run_analytically</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate the state evolution under the given `qutip.QubitCircuit`</span>
+<span class="sd">        with matrice exponentiation. It will calculate the propagator</span>
+<span class="sd">        with matrix exponentiation and return a list of :class:`qutip.Qobj`.</span>
+<span class="sd">        This method won&#39;t include noise or collpase.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qc: :class:`.QubitCircuit`, optional</span>
+<span class="sd">            Takes the quantum circuit to be implemented. If not given, use</span>
+<span class="sd">            the quantum circuit saved in the processor by ``load_circuit``.</span>
+
+<span class="sd">        init_state: :class:`qutip.Qobj`, optional</span>
+<span class="sd">            The initial state of the qubits in the register.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        U_list: list</span>
+<span class="sd">            A list of propagators obtained for the physical implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">init_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">U_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">init_state</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">U_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_coeffs</span><span class="p">()</span>
+
+        <span class="c1"># Compute drift Hamiltonians</span>
+        <span class="n">H_drift</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">drift_ham</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift</span><span class="o">.</span><span class="n">drift_hamiltonians</span><span class="p">:</span>
+            <span class="n">H_drift</span> <span class="o">+=</span> <span class="n">drift_ham</span><span class="o">.</span><span class="n">get_qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+        <span class="c1"># Compute control Hamiltonians</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_drift</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">coeffs</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">))])</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tlist</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">H</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eliminate_auxillary_modes</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+            <span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># correct_global_phase are defined for ModelProcessor</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">correct_global_phase</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">U_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">globalphase</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">U_list</span></div>
+
+<div class="viewcode-block" id="Processor.run"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the propagator of the evolution by matrix exponentiation.</span>
+<span class="sd">        This method won&#39;t include noise or collpase.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qc: :class:`.QubitCircuit`, optional</span>
+<span class="sd">            Takes the quantum circuit to be implemented. If not given, use</span>
+<span class="sd">            the quantum circuit saved in the processor by `load_circuit`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        U_list: list</span>
+<span class="sd">            The propagator matrix obtained from the physical implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">qc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_analytically</span><span class="p">(</span><span class="n">qc</span><span class="o">=</span><span class="n">qc</span><span class="p">,</span> <span class="n">init_state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.run_state"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.run_state">[docs]</a>    <span class="k">def</span> <span class="nf">run_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">noisy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;mesolve&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If `analytical` is False, use :func:`qutip.mesolve` to</span>
+<span class="sd">        calculate the time of the state evolution</span>
+<span class="sd">        and return the result. Other arguments of mesolve can be</span>
+<span class="sd">        given as keyword arguments.</span>
+
+<span class="sd">        If `analytical` is True, calculate the propagator</span>
+<span class="sd">        with matrix exponentiation and return a list of matrices.</span>
+<span class="sd">        Noise will be neglected in this option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        init_state: Qobj</span>
+<span class="sd">            Initial density matrix or state vector (ket).</span>
+
+<span class="sd">        analytical: bool</span>
+<span class="sd">            If True, calculate the evolution with matrices exponentiation.</span>
+
+<span class="sd">        states: :class:`qutip.Qobj`, optional</span>
+<span class="sd">            Old API, same as init_state.</span>
+
+<span class="sd">        solver: str</span>
+<span class="sd">            &quot;mesolve&quot; or &quot;mcsolve&quot;</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            Keyword arguments for the qutip solver.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        evo_result: :class:`qutip.Result`</span>
+<span class="sd">            If ``analytical`` is False,  an instance of the class</span>
+<span class="sd">            :class:`qutip.Result` will be returned.</span>
+
+<span class="sd">            If ``analytical`` is True, a list of matrices representation</span>
+<span class="sd">            is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;states will be deprecated and replaced by init_state&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">init_state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">states</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Qubit state not defined.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">init_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># just to keep the old parameters `states`,</span>
+            <span class="c1"># it is replaced by init_state</span>
+            <span class="n">init_state</span> <span class="o">=</span> <span class="n">states</span>
+        <span class="k">if</span> <span class="n">analytical</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Analytical matrices exponentiation&quot;</span>
+                    <span class="s2">&quot;does not process noise or&quot;</span>
+                    <span class="s2">&quot;any keyword arguments.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_analytically</span><span class="p">(</span><span class="n">init_state</span><span class="o">=</span><span class="n">init_state</span><span class="p">)</span>
+
+        <span class="c1"># kwargs can not contain H or tlist</span>
+        <span class="k">if</span> <span class="s2">&quot;H&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s2">&quot;tlist&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;`H` and `tlist` are already specified by the processor &quot;</span>
+                <span class="s2">&quot;and can not be given as a keyword argument&quot;</span><span class="p">)</span>
+
+        <span class="c1"># construct qobjevo for unitary evolution</span>
+        <span class="k">if</span> <span class="s2">&quot;args&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">noisy_qobjevo</span><span class="p">,</span> <span class="n">sys_c_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_qobjevo</span><span class="p">(</span>
+                    <span class="n">args</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">],</span> <span class="n">noisy</span><span class="o">=</span><span class="n">noisy</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">noisy_qobjevo</span><span class="p">,</span> <span class="n">sys_c_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_qobjevo</span><span class="p">(</span><span class="n">noisy</span><span class="o">=</span><span class="n">noisy</span><span class="p">)</span>
+
+        <span class="c1"># add collpase operators into kwargs</span>
+        <span class="k">if</span> <span class="s2">&quot;c_ops&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c_ops&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)):</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c_ops&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c_ops&quot;</span><span class="p">]]</span> <span class="o">+</span> <span class="n">sys_c_ops</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c_ops&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sys_c_ops</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c_ops&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys_c_ops</span>
+
+        <span class="c1"># choose solver:</span>
+        <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s2">&quot;mesolve&quot;</span><span class="p">:</span>
+            <span class="n">evo_result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span>
+                <span class="n">H</span><span class="o">=</span><span class="n">noisy_qobjevo</span><span class="p">,</span> <span class="n">rho0</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span>
+                <span class="n">tlist</span><span class="o">=</span><span class="n">noisy_qobjevo</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">solver</span> <span class="o">==</span> <span class="s2">&quot;mcsolve&quot;</span><span class="p">:</span>
+            <span class="n">evo_result</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span>
+                <span class="n">H</span><span class="o">=</span><span class="n">noisy_qobjevo</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span>
+                <span class="n">tlist</span><span class="o">=</span><span class="n">noisy_qobjevo</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">evo_result</span></div>
+
+<div class="viewcode-block" id="Processor.load_circuit"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.load_circuit">[docs]</a>    <span class="k">def</span> <span class="nf">load_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Translate an :class:`.QubitCircuit` to its</span>
+<span class="sd">        corresponding Hamiltonians. (Defined in subclasses)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Use the function in the sub-class&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Processor.eliminate_auxillary_modes"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.eliminate_auxillary_modes">[docs]</a>    <span class="k">def</span> <span class="nf">eliminate_auxillary_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Eliminate the auxillary modes like the cavity modes in cqed.</span>
+<span class="sd">        (Defined in subclasses)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">U</span></div>
+
+<div class="viewcode-block" id="Processor.get_operators_labels"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.get_operators_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_operators_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the labels for each Hamiltonian.</span>
+<span class="sd">        It is used in the method``plot_pulses``.</span>
+<span class="sd">        It is a 2-d nested list, in the plot,</span>
+<span class="sd">        a different color will be used for each sublist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">label_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="n">label_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">label_list</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Processor.plot_pulses"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.Processor.plot_pulses">[docs]</a>    <span class="k">def</span> <span class="nf">plot_pulses</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">show_axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rescale_pulse_coeffs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">num_steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the ideal pulse coefficients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        title: str, optional</span>
+<span class="sd">            Title for the plot.</span>
+
+<span class="sd">        figsize: tuple, optional</span>
+<span class="sd">            The size of the figure.</span>
+
+<span class="sd">        dpi: int, optional</span>
+<span class="sd">            The dpi of the figure.</span>
+
+<span class="sd">        show_axis: bool, optional</span>
+<span class="sd">            If the axis are shown.</span>
+
+<span class="sd">        rescale_pulse_coeffs: bool, optional</span>
+<span class="sd">            Rescale the hight of each pulses.</span>
+
+<span class="sd">        num_steps: int, optional</span>
+<span class="sd">            Number of time steps in the plot.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig: matplotlib.figure.Figure</span>
+<span class="sd">            The `Figure` object for the plot.</span>
+
+<span class="sd">        ax: matplotlib.axes._subplots.AxesSubplot</span>
+<span class="sd">            The axes for the plot.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        ``plot_pulses`` only works for array_like coefficients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+        <span class="n">color_list</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">by_key</span><span class="p">()[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+
+        <span class="c1"># create a axis for each pulse</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">grids</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">grids</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+
+        <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_steps</span><span class="p">)</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># make sure coeffs start and end with zero, for ax.fill</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="o">-</span><span class="n">dt</span><span class="o">*</span><span class="mf">1.e-20</span><span class="p">],</span> <span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">tlist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="mf">1.e-20</span><span class="p">]))</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulses</span><span class="p">:</span>
+            <span class="n">coeffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pulse_interpolate</span><span class="p">(</span><span class="n">pulse</span><span class="p">,</span> <span class="n">tlist</span><span class="p">))</span>
+
+        <span class="n">pulse_ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">axis</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label_group</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_operators_labels</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_group</span><span class="p">):</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="n">grids</span><span class="p">[</span><span class="n">pulse_ind</span><span class="p">]</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+                <span class="n">axis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">pulse_ind</span><span class="p">],</span> <span class="n">color_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">pulse_ind</span><span class="p">],</span> <span class="n">color_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">rescale_pulse_coeffs</span><span class="p">:</span>
+                    <span class="n">ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">[</span><span class="n">pulse_ind</span><span class="p">]))</span> <span class="o">*</span> <span class="mf">1.1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coeffs</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.1</span>
+                <span class="k">if</span> <span class="n">ymax</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="n">ymax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">))</span>
+
+                <span class="c1"># disable frame and ticks</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">show_axis</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">pulse_ind</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">axis</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_pulse_interpolate</span><span class="p">(</span><span class="n">pulse</span><span class="p">,</span> <span class="n">tlist</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that calls Scipy interpolation routine. Used for plotting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">coeff</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span><span class="p">:</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">coeff</span>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">.</span><span class="n">coeff</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># for discrete pulse</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">coeff</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+    <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
+    <span class="k">if</span> <span class="n">pulse</span><span class="o">.</span><span class="n">spline_kind</span> <span class="o">==</span> <span class="s2">&quot;step_func&quot;</span><span class="p">:</span>
+        <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;previous&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
+    <span class="n">inter</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
+        <span class="n">pulse</span><span class="o">.</span><span class="n">tlist</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
+        <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inter</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Feb 08, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

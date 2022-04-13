@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qutip.lattice &mdash; QuTiP 4.6 Documentation</title>
+  <title>qutip.lattice &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -45,7 +45,8 @@
 
     
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -104,6 +105,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
 </ul>
 
             
@@ -170,51 +172,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for qutip.lattice</h1><div class="highlight"><pre>
-<span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
-<span class="c1">#</span>
-<span class="c1">#    Copyright (c) 2011 and later, The QuTiP Project.</span>
-<span class="c1">#    All rights reserved.</span>
-<span class="c1">#</span>
-<span class="c1">#    Redistribution and use in source and binary forms, with or without</span>
-<span class="c1">#    modification, are permitted provided that the following conditions are</span>
-<span class="c1">#    met:</span>
-<span class="c1">#</span>
-<span class="c1">#    1. Redistributions of source code must retain the above copyright notice,</span>
-<span class="c1">#       this list of conditions and the following disclaimer.</span>
-<span class="c1">#</span>
-<span class="c1">#    2. Redistributions in binary form must reproduce the above copyright</span>
-<span class="c1">#       notice, this list of conditions and the following disclaimer in the</span>
-<span class="c1">#       documentation and/or other materials provided with the distribution.</span>
-<span class="c1">#</span>
-<span class="c1">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
-<span class="c1">#       of its contributors may be used to endorse or promote products derived</span>
-<span class="c1">#       from this software without specific prior written permission.</span>
-<span class="c1">#</span>
-<span class="c1">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
-<span class="c1">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
-<span class="c1">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
-<span class="c1">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
-<span class="c1">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
-<span class="c1">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
-<span class="c1">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
-<span class="c1">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
-<span class="c1">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
-<span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
-<span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
-<span class="c1">###############################################################################</span>
-
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Lattice1d&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_structures&#39;</span><span class="p">]</span>
-
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="p">(</span><span class="n">csr_matrix</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">qeye</span><span class="p">,</span> <span class="n">isherm</span><span class="p">,</span> <span class="n">sigmax</span><span class="p">,</span> <span class="n">sigmay</span><span class="p">,</span> <span class="n">sigmaz</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">qeye</span><span class="p">,</span> <span class="n">isherm</span><span class="p">,</span> <span class="n">sigmax</span><span class="p">,</span> <span class="n">sigmay</span><span class="p">,</span> <span class="n">sigmaz</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="k">except</span><span class="p">:</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">pass</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Lattice1d&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_structures&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="cell_structures"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.lattice.cell_structures">[docs]</a><span class="k">def</span> <span class="nf">cell_structures</span><span class="p">(</span><span class="n">val_s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">val_t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">val_u</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -430,7 +398,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_cell</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">cell_num_site</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">cell_site_dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Hamiltonian_of_cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">inter_hop</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">num_cell</span> <span class="o">=</span> <span class="n">num_cell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_num_site</span> <span class="o">=</span> <span class="n">cell_num_site</span>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cell_num_site</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">or</span> <span class="n">cell_num_site</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1258,8 +1225,7 @@
                         <span class="n">Qin</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H_intra</span><span class="p">[</span>
                                 <span class="n">i0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_length_for_site</span><span class="o">+</span><span class="n">i</span><span class="p">,</span>
                                 <span class="n">j0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_length_for_site</span><span class="o">+</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">dim_site</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_tensor_config</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">))</span>
-                <span class="n">dims_site</span> <span class="o">=</span> <span class="p">[</span><span class="n">dim_site</span><span class="p">,</span> <span class="n">dim_site</span><span class="p">]</span>
+                <span class="n">dims_site</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_site_dof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_site_dof</span><span class="p">]</span>
                 <span class="n">Hcell</span><span class="p">[</span><span class="n">i0</span><span class="p">][</span><span class="n">j0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">Qin</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims_site</span><span class="p">)</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">CNS</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">CNS</span><span class="o">*</span><span class="mf">2.5</span><span class="p">])</span>
@@ -1358,8 +1324,7 @@
                         <span class="n">Qin</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H_intra</span><span class="p">[</span>
                                 <span class="n">i0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_length_for_site</span><span class="o">+</span><span class="n">i</span><span class="p">,</span>
                                 <span class="n">j0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_length_for_site</span><span class="o">+</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">dim_site</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_tensor_config</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">))</span>
-                <span class="n">dims_site</span> <span class="o">=</span> <span class="p">[</span><span class="n">dim_site</span><span class="p">,</span> <span class="n">dim_site</span><span class="p">]</span>
+                <span class="n">dims_site</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_site_dof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_site_dof</span><span class="p">]</span>
                 <span class="n">Hcell</span><span class="p">[</span><span class="n">i0</span><span class="p">][</span><span class="n">j0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">Qin</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims_site</span><span class="p">)</span>
 
         <span class="n">j0</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1448,8 +1413,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">dim_site</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_tensor_config</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">))</span>
-        <span class="n">dims_site</span> <span class="o">=</span> <span class="p">[</span><span class="n">dim_site</span><span class="p">,</span> <span class="n">dim_site</span><span class="p">]</span>
+        <span class="n">dims_site</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_site_dof</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_site_dof</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">inter_T</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims_site</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -1462,9 +1426,9 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Feb 08, 2022.
+        Last updated on Apr 13, 2022.
       </span>
 
     </p>

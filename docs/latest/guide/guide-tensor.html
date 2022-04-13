@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Using Tensor Products and Partial Traces &mdash; QuTiP 4.6 Documentation</title>
+  <title>Using Tensor Products and Partial Traces &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -48,6 +48,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="next" title="Time Evolution and Quantum System Dynamics" href="guide-dynamics.html" />
     <link rel="prev" title="Manipulating States and Operators" href="guide-states.html" /> 
 </head>
@@ -73,7 +74,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -118,6 +119,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
@@ -137,6 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">Copyright and Licensing</a></li>
 </ul>
 
             
@@ -217,7 +220,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tensor</span><span class="p">([</span><span class="n">op1</span><span class="p">,</span> <span class="n">op2</span><span class="p">,</span> <span class="n">op3</span><span class="p">])</span> 
 </pre></div>
 </div>
-<p>of state vectors <em>or</em> operators and returns a composite quantum object for the combined Hilbert space. The function accepts an arbitray number of states or operators as argument. The type returned quantum object is the same as that of the input(s).</p>
+<p>of state vectors <em>or</em> operators and returns a composite quantum object for the combined Hilbert space. The function accepts an arbitrary number of states or operators as argument. The type returned quantum object is the same as that of the input(s).</p>
 <p>For example, the state vector describing two qubits in their ground states is formed by taking the tensor product of the two single-qubit ground state vectors:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
 </pre></div>
@@ -275,7 +278,7 @@ Qobj data =
  [1. 0. 0. 0.]]
 </pre></div>
 </div>
-<p>To create operators in a combined Hilbert space that only act only on a single component, we take the tensor product of the operator acting on the subspace of interest, with the identity operators corresponding to the components that are to be unchanged. For example, the operator that represents <span class="math notranslate nohighlight">\(\sigma_z\)</span> on the first qubit in a two-qubit system, while leaving the second qubit unaffected:</p>
+<p>To create operators in a combined Hilbert space that only act on a single component, we take the tensor product of the operator acting on the subspace of interest, with the identity operators corresponding to the components that are to be unchanged. For example, the operator that represents <span class="math notranslate nohighlight">\(\sigma_z\)</span> on the first qubit in a two-qubit system, while leaving the second qubit unaffected:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
 </pre></div>
 </div>
@@ -294,7 +297,7 @@ Qobj data =
 <p>The <a class="reference internal" href="../apidoc/functions.html#qutip.tensor.tensor" title="qutip.tensor.tensor"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.tensor.tensor</span></code></a> function is extensively used when constructing Hamiltonians for composite systems. Here we’ll look at some simple examples.</p>
 <div class="section" id="two-coupled-qubits">
 <span id="tensor-product-example-2qubits"></span><h3>Two coupled qubits<a class="headerlink" href="#two-coupled-qubits" title="Permalink to this headline">¶</a></h3>
-<p>First, let’s consider a system of two coupled qubits. Assume that both qubit has equal energy splitting, and that the qubits are coupled through a <span class="math notranslate nohighlight">\(\sigma_x\otimes\sigma_x\)</span> interaction with strength g = 0.05 (in units where the bare qubit energy splitting is unity). The Hamiltonian describing this system is:</p>
+<p>First, let’s consider a system of two coupled qubits. Assume that both the qubits have equal energy splitting, and that the qubits are coupled through a <span class="math notranslate nohighlight">\(\sigma_x\otimes\sigma_x\)</span> interaction with strength g = 0.05 (in units where the bare qubit energy splitting is unity). The Hamiltonian describing this system is:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmaz</span><span class="p">(),</span> <span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">tensor</span><span class="p">(</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sigmaz</span><span class="p">())</span> <span class="o">+</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">tensor</span><span class="p">(</span><span class="n">sigmax</span><span class="p">(),</span> <span class="n">sigmax</span><span class="p">())</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
@@ -334,7 +337,7 @@ Qobj data =
 </div>
 <div class="section" id="a-two-level-system-coupled-to-a-cavity-the-jaynes-cummings-model">
 <span id="tensor-product-example-jcmodel"></span><h3>A two-level system coupled to a cavity: The Jaynes-Cummings model<a class="headerlink" href="#a-two-level-system-coupled-to-a-cavity-the-jaynes-cummings-model" title="Permalink to this headline">¶</a></h3>
-<p>The simplest possible quantum mechanical description for light-matter interaction is encapsulated in the Jaynes-Cummings model, which describes the coupling between a two-level atom and a single-mode electromagnetic field (a cavity mode). Denoting the energy splitting of the atom and cavity <code class="docutils literal notranslate"><span class="pre">omega_a</span></code> and <code class="docutils literal notranslate"><span class="pre">omega_c</span></code>, respectively, and the atom-cavity interaction strength <code class="docutils literal notranslate"><span class="pre">g</span></code>, the Jaynes-Cumming Hamiltonian can be constructed as:</p>
+<p>The simplest possible quantum mechanical description for light-matter interaction is encapsulated in the Jaynes-Cummings model, which describes the coupling between a two-level atom and a single-mode electromagnetic field (a cavity mode). Denoting the energy splitting of the atom and cavity <code class="docutils literal notranslate"><span class="pre">omega_a</span></code> and <code class="docutils literal notranslate"><span class="pre">omega_c</span></code>, respectively, and the atom-cavity interaction strength <code class="docutils literal notranslate"><span class="pre">g</span></code>, the Jaynes-Cummings Hamiltonian can be constructed as:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="n">omega_a</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -546,7 +549,7 @@ represent the composition of two systems.</p>
 useful for converting between superoperator representations <a class="reference internal" href="../biblio.html#wbc11" id="id4"><span>[WBC11]</span></a>.
 In particular, the <code class="xref py py-func docutils literal notranslate"><span class="pre">tensor_contract</span></code> function allows for
 contracting one or more pairs of indices. As detailed in
-the <a class="reference external" href="http://nbviewer.ipython.org/github/qutip/qutip-notebooks/blob/master/examples/superop-contract.ipynb">channel contraction tutorial</a>, this can be used to find
+the <a class="reference external" href="https://nbviewer.ipython.org/github/qutip/qutip-notebooks/blob/master/examples/superop-contract.ipynb">channel contraction tutorial</a>, this can be used to find
 superoperators that represent partial trace maps.
 Using this functionality, we can construct some quite exotic maps,
 such as a map from <span class="math notranslate nohighlight">\(3 \times 3\)</span> operators to <span class="math notranslate nohighlight">\(2 \times 2\)</span>
@@ -572,9 +575,9 @@ operators:</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+        &#169; <a href="../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Feb 08, 2022.
+        Last updated on Apr 13, 2022.
       </span>
 
     </p>

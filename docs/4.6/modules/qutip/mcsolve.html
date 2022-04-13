@@ -1,0 +1,1053 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.mcsolve &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.mcsolve</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.mcsolve</h1><div class="highlight"><pre>
+<span></span><span class="c1"># This file is part of QuTiP: Quantum Toolbox in Python.</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (c) 2011 and later, Paul D. Nation and Robert J. Johansson.</span>
+<span class="c1">#    All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#    Redistribution and use in source and binary forms, with or without</span>
+<span class="c1">#    modification, are permitted provided that the following conditions are</span>
+<span class="c1">#    met:</span>
+<span class="c1">#</span>
+<span class="c1">#    1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c1">#       this list of conditions and the following disclaimer.</span>
+<span class="c1">#</span>
+<span class="c1">#    2. Redistributions in binary form must reproduce the above copyright</span>
+<span class="c1">#       notice, this list of conditions and the following disclaimer in the</span>
+<span class="c1">#       documentation and/or other materials provided with the distribution.</span>
+<span class="c1">#</span>
+<span class="c1">#    3. Neither the name of the QuTiP: Quantum Toolbox in Python nor the names</span>
+<span class="c1">#       of its contributors may be used to endorse or promote products derived</span>
+<span class="c1">#       from this software without specific prior written permission.</span>
+<span class="c1">#</span>
+<span class="c1">#    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="c1">#    &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c1">#    PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="c1">#    HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c1">#    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="c1">#    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="c1">#    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="c1">#    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="c1">#    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c1">#    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c1">###############################################################################</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mcsolve&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">RandomState</span><span class="p">,</span> <span class="n">randint</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">ode</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate._ode</span> <span class="kn">import</span> <span class="n">zvode</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">BuiltinFunctionType</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">qutip.fastsparse</span> <span class="kn">import</span> <span class="n">csr2fast</span>
+<span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
+<span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+<span class="kn">from</span> <span class="nn">qutip.parallel</span> <span class="kn">import</span> <span class="n">parfor</span><span class="p">,</span> <span class="n">parallel_map</span><span class="p">,</span> <span class="n">serial_map</span>
+<span class="kn">from</span> <span class="nn">qutip.cy.mcsolve</span> <span class="kn">import</span> <span class="n">CyMcOde</span><span class="p">,</span> <span class="n">CyMcOdeDiag</span>
+<span class="kn">from</span> <span class="nn">qutip.cy.spconvert</span> <span class="kn">import</span> <span class="n">dense1D_to_fastcsr_ket</span>
+<span class="kn">from</span> <span class="nn">qutip.sesolve</span> <span class="kn">import</span> <span class="n">sesolve</span>
+<span class="kn">from</span> <span class="nn">qutip.solver</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Options</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">ExpectOps</span><span class="p">,</span>
+                          <span class="n">solver_safe</span><span class="p">,</span> <span class="n">SolverSystem</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">qutip.settings</span> <span class="kn">import</span> <span class="n">debug</span>
+<span class="kn">from</span> <span class="nn">qutip.ui.progressbar</span> <span class="kn">import</span> <span class="n">TextProgressBar</span><span class="p">,</span> <span class="n">BaseProgressBar</span>
+<span class="kn">import</span> <span class="nn">qutip.settings</span>
+
+<span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="c1">#</span>
+<span class="c1"># Internal, global variables for storing references to dynamically loaded</span>
+<span class="c1"># cython functions</span>
+
+
+<span class="c1"># Todo: use real warning</span>
+<span class="k">def</span> <span class="nf">warn</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">qutip_zvode</span><span class="p">(</span><span class="n">zvode</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">itask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rwork</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call_args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call_args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">itask</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+
+<div class="viewcode-block" id="mcsolve"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.mcsolve.mcsolve">[docs]</a><span class="k">def</span> <span class="nf">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">map_func</span><span class="o">=</span><span class="n">parallel_map</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Monte Carlo evolution of a state vector :math:`|\psi \rangle` for a</span>
+<span class="sd">    given Hamiltonian and sets of collapse operators, and possibly, operators</span>
+<span class="sd">    for calculating expectation values. Options for the underlying ODE solver</span>
+<span class="sd">    are given by the Options class.</span>
+
+<span class="sd">    mcsolve supports time-dependent Hamiltonians and collapse operators using</span>
+<span class="sd">    either Python functions of strings to represent time-dependent</span>
+<span class="sd">    coefficients. Note that, the system Hamiltonian MUST have at least one</span>
+<span class="sd">    constant term.</span>
+
+<span class="sd">    As an example of a time-dependent problem, consider a Hamiltonian with two</span>
+<span class="sd">    terms ``H0`` and ``H1``, where ``H1`` is time-dependent with coefficient</span>
+<span class="sd">    ``sin(w*t)``, and collapse operators ``C0`` and ``C1``, where ``C1`` is</span>
+<span class="sd">    time-dependent with coeffcient ``exp(-a*t)``.  Here, w and a are constant</span>
+<span class="sd">    arguments with values ``W`` and ``A``.</span>
+
+<span class="sd">    Using the Python function time-dependent format requires two Python</span>
+<span class="sd">    functions, one for each collapse coefficient. Therefore, this problem could</span>
+<span class="sd">    be expressed as::</span>
+
+<span class="sd">        def H1_coeff(t,args):</span>
+<span class="sd">            return sin(args[&#39;w&#39;]*t)</span>
+
+<span class="sd">        def C1_coeff(t,args):</span>
+<span class="sd">            return exp(-args[&#39;a&#39;]*t)</span>
+
+<span class="sd">        H = [H0, [H1, H1_coeff]]</span>
+
+<span class="sd">        c_ops = [C0, [C1, C1_coeff]]</span>
+
+<span class="sd">        args={&#39;a&#39;: A, &#39;w&#39;: W}</span>
+
+<span class="sd">    or in String (Cython) format we could write::</span>
+
+<span class="sd">        H = [H0, [H1, &#39;sin(w*t)&#39;]]</span>
+
+<span class="sd">        c_ops = [C0, [C1, &#39;exp(-a*t)&#39;]]</span>
+
+<span class="sd">        args={&#39;a&#39;: A, &#39;w&#39;: W}</span>
+
+<span class="sd">    Constant terms are preferably placed first in the Hamiltonian and collapse</span>
+<span class="sd">    operator lists.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    H : :class:`qutip.Qobj`, ``list``</span>
+<span class="sd">        System Hamiltonian.</span>
+
+<span class="sd">    psi0 : :class:`qutip.Qobj`</span>
+<span class="sd">        Initial state vector</span>
+
+<span class="sd">    tlist : array_like</span>
+<span class="sd">        Times at which results are recorded.</span>
+
+<span class="sd">    ntraj : int</span>
+<span class="sd">        Number of trajectories to run.</span>
+
+<span class="sd">    c_ops : :class:`qutip.Qobj`, ``list``</span>
+<span class="sd">        single collapse operator or a ``list`` of collapse operators.</span>
+
+<span class="sd">    e_ops : :class:`qutip.Qobj`, ``list``</span>
+<span class="sd">        single operator as Qobj or ``list`` or equivalent of Qobj operators</span>
+<span class="sd">        for calculating expectation values.</span>
+
+<span class="sd">    args : dict</span>
+<span class="sd">        Arguments for time-dependent Hamiltonian and collapse operator terms.</span>
+
+<span class="sd">    options : Options</span>
+<span class="sd">        Instance of ODE solver options.</span>
+
+<span class="sd">    progress_bar: BaseProgressBar</span>
+<span class="sd">        Optional instance of BaseProgressBar, or a subclass thereof, for</span>
+<span class="sd">        showing the progress of the simulation. Set to None to disable the</span>
+<span class="sd">        progress bar.</span>
+
+<span class="sd">    map_func: function</span>
+<span class="sd">        A map function for managing the calls to the single-trajactory solver.</span>
+
+<span class="sd">    map_kwargs: dictionary</span>
+<span class="sd">        Optional keyword arguments to the map_func function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    results : :class:`qutip.solver.Result`</span>
+<span class="sd">        Object storing all results from the simulation.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        It is possible to reuse the random number seeds from a previous run</span>
+<span class="sd">        of the mcsolver by passing the output Result object seeds via the</span>
+<span class="sd">        Options class, i.e. Options(seeds=prev_result.seeds).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)):</span>
+        <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ops</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">rhs_reuse</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">SolverSystem</span><span class="p">):</span>
+        <span class="c1"># TODO: deprecate when going to class based solver.</span>
+        <span class="k">if</span> <span class="s2">&quot;mcsolve&quot;</span> <span class="ow">in</span> <span class="n">solver_safe</span><span class="p">:</span>
+            <span class="c1"># print(&quot; &quot;)</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">solver_safe</span><span class="p">[</span><span class="s2">&quot;mcsolve&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+            <span class="c1"># raise Exception(&quot;Could not find the Hamiltonian to reuse.&quot;)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ntraj</span><span class="p">:</span>
+        <span class="n">ntraj</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">ntraj</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">rhs_reuse</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No c_ops, using sesolve&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+                       <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+                       <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">num_traj</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntraj</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">num_traj</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ntraj</span><span class="p">)</span>
+
+    <span class="c1"># set the physics</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">psi0</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Initial state must be a state vector.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># load monte carlo class</span>
+    <span class="n">mc</span> <span class="o">=</span> <span class="n">_MC</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">SolverSystem</span><span class="p">):</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="n">H</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">make_system</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+    <span class="n">mc</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">psi0</span><span class="p">)</span>
+
+    <span class="n">mc</span><span class="o">.</span><span class="n">set_e_ops</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">seeds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">seeds</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">_safe_mode</span><span class="p">:</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">run_test</span><span class="p">()</span>
+
+    <span class="c1"># Run the simulation</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">num_traj</span><span class="o">=</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">,</span>
+           <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+           <span class="n">map_func</span><span class="o">=</span><span class="n">map_func</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="o">=</span><span class="n">map_kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mc</span><span class="o">.</span><span class="n">get_result</span><span class="p">(</span><span class="n">ntraj</span><span class="p">)</span></div>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># MONTE CARLO CLASS</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="k">class</span> <span class="nc">_MC</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Private class for solving Monte Carlo evolution from mcsolve</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ran</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args_col</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expect_out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">psi0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span> <span class="o">=</span> <span class="n">psi0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Diagonal&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">Ud</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ran</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expect_out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="c1"># setup seeds array</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">seeds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ntraj</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="n">seeds</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span>
+                                              <span class="n">size</span><span class="o">=</span><span class="n">ntraj</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">),</span>
+                                              <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="n">seeds</span><span class="p">[:</span><span class="n">ntraj</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">make_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="n">ss</span> <span class="o">=</span> <span class="n">SolverSystem</span><span class="p">()</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">col_args</span> <span class="o">=</span> <span class="n">var</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
+            <span class="n">cevo</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
+            <span class="n">cdc</span> <span class="o">=</span> <span class="n">cevo</span><span class="o">.</span><span class="n">_cdc</span><span class="p">()</span>
+            <span class="n">cevo</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+            <span class="n">cdc</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cevo</span><span class="p">)</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">H_td</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
+            <span class="n">H_td</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="p">:</span>
+                <span class="n">H_td</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">c</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">rhs_with_state</span><span class="p">:</span>
+                <span class="n">H_td</span><span class="o">.</span><span class="n">_check_old_with_state</span><span class="p">()</span>
+            <span class="n">H_td</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">H_td</span> <span class="o">=</span> <span class="n">H_td</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">makefunc</span> <span class="o">=</span> <span class="n">_qobjevo_set</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">set_args</span> <span class="o">=</span> <span class="n">_qobjevo_args</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s2">&quot;QobjEvo&quot;</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">h_func</span> <span class="o">=</span> <span class="n">H</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="p">)</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">with_state</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">rhs_with_state</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">makefunc</span> <span class="o">=</span> <span class="n">_func_set</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">set_args</span> <span class="o">=</span> <span class="n">_func_args</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s2">&quot;callback&quot;</span>
+
+        <span class="n">solver_safe</span><span class="p">[</span><span class="s2">&quot;mcsolve&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">set_e_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">e_ops</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">([])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">check_dims</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+        <span class="n">ss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span>
+        <span class="k">if</span> <span class="n">ss</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Diagonal&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">isfunc</span><span class="p">:</span>
+            <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Qobj</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">e</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">ss</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">store_states</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">:</span>
+                <span class="n">c_op</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;c_ops are not consistant with psi0&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;QobjEvo&quot;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">H_td</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error calculating H&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">rhs</span><span class="p">,</span> <span class="n">ode_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">makefunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="p">)</span>
+                <span class="n">rhs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">ode_args</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error calculating H&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_traj</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">e_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">map_func</span><span class="o">=</span><span class="n">parallel_map</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="c1"># %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+        <span class="c1"># 4 situation for run:</span>
+        <span class="c1"># - first run</span>
+        <span class="c1"># - change parameters</span>
+        <span class="c1"># - add  trajectories</span>
+        <span class="c1">#       (self.add_traj)      Not Implemented</span>
+        <span class="c1"># - continue from the last time and states</span>
+        <span class="c1">#       (self.continue_runs) Not Implemented</span>
+        <span class="c1"># %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">options</span> <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ran</span> <span class="ow">and</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">:</span>
+            <span class="c1"># psi0 is ignored since we restart from a</span>
+            <span class="c1"># different states for each trajectories</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">continue_runs</span><span class="p">(</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
+                               <span class="n">progress_bar</span><span class="p">,</span> <span class="n">map_func</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">args</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">e_ops</span> <span class="ow">and</span> <span class="n">e_ops</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_e_ops</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">psi0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">psi0</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span> <span class="o">=</span> <span class="n">psi0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tlist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">tlist</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span> <span class="o">=</span> <span class="n">tlist</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ran</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">store_states</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if not reset here, add trajectories</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_traj</span><span class="p">(</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">,</span> <span class="n">map_func</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">num_traj</span><span class="p">:</span>
+            <span class="n">num_traj</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">ntraj</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">num_cpus</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">num_traj</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">map_func</span> <span class="o">=</span> <span class="n">serial_map</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_traj</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">num_traj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">progress_bar</span><span class="p">:</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">BaseProgressBar</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">TextProgressBar</span><span class="p">()</span>
+
+        <span class="c1"># set arguments for input to monte carlo</span>
+        <span class="n">map_kwargs_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;progress_bar&#39;</span><span class="p">:</span> <span class="n">progress_bar</span><span class="p">,</span>
+                       <span class="s1">&#39;num_cpus&#39;</span><span class="p">:</span> <span class="n">options</span><span class="o">.</span><span class="n">num_cpus</span><span class="p">}</span>
+        <span class="n">map_kwargs_</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">map_kwargs</span><span class="p">)</span>
+        <span class="n">map_kwargs</span> <span class="o">=</span> <span class="n">map_kwargs_</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_e_ops</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Diagonal&quot;</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">map_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_traj_diag</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_traj</span><span class="p">)),</span>
+                               <span class="o">**</span><span class="n">map_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">map_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_single_traj</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_traj</span><span class="p">)),</span>
+                               <span class="o">**</span><span class="n">map_kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span> <span class="o">=</span> <span class="n">num_traj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ran</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">state_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">expect</span><span class="p">,</span> <span class="n">collapse</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state_out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ss_out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_expect_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expect</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">collapse</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_traj</span><span class="p">,</span>
+                 <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">map_func</span><span class="o">=</span><span class="n">parallel_map</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">continue_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_traj</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">map_func</span><span class="o">=</span><span class="n">parallel_map</span><span class="p">,</span> <span class="n">map_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="c1"># results functions</span>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">len_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dm_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
+                <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="n">dm_t</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">vec</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dm_t</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)):</span>
+                <span class="n">dm_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
+                    <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="n">dm_t</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">vec</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
+                <span class="n">states</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dm_t</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">states</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">len_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">dm_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">dm_t</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">vec</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dm_t</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">runs_final_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">psis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
+            <span class="n">psis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dense1D_to_fastcsr_ket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                           <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psis</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expect_traj_avg</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">runs_expect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">expt</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span> <span class="k">for</span> <span class="n">expt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expect_out</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">expect_traj_avg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ntraj</span><span class="p">:</span>
+            <span class="n">ntraj</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_expect_out</span><span class="p">)</span>
+        <span class="n">expect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">expt</span><span class="o">.</span><span class="n">raw_out</span> <span class="k">for</span> <span class="n">expt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expect_out</span><span class="p">[:</span><span class="n">ntraj</span><span class="p">]])</span>
+        <span class="n">expect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">expect</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_num</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops_isherm</span><span class="p">[</span><span class="n">ii</span><span class="p">]:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">expect</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="p">:]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expect</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops_dict</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">e</span><span class="p">:</span> <span class="n">result</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                      <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">steady_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">len_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ss_out</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                        <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">len_</span><span class="p">,</span> <span class="n">len_</span><span class="p">))</span>
+        <span class="c1"># TO-DO rebuild steady_state from _psi_out if needed</span>
+        <span class="c1"># elif self._psi_out is not None:</span>
+        <span class="c1">#     return sum(self.state_average) / self.num_traj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">runs_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi0</span><span class="o">.</span><span class="n">dims</span>
+        <span class="n">psis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tlist</span><span class="p">)):</span>
+                <span class="n">psis</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">dense1D_to_fastcsr_ket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_psi_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]),</span>
+                                  <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psis</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">collapse_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="p">([]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">collapse_which</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="p">([]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collapse</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="c1"># Store results in the Result object</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ntraj</span><span class="p">:</span>
+            <span class="n">ntraj</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ntraj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">ntraj</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntraj</span><span class="p">]</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Result</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;mcsolve&#39;</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">steady_state_average</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steady_state</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">average_states</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">store_states</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">store_states</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_states</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">store_final_state</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">average_states</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">final_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_state</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">final_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_final_states</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">average_expect</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">expect_traj_avg</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ntraj</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_expect</span>
+
+        <span class="c1"># simulation parameters</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">num_expect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_num</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">num_collapse</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">ntraj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_traj</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">col_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse_times</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">col_which</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse_which</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="c1"># single-trajectory for monte carlo</span>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="k">def</span> <span class="nf">_single_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Monte Carlo algorithm returning state-vector or expectation values</span>
+<span class="sd">        at times tlist for a single trajectory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># SEED AND RNG AND GENERATE</span>
+        <span class="n">prng</span> <span class="o">=</span> <span class="n">RandomState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">[</span><span class="n">nt</span><span class="p">])</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+
+        <span class="c1"># set initial conditions</span>
+        <span class="n">ss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span>
+        <span class="n">e_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+        <span class="n">rhs</span><span class="p">,</span> <span class="n">ode_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span><span class="o">.</span><span class="n">makefunc</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
+        <span class="n">ODE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_integration_func</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">ode_args</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+        <span class="n">ODE</span><span class="o">.</span><span class="n">set_initial_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span><span class="p">,</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">e_ops</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+
+        <span class="n">cymc</span> <span class="o">=</span> <span class="n">CyMcOde</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+        <span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">collapses</span> <span class="o">=</span> <span class="n">cymc</span><span class="o">.</span><span class="n">run_ode</span><span class="p">(</span><span class="n">ODE</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">prng</span><span class="p">)</span>
+
+        <span class="c1"># Run at end of mc_alg function</span>
+        <span class="c1"># -----------------------------</span>
+        <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">steady_state_average</span><span class="p">:</span>
+            <span class="n">ss_out</span> <span class="o">/=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">collapses</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_integration_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">ode_args</span><span class="p">,</span> <span class="n">opt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the integration function while fixing the parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ODE</span> <span class="o">=</span> <span class="n">ode</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ode_args</span><span class="p">:</span>
+            <span class="n">ODE</span><span class="o">.</span><span class="n">set_f_params</span><span class="p">(</span><span class="n">ode_args</span><span class="p">)</span>
+        <span class="c1"># initialize ODE solver for RHS</span>
+        <span class="n">ODE</span><span class="o">.</span><span class="n">set_integrator</span><span class="p">(</span><span class="s1">&#39;zvode&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;adams&quot;</span><span class="p">)</span>
+        <span class="n">ODE</span><span class="o">.</span><span class="n">_integrator</span> <span class="o">=</span> <span class="n">qutip_zvode</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span>
+            <span class="n">rtol</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">rtol</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">nsteps</span><span class="p">,</span> <span class="n">first_step</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">first_step</span><span class="p">,</span>
+            <span class="n">min_step</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">min_step</span><span class="p">,</span> <span class="n">max_step</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">max_step</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ODE</span>
+
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="c1"># In development diagonalize the Hamiltonian before solving</span>
+    <span class="c1"># Same seeds give same evolution</span>
+    <span class="c1"># 3~5 time faster</span>
+    <span class="c1"># constant system only.</span>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="k">def</span> <span class="nf">make_diag_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">):</span>
+        <span class="n">ss</span> <span class="o">=</span> <span class="n">SolverSystem</span><span class="p">()</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">H_</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">H_</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
+            <span class="n">H_</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c</span>
+
+        <span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">H_</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+        <span class="n">eig</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">Ud</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
+            <span class="n">c_diag</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">c</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+            <span class="n">cevo</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">c_diag</span><span class="p">)</span>
+            <span class="n">cdc</span> <span class="o">=</span> <span class="n">cevo</span><span class="o">.</span><span class="n">_cdc</span><span class="p">()</span>
+            <span class="n">cevo</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+            <span class="n">cdc</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cevo</span><span class="p">)</span>
+            <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span>
+
+        <span class="n">ss</span><span class="o">.</span><span class="n">H_diag</span> <span class="o">=</span> <span class="n">eig</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">Ud</span> <span class="o">=</span> <span class="n">Ud</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ss</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s2">&quot;Diagonal&quot;</span>
+        <span class="n">solver_safe</span><span class="p">[</span><span class="s2">&quot;mcsolve&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">isfunc</span><span class="p">:</span>
+            <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Qobj</span><span class="p">(</span><span class="n">Ud</span> <span class="o">@</span> <span class="n">e</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">@</span> <span class="n">U</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">e_ops</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="n">ExpectOps</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_single_traj_diag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Monte Carlo algorithm returning state-vector or expectation values</span>
+<span class="sd">        at times tlist for a single trajectory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># SEED AND RNG AND GENERATE</span>
+        <span class="n">prng</span> <span class="o">=</span> <span class="n">RandomState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">[</span><span class="n">nt</span><span class="p">])</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+
+        <span class="n">ss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ss</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tlist</span>
+        <span class="n">e_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+        <span class="n">e_ops</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+
+        <span class="n">cymc</span> <span class="o">=</span> <span class="n">CyMcOdeDiag</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+        <span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">collapses</span> <span class="o">=</span>\
+            <span class="n">cymc</span><span class="o">.</span><span class="n">run_ode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_vector</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">prng</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">steady_state_average</span><span class="p">:</span>
+            <span class="n">ss_out</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">U</span> <span class="o">@</span> <span class="n">ss_out</span> <span class="o">@</span> <span class="n">ss</span><span class="o">.</span><span class="n">Ud</span>
+        <span class="n">states_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="n">states_out</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">steady_state_average</span><span class="p">:</span>
+            <span class="n">ss_out</span> <span class="o">/=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlist</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">states_out</span><span class="p">,</span> <span class="n">ss_out</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">collapses</span><span class="p">)</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># CODES FOR PYTHON FUNCTION BASED TIME-DEPENDENT RHS</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="k">def</span> <span class="nf">_qobjevo_set</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">opt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">rhs</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">H_td</span><span class="o">.</span><span class="n">compiled_qobjevo</span><span class="o">.</span><span class="n">mul_vec</span>
+    <span class="k">return</span> <span class="n">rhs</span><span class="p">,</span> <span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_qobjevo_args</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">ss</span><span class="o">.</span><span class="n">col_args</span> <span class="o">=</span> <span class="n">var</span>
+    <span class="n">ss</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">ss</span><span class="o">.</span><span class="n">H_td</span><span class="o">.</span><span class="n">solver_set_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">solver_set_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">solver_set_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_func_set</span><span class="p">(</span><span class="n">HS</span><span class="p">,</span> <span class="n">psi0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">opt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">args</span>
+    <span class="k">if</span> <span class="n">ss</span><span class="o">.</span><span class="n">with_state</span><span class="p">:</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">_funcrhs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">_funcrhs_with_state</span>
+    <span class="k">return</span> <span class="n">rhs</span><span class="p">,</span> <span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">h_func</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_func_args</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">ss</span><span class="o">.</span><span class="n">col_args</span> <span class="o">=</span> <span class="n">var</span>
+    <span class="n">ss</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">td_c_ops</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">solver_set_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">td_n_ops</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">solver_set_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rhs</span><span class="p">,</span> <span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">h_func</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">Hc_td</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+
+<span class="c1"># RHS of ODE for python function Hamiltonian</span>
+<span class="k">def</span> <span class="nf">_funcrhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">h_func</span><span class="p">,</span> <span class="n">Hc_td</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">h_func_data</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">h_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">h_func_term</span> <span class="o">=</span> <span class="n">h_func_data</span> <span class="o">*</span> <span class="n">psi</span>
+    <span class="k">return</span> <span class="n">h_func_term</span> <span class="o">+</span> <span class="n">Hc_td</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_funcrhs_with_state</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">h_func</span><span class="p">,</span> <span class="n">Hc_td</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">h_func_data</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">h_func</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">h_func_term</span> <span class="o">=</span> <span class="n">h_func_data</span> <span class="o">*</span> <span class="n">psi</span>
+    <span class="k">return</span> <span class="n">h_func_term</span> <span class="o">+</span> <span class="n">Hc_td</span><span class="o">.</span><span class="n">mul_vec</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_mc_dm_avg</span><span class="p">(</span><span class="n">psi_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Private function that averages density matrices in parallel</span>
+<span class="sd">    over all trajectories for a single time using parfor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ln</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">psi_list</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">psi_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">psi_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">out_data</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">psi</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">psi_list</span><span class="p">])</span> <span class="o">/</span> <span class="n">ln</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="s1">&#39;mc-dm&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_collapse_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;collapse&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span> <span class="n">key</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Feb 08, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

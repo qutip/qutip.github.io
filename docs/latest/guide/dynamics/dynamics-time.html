@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Solving Problems with Time-dependent Hamiltonians &mdash; QuTiP 4.6 Documentation</title>
+  <title>Solving Problems with Time-dependent Hamiltonians &mdash; QuTiP 4.7 Documentation</title>
   
 
   
@@ -48,6 +48,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="next" title="Bloch-Redfield master equation" href="dynamics-bloch-redfield.html" />
     <link rel="prev" title="Stochastic Solver" href="dynamics-stochastic.html" /> 
 </head>
@@ -73,7 +74,7 @@
             
             
               <div class="version">
-                4.6
+                4.7
               </div>
             
           
@@ -128,6 +129,7 @@
 <li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
@@ -147,6 +149,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
 </ul>
 
             
@@ -262,7 +265,7 @@ However, this method is somewhat less efficient then the previously mentioned me
 However, in contrast to the other options
 this method can be used in implementing time-dependent Hamiltonians that cannot be
 expressed as a function of constant operators with time-dependent coefficients.</p>
-<p>A collection of examples demonstrating the simulation of time-dependent problems can be found on the <a class="reference external" href="http://qutip.org/tutorials.html">tutorials</a> web page.</p>
+<p>A collection of examples demonstrating the simulation of time-dependent problems can be found on the <a class="reference external" href="https://qutip.org/tutorials.html">tutorials</a> web page.</p>
 </div>
 <div class="section" id="function-based-time-dependence">
 <span id="time-function"></span><h2>Function Based Time Dependence<a class="headerlink" href="#function-based-time-dependence" title="Permalink to this headline">¶</a></h2>
@@ -270,7 +273,7 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="n">py_coeff1</span><span class="p">],</span> <span class="p">[</span><span class="n">H2</span><span class="p">,</span> <span class="n">py_coeff2</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> 
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">H0</span></code> is a time-independent Hamiltonian, while <code class="docutils literal notranslate"><span class="pre">H1</span></code>,``H2``, are time dependent. The same format can be used for collapse operators:</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">H0</span></code> is a time-independent Hamiltonian, while <code class="docutils literal notranslate"><span class="pre">H1``and</span> <span class="pre">``H2</span></code> are time dependent. The same format can be used for collapse operators:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c_ops</span> <span class="o">=</span> <span class="p">[[</span><span class="n">C0</span><span class="p">,</span> <span class="n">py_coeff0</span><span class="p">],</span> <span class="n">C1</span><span class="p">,</span> <span class="p">[</span><span class="n">C2</span><span class="p">,</span> <span class="n">py_coeff2</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> 
 </pre></div>
 </div>
@@ -279,7 +282,7 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <p class="admonition-title">Note</p>
 <p>While, in general, you can arrange time-dependent and time-independent terms in any order you like, it is best to place all time-independent terms first.</p>
 </div>
-<p>As an example, we will look at an example that has a time-dependent Hamiltonian of the form <span class="math notranslate nohighlight">\(H=H_{0}-f(t)H_{1}\)</span> where <span class="math notranslate nohighlight">\(f(t)\)</span> is the time-dependent driving strength given as <span class="math notranslate nohighlight">\(f(t)=A\exp\left[-\left( t/\sigma \right)^{2}\right]\)</span>.  The follow code sets up the problem</p>
+<p>As an example, we will look at an example that has a time-dependent Hamiltonian of the form <span class="math notranslate nohighlight">\(H=H_{0}-f(t)H_{1}\)</span> where <span class="math notranslate nohighlight">\(f(t)\)</span> is the time-dependent driving strength given as <span class="math notranslate nohighlight">\(f(t)=A\exp\left[-\left( t/\sigma \right)^{2}\right]\)</span>.  The following code sets up the problem</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ustate</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">excited</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">ground</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -310,7 +313,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">H1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma_ue</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sigma_ue</span><span class="p">)</span>  <span class="c1"># time-dependent term</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-1.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-1.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-1.png" src="../../images/dynamics-time-1.png" />
 </div>
@@ -319,7 +321,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
     <span class="k">return</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="mf">5.</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-2.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-2.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-2.png" src="../../images/dynamics-time-2.png" />
 </div>
@@ -328,7 +329,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">ada</span><span class="p">,</span> <span class="n">sigma_UU</span><span class="p">,</span> <span class="n">sigma_GG</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-3.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-3.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-3.png" src="../../images/dynamics-time-3.png" />
 </div>
@@ -351,7 +351,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-4.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-4.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-4.png" src="../../images/dynamics-time-4.png" />
 </div>
@@ -362,7 +361,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
     <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span><span class="o">/</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-5.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-5.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-5.png" src="../../images/dynamics-time-5.png" />
 </div>
@@ -373,7 +371,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
       <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">sig</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-6.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-6.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-6.png" src="../../images/dynamics-time-6.png" />
 </div>
@@ -381,7 +378,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-7.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-7.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-7.png" src="../../images/dynamics-time-7.png" />
 </div>
@@ -390,7 +386,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-8.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-8.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-8.png" src="../../images/dynamics-time-8.png" />
 </div>
@@ -435,14 +430,12 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">H1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma_ue</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sigma_ue</span><span class="p">)</span>  <span class="c1"># time-dependent term</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-9.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-9.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-9.png" src="../../images/dynamics-time-9.png" />
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="s1">&#39;9 * exp(-(t / 5) ** 2)&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-10.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-10.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-10.png" src="../../images/dynamics-time-10.png" />
 </div>
@@ -450,7 +443,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-11.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-11.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-11.png" src="../../images/dynamics-time-11.png" />
 </div>
@@ -460,7 +452,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-12.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-12.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-12.png" src="../../images/dynamics-time-12.png" />
 </div>
@@ -484,13 +475,11 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure align-default" id="id1">
+<div class="figure align-default">
 <img alt="../../images/dynamics-time-13_00.png" src="../../images/dynamics-time-13_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_00.pdf">pdf</a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-<div class="figure align-default" id="id2">
+<div class="figure align-default">
 <img alt="../../images/dynamics-time-13_01.png" src="../../images/dynamics-time-13_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-13_01.pdf">pdf</a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>To turn these data points into a function we call the QuTiP <a class="reference internal" href="../../apidoc/classes.html#qutip.interpolate.Cubic_Spline" title="qutip.interpolate.Cubic_Spline"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.interpolate.Cubic_Spline</span></code></a> class using the first and last domain time points, <code class="docutils literal notranslate"><span class="pre">t[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">t[-1]</span></code>, respectively, as well as the entire array of data points:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="n">Cubic_Spline</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">noisy_data</span><span class="p">)</span>
@@ -502,7 +491,6 @@ expressed as a function of constant operators with time-dependent coefficients.<
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../guide/dynamics/dynamics-time-14.png">png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-14.hires.png">hires.png</a>, <a class="reference external" href="../../guide/dynamics/dynamics-time-14.pdf">pdf</a>)</p>
 <div class="figure align-default">
 <img alt="../../images/dynamics-time-14.png" src="../../images/dynamics-time-14.png" />
 </div>
@@ -656,9 +644,9 @@ pre-generated Hamiltonian constructed using the <a class="reference internal" hr
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Feb 08, 2022.
+        Last updated on Apr 13, 2022.
       </span>
 
     </p>

@@ -1,0 +1,382 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Permutational Invariance &mdash; QuTiP 4.6 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bra": ["\\left\\langle{#1}\\right\\rvert", 1], "ket": ["\\left\\lvert{#1}\\right\\rangle", 1], "tr": "\\operatorname{tr}"}}})</script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Setting Options for the Dynamics Solvers" href="dynamics-options.html" />
+    <link rel="prev" title="Floquet Formalism" href="dynamics-floquet.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-master.html">Lindblad Master Equation Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-photocurrent.html">Stochastic Solver - Photocurrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Permutational Invariance</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#permutational-invariant-quantum-solver-piqs">Permutational Invariant Quantum Solver (PIQS)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-qip.html">Quantum Information Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+        
+          <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
+        
+      <li>Permutational Invariance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="permutational-invariance">
+<span id="master-piqs"></span><h1>Permutational Invariance<a class="headerlink" href="#permutational-invariance" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="permutational-invariant-quantum-solver-piqs">
+<span id="master-unitary-piqs"></span><h2>Permutational Invariant Quantum Solver (PIQS)<a class="headerlink" href="#permutational-invariant-quantum-solver-piqs" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Permutational Invariant Quantum Solver (PIQS)</em> is a QuTiP module that allows to study the dynamics of an open quantum system consisting of an ensemble of identical qubits that can dissipate through local and collective baths according to a Lindblad master equation.</p>
+<p>The Liouvillian of an ensemble of <span class="math notranslate nohighlight">\(N\)</span> qubits, or two-level systems (TLSs), <span class="math notranslate nohighlight">\(\mathcal{D}_{TLS}(\rho)\)</span>, can be built using only polynomial – instead of exponential – resources.
+This has many applications for the study of realistic quantum optics models of many TLSs and in general as a tool in cavity QED.</p>
+<p>Consider a system evolving according to the equation</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\dot{\rho} = \mathcal{D}_\text{TLS}(\rho)=-\frac{i}{\hbar}\lbrack H,\rho \rbrack
++\frac{\gamma_\text{CE}}{2}\mathcal{L}_{J_{-}}[\rho]
++\frac{\gamma_\text{CD}}{2}\mathcal{L}_{J_{z}}[\rho]
++\frac{\gamma_\text{CP}}{2}\mathcal{L}_{J_{+}}[\rho]\\+\sum_{n=1}^{N}\left(
+\frac{\gamma_\text{E}}{2}\mathcal{L}_{J_{-,n}}[\rho]
++\frac{\gamma_\text{D}}{2}\mathcal{L}_{J_{z,n}}[\rho]
++\frac{\gamma_\text{P}}{2}\mathcal{L}_{J_{+,n}}[\rho]\right)\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(J_{\alpha,n}=\frac{1}{2}\sigma_{\alpha,n}\)</span> are SU(2) Pauli spin operators, with <span class="math notranslate nohighlight">\({\alpha=x,y,z}\)</span> and <span class="math notranslate nohighlight">\(J_{\pm,n}=\sigma_{\pm,n}\)</span>. The collective spin operators are <span class="math notranslate nohighlight">\(J_{\alpha} = \sum_{n}J_{\alpha,n}\)</span> . The Lindblad super-operators are <span class="math notranslate nohighlight">\(\mathcal{L}_{A} = 2A\rho A^\dagger - A^\dagger A \rho - \rho A^\dagger A\)</span>.</p>
+<p>The inclusion of local processes in the dynamics lead to using a Liouvillian space of dimension <span class="math notranslate nohighlight">\(4^N\)</span>. By exploiting the permutational invariance of identical particles [2-8], the Liouvillian <span class="math notranslate nohighlight">\(\mathcal{D}_\text{TLS}(\rho)\)</span> can be built as a block-diagonal matrix in the basis of Dicke states <span class="math notranslate nohighlight">\(|j, m \rangle\)</span>.</p>
+<p>The system under study is defined by creating an object of the
+<code class="code docutils literal notranslate"><span class="pre">Dicke</span></code> class, e.g. simply named
+<code class="code docutils literal notranslate"><span class="pre">system</span></code>, whose first attribute is</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">system.N</span></code>, the number of TLSs of the system <span class="math notranslate nohighlight">\(N\)</span>.</p></li>
+</ul>
+<p>The rates for collective and local processes are simply defined as</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">collective_emission</span></code> defines <span class="math notranslate nohighlight">\(\gamma_\text{CE}\)</span>, collective (superradiant) emission</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">collective_dephasing</span></code> defines <span class="math notranslate nohighlight">\(\gamma_\text{CD}\)</span>, collective dephasing</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">collective_pumping</span></code> defines <span class="math notranslate nohighlight">\(\gamma_\text{CP}\)</span>, collective pumping.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">emission</span></code> defines <span class="math notranslate nohighlight">\(\gamma_\text{E}\)</span>, incoherent emission (losses)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">dephasing</span></code> defines <span class="math notranslate nohighlight">\(\gamma_\text{D}\)</span>, local dephasing</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">pumping</span></code>  defines <span class="math notranslate nohighlight">\(\gamma_\text{P}\)</span>, incoherent pumping.</p></li>
+</ul>
+<p>Then the <code class="code docutils literal notranslate"><span class="pre">system.lindbladian()</span></code> creates the total TLS Lindbladian superoperator matrix. Similarly, <code class="code docutils literal notranslate"><span class="pre">system.hamiltonian</span></code> defines the TLS hamiltonian of the system <span class="math notranslate nohighlight">\(H_\text{TLS}\)</span>.</p>
+<p>The system’s Liouvillian can be built using <code class="code docutils literal notranslate"><span class="pre">system.liouvillian()</span></code>. The properties of a Piqs object can be visualized by simply calling
+<code class="code docutils literal notranslate"><span class="pre">system</span></code>. We give two basic examples on the use of <em>PIQS</em>. In the first example the incoherent emission of N driven TLSs is considered.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">piqs</span> <span class="kn">import</span> <span class="n">Dicke</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">steadystate</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">Dicke</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">emission</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pumping</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">liouvillian</span><span class="p">()</span>
+<span class="n">steady</span> <span class="o">=</span> <span class="n">steadystate</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more example of use, see the “Permutational Invariant Lindblad Dynamics” section in the tutorials section of the website, <a class="reference external" href="http://qutip.org/tutorials.html">http://qutip.org/tutorials.html</a>.</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Useful PIQS functions.</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operators</p></th>
+<th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Collective spin algebra <span class="math notranslate nohighlight">\(J_x,\ J_y,\ J_z\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N)</span></code></p></td>
+<td><p>The collective spin algebra  <span class="math notranslate nohighlight">\(J_x,\ J_y,\ J_z\)</span> for <span class="math notranslate nohighlight">\(N\)</span> TLSs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Collective spin <span class="math notranslate nohighlight">\(J_x\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N,</span> <span class="pre">&quot;x&quot;)</span></code></p></td>
+<td><p>The collective spin operator <span class="math notranslate nohighlight">\(Jx\)</span>. Requires <span class="math notranslate nohighlight">\(N\)</span> number of TLSs</p></td>
+</tr>
+<tr class="row-even"><td><p>Collective spin <span class="math notranslate nohighlight">\(J_y\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N,</span> <span class="pre">&quot;y&quot;)</span></code></p></td>
+<td><p>The collective spin operator <span class="math notranslate nohighlight">\(J_y\)</span>. Requires <span class="math notranslate nohighlight">\(N\)</span> number of TLSs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Collective spin <span class="math notranslate nohighlight">\(J_z\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N,</span> <span class="pre">&quot;z&quot;)</span></code></p></td>
+<td><p>The collective spin operator <span class="math notranslate nohighlight">\(J_z\)</span>. Requires <span class="math notranslate nohighlight">\(N\)</span> number of TLSs</p></td>
+</tr>
+<tr class="row-even"><td><p>Collective spin <span class="math notranslate nohighlight">\(J_+\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N,</span> <span class="pre">&quot;+&quot;)</span></code></p></td>
+<td><p>The collective spin operator <span class="math notranslate nohighlight">\(J_+\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Collective spin <span class="math notranslate nohighlight">\(J_-\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N,</span> <span class="pre">&quot;-&quot;)</span></code></p></td>
+<td><p>The collective spin operator <span class="math notranslate nohighlight">\(J_-\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Collective spin <span class="math notranslate nohighlight">\(J_z\)</span> in uncoupled basis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jspin(N,</span> <span class="pre">&quot;z&quot;,</span> <span class="pre">basis='uncoupled')</span></code></p></td>
+<td><p>The collective spin operator <span class="math notranslate nohighlight">\(J_z\)</span> in the uncoupled basis of dimension <span class="math notranslate nohighlight">\(2^N\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dicke state <span class="math notranslate nohighlight">\(|j,m\rangle\)</span> density matrix</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dicke(N,</span> <span class="pre">j,</span> <span class="pre">m)</span></code></p></td>
+<td><p>The density matrix for the Dicke state given by <span class="math notranslate nohighlight">\(|j,m\rangle\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Excited-state density matrix  in Dicke basis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">excited(N)</span></code></p></td>
+<td><p>The excited state in the Dicke basis</p></td>
+</tr>
+<tr class="row-odd"><td><p>Excited-state density matrix  in uncoupled basis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">excited(N,</span> <span class="pre">basis=&quot;uncoupled&quot;)</span></code></p></td>
+<td><p>The excited state in the uncoupled basis</p></td>
+</tr>
+<tr class="row-even"><td><p>Ground-state density matrix  in Dicke basis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ground(N)</span></code></p></td>
+<td><p>The ground state in the Dicke basis</p></td>
+</tr>
+<tr class="row-odd"><td><p>GHZ-state density matrix in the Dicke basis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ghz(N)</span></code></p></td>
+<td><p>The GHZ-state density matrix in the Dicke (default) basis for N number of TLS</p></td>
+</tr>
+<tr class="row-even"><td><p>Collapse operators of the ensemble</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Dicke.c_ops()</span></code></p></td>
+<td><p>The collapse operators for the ensemble can be called by the <cite>c_ops</cite> method of the Dicke class.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the mathematical object representing the density matrix of the full system that is manipulated (or obtained from <cite>steadystate</cite>) in the Dicke-basis formalism used here is a <em>representative of the density matrix</em>. This <em>representative object</em> is of linear size N^2, whereas the full density matrix is defined over a 2^N Hilbert space. In order to calculate nonlinear functions of such density matrix, such as the Von Neumann entropy or the purity, it is necessary to take into account the degeneracy of each block of such block-diagonal density matrix. Note that as long as one calculates expected values of operators, being Tr[A*rho] a <em>linear</em> function of <cite>rho</cite>, the <em>representative density matrix</em> give straightforwardly the correct result. When a <em>nonlinear</em> function of the density matrix needs to be calculated, one needs to weigh each degenerate block correctly; this is taken care by the <cite>dicke_function_trace</cite> in <cite>qutip.piqs</cite>, and the user can use it to define general nonlinear functions that can be described as the trace of a Taylor expandable function. Two nonlinear functions that use <cite>dicke_function_trace</cite> and are already implemented are <cite>purity_dicke</cite>, to calculate the purity of a density matrix in the Dicke basis, and <cite>entropy_vn_dicke</cite>, which can be used to calculate the Von Neumann entropy.</p>
+<p>More functions relative to the <cite>qutip.piqs</cite> module can be found at <a class="reference internal" href="../../apidoc/apidoc.html#apidoc"><span class="std std-ref">API documentation</span></a>. Attributes to the <a class="reference internal" href="../../apidoc/classes.html#qutip.piqs.Dicke" title="qutip.piqs.Dicke"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.piqs.Dicke</span></code></a> and <a class="reference internal" href="../../apidoc/classes.html#qutip.piqs.Pim" title="qutip.piqs.Pim"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.piqs.Pim</span></code></a> class can also be found there.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="dynamics-options.html" class="btn btn-neutral float-right" title="Setting Options for the Dynamics Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dynamics-floquet.html" class="btn btn-neutral float-left" title="Floquet Formalism" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2011 and later, P.D. Nation, J.R. Johansson, A.J.G. Pitchford, C. Granade, A.L. Grimsmo, N. Shammah, S. Ahmed, N. Lambert, B. Li, J. Lishman, S. Cross, and E. Giguère.
+      <span class="lastupdated">
+        Last updated on Feb 08, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
