@@ -1,0 +1,2 @@
+b.clear()
+b.render()

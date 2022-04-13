@@ -1,0 +1,354 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.qip.compiler.spinchaincompiler &mdash; QuTiP 4.7 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../static/documentation_options.js"></script>
+        <script src="../../../../static/jquery.js"></script>
+        <script src="../../../../static/underscore.js"></script>
+        <script src="../../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.qip.compiler.spinchaincompiler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.qip.compiler.spinchaincompiler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span><span class="p">,</span> <span class="n">Gate</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.compiler</span> <span class="kn">import</span> <span class="n">GateCompiler</span><span class="p">,</span> <span class="n">Instruction</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SpinChainCompiler&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SpinChainCompiler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.SpinChainCompiler">[docs]</a><span class="k">class</span> <span class="nc">SpinChainCompiler</span><span class="p">(</span><span class="n">GateCompiler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile a :class:`.QubitCircuit` into</span>
+<span class="sd">    the pulse sequence for the processor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of qubits in the system.</span>
+
+<span class="sd">    params: dict</span>
+<span class="sd">        A Python dictionary contains the name and the value of the parameters.</span>
+<span class="sd">        See :meth:`.SpinChain.set_up_params` for the definition.</span>
+
+<span class="sd">    setup: string</span>
+<span class="sd">        &quot;linear&quot; or &quot;circular&quot; for two sub-classes.</span>
+
+<span class="sd">    global_phase: bool</span>
+<span class="sd">        Record of the global phase change and will be returned.</span>
+
+<span class="sd">    pulse_dict: dict, optional</span>
+<span class="sd">        A map between the pulse label and its index in the pulse list.</span>
+<span class="sd">        If given, the compiled pulse can be identified with</span>
+<span class="sd">        ``(pulse_label, coeff)``, instead of ``(pulse_index, coeff)``.</span>
+<span class="sd">        The number of key-value pairs should match the number of pulses</span>
+<span class="sd">        in the processor.</span>
+<span class="sd">        If it is empty, an integer ``pulse_index`` needs to be used</span>
+<span class="sd">        in the compiling routine saved under the attributes ``gate_compiler``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of the component systems.</span>
+
+<span class="sd">    params: dict</span>
+<span class="sd">        A Python dictionary contains the name and the value of the parameters,</span>
+<span class="sd">        such as laser frequency, detuning etc.</span>
+
+<span class="sd">    pulse_dict: dict</span>
+<span class="sd">        A map between the pulse label and its index in the pulse list.</span>
+
+<span class="sd">    gate_compiler: dict</span>
+<span class="sd">        The Python dictionary in the form of {gate_name: decompose_function}.</span>
+<span class="sd">        It saves the decomposition scheme for each gate.</span>
+
+<span class="sd">    setup: string</span>
+<span class="sd">        &quot;linear&quot; or &quot;circular&quot; for two sub-classes.</span>
+
+<span class="sd">    global_phase: bool</span>
+<span class="sd">        Record of the global phase change and will be returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pulse_dict</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">global_phase</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SpinChainCompiler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">pulse_dict</span><span class="o">=</span><span class="n">pulse_dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate_compiler</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;ISWAP&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">iswap_compiler</span><span class="p">,</span>
+            <span class="s2">&quot;SQRTISWAP&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrtiswap_compiler</span><span class="p">,</span>
+            <span class="s2">&quot;RZ&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rz_compiler</span><span class="p">,</span>
+            <span class="s2">&quot;RX&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx_compiler</span><span class="p">,</span>
+            <span class="s2">&quot;GLOBALPHASE&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">globalphase_compiler</span>
+            <span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span> <span class="o">=</span> <span class="n">global_phase</span>
+
+<div class="viewcode-block" id="SpinChainCompiler.rz_compiler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.SpinChainCompiler.rz_compiler">[docs]</a>    <span class="k">def</span> <span class="nf">rz_compiler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiler for the RZ gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;sz&quot;</span><span class="p">][</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">)</span> <span class="o">*</span> <span class="n">g</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">g</span><span class="p">)</span>
+        <span class="n">pulse_info</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;sz&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">coeff</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Instruction</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">pulse_info</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="SpinChainCompiler.rx_compiler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.SpinChainCompiler.rx_compiler">[docs]</a>    <span class="k">def</span> <span class="nf">rx_compiler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiler for the RX gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;sx&quot;</span><span class="p">][</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">)</span> <span class="o">*</span> <span class="n">g</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">g</span><span class="p">)</span>
+        <span class="n">pulse_info</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;sx&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">coeff</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Instruction</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">pulse_info</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="SpinChainCompiler.iswap_compiler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.SpinChainCompiler.iswap_compiler">[docs]</a>    <span class="k">def</span> <span class="nf">iswap_compiler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiler for the ISWAP gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span>
+        <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">targets</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;sxsy&quot;</span><span class="p">][</span><span class="n">q1</span><span class="p">]</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="o">-</span><span class="n">g</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">g</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">q2</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">pulse_name</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pulse_name</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+        <span class="n">pulse_info</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pulse_name</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Instruction</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">pulse_info</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="SpinChainCompiler.sqrtiswap_compiler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.SpinChainCompiler.sqrtiswap_compiler">[docs]</a>    <span class="k">def</span> <span class="nf">sqrtiswap_compiler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiler for the SQRTISWAP gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">targets</span>
+        <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">targets</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;sxsy&quot;</span><span class="p">][</span><span class="n">q1</span><span class="p">]</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="o">-</span><span class="n">g</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">g</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">q1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">q2</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">pulse_name</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pulse_name</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+        <span class="n">pulse_info</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pulse_name</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Instruction</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">pulse_info</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="SpinChainCompiler.globalphase_compiler"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.compiler.SpinChainCompiler.globalphase_compiler">[docs]</a>    <span class="k">def</span> <span class="nf">globalphase_compiler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiler for the GLOBALPHASE gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span> <span class="o">+=</span> <span class="n">gate</span><span class="o">.</span><span class="n">arg_value</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Apr 13, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

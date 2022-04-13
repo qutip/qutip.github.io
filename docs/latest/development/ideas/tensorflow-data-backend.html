@@ -1,0 +1,341 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>TensorFlow Data Backend &mdash; QuTiP 4.7 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="next" title="Quantum Error Mitigation" href="quantum-error-mitigation.html" />
+    <link rel="prev" title="Pulse level description of quantum circuits" href="pulse-level-quantum-circuits.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../development.html">Development Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">Contributing to QuTiP Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html">QuTiP Development Roadmap</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ideas.html">Ideas for future QuTiP development</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qutip-interactive.html">QuTiP Interactive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pulse-level-quantum-circuits.html">Pulse level description of quantum circuits</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">TensorFlow Data Backend</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#why-a-tensorflow-backend">Why a TensorFlow backend?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#challenges">Challenges</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantum-error-mitigation.html">Quantum Error Mitigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="heom-gpu.html">GPU implementation of the Hierarchical Equations of Motion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs.html">Working with the QuTiP Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_distribution.html">Release and Distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../development.html">Development Documentation</a> &raquo;</li>
+        
+          <li><a href="../ideas.html">Ideas for future QuTiP development</a> &raquo;</li>
+        
+      <li>TensorFlow Data Backend</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tensorflow-data-backend">
+<h1>TensorFlow Data Backend<a class="headerlink" href="#tensorflow-data-backend" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#why-a-tensorflow-backend" id="id5">Why a TensorFlow backend?</a></p></li>
+<li><p><a class="reference internal" href="#challenges" id="id6">Challenges</a></p>
+<ul>
+<li><p><a class="reference internal" href="#expected-outcomes" id="id7">Expected outcomes</a></p></li>
+<li><p><a class="reference internal" href="#skills" id="id8">Skills</a></p></li>
+<li><p><a class="reference internal" href="#difficulty" id="id9">Difficulty</a></p></li>
+<li><p><a class="reference internal" href="#mentors" id="id10">Mentors</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id11">References</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>QuTiP’s data layer provides the mathematical operations needed to work with
+quantum states and operators, i.e. <code class="docutils literal notranslate"><span class="pre">Qobj</span></code>, inside QuTiP. As part of Google
+Summer of Code 2020, the data layer was rewritten to allow new backends to
+be added more easily and for different backends to interoperate with each
+other. Backends using in-memory spares and dense matrices already exist,
+and we would like to add a backend that implements the necessary operations
+using TensorFlow <a class="footnote-reference brackets" href="#id3" id="id1">1</a>.</p>
+<div class="section" id="why-a-tensorflow-backend">
+<h2><a class="toc-backref" href="#id5">Why a TensorFlow backend?</a><a class="headerlink" href="#why-a-tensorflow-backend" title="Permalink to this headline">¶</a></h2>
+<p>TensorFlow supports distributing matrix operations across multiple GPUs and
+multiple machines, and abstracts away some of the complexities of doing so
+efficiently. We hope that by using TensorFlow we might enable QuTiP to scale
+to bigger quantum systems (e.g. more qubits) and decrease the time taken to
+simulate them.</p>
+<p>There is particular interest in trying the new backend with the
+BoFiN HEOM (Hierarchical Equations of Motion) solver <a class="footnote-reference brackets" href="#id4" id="id2">2</a>.</p>
+</div>
+<div class="section" id="challenges">
+<h2><a class="toc-backref" href="#id6">Challenges</a><a class="headerlink" href="#challenges" title="Permalink to this headline">¶</a></h2>
+<p>TensorFlow is a very different kind of computational framework to the existing
+dense and sparse matrix backends. It uses flow graphs to describe operations,
+and to work efficiently. Ideally large graphs of operations need to be
+executed together in order to efficiently compute results.</p>
+<p>The QuTiP data layer might need to be adjusted to accommodate these
+differences, and it is possible that this will prove challenging or even
+that we will not find a reasonable way to achieve the desired performance.</p>
+<div class="section" id="expected-outcomes">
+<h3><a class="toc-backref" href="#id7">Expected outcomes</a><a class="headerlink" href="#expected-outcomes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">qutip.core.data.tensorflow</span></code> data type.</p></li>
+<li><p>Implement specialisations for some important operations (e.g. <code class="docutils literal notranslate"><span class="pre">add</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mul</span></code>, <code class="docutils literal notranslate"><span class="pre">matmul</span></code>, <code class="docutils literal notranslate"><span class="pre">eigen</span></code>, etc).</p></li>
+<li><p>Write a small benchmark to show how <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> operations scale on the new
+backend in comparison to the existing backends. Run the benchmark both
+with and without using a GPU.</p></li>
+<li><p>Implement enough for a solver to run on top of the new TensorFlow data
+backend and benchmark that (stretch goal).</p></li>
+</ul>
+</div>
+<div class="section" id="skills">
+<h3><a class="toc-backref" href="#id8">Skills</a><a class="headerlink" href="#skills" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Git, Python and familiarity with the Python scientific computing stack</p></li>
+<li><p>Familiarity with TensorFlow (beneficial, but not required)</p></li>
+<li><p>Familiarity with Cython (beneficial, but not required)</p></li>
+</ul>
+</div>
+<div class="section" id="difficulty">
+<h3><a class="toc-backref" href="#id9">Difficulty</a><a class="headerlink" href="#difficulty" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Medium</p></li>
+</ul>
+</div>
+<div class="section" id="mentors">
+<h3><a class="toc-backref" href="#id10">Mentors</a><a class="headerlink" href="#mentors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Simon Cross (<a class="reference external" href="mailto:hodgestar&#37;&#52;&#48;gmail&#46;com">hodgestar<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
+<li><p>Jake Lishman (<a class="reference external" href="mailto:jake&#37;&#52;&#48;binhbar&#46;com">jake<span>&#64;</span>binhbar<span>&#46;</span>com</a>)</p></li>
+<li><p>Alex Pitchford (<a class="reference external" href="mailto:alex&#46;pitchford&#37;&#52;&#48;gmail&#46;com">alex<span>&#46;</span>pitchford<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h3><a class="toc-backref" href="#id11">References</a><a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><a class="reference external" href="https://www.tensorflow.org/">https://www.tensorflow.org/</a></p>
+</dd>
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p><a class="reference external" href="https://github.com/tehruhn/bofin">https://github.com/tehruhn/bofin</a></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="quantum-error-mitigation.html" class="btn btn-neutral float-right" title="Quantum Error Mitigation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pulse-level-quantum-circuits.html" class="btn btn-neutral float-left" title="Pulse level description of quantum circuits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Apr 13, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

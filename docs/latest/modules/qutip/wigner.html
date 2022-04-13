@@ -1,0 +1,1228 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.wigner &mdash; QuTiP 4.7 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.wigner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.wigner</h1><div class="highlight"><pre>
+<span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;wigner&#39;</span><span class="p">,</span> <span class="s1">&#39;qfunc&#39;</span><span class="p">,</span> <span class="s1">&#39;QFunc&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_q_function&#39;</span><span class="p">,</span> <span class="s1">&#39;spin_wigner&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;wigner_transform&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">zeros</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">conj</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="k">as</span> <span class="nn">ft</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">genlaguerre</span><span class="p">,</span> <span class="n">binom</span><span class="p">,</span> <span class="n">sph_harm</span><span class="p">,</span> <span class="n">factorial</span>
+
+<span class="kn">import</span> <span class="nn">qutip</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">ket2dm</span><span class="p">,</span> <span class="n">jmat</span>
+<span class="kn">from</span> <span class="nn">qutip.parallel</span> <span class="kn">import</span> <span class="n">parfor</span>
+<span class="kn">from</span> <span class="nn">qutip.cy.sparse_utils</span> <span class="kn">import</span> <span class="n">_csr_get_diag</span>
+<span class="kn">from</span> <span class="nn">qutip.sparse</span> <span class="kn">import</span> <span class="n">eigh</span>
+
+
+<span class="k">def</span> <span class="nf">wigner_transform</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">fullparity</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">slicearray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;takes the density matrix or state vector of any finite state and</span>
+<span class="sd">    generates the Wigner function for that state on a sphere, generating a spin</span>
+<span class="sd">    Wigner function useful for displaying the quasi-probability for a qubit or</span>
+<span class="sd">    any qudit. For the standard, continuous-variable Wigner function for</span>
+<span class="sd">    position and momentum variables, wigner() should be used.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">        psi : qobj</span>
+<span class="sd">              a state vector or density matrix.</span>
+<span class="sd">        j : int</span>
+<span class="sd">            the total angular momentum of the quantum state.</span>
+<span class="sd">        fullparity : bool</span>
+<span class="sd">                     should the parity of the full SU space be used?</span>
+<span class="sd">        steps : int</span>
+<span class="sd">                number of points at which the Wigner transform is calculated.</span>
+<span class="sd">        slicearray : list of str</span>
+<span class="sd">                     the angle slice to be used for each particle in case of a</span>
+<span class="sd">                     multi-particle quantum state. &#39;l&#39; yields an equal angle</span>
+<span class="sd">                     slice. &#39;x&#39;, &#39;y&#39; and &#39;z&#39; angle slices can also be chosen.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">        wigner : list of float</span>
+<span class="sd">                 the wigner transformation at `steps` different theta and phi.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ComplexWarning</span>
+<span class="sd">        This can be ignored as it is caused due to rounding errors.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    See example notebook wigner_visualisation.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ------</span>
+<span class="sd">    [1] T. Tilma, M. J. Everitt, J. H. Samson, W. J. Munro,</span>
+<span class="sd">        and K. Nemoto, Phys. Rev. Lett. 117, 180401 (2016).</span>
+<span class="sd">    [2] R. P. Rundle, P. W. Mills, T. Tilma, J. H. Samson, and</span>
+<span class="sd">        M. J. Everitt, Phys. Rev. A 96, 022117 (2017).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;operator&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input state is not a valid operator.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">psi</span>
+
+    <span class="n">sun</span> <span class="o">=</span> <span class="mi">2</span>   <span class="c1"># The order of the SU group</span>
+
+    <span class="c1"># calculate total number of particles in quantum state:</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">rho</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">steps</span><span class="p">))</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">steps</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+
+    <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">_angle_slice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slicearray</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+
+    <span class="n">wigner</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">steps</span><span class="p">,</span> <span class="n">steps</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">fullparity</span><span class="p">:</span>
+        <span class="n">pari</span> <span class="o">=</span> <span class="n">_parity</span><span class="p">(</span><span class="n">sun</span><span class="o">**</span><span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pari</span> <span class="o">=</span> <span class="n">_parity</span><span class="p">(</span><span class="n">sun</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="n">wigner</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span> <span class="o">@</span> <span class="n">_kernelsu2</span><span class="p">(</span>
+                <span class="n">theta</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">phi</span><span class="p">[:,</span> <span class="n">p</span><span class="p">],</span> <span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">pari</span><span class="p">,</span> <span class="n">fullparity</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">wigner</span>
+
+
+<span class="k">def</span> <span class="nf">_parity</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function to calculate the parity of the quantum system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">_lambda_f</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="k">elif</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="n">mult</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">mult</span><span class="p">,</span> <span class="n">mult</span><span class="p">))</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mult</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">foo</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">matrix</span> <span class="o">/</span> <span class="n">mult</span>
+
+
+<span class="k">def</span> <span class="nf">_lambda_f</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function needed for the calculation of the parity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">matrix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">matrix</span>
+
+
+<span class="k">def</span> <span class="nf">_kernelsu2</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">parity</span><span class="p">,</span> <span class="n">fullparity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function that calculates the kernel for the SU2 unitary group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># calculate the total rotation matrix (tensor product for each particle):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">_rotation_matrix</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">j</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fullparity</span><span class="p">:</span>
+        <span class="n">op_parity</span> <span class="o">=</span> <span class="n">parity</span>   <span class="c1"># The parity for a one particle system</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">parity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">parity</span><span class="p">,</span> <span class="n">op_parity</span><span class="p">)</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">parity</span> <span class="o">@</span> <span class="n">U</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">matrix</span>
+
+
+<span class="k">def</span> <span class="nf">_rotation_matrix</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function to calculate the rotation operator for the SU2 kernel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">la</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span> <span class="o">*</span> <span class="n">jmat</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">())</span> <span class="o">@</span> \
+           <span class="n">la</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">jmat</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+
+
+<span class="k">def</span> <span class="nf">_angle_slice</span><span class="p">(</span><span class="n">slicearray</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Private function to modify theta and phi for angle slicing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slicearray</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">theta</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">theta</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">phi</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="n">xind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">yind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slicearray</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">theta</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">theta</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">phi</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">phi</span><span class="p">[</span><span class="n">yind</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">zind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slicearray</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">)</span>
+    <span class="n">phi</span><span class="p">[</span><span class="n">zind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">zind</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">return</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span>
+
+
+<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+           <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wigner function for a state vector or density matrix at points</span>
+<span class="sd">    `xvec + i * yvec`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    state : qobj</span>
+<span class="sd">        A state vector or density matrix.</span>
+
+<span class="sd">    xvec : array_like</span>
+<span class="sd">        x-coordinates at which to calculate the Wigner function.</span>
+
+<span class="sd">    yvec : array_like</span>
+<span class="sd">        y-coordinates at which to calculate the Wigner function.  Does not</span>
+<span class="sd">        apply to the &#39;fft&#39; method.</span>
+
+<span class="sd">    g : float</span>
+<span class="sd">        Scaling factor for `a = 0.5 * g * (x + iy)`, default `g = sqrt(2)`.</span>
+<span class="sd">        The value of `g` is related to the value of `hbar` in the commutation</span>
+<span class="sd">        relation `[x, y] = i * hbar` via `hbar=2/g^2` giving the default</span>
+<span class="sd">        value `hbar=1`.</span>
+
+<span class="sd">    method : string {&#39;clenshaw&#39;, &#39;iterative&#39;, &#39;laguerre&#39;, &#39;fft&#39;}</span>
+<span class="sd">        Select method &#39;clenshaw&#39; &#39;iterative&#39;, &#39;laguerre&#39;, or &#39;fft&#39;, where &#39;clenshaw&#39;</span>
+<span class="sd">        and &#39;iterative&#39; use an iterative method to evaluate the Wigner functions for density</span>
+<span class="sd">        matrices :math:`|m&gt;&lt;n|`, while &#39;laguerre&#39; uses the Laguerre polynomials</span>
+<span class="sd">        in scipy for the same task. The &#39;fft&#39; method evaluates the Fourier</span>
+<span class="sd">        transform of the density matrix. The &#39;iterative&#39; method is default, and</span>
+<span class="sd">        in general recommended, but the &#39;laguerre&#39; method is more efficient for</span>
+<span class="sd">        very sparse density matrices (e.g., superpositions of Fock states in a</span>
+<span class="sd">        large Hilbert space). The &#39;clenshaw&#39; method is the preferred method for</span>
+<span class="sd">        dealing with density matrices that have a large number of excitations</span>
+<span class="sd">        (&gt;~50). &#39;clenshaw&#39; is a fast and numerically stable method.</span>
+
+<span class="sd">    sparse : bool {False, True}</span>
+<span class="sd">        Tells the default solver whether or not to keep the input density</span>
+<span class="sd">        matrix in sparse format.  As the dimensions of the density matrix</span>
+<span class="sd">        grow, setthing this flag can result in increased performance.</span>
+
+<span class="sd">    parfor : bool {False, True}</span>
+<span class="sd">        Flag for calculating the Laguerre polynomial based Wigner function</span>
+<span class="sd">        method=&#39;laguerre&#39; in parallel using the parfor function.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    W : array</span>
+<span class="sd">        Values representing the Wigner function calculated over the specified</span>
+<span class="sd">        range [xvec,yvec].</span>
+
+<span class="sd">    yvex : array</span>
+<span class="sd">        FFT ONLY. Returns the y-coordinate values calculated via the Fourier</span>
+<span class="sd">        transform.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The &#39;fft&#39; method accepts only an xvec input for the x-coordinate.</span>
+<span class="sd">    The y-coordinates are calculated internally.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Ulf Leonhardt,</span>
+<span class="sd">    Measuring the Quantum State of Light, (Cambridge University Press, 1997)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input state is not a valid operator.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;fft&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_wigner_fourier</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span> <span class="ow">or</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">psi</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;iterative&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_wigner_iterative</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;laguerre&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_wigner_laguerre</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">parfor</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;clenshaw&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_wigner_clenshaw</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;method must be either &#39;iterative&#39;, &#39;laguerre&#39;, or &#39;fft&#39;.&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_wigner_iterative</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Using an iterative method to evaluate the wigner functions for the Fock</span>
+<span class="sd">    state :math:`|m&gt;&lt;n|`.</span>
+
+<span class="sd">    The Wigner function is calculated as</span>
+<span class="sd">    :math:`W = \sum_{mn} \rho_{mn} W_{mn}` where :math:`W_{mn}` is the Wigner</span>
+<span class="sd">    function for the density matrix :math:`|m&gt;&lt;n|`.</span>
+
+<span class="sd">    In this implementation, for each row m, Wlist contains the Wigner functions</span>
+<span class="sd">    Wlist = [0, ..., W_mm, ..., W_mN]. As soon as one W_mn Wigner function is</span>
+<span class="sd">    calculated, the corresponding contribution is added to the total Wigner</span>
+<span class="sd">    function, weighted by the corresponding element in the density matrix</span>
+<span class="sd">    :math:`rho_{mn}`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span>
+
+    <span class="n">Wlist</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">)])</span>
+    <span class="n">Wlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">real</span><span class="p">(</span><span class="n">Wlist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+        <span class="n">Wlist</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">Wlist</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">Wlist</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">Wlist</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+        <span class="n">Wlist</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">conj</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">*</span> <span class="n">temp</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">Wlist</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1"># Wlist[m] = Wigner function for |m&gt;&lt;m|</span>
+        <span class="n">W</span> <span class="o">+=</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">Wlist</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+            <span class="n">temp2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">Wlist</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">temp</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">Wlist</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">Wlist</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp2</span>
+
+            <span class="c1"># Wlist[n] = Wigner function for |m&gt;&lt;n|</span>
+            <span class="n">W</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">Wlist</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">W</span> <span class="o">*</span> <span class="n">g</span> <span class="o">**</span> <span class="mi">2</span>
+
+
+<span class="k">def</span> <span class="nf">_wigner_laguerre</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">parallel</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Using Laguerre polynomials from scipy to evaluate the Wigner function for</span>
+<span class="sd">    the density matrices :math:`|m&gt;&lt;n|`, :math:`W_{mn}`. The total Wigner</span>
+<span class="sd">    function is calculated as :math:`W = \sum_{mn} \rho_{mn} W_{mn}`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+
+    <span class="c1"># compute wigner functions for density matrices |m&gt;&lt;n| and</span>
+    <span class="c1"># weight by all the elements in the density matrix</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="n">sp</span><span class="o">.</span><span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+        <span class="c1"># for compress sparse row matrices</span>
+        <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+            <span class="n">iterator</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">W1_out</span> <span class="o">=</span> <span class="n">parfor</span><span class="p">(</span><span class="n">_par_wig_eval</span><span class="p">,</span> <span class="n">iterator</span><span class="p">)</span>
+            <span class="n">W</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">W1_out</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+                        <span class="n">W</span> <span class="o">+=</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">m</span> <span class="o">*</span> <span class="n">genlaguerre</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">)(</span><span class="n">B</span><span class="p">))</span>
+
+                    <span class="k">elif</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">:</span>
+                        <span class="n">W</span> <span class="o">+=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">m</span> <span class="o">*</span>
+                                        <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span>
+                                        <span class="n">sqrt</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">*</span>
+                                        <span class="n">genlaguerre</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)(</span><span class="n">B</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># for dense density matrices</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">W</span> <span class="o">+=</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">m</span> <span class="o">*</span> <span class="n">genlaguerre</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">)(</span><span class="n">B</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">W</span> <span class="o">+=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">m</span> <span class="o">*</span>
+                                    <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span>
+                                    <span class="n">sqrt</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">*</span>
+                                    <span class="n">genlaguerre</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)(</span><span class="n">B</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">W</span> <span class="o">*</span> <span class="n">g</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">B</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi</span>
+
+
+<span class="k">def</span> <span class="nf">_par_wig_eval</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Private function for calculating terms of Laguerre Wigner function</span>
+<span class="sd">    using parfor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">W1</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">W1</span> <span class="o">+=</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">m</span> <span class="o">*</span> <span class="n">genlaguerre</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">)(</span><span class="n">B</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">W1</span> <span class="o">+=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">real</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">m</span> <span class="o">*</span>
+                             <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">*</span>
+                             <span class="n">sqrt</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">*</span>
+                             <span class="n">genlaguerre</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)(</span><span class="n">B</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">W1</span>
+
+
+<span class="k">def</span> <span class="nf">_wigner_fourier</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the Wigner function via the Fourier transform.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">:</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_psi_wigner_fft</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">full</span><span class="p">(),</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">psi</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
+        <span class="n">eig_vals</span><span class="p">,</span> <span class="n">eig_vecs</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">W1</span><span class="p">,</span> <span class="n">yvec</span> <span class="o">=</span> <span class="n">_psi_wigner_fft</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">eig_vecs</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">],</span> <span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+            <span class="n">W</span> <span class="o">+=</span> <span class="n">eig_vals</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="n">W1</span>
+        <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">yvec</span>
+
+
+<span class="k">def</span> <span class="nf">_psi_wigner_fft</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FFT method for a single state vector.  Called multiple times when the</span>
+<span class="sd">    input is a density matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">_osc_eigen</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">xvec</span> <span class="o">*</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">xpsi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+    <span class="n">W</span><span class="p">,</span> <span class="n">yvec</span> <span class="o">=</span> <span class="n">_wigner_fft</span><span class="p">(</span><span class="n">xpsi</span><span class="p">,</span> <span class="n">xvec</span> <span class="o">*</span> <span class="n">g</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">yvec</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">g</span>
+
+
+<span class="k">def</span> <span class="nf">_wigner_fft</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluates the Fourier transformation of a given state vector.</span>
+<span class="sd">    Returns the corresponding density matrix and range</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">]]),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">conj</span><span class="p">()),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">//</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">psi</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">//</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">r1</span><span class="p">)</span> <span class="o">*</span> \
+        <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">r2</span><span class="p">))</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">w</span><span class="p">[:,</span> <span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="n">w</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">w</span><span class="p">[:,</span> <span class="mi">3</span><span class="o">*</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">w</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">n</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">xvec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xvec</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">w</span><span class="p">,</span> <span class="n">p</span>
+
+
+<span class="k">def</span> <span class="nf">_osc_eigen</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">pnts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vector of and N-dim oscillator eigenfunctions evaluated</span>
+<span class="sd">    at the points in pnts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pnts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pnts</span><span class="p">)</span>
+    <span class="n">lpnts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pnts</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">lpnts</span><span class="p">))</span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">pnts</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi</span> <span class="o">**</span> <span class="mf">0.25</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">A</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pnts</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">pnts</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="n">A</span>
+
+
+<span class="k">def</span> <span class="nf">_wigner_clenshaw</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Using Clenshaw summation - numerically stable and efficient</span>
+<span class="sd">    iterative algorithm to evaluate polynomial series.</span>
+
+<span class="sd">    The Wigner function is calculated as</span>
+<span class="sd">    :math:`W = e^(-0.5*x^2)/pi * \sum_{L} c_L (2x)^L / \sqrt(L!)` where</span>
+<span class="sd">    :math:`c_L = \sum_n \rho_{n,L+n} LL_n^L` where</span>
+<span class="sd">    :math:`LL_n^L = (-1)^n \sqrt(L!n!/(L+n)!) LaguerreL[n,L,x]`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+    <span class="c1">#A = 0.5 * g * (X + 1.0j * Y)</span>
+    <span class="n">A2</span> <span class="o">=</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span> <span class="c1">#this is A2 = 2*A</span>
+
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">*=</span> <span class="n">B</span>
+    <span class="n">w0</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">M</span><span class="o">-</span><span class="mi">1</span>
+    <span class="c1">#calculation of \sum_{L} c_L (2x)^L / \sqrt(L!)</span>
+    <span class="c1">#using Horner&#39;s method</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">)))</span>
+        <span class="k">while</span> <span class="n">L</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">L</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="c1">#here c_L = _wig_laguerre_val(L, B, np.diag(rho, L))</span>
+            <span class="n">w0</span> <span class="o">=</span> <span class="n">_wig_laguerre_val</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">A2</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**-</span><span class="mf">0.5</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">L</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">L</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">diag</span> <span class="o">=</span> <span class="n">_csr_get_diag</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span>
+                                <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">L</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diag</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="c1">#here c_L = _wig_laguerre_val(L, B, np.diag(rho, L))</span>
+            <span class="n">w0</span> <span class="o">=</span> <span class="n">_wig_laguerre_val</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">diag</span><span class="p">)</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">A2</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**-</span><span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">w0</span><span class="o">.</span><span class="n">real</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">B</span><span class="o">*</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">g</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_wig_laguerre_val</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this is evaluation of polynomial series inspired by hermval from numpy.</span>
+<span class="sd">    Returns polynomial series</span>
+
+<span class="sd">    .. math:</span>
+<span class="sd">        \sum_n b_n LL_n^L,</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math:</span>
+<span class="sd">        LL_n^L = (-1)^n \sqrt(L!n!/(L+n)!) LaguerreL[n,L,x]</span>
+
+<span class="sd">    The evaluation uses Clenshaw recursion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">k</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">y0</span><span class="p">,</span>    <span class="n">y1</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">((</span><span class="n">L</span><span class="o">+</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">k</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> \
+            <span class="n">y0</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">*</span> <span class="p">((</span><span class="n">L</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">k</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">L</span><span class="o">+</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">k</span><span class="p">)</span><span class="o">**-</span><span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">*</span> <span class="p">((</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">**-</span><span class="mf">0.5</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># Q FUNCTION</span>
+<span class="c1">#</span>
+<span class="k">def</span> <span class="nf">_qfunc_check_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;state must be Qobj, but is </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># This is only approximate, but it&#39;s enough for our purposes; doing more</span>
+    <span class="c1"># than this would take computational effort we don&#39;t _need_ to do.</span>
+    <span class="n">isdm</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">isoper</span>
+        <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">isherm</span>
+        <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">qutip</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">atol</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">isdm</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;state must be a ket or density matrix, but is </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;state must not have tensor structure, but has dimensions:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span>
+
+
+<span class="k">def</span> <span class="nf">_qfunc_check_coordinates</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">xvec</span><span class="p">)</span> <span class="ow">or</span> <span class="n">xvec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;xvec must be array-like, but is &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">xvec</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">yvec</span><span class="p">)</span> <span class="ow">or</span> <span class="n">yvec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;yvec must be array-like, but is &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">yvec</span><span class="p">))</span>
+    <span class="n">xvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">yvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yvec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xvec</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">yvec</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;xvec and yvec must be 1D, but have shapes </span><span class="si">{</span><span class="n">xvec</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">yvec</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span>
+
+
+<span class="k">class</span> <span class="nc">_QFuncCoherentGrid</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Internal function to compute coherent state operators corresponding to a</span>
+<span class="sd">    grid of complex values in phase space.  For efficiency reasons, this class</span>
+<span class="sd">    produces the adjoint of the coherent states, to save allocations when</span>
+<span class="sd">    calculating inner products later.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Initialise the grid calculator.</span>
+
+<span class="sd">    &gt;&gt;&gt; xvec = yvec = np.linspace(-1, 1, 21)</span>
+<span class="sd">    &gt;&gt;&gt; g = np.sqrt(0.5)</span>
+<span class="sd">    &gt;&gt;&gt; max_ns = 10</span>
+<span class="sd">    &gt;&gt;&gt; grid = _QFuncCoherentGrid(xvec, yvec, g)</span>
+
+<span class="sd">    The naive construction of the grid is</span>
+
+<span class="sd">    &gt;&gt;&gt; xs, ys = np.meshgrid(xvec, yvec)</span>
+<span class="sd">    &gt;&gt;&gt; all_alphas = 0.5 * g * (xs + 1j*ys)</span>
+<span class="sd">    &gt;&gt;&gt; naive = np.array([</span>
+<span class="sd">    ...     [</span>
+<span class="sd">    ...         qutip.coherent(max_ns, alpha, method=&#39;analytic&#39;)</span>
+<span class="sd">    ...             .dag().full().ravel()</span>
+<span class="sd">    ...         for alpha in x_alphas</span>
+<span class="sd">    ...     ]</span>
+<span class="sd">    ...     for y_alphas in all_alphas</span>
+<span class="sd">    ... ])</span>
+
+<span class="sd">    The naive approach is typically several of orders of magnitude slower than</span>
+<span class="sd">    this class, which uses much simpler vectorised operations.  The outputs are</span>
+<span class="sd">    within close tolerance, however:</span>
+
+<span class="sd">    &gt;&gt;&gt; np.allclose(naive, grid(max_ns))</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; np.allclose(naive[:, :, 4:7], grid(4, 7))</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xvec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yvec</span> <span class="o">=</span> <span class="n">_qfunc_check_coordinates</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xvec</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">yvec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">real</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="c1"># We produce the adjoint of the coherent states to save an operation</span>
+        <span class="c1"># later when computing dot products, hence the negative imaginary part.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">imag</span> <span class="o">=</span> <span class="o">-</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefactor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the coherent state matrix corresponding to the first needed Fock</span>
+<span class="sd">        state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">first</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefactor</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">first</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefactor</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">last</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a 3D array of shape ``(yvec.size, xvec.size, last - first)`` of the</span>
+<span class="sd">        coherent-state vectors for all the Fock states in the range ``first``</span>
+<span class="sd">        to ``last``, excluding the end point.  The first two axes are the y-</span>
+<span class="sd">        and x-coordinates of phase space (i.e. Cartesian indexing, like</span>
+<span class="sd">        ``numpy.meshgrid``), and the last runs over the selected range of</span>
+<span class="sd">        Fock-space dimensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Technically we could avoid hitting the limits of floating-point</span>
+        <span class="c1"># exponents for longer by doing all this in logarithmic space (using</span>
+        <span class="c1"># scipy.special.gammaln), but that ends up involving more</span>
+        <span class="c1"># floating-point operations overall, and needs special care around the</span>
+        <span class="c1"># point alpha = 0 to avoid nan appearing, due to how Python handles</span>
+        <span class="c1"># mixed-width arithmetic operations.</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">size</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
+        <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">ns</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+
+<div class="viewcode-block" id="QFunc"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.QFunc">[docs]</a><span class="k">class</span> <span class="nc">QFunc</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class-based method of calculating the Husimi-Q function of many different</span>
+<span class="sd">    quantum states at fixed phase-space points ``0.5*g* (xvec + i*yvec)``.</span>
+<span class="sd">    This class has slightly higher first-usage costs than :obj:`.qfunc`, but</span>
+<span class="sd">    subsequent operations will be several times faster. However, it can require</span>
+<span class="sd">    quite a lot of memory. Call the created object as a function to retrieve</span>
+<span class="sd">    the Husimi-Q function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xvec, yvec : array_like</span>
+<span class="sd">        x- and y-coordinates at which to calculate the Husimi-Q function.</span>
+
+<span class="sd">    g : float, default sqrt(2)</span>
+<span class="sd">        Scaling factor for ``a = 0.5 * g * (x + iy)``.  The value of `g` is</span>
+<span class="sd">        related to the value of `hbar` in the commutation relation</span>
+<span class="sd">        :math:`[x,\,y] = i\hbar` via :math:`\hbar=2/g^2`, so the default</span>
+<span class="sd">        corresponds to :math:`\hbar=1`.</span>
+
+<span class="sd">    memory : real, default 1024</span>
+<span class="sd">        Size in MB that may be used internally as workspace.  This class will</span>
+<span class="sd">        raise ``MemoryError`` if subsequently passed a state of sufficiently</span>
+<span class="sd">        large dimension that this bound would be exceeded.  In those cases, use</span>
+<span class="sd">        :obj:`.qfunc` with ``precompute_memory=None`` instead to force using</span>
+<span class="sd">        the slower, more memory-efficient algorithm.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Initialise the class for a square set of coordinates, with some states we</span>
+<span class="sd">    want to investigate.</span>
+
+<span class="sd">    &gt;&gt;&gt; xvec = np.linspace(-2, 2, 101)</span>
+<span class="sd">    &gt;&gt;&gt; states = [qutip.rand_dm(10) for _ in [None]*10]</span>
+<span class="sd">    &gt;&gt;&gt; qfunc = qutip.QFunc(xvec, xvec)</span>
+
+<span class="sd">    Now we can calculate the Husimi-Q function over each of the states more</span>
+<span class="sd">    efficiently with:</span>
+
+<span class="sd">    &gt;&gt;&gt; husimiq = np.array([qfunc(state) for state in states])</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :obj:`.qfunc` :</span>
+<span class="sd">        a single function version, which will involve computing several</span>
+<span class="sd">        quantities multiple times in order to use less memory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">memory</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span> <span class="o">=</span> <span class="n">_QFuncCoherentGrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+        <span class="c1"># 16 bytes per complex, 1024**2 bytes per MB.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size_mb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_mb</span> <span class="o">=</span> <span class="n">memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_memory_mb</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size_mb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_alphas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrive the full tensor of (the conjugate of) coherent states over all</span>
+<span class="sd">        values of :math:`\alpha`, for states of dimension ``size``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">size</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_size</span><span class="p">:</span>
+            <span class="n">requirement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size_mb</span> <span class="o">*</span> <span class="n">size</span>
+            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Refusing to precompute up to </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> basis states.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; This would require </span><span class="si">{</span><span class="n">requirement</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB,&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; but only </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_memory_mb</span><span class="si">}</span><span class="s2"> MB is allowed.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coherent_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span><span class="p">,</span> <span class="n">size</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span>
+
+    <span class="k">def</span> <span class="nf">_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">alphas</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the Q function (without the :math:`\pi` scaling factor) of a single</span>
+<span class="sd">        state vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">vector</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the Husimi-Q function for the given state vector or density matrix,</span>
+<span class="sd">        over the coordinates used to initialise the class.  If called multiple</span>
+<span class="sd">        times, the states do not need to have the same dimensions, but none of</span>
+<span class="sd">        them can have tensor-product structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">_qfunc_check_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">alphas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alphas</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">alphas</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="c1"># We don&#39;t use Qobj.eigenstates() to avoid building many unnecessary</span>
+        <span class="c1"># CSR versions of dense matrices.</span>
+        <span class="n">values</span><span class="p">,</span> <span class="n">vectors</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+        <span class="n">vectors</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alphas</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">vector</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">alphas</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span></div>
+
+
+<span class="k">def</span> <span class="nf">_qfunc_iterative_single</span><span class="p">(</span>
+    <span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">alpha_grid</span><span class="p">:</span> <span class="n">_QFuncCoherentGrid</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the Q function (without the :math:`\pi` scaling factor) of a single</span>
+<span class="sd">    state vector, using the iterative algorithm which recomputes the powers of</span>
+<span class="sd">    the coherent-state matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span>
+        <span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">g</span> <span class="o">*</span> <span class="n">vector</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">ns</span><span class="p">)))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">alpha_grid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">out</span> <span class="o">*=</span> <span class="n">alpha_grid</span><span class="o">.</span><span class="n">prefactor</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+
+<div class="viewcode-block" id="qfunc"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.qfunc">[docs]</a><span class="k">def</span> <span class="nf">qfunc</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">Qobj</span><span class="p">,</span>
+    <span class="n">xvec</span><span class="p">,</span>
+    <span class="n">yvec</span><span class="p">,</span>
+    <span class="n">g</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">precompute_memory</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Husimi-Q function of a given state vector or density matrix at phase-space</span>
+<span class="sd">    points ``0.5 * g * (xvec + i*yvec)``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :obj:`.Qobj`</span>
+<span class="sd">        A state vector or density matrix.  This cannot have tensor-product</span>
+<span class="sd">        structure.</span>
+
+<span class="sd">    xvec, yvec : array_like</span>
+<span class="sd">        x- and y-coordinates at which to calculate the Husimi-Q function.</span>
+
+<span class="sd">    g : float, default sqrt(2)</span>
+<span class="sd">        Scaling factor for ``a = 0.5 * g * (x + iy)``.  The value of `g` is</span>
+<span class="sd">        related to the value of :math:`\hbar` in the commutation relation</span>
+<span class="sd">        :math:`[x,\,y] = i\hbar` via :math:`\hbar=2/g^2`, so the default</span>
+<span class="sd">        corresponds to :math:`\hbar=1`.</span>
+
+<span class="sd">    precompute_memory : real, default 1024</span>
+<span class="sd">        Size in MB that may be used during calculations as working space when</span>
+<span class="sd">        dealing with density-matrix inputs.  This is ignored for state-vector</span>
+<span class="sd">        inputs.  The bound is not quite exact due to other, order-of-magnitude</span>
+<span class="sd">        smaller, intermediaries being necessary, but is a good approximation.</span>
+<span class="sd">        If you want to use the same iterative algorithm for density matrices</span>
+<span class="sd">        that is used for single kets, set ``precompute_memory=None``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Values representing the Husimi-Q function calculated over the specified</span>
+<span class="sd">        range ``[xvec, yvec]``.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :obj:`.QFunc` :</span>
+<span class="sd">        a class-based version, more efficient if you want to calculate the</span>
+<span class="sd">        Husimi-Q function for several states over the same coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">_qfunc_check_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span> <span class="o">=</span> <span class="n">_qfunc_check_coordinates</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
+    <span class="n">required_memory</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">xvec</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">yvec</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">enough_memory</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">precompute_memory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">precompute_memory</span> <span class="o">&gt;</span> <span class="n">required_memory</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isoper</span> <span class="ow">and</span> <span class="n">enough_memory</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QFunc</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">precompute_memory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Falling back to iterative algorithm due to lack of memory.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; Needed </span><span class="si">{</span><span class="n">required_memory</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB, but only allowed to use&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">precompute_memory</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB.  Increase `precompute_memory` to&quot;</span>
+            <span class="s2">&quot; raise limit, or set to `None` to suppress warning.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">alpha_grid</span> <span class="o">=</span> <span class="n">_QFuncCoherentGrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_qfunc_iterative_single</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">alpha_grid</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="c1"># We don&#39;t use Qobj.eigenstates() to avoid building many unnecessary CSR</span>
+    <span class="c1"># versions of dense matrices.</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">vectors</span> <span class="o">=</span> <span class="n">eigh</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
+    <span class="n">vectors</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">_qfunc_iterative_single</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha_grid</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">vector</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="n">_qfunc_iterative_single</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">alpha_grid</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># PSEUDO DISTRIBUTION FUNCTIONS FOR SPINS</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="spin_q_function"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.spin_q_function">[docs]</a><span class="k">def</span> <span class="nf">spin_q_function</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The Husimi Q function for spins is defined as ``Q(theta, phi) =</span>
+<span class="sd">    SCS.dag() * rho * SCS`` for the spin coherent state ``SCS = spin_coherent(</span>
+<span class="sd">    j, theta, phi)`` where j is the spin length.</span>
+<span class="sd">    The implementation here is more efficient as it doesn&#39;t</span>
+<span class="sd">    generate all of the SCS at theta and phi (see references).</span>
+
+<span class="sd">    The spin Q function is normal when integrated over the surface of the</span>
+<span class="sd">    sphere</span>
+
+<span class="sd">    .. math:: \frac{4 \pi}{2j + 1}\int_\phi \int_\theta</span>
+<span class="sd">              Q(\theta, \phi) \sin(\theta) d\theta d\phi = 1</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : qobj</span>
+<span class="sd">        A state vector or density matrix for a spin-j quantum system.</span>
+<span class="sd">    theta : array_like</span>
+<span class="sd">        Polar (colatitude) angle at which to calculate the Husimi-Q function.</span>
+<span class="sd">    phi : array_like</span>
+<span class="sd">        Azimuthal angle at which to calculate the Husimi-Q function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Q, THETA, PHI : 2d-array</span>
+<span class="sd">        Values representing the spin Husimi Q function at the values specified</span>
+<span class="sd">        by THETA and PHI.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Lee Loh, Y., &amp; Kim, M. (2015). American J. of Phys., 83(1), 30–35.</span>
+<span class="sd">    https://doi.org/10.1119/1.4898595</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+
+    <span class="n">J</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">J</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">THETA</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">Q</span> <span class="o">+=</span> <span class="n">binom</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="n">m1</span><span class="p">))</span> <span class="o">*</span> \
+             <span class="n">sin</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">))</span> <span class="o">*</span> \
+             <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="n">m1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">Q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m1</span><span class="p">))</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m2</span><span class="p">))</span> <span class="o">*</span>
+                  <span class="n">cos</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="n">m1</span> <span class="o">+</span> <span class="n">m2</span><span class="p">)</span> <span class="o">*</span>
+                  <span class="n">sin</span><span class="p">(</span><span class="n">THETA</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">m1</span> <span class="o">-</span> <span class="n">m2</span><span class="p">))</span> <span class="o">*</span> \
+             <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">m1</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)</span> <span class="o">*</span> <span class="n">PHI</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)]</span> <span class="o">+</span>
+              <span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">m2</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">*</span> <span class="n">PHI</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)])</span>
+
+    <span class="k">return</span> <span class="n">Q</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span></div>
+
+
+<span class="k">def</span> <span class="nf">_rho_kq</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This calculates the trace of the multipole operator T_kq and the density</span>
+<span class="sd">    matrix rho for use in the spin Wigner quasiprobability distribution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rho : qobj</span>
+<span class="sd">        A density matrix for a spin-j quantum system.</span>
+<span class="sd">    j : float</span>
+<span class="sd">        The spin length of the system.</span>
+<span class="sd">    k : int</span>
+<span class="sd">        Spherical harmonic degree</span>
+<span class="sd">    q : int</span>
+<span class="sd">        Spherical harmonic order</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    v : float</span>
+<span class="sd">        Overlap of state with multipole operator T_kq</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="n">j</span>
+    <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="n">m1</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">clebsch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="n">m1</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="o">-</span><span class="n">m2</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">rho</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">m2</span><span class="p">)]</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">v</span>
+
+
+<div class="viewcode-block" id="spin_wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.spin_wigner">[docs]</a><span class="k">def</span> <span class="nf">spin_wigner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Wigner function for a spin-j system.</span>
+
+<span class="sd">    The spin W function is normal when integrated over the surface of the</span>
+<span class="sd">    sphere</span>
+
+<span class="sd">    .. math:: \sqrt{\frac{4 \pi}{2j + 1}}\int_\phi \int_\theta</span>
+<span class="sd">              W(\theta,\phi) \sin(\theta) d\theta d\phi = 1</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : qobj</span>
+<span class="sd">        A state vector or density matrix for a spin-j quantum system.</span>
+<span class="sd">    theta : array_like</span>
+<span class="sd">        Polar (colatitude) angle at which to calculate the W function.</span>
+<span class="sd">    phi : array_like</span>
+<span class="sd">        Azimuthal angle at which to calculate the W function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    W, THETA, PHI : 2d-array</span>
+<span class="sd">        Values representing the spin Wigner function at the values specified</span>
+<span class="sd">        by THETA and PHI.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Agarwal, G. S. (1981). Phys. Rev. A, 24(6), 2889–2896.</span>
+<span class="sd">    https://doi.org/10.1103/PhysRevA.24.2889</span>
+
+<span class="sd">    [2] Dowling, J. P., Agarwal, G. S., &amp; Schleich, W. P. (1994).</span>
+<span class="sd">    Phys. Rev. A, 49(5), 4101–4109. https://doi.org/10.1103/PhysRevA.49.4101</span>
+
+<span class="sd">    [3] Conversion between Wigner 3-j symbol and Clebsch-Gordan coefficients</span>
+<span class="sd">    taken from Wikipedia (https://en.wikipedia.org/wiki/3-j_symbol)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">rho</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+
+    <span class="n">J</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">J</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">THETA</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># sph_harm takes azimuthal angle then polar angle as arguments</span>
+            <span class="n">W</span> <span class="o">+=</span> <span class="n">_rho_kq</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">sph_harm</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">PHI</span><span class="p">,</span> <span class="n">THETA</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">W</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Apr 13, 2022.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
