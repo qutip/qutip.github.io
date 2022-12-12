@@ -213,12 +213,12 @@
 <span id="qip-intro"></span><h1>Quantum Information Processing<a class="headerlink" href="#quantum-information-processing" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The Quantum Information Processing (QIP) module aims at providing basic tools for quantum computing simulation both for simple quantum algorithm design and for experimental realization. It offers two different approaches, one with <code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code> calculating unitary evolution under quantum gates by matrix product, another called <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a> using open system solvers in QuTiP to simulate noisy quantum device.</p>
+<p>The Quantum Information Processing (QIP) module aims at providing basic tools for quantum computing simulation both for simple quantum algorithm design and for experimental realization. It offers two different approaches, one with <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit" title="qutip.qip.circuit.QubitCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code></a> calculating unitary evolution under quantum gates by matrix product, another called <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.device.Processor" title="qutip.qip.device.Processor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></a> using open system solvers in QuTiP to simulate noisy quantum device.</p>
 </div>
 <div class="section" id="quantum-circuit">
 <span id="quantum-circuits"></span><h2>Quantum Circuit<a class="headerlink" href="#quantum-circuit" title="Permalink to this headline">¶</a></h2>
 <p>The most common model for quantum computing is the quantum circuit model.
-In QuTiP, we use <code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code> to represent a quantum circuit.
+In QuTiP, we use <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit" title="qutip.qip.circuit.QubitCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code></a> to represent a quantum circuit.
 The circuit is characterized by registers and gates:</p>
 <ul class="simple">
 <li><p><strong>Registers</strong>: The argument <code class="docutils literal notranslate"><span class="pre">N</span></code> specifies the number of qubit registers in the circuit
@@ -229,7 +229,7 @@ with information such as gate name, target qubits and arguments.
 Gates can also be controlled on a classical bit by specifying the register number
 with the argument <code class="docutils literal notranslate"><span class="pre">classical_controls</span></code>.</p></li>
 <li><p><strong>Measurements</strong>: We can also carry out measurements on individual qubit (both in the middle and at the end of the circuit).
-Each measurement is saved as a class object <code class="xref py py-class docutils literal notranslate"><span class="pre">Measurement</span></code> with parameters such as <cite>targets</cite>,
+Each measurement is saved as a class object <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.Measurement" title="qutip.qip.circuit.Measurement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Measurement</span></code></a> with parameters such as <cite>targets</cite>,
 the target qubit on which the measurement will be carried out, and <cite>classical_store</cite>,
 the index of the classical register which stores the result of the measurement.</p></li>
 </ul>
@@ -434,7 +434,7 @@ Qobj data =
 </tr>
 </tbody>
 </table>
-<p>For some of the gates listed above, <code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code> also has a primitive <code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_gates</span></code> method that decomposes them into elementary gate sets such as CNOT or SWAP with single-qubit gates (RX, RY and RZ). However, this method is not fully optimized. It is very likely that the depth of the circuit can be further reduced by merging quantum gates. It is required that the gate resolution be carried out before the measurements to the circuit are added.</p>
+<p>For some of the gates listed above, <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit" title="qutip.qip.circuit.QubitCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">QubitCircuit</span></code></a> also has a primitive <a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.QubitCircuit.resolve_gates" title="qutip.qip.circuit.QubitCircuit.resolve_gates"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_gates</span></code></a> method that decomposes them into elementary gate sets such as CNOT or SWAP with single-qubit gates (RX, RY and RZ). However, this method is not fully optimized. It is very likely that the depth of the circuit can be further reduced by merging quantum gates. It is required that the gate resolution be carried out before the measurements to the circuit are added.</p>
 <p><strong>Custom Gates</strong></p>
 <p>In addition to these pre-defined gates, QuTiP also allows the user to define their own gate.
 The following example shows how to define a customized gate.
@@ -553,11 +553,11 @@ where <code class="docutils literal notranslate"><span class="pre">anypdf.pdf</s
 <ul class="simple">
 <li><p>The first method utilizes unitary application through matrix products on the input states.
 This method simulates circuits exactly in a deterministic manner. This is achieved through
-<code class="xref py py-class docutils literal notranslate"><span class="pre">CircuitSimulator</span></code>. A short guide to exact simulation can be
+<a class="reference internal" href="../../apidoc/classes.html#qutip.qip.circuit.CircuitSimulator" title="qutip.qip.circuit.CircuitSimulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">CircuitSimulator</span></code></a>. A short guide to exact simulation can be
 found at <a class="reference internal" href="qip-simulator.html#qip-simulator"><span class="std std-ref">Operator-level circuit simulation</span></a>. The teleportation notebook is also useful as an example.</p></li>
 <li><p>A different method of circuit simulation employs driving Hamiltonians with the ability to
 simulate circuits in the presence of noise. This can be achieved through the various classes
-in <code class="xref py py-class docutils literal notranslate"><span class="pre">device</span></code>.A short guide to processors for QIP simulation can be found at <a class="reference internal" href="qip-processor.html#qip-processor"><span class="std std-ref">Pulse-level circuit simulation</span></a>.</p></li>
+in <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.qip.device</span></code>. A short guide to processors for QIP simulation can be found at <a class="reference internal" href="qip-processor.html#qip-processor"><span class="std std-ref">Pulse-level circuit simulation</span></a>.</p></li>
 </ul>
 </div>
 </div>
@@ -578,7 +578,7 @@ in <code class="xref py py-class docutils literal notranslate"><span class="pre"
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>
