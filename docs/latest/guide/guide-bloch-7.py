@@ -1,2 +1,0 @@
-b.clear()
-b.render()

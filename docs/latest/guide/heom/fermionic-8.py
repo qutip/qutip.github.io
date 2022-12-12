@@ -1,1 +1,0 @@
-steady_state, steady_ados = solver.steady_state()

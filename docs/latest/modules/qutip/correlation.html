@@ -12,17 +12,17 @@
   
 
   
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/site.css" type="text/css" />
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
 
   
@@ -32,16 +32,16 @@
 
   
   <!--[if lt IE 9]>
-    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-        <script src="../../static/jquery.js"></script>
-        <script src="../../static/underscore.js"></script>
-        <script src="../../static/doctools.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -1243,18 +1243,15 @@
     <span class="n">rho_t</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[],</span>
                     <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">states</span>
     <span class="n">corr_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">tlist</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">taulist</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-    <span class="n">H_shifted</span><span class="p">,</span> <span class="n">c_ops_shifted</span><span class="p">,</span> <span class="n">_args</span> <span class="o">=</span> <span class="n">_transform_L_t_shift_new</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">taulist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">taulist</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">tdname</span><span class="p">:</span>
         <span class="n">_cython_build_cleanup</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span><span class="p">)</span>
     <span class="n">rhs_clear</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">rho</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rho_t</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="n">_args</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">]</span>
-
         <span class="n">corr_mat</span><span class="p">[</span><span class="n">t_idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span>
-            <span class="n">H_shifted</span><span class="p">,</span> <span class="n">c_op</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops_shifted</span><span class="p">,</span>
-            <span class="p">[</span><span class="n">b_op</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">_args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span>
+            <span class="n">H</span><span class="p">,</span> <span class="n">c_op</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">taulist</span> <span class="o">+</span> <span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">],</span> <span class="n">c_ops</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">b_op</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span>
         <span class="p">)</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">t_idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1379,7 +1376,8 @@
     <span class="p">)</span><span class="o">.</span><span class="n">states</span>
 
     <span class="n">corr_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">tlist</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">taulist</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-    <span class="n">H_shifted</span><span class="p">,</span> <span class="n">c_ops_shifted</span><span class="p">,</span> <span class="n">_args</span> <span class="o">=</span> <span class="n">_transform_L_t_shift_new</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+    <span class="n">taulist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">taulist</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">tdname</span><span class="p">:</span>
         <span class="n">_cython_build_cleanup</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span><span class="p">)</span>
     <span class="n">rhs_clear</span><span class="p">()</span>
@@ -1387,9 +1385,6 @@
     <span class="c1"># calculation of &lt;A(t)B(t+tau)C(t)&gt; from only knowledge of psi0 requires</span>
     <span class="c1"># averaging over both t and tau</span>
     <span class="k">for</span> <span class="n">t_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">tlist</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="n">_args</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">]</span>
-
         <span class="k">for</span> <span class="n">trial_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">ntraj</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a_op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">a_op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">==</span> <span class="n">c_op</span><span class="p">:</span>
@@ -1399,9 +1394,9 @@
 
                     <span class="c1"># evolve these states and calculate expectation value of B</span>
                     <span class="n">c_tau</span> <span class="o">=</span> <span class="n">chi_0</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mcsolve</span><span class="p">(</span>
-                        <span class="n">H_shifted</span><span class="p">,</span> <span class="n">chi_0</span><span class="o">/</span><span class="n">chi_0</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops_shifted</span><span class="p">,</span>
+                        <span class="n">H</span><span class="p">,</span> <span class="n">chi_0</span><span class="o">/</span><span class="n">chi_0</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span> <span class="n">taulist</span> <span class="o">+</span> <span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">],</span> <span class="n">c_ops</span><span class="p">,</span>
                         <span class="p">[</span><span class="n">b_op</span><span class="p">],</span>
-                        <span class="n">args</span><span class="o">=</span><span class="n">_args</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">ntraj</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">ntraj</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
                         <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -1426,9 +1421,9 @@
                 <span class="c1"># evolve these states and calculate expectation value of B</span>
                 <span class="n">c_tau</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">chi</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mcsolve</span><span class="p">(</span>
-                        <span class="n">H_shifted</span><span class="p">,</span> <span class="n">chi</span><span class="o">/</span><span class="n">chi</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops_shifted</span><span class="p">,</span>
+                        <span class="n">H</span><span class="p">,</span> <span class="n">chi</span><span class="o">/</span><span class="n">chi</span><span class="o">.</span><span class="n">norm</span><span class="p">(),</span> <span class="n">taulist</span> <span class="o">+</span> <span class="n">tlist</span><span class="p">[</span><span class="n">t_idx</span><span class="p">],</span> <span class="n">c_ops</span><span class="p">,</span>
                         <span class="p">[</span><span class="n">b_op</span><span class="p">],</span>
-                        <span class="n">args</span><span class="o">=</span><span class="n">_args</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">ntraj</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">ntraj</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
                         <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">chi</span> <span class="ow">in</span> <span class="n">chi_0</span>
@@ -1490,58 +1485,6 @@
         <span class="n">spectrum</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">spectrum</span>
-
-
-<span class="c1"># auxiliary</span>
-<span class="k">def</span> <span class="nf">_transform_shift_one_coeff</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">):</span>
-        <span class="c1"># function-list based time-dependence</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args_i</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">args_i</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">],</span> <span class="n">args_i</span><span class="p">)</span>
-            <span class="n">fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">args_i</span><span class="p">:</span> \
-                <span class="n">op</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">args_i</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">],</span> <span class="n">args_i</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args_i</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">args_i</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">],</span> <span class="n">args_i</span><span class="p">[</span><span class="s2">&quot;_user_args&quot;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="s2">&quot;(?&lt;=[^0-9a-zA-Z_])t(?=[^0-9a-zA-Z_])&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;(t+_t0)&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">op</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fn</span>
-
-
-<span class="k">def</span> <span class="nf">_transform_shift_one_op</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-        <span class="n">new_op</span> <span class="o">=</span> <span class="n">op</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">):</span>
-        <span class="n">new_op</span> <span class="o">=</span> <span class="n">op</span>
-        <span class="n">new_op</span><span class="o">.</span><span class="n">_shift</span>
-    <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">new_op</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args_i</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">args_i</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">],</span> <span class="n">args_i</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">new_op</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">op</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                <span class="n">new_op</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                               <span class="n">_transform_shift_one_coeff</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">args</span><span class="p">)])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">new_op</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">new_op</span>
-
-
-<span class="k">def</span> <span class="nf">_transform_L_t_shift_new</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
-    <span class="n">H_shifted</span> <span class="o">=</span> <span class="n">_transform_shift_one_op</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
-    <span class="n">c_ops_shifted</span> <span class="o">=</span> <span class="p">[</span><span class="n">_transform_shift_one_op</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_t0&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="n">_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">_args</span><span class="p">[</span><span class="s2">&quot;_t0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_user_args&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span> <span class="s2">&quot;_t0&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">H_shifted</span><span class="p">,</span> <span class="n">c_ops_shifted</span><span class="p">,</span> <span class="n">_args</span>
 </pre></div>
 
            </div>
@@ -1555,7 +1498,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>

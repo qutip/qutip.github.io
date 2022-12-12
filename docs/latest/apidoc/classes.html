@@ -1132,17 +1132,18 @@ operators and states.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>: <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code></a>, C number</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">/</span></code> : C number</p></li>
 </ul>
-<p>This object is constructed by passing a list of <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a> instances,
-each of which <em>may</em> have an associated scalar time dependence.  The list is
-summed to produce the final result.  In other words, if an instance of this
-class is <span class="math notranslate nohighlight">\(Q(t)\)</span>, then it is constructed from a set of constant
-<a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a> <span class="math notranslate nohighlight">\(\{Q_k\}\)</span> and time-dependent scalars <span class="math notranslate nohighlight">\(f_k(t)\)</span> by</p>
+<p>This object is constructed by passing a list of <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a>
+instances, each of which <em>may</em> have an associated scalar time dependence.
+The list is summed to produce the final result.  In other words, if an
+instance of this class is <span class="math notranslate nohighlight">\(Q(t)\)</span>, then it is constructed from a set
+of constant:obj:<cite>~qutip.Qobj</cite> <span class="math notranslate nohighlight">\(\{Q_k\}\)</span> and time-dependent scalars
+<span class="math notranslate nohighlight">\(f_k(t)\)</span> by</p>
 <div class="math notranslate nohighlight">
 \[Q(t) = \sum_k f_k(t) Q_k\]</div>
-<p>If a scalar <span class="math notranslate nohighlight">\(f_k(t)\)</span> is not passed with a given <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a>, then
-that term is assumed to be constant.  The next section contains more detail
-on the allowed forms of the constants, and gives several examples for how
-to build instances of this class.</p>
+<p>If a scalar <span class="math notranslate nohighlight">\(f_k(t)\)</span> is not passed with a given <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a>,
+then that term is assumed to be constant.  The next section contains more
+detail on the allowed forms of the constants, and gives several examples
+for how to build instances of this class.</p>
 <p><strong>Time-dependence formats</strong></p>
 <p>There are three major formats for specifying a time-dependent scalar:</p>
 <ul class="simple">
@@ -1502,8 +1503,8 @@ can be passed to <a class="reference internal" href="functions.html#module-qutip
 <dd><p>Class representation of an exponential-series expansion of
 time-dependent quantum objects.</p>
 <div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 4.6.0: </span><a class="reference internal" href="#qutip.eseries" title="qutip.eseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eseries</span></code></a> will be removed in QuTiP 5.  Please use <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QobjEvo</span></code></a>
-for general time-dependence.</p>
+<p><span class="versionmodified deprecated">Deprecated since version 4.6.0: </span><a class="reference internal" href="#qutip.eseries" title="qutip.eseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eseries</span></code></a> will be removed in QuTiP 5.
+Please use <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QobjEvo</span></code></a> for general time-dependence.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -1896,6 +1897,183 @@ in the cell you create the figure in.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="qutip.bloch3d.Bloch3d">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Bloch3d</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for plotting data on a 3D Bloch sphere using mayavi.
+Valid data can be either points, vectors, or qobj objects
+corresponding to state vectors or density matrices. for
+a two-state system (or subsystem).</p>
+<p class="rubric">Notes</p>
+<p>The use of mayavi for 3D rendering of the Bloch sphere comes with
+a few limitations: I) You can not embed a Bloch3d figure into a
+matplotlib window. II) The use of LaTex is not supported by the
+mayavi rendering engine. Therefore all labels must be defined using
+standard text. Of course you can post-process the generated figures
+later to add LaTeX using other software if needed.</p>
+<dl class="field-list">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl>
+<dt><strong>fig</strong><span class="classifier">instance {None}</span></dt><dd><p>User supplied Matplotlib Figure instance for plotting Bloch sphere.</p>
+</dd>
+<dt><strong>font_color</strong><span class="classifier">str {‘black’}</span></dt><dd><p>Color of font used for Bloch sphere labels.</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float {0.08}</span></dt><dd><p>Scale for font used for Bloch sphere labels.</p>
+</dd>
+<dt><strong>frame</strong><span class="classifier">bool {True}</span></dt><dd><p>Draw frame for Bloch sphere</p>
+</dd>
+<dt><strong>frame_alpha</strong><span class="classifier">float {0.05}</span></dt><dd><p>Sets transparency of Bloch sphere frame.</p>
+</dd>
+<dt><strong>frame_color</strong><span class="classifier">str {‘gray’}</span></dt><dd><p>Color of sphere wireframe.</p>
+</dd>
+<dt><strong>frame_num</strong><span class="classifier">int {8}</span></dt><dd><p>Number of frame elements to draw.</p>
+</dd>
+<dt><strong>frame_radius</strong><span class="classifier">floats {0.005}</span></dt><dd><p>Width of wireframe.</p>
+</dd>
+<dt><strong>point_color</strong><span class="classifier">list {[‘r’, ‘g’, ‘b’, ‘y’]}</span></dt><dd><p>List of colors for Bloch sphere point markers to cycle through.
+i.e. By default, points 0 and 4 will both be blue (‘r’).</p>
+</dd>
+<dt><strong>point_mode</strong><span class="classifier">string {‘sphere’,’cone’,’cube’,’cylinder’,’point’}</span></dt><dd><p>Point marker shapes.</p>
+</dd>
+<dt><strong>point_size</strong><span class="classifier">float {0.075}</span></dt><dd><p>Size of points on Bloch sphere.</p>
+</dd>
+<dt><strong>sphere_alpha</strong><span class="classifier">float {0.1}</span></dt><dd><p>Transparency of Bloch sphere itself.</p>
+</dd>
+<dt><strong>sphere_color</strong><span class="classifier">str {‘#808080’}</span></dt><dd><p>Color of Bloch sphere.</p>
+</dd>
+<dt><strong>size</strong><span class="classifier">list {[500,500]}</span></dt><dd><p>Size of Bloch sphere plot in pixels. Best to have both numbers the same
+otherwise you will have a Bloch sphere that looks like a football.</p>
+</dd>
+<dt><strong>vector_color</strong><span class="classifier">list {[‘r’, ‘g’, ‘b’, ‘y’]}</span></dt><dd><p>List of vector colors to cycle through.</p>
+</dd>
+<dt><strong>vector_width</strong><span class="classifier">int {3}</span></dt><dd><p>Width of displayed vectors.</p>
+</dd>
+<dt><strong>view</strong><span class="classifier">list {[45,65]}</span></dt><dd><p>Azimuthal and Elevation viewing angles.</p>
+</dd>
+<dt><strong>xlabel</strong><span class="classifier">list {<code class="docutils literal notranslate"><span class="pre">['|x&gt;',</span> <span class="pre">'']</span></code>}</span></dt><dd><p>List of strings corresponding to +x and -x axes labels, respectively.</p>
+</dd>
+<dt><strong>xlpos</strong><span class="classifier">list {[1.07,-1.07]}</span></dt><dd><p>Positions of +x and -x labels respectively.</p>
+</dd>
+<dt><strong>ylabel</strong><span class="classifier">list {<code class="docutils literal notranslate"><span class="pre">['|y&gt;',</span> <span class="pre">'']</span></code>}</span></dt><dd><p>List of strings corresponding to +y and -y axes labels, respectively.</p>
+</dd>
+<dt><strong>ylpos</strong><span class="classifier">list {[1.07,-1.07]}</span></dt><dd><p>Positions of +y and -y labels respectively.</p>
+</dd>
+<dt><strong>zlabel</strong><span class="classifier">list {<code class="docutils literal notranslate"><span class="pre">['|0&gt;',</span> <span class="pre">'|1&gt;']</span></code>}</span></dt><dd><p>List of strings corresponding to +z and -z axes labels, respectively.</p>
+</dd>
+<dt><strong>zlpos</strong><span class="classifier">list {[1.07,-1.07]}</span></dt><dd><p>Positions of +z and -z labels respectively.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.add_points">
+<code class="sig-name descname"><span class="pre">add_points</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.add_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.add_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of data points to bloch sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>points</strong><span class="classifier">array/list</span></dt><dd><p>Collection of data points.</p>
+</dd>
+<dt><strong>meth</strong><span class="classifier">str {‘s’,’m’}</span></dt><dd><p>Type of points to plot, use ‘m’ for multicolored.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, default=1.</span></dt><dd><p>Transparency value for the vectors. Values between 0 and 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.add_states">
+<code class="sig-name descname"><span class="pre">add_states</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vector'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.add_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.add_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a state vector Qobj to Bloch sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>state</strong><span class="classifier">qobj</span></dt><dd><p>Input state vector.</p>
+</dd>
+<dt><strong>kind</strong><span class="classifier">str {‘vector’,’point’}</span></dt><dd><p>Type of object to plot.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, default=1.</span></dt><dd><p>Transparency value for the vectors. Values between 0 and 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.add_vectors">
+<code class="sig-name descname"><span class="pre">add_vectors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.add_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.add_vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of vectors to Bloch sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>vectors</strong><span class="classifier">array/list</span></dt><dd><p>Array with vectors of unit length or smaller.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, default=1.</span></dt><dd><p>Transparency value for the vectors. Values between 0 and 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.clear">
+<code class="sig-name descname"><span class="pre">clear</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the Bloch sphere data sets to empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.make_sphere">
+<code class="sig-name descname"><span class="pre">make_sphere</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.make_sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.make_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots Bloch sphere and data sets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.plot_points">
+<code class="sig-name descname"><span class="pre">plot_points</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.plot_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.plot_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots points on the Bloch sphere.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.plot_vectors">
+<code class="sig-name descname"><span class="pre">plot_vectors</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.plot_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.plot_vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots vectors on the Bloch sphere.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.save">
+<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves Bloch sphere to file of type <code class="docutils literal notranslate"><span class="pre">format</span></code> in directory <code class="docutils literal notranslate"><span class="pre">dirc</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of saved image. Must include path and format as well.
+i.e. ‘/Users/Paul/Desktop/bloch.png’
+This overrides the ‘format’ and ‘dirc’ arguments.</p>
+</dd>
+<dt><strong>format</strong><span class="classifier">str</span></dt><dd><p>Format of output image. Default is ‘png’.</p>
+</dd>
+<dt><strong>dirc</strong><span class="classifier">str</span></dt><dd><p>Directory for output images. Defaults to current working directory.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>File containing plot of Bloch sphere.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qutip.bloch3d.Bloch3d.show">
+<code class="sig-name descname"><span class="pre">show</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/bloch3d.html#Bloch3d.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.bloch3d.Bloch3d.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the Bloch sphere and corresponding data sets.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="distributions">
 <h2>Distributions<a class="headerlink" href="#distributions" title="Permalink to this headline">¶</a></h2>
@@ -2007,8 +2185,8 @@ Theory and Applications”, Comput Econ 30, 153 (2007).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>H_sys</strong><span class="classifier">QObj, QobjEvo or a list</span></dt><dd><p>The system Hamiltonian or Liouvillian specified as either a
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code>, a <code class="xref py py-obj docutils literal notranslate"><span class="pre">QobjEvo</span></code>, or a list of elements that may
-be converted to a <code class="xref py py-obj docutils literal notranslate"><span class="pre">ObjEvo</span></code>.</p>
+<a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a>, a <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QobjEvo</span></code></a>, or a list of elements
+that may be converted to a <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QobjEvo</span></code></a>.</p>
 </dd>
 <dt><strong>bath</strong><span class="classifier">Bath or list of Bath</span></dt><dd><p>A <a class="reference internal" href="#qutip.nonmarkov.heom.Bath" title="qutip.nonmarkov.heom.Bath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bath</span></code></a> containing the exponents of the expansion of the
 bath correlation funcion and their associated coefficients
@@ -2043,7 +2221,7 @@ and maximum depth.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>rho0</strong><span class="classifier">Qobj or HierarchyADOsState or numpy.array</span></dt><dd><p>Initial state (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code> density matrix) of the system
+<dt><strong>rho0</strong><span class="classifier">Qobj or HierarchyADOsState or numpy.array</span></dt><dd><p>Initial state (<a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a> density matrix) of the system
 if <code class="docutils literal notranslate"><span class="pre">ado_init</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">ado_init</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then <code class="docutils literal notranslate"><span class="pre">rho0</span></code> should be an
 instance of <a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOsState" title="qutip.nonmarkov.heom.HierarchyADOsState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HierarchyADOsState</span></code></a> or a numpy array
@@ -2194,10 +2372,6 @@ less than <code class="docutils literal notranslate"><span class="pre">N_exp</sp
 <dt><strong>bnd_cut_approx</strong><span class="classifier">bool</span></dt><dd><p>Use boundary cut off approximation. If true, the Matsubara
 terminator is added to the system Liouvillian (and H_sys is
 promoted to a Liouvillian if it was a Hamiltonian).</p>
-</dd>
-<dt><strong>progress_bar</strong><span class="classifier">None, True or <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProgressBar</span></code></span></dt><dd><p>Optional instance of BaseProgressBar, or a subclass thereof, for
-showing the progress of the solver. If True, an instance of
-<code class="xref py py-class docutils literal notranslate"><span class="pre">TextProgressBar</span></code> is used instead.</p>
 </dd>
 <dt><strong>options</strong><span class="classifier"><a class="reference internal" href="#qutip.solver.Options" title="qutip.solver.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Options</span></code></a></span></dt><dd><p>Generic solver options.
 If set to None the default options will be used.</p>
@@ -2858,7 +3032,7 @@ point in time, <code class="docutils literal notranslate"><span class="pre">t</s
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>rho</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code></span></dt><dd><p>The current state of the system (i.e. the 0th component of the
+<dt><strong>rho</strong><span class="classifier"><a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code></a></span></dt><dd><p>The current state of the system (i.e. the 0th component of the
 hierarchy).</p>
 </dd>
 <dt><strong>ados</strong><span class="classifier"><a class="reference internal" href="#qutip.nonmarkov.heom.HierarchyADOs" title="qutip.nonmarkov.heom.HierarchyADOs"><code class="xref py py-class docutils literal notranslate"><span class="pre">HierarchyADOs</span></code></a></span></dt><dd><p>The description of the hierarchy.</p>
@@ -2896,7 +3070,7 @@ is extracted by label instead.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>Qobj</dt><dd><p>A <code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code> representing the state of the specified ADO.</p>
+<dt>Qobj</dt><dd><p>A <a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Qobj</span></code></a> representing the state of the specified ADO.</p>
 </dd>
 </dl>
 </dd>
@@ -3580,18 +3754,18 @@ construct an instance of this class, so it is rarely needed to explicitly
 create an instance of this class.</p>
 <p>Within the attribute list, a <code class="docutils literal notranslate"><span class="pre">time_dependent_object</span></code> is either</p>
 <ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code>: a constant term</p></li>
+<li><p><a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code></a>: a constant term</p></li>
 <li><p>2-element list of <code class="docutils literal notranslate"><span class="pre">[Qobj,</span> <span class="pre">time_dependence]</span></code>: a time-dependent term
 where the <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> will be multiplied by the time-dependent scalar.</p></li>
 </ul>
 <p>For more details on all allowed time-dependent objects, see the
-documentation for <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>.</p>
+documentation for <a class="reference internal" href="#qutip.QobjEvo" title="qutip.QobjEvo"><code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code></a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl>
 <dt><strong>H</strong><span class="classifier">time_dependent_object or list of time_dependent_object</span></dt><dd><p>System Hamiltonian in standard time-dependent list format.  This is the
-same as the argument that (e.g.) <code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code> takes.  If this is a
-list of elements, they are summed.</p>
+same as the argument that (e.g.) <a class="reference internal" href="functions.html#module-qutip.mesolve" title="qutip.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code></a> takes.
+If this is a list of elements, they are summed.</p>
 </dd>
 <dt><strong>state0</strong><span class="classifier"><a class="reference internal" href="#qutip.Qobj" title="qutip.Qobj"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Qobj</span></code></a></span></dt><dd><p>Initial state vector (ket) or density matrix.</p>
 </dd>
@@ -4580,7 +4754,7 @@ oscillator (as density matrix)</p>
 <dl class="py class">
 <dt id="qutip.qip.Gate">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Gate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qip/circuit.html#Gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.qip.Gate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Representation of a quantum gate, with its required parametrs, and target
+<dd><p>Representation of a quantum gate, with its required parameters, and target
 and control qubits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -4716,7 +4890,7 @@ to all the qubits in the register.</p>
 
 <dl class="py method">
 <dt id="qutip.qip.circuit.QubitCircuit.add_circuit">
-<code class="sig-name descname"><span class="pre">add_circuit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qip/circuit.html#QubitCircuit.add_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.qip.circuit.QubitCircuit.add_circuit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_circuit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_user_gates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../modules/qutip/qip/circuit.html#QubitCircuit.add_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qutip.qip.circuit.QubitCircuit.add_circuit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a block of a qubit circuit to the main circuit.
 Globalphase gates are not added.</p>
 <dl class="field-list">
@@ -4749,7 +4923,8 @@ unpacked and added.</p>
 </dd>
 <dt><strong>arg_label: string</strong></dt><dd><p>Label for gate representation.</p>
 </dd>
-<dt><strong>index</strong><span class="classifier">list</span></dt><dd><p>Positions to add the gate.</p>
+<dt><strong>index</strong><span class="classifier">list</span></dt><dd><p>Positions to add the gate. Each index in the supplied list refers
+to a position in the original list of gates.</p>
 </dd>
 <dt><strong>classical_controls</strong><span class="classifier">int or list of int, optional</span></dt><dd><p>indices of classical bits to control gate on.</p>
 </dd>
@@ -4771,7 +4946,7 @@ If not specified, then the value is interpreted to be
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>name: string</strong></dt><dd><p>Measurement name. If name is an instance of <cite>Measuremnent</cite>,
+<dt><strong>measurement: string</strong></dt><dd><p>Measurement name. If name is an instance of <cite>Measuremnent</cite>,
 parameters are unpacked and added.</p>
 </dd>
 <dt><strong>targets: list</strong></dt><dd><p>Gate targets</p>
@@ -5552,8 +5727,8 @@ Noise will be neglected in this option.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -6054,8 +6229,8 @@ Noise will be neglected in this option.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -6513,8 +6688,8 @@ and then calculate the evolution.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -7075,8 +7250,8 @@ and then calculate the evolution.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -7638,8 +7813,8 @@ and then calculate the evolution.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -8201,8 +8376,8 @@ and then calculate the evolution.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -8770,8 +8945,8 @@ and then calculate the evolution.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt>evo_result: <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
-<code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> will be returned.</p>
+<dt>evo_result: <a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is False,  an instance of the class
+<a class="reference internal" href="#qutip.solver.Result" title="qutip.solver.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.solver.Result</span></code></a> will be returned.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">analytical</span></code> is True, a list of matrices representation
 is returned.</p>
 </dd>
@@ -10022,7 +10197,7 @@ not used by the class, but set by pulseoptim.create_pulse_optimizer</p>
 set to None to reduce overhead of calculating stats.
 Note it is (usually) shared with the Dynamics instance</p>
 </dd>
-<dt><strong>dump</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">dump.OptimDump</span></code></span></dt><dd><p>Container for data dumped during the optimisation.
+<dt><strong>dump</strong><span class="classifier"><a class="reference internal" href="#qutip.control.dump.OptimDump" title="qutip.control.dump.OptimDump"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.control.dump.OptimDump</span></code></a></span></dt><dd><p>Container for data dumped during the optimisation.
 Can be set by specifying the dumping level or set directly.
 Note this is mainly intended for user and a development debugging
 but could be used for status information during a long optimisation.</p>
@@ -10559,7 +10734,7 @@ Default is 0</p>
 <dt><strong>unitarity_tol :</strong></dt><dd><p>Tolerance used in checking if operator is unitary
 Default is 1e-10</p>
 </dd>
-<dt><strong>dump</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">dump.DynamicsDump</span></code></span></dt><dd><p>Store of historical calculation data.
+<dt><strong>dump</strong><span class="classifier"><a class="reference internal" href="#qutip.control.dump.DynamicsDump" title="qutip.control.dump.DynamicsDump"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.control.dump.DynamicsDump</span></code></a></span></dt><dd><p>Store of historical calculation data.
 Set to None (Default) for no storing of historical data
 Use dumping property to set level of data dumping</p>
 </dd>
@@ -12010,7 +12185,7 @@ optimisation.</p>
 <dd class="field-odd"><dl>
 <dt><strong>dump_summary</strong><span class="classifier">bool</span></dt><dd><p>When True summary items are appended to the iter_summary</p>
 </dd>
-<dt><strong>iter_summary</strong><span class="classifier">list of <code class="xref py py-class docutils literal notranslate"><span class="pre">optimizer.OptimIterSummary</span></code></span></dt><dd><p>Summary at each iteration</p>
+<dt><strong>iter_summary</strong><span class="classifier">list of <a class="reference internal" href="#qutip.control.optimizer.OptimIterSummary" title="qutip.control.optimizer.OptimIterSummary"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.control.optimizer.OptimIterSummary</span></code></a></span></dt><dd><p>Summary at each iteration</p>
 </dd>
 <dt><strong>dump_fid_err</strong><span class="classifier">bool</span></dt><dd><p>When True values are appended to the fid_err_log</p>
 </dd>
@@ -12223,7 +12398,7 @@ as numpy.savetxt is used, and requires this.</p>
     <p>
         &#169; <a href="../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>
