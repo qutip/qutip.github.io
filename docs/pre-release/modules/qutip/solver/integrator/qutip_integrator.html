@@ -1,0 +1,423 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.solver.integrator.qutip_integrator &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../static/documentation_options.js"></script>
+        <script src="../../../../static/jquery.js"></script>
+        <script src="../../../../static/underscore.js"></script>
+        <script src="../../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.solver.integrator.qutip_integrator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.solver.integrator.qutip_integrator</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..integrator</span> <span class="kn">import</span> <span class="n">IntegratorException</span><span class="p">,</span> <span class="n">Integrator</span>
+<span class="kn">from</span> <span class="nn">..solver_base</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">from</span> <span class="nn">.explicit_rk</span> <span class="kn">import</span> <span class="n">Explicit_RungeKutta</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;IntegratorVern7&#39;</span><span class="p">,</span> <span class="s1">&#39;IntegratorVern9&#39;</span><span class="p">,</span> <span class="s1">&#39;IntegratorDiag&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="IntegratorVern7"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.solver.integrator.qutip_integrator.IntegratorVern7">[docs]</a><span class="k">class</span> <span class="nc">IntegratorVern7</span><span class="p">(</span><span class="n">Integrator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    QuTiP&#39;s implementation of Verner&#39;s &quot;most efficient&quot; Runge-Kutta method</span>
+<span class="sd">    of order 7. These are Runge-Kutta methods with variable steps and dense</span>
+<span class="sd">    output.</span>
+
+<span class="sd">    The implementation uses QuTiP&#39;s Data objects for the state, allowing</span>
+<span class="sd">    sparse, GPU or other data layer objects to be used efficiently by the</span>
+<span class="sd">    solver in their native formats.</span>
+
+<span class="sd">    See http://people.math.sfu.ca/~jverner/ for a detailed description of the</span>
+<span class="sd">    methods.</span>
+
+<span class="sd">    Usable with ``method=&quot;vern7&quot;``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">integrator_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;atol&#39;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">,</span>
+        <span class="s1">&#39;rtol&#39;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+        <span class="s1">&#39;nsteps&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s1">&#39;first_step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;max_step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;min_step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;interpolate&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">support_time_dependant</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">supports_blackbox</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;vern7&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span> <span class="o">=</span> <span class="n">Explicit_RungeKutta</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
+
+    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">copy</span> <span class="k">else</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">set_initial_value</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_failed_integration</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">mcstep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_failed_integration</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_failed_integration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">successful</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="n">IntegratorException</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ode_solver</span><span class="o">.</span><span class="n">status_message</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Supported options by verner method:</span>
+
+<span class="sd">        atol : float, default=1e-8</span>
+<span class="sd">            Absolute tolerance.</span>
+
+<span class="sd">        rtol : float, default=1e-6</span>
+<span class="sd">            Relative tolerance.</span>
+
+<span class="sd">        nsteps : int, default=1000</span>
+<span class="sd">            Max. number of internal steps/call.</span>
+
+<span class="sd">        first_step : float, default=0</span>
+<span class="sd">            Size of initial step (0 = automatic).</span>
+
+<span class="sd">        min_step : float, default=0</span>
+<span class="sd">            Minimum step size (0 = automatic).</span>
+
+<span class="sd">        max_step : float, default=0</span>
+<span class="sd">            Maximum step size (0 = automatic)</span>
+<span class="sd">            When using pulses, change to half the thinest pulse otherwise it</span>
+<span class="sd">            may be skipped.</span>
+
+<span class="sd">        interpolate : bool, default=True</span>
+<span class="sd">            Whether to use interpolation step, faster most of the time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
+        <span class="n">Integrator</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegratorVern9"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.solver.integrator.qutip_integrator.IntegratorVern9">[docs]</a><span class="k">class</span> <span class="nc">IntegratorVern9</span><span class="p">(</span><span class="n">IntegratorVern7</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    QuTiP&#39;s implementation of Verner&#39;s &quot;most efficient&quot; Runge-Kutta method</span>
+<span class="sd">    of order 9. These are Runge-Kutta methods with variable steps and dense</span>
+<span class="sd">    output.</span>
+
+<span class="sd">    The implementation uses QuTiP&#39;s Data objects for the state, allowing</span>
+<span class="sd">    sparse, GPU or other data layer objects to be used efficiently by the</span>
+<span class="sd">    solver in their native formats.</span>
+
+<span class="sd">    See http://people.math.sfu.ca/~jverner/ for a detailed description of the</span>
+<span class="sd">    methods.</span>
+
+<span class="sd">    Usable with ``method=&quot;vern9&quot;``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">integrator_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;atol&#39;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">,</span>
+        <span class="s1">&#39;rtol&#39;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+        <span class="s1">&#39;nsteps&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s1">&#39;first_step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;max_step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;min_step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;interpolate&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;vern9&#39;</span></div>
+
+
+<div class="viewcode-block" id="IntegratorDiag"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.solver.integrator.qutip_integrator.IntegratorDiag">[docs]</a><span class="k">class</span> <span class="nc">IntegratorDiag</span><span class="p">(</span><span class="n">Integrator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Integrator solving the ODE by diagonalizing the system and solving</span>
+<span class="sd">    analytically. It can only solve constant system and has a long preparation</span>
+<span class="sd">    time, but the integration is fast.</span>
+
+<span class="sd">    Usable with ``method=&quot;diag&quot;``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">integrator_options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;eigensolver_dtype&quot;</span><span class="p">:</span> <span class="s2">&quot;dense&quot;</span><span class="p">}</span>
+    <span class="n">support_time_dependant</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">supports_blackbox</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;diag&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">system</span><span class="o">.</span><span class="n">isconstant</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Hamiltonian system must be constant to use &quot;</span>
+                             <span class="s2">&quot;diagonalized method&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expH</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">H0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;eigensolver_dtype&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">eigs</span><span class="p">(</span><span class="n">H0</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Uinv</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;qutip diagonalized&quot;</span>
+
+    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span>
+        <span class="k">if</span> <span class="n">dt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">!=</span> <span class="n">dt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_expH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diag</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">mcstep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">dense</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Uinv</span><span class="p">,</span> <span class="n">state0</span><span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Supported options by &quot;diag&quot; method:</span>
+
+<span class="sd">        eigensolver_dtype : str, default=&quot;dense&quot;</span>
+<span class="sd">            Qutip data type {&quot;dense&quot;, &quot;csr&quot;, etc.} to use when computing the</span>
+<span class="sd">            eigenstates. The dense eigen solver is usually faster and more</span>
+<span class="sd">            stable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
+        <span class="n">Integrator</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span></div>
+
+
+<span class="n">Solver</span><span class="o">.</span><span class="n">add_integrator</span><span class="p">(</span><span class="n">IntegratorVern7</span><span class="p">,</span> <span class="s1">&#39;vern7&#39;</span><span class="p">)</span>
+<span class="n">Solver</span><span class="o">.</span><span class="n">add_integrator</span><span class="p">(</span><span class="n">IntegratorVern9</span><span class="p">,</span> <span class="s1">&#39;vern9&#39;</span><span class="p">)</span>
+<span class="n">Solver</span><span class="o">.</span><span class="n">add_integrator</span><span class="p">(</span><span class="n">IntegratorDiag</span><span class="p">,</span> <span class="s1">&#39;diag&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

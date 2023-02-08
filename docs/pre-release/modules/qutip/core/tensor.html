@@ -1,0 +1,685 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.core.tensor &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
+        <script src="../../../static/jquery.js"></script>
+        <script src="../../../static/underscore.js"></script>
+        <script src="../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.core.tensor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.core.tensor</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for the creation of composite quantum objects via the tensor product.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;tensor&#39;</span><span class="p">,</span> <span class="s1">&#39;super_tensor&#39;</span><span class="p">,</span> <span class="s1">&#39;composite&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor_swap&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor_contract&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;expand_operator&#39;</span>
+<span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">.operators</span> <span class="kn">import</span> <span class="n">qeye</span>
+<span class="kn">from</span> <span class="nn">.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
+<span class="kn">from</span> <span class="nn">.superoperator</span> <span class="kn">import</span> <span class="n">operator_to_vector</span><span class="p">,</span> <span class="n">reshuffle</span>
+<span class="kn">from</span> <span class="nn">.dimensions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">flatten</span><span class="p">,</span> <span class="n">enumerate_flat</span><span class="p">,</span> <span class="n">unflatten</span><span class="p">,</span> <span class="n">deep_remove</span><span class="p">,</span> <span class="n">dims_to_tensor_shape</span><span class="p">,</span>
+    <span class="n">dims_idxs_to_tensor_idxs</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
+
+
+<span class="k">class</span> <span class="nc">_reverse_partial_tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Picklable lambda op: tensor(op, right) &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="tensor"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.tensor.tensor">[docs]</a><span class="k">def</span> <span class="nf">tensor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the tensor product of input operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    args : array_like</span>
+<span class="sd">        ``list`` or ``array`` of quantum objects for tensor product.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    obj : qobj</span>
+<span class="sd">        A composite quantum object.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; tensor([sigmax(), sigmax()]) # doctest: +SKIP</span>
+<span class="sd">    Quantum object: dims = [[2, 2], [2, 2]], \</span>
+<span class="sd">shape = [4, 4], type = oper, isHerm = True</span>
+<span class="sd">    Qobj data =</span>
+<span class="sd">    [[ 0.+0.j  0.+0.j  0.+0.j  1.+0.j]</span>
+<span class="sd">     [ 0.+0.j  0.+0.j  1.+0.j  0.+0.j]</span>
+<span class="sd">     [ 0.+0.j  1.+0.j  0.+0.j  0.+0.j]</span>
+<span class="sd">     [ 1.+0.j  0.+0.j  0.+0.j  0.+0.j]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Requires at least one input argument&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;requires Qobj or QobjEvo operands&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;requires Qobj or QobjEvo operands&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+        <span class="c1"># First make tensor from pairs only</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tensor</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tensor</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+
+        <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">right</span><span class="o">.</span><span class="n">linear_map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">left</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">left</span><span class="o">.</span><span class="n">linear_map</span><span class="p">(</span><span class="n">_reverse_partial_tensor</span><span class="p">(</span><span class="n">right</span><span class="p">))</span>
+        <span class="n">left_t</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">linear_map</span><span class="p">(</span><span class="n">_reverse_partial_tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="n">right_t</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">linear_map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">qeye</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="k">return</span> <span class="n">left_t</span> <span class="o">@</span> <span class="n">right_t</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">superrep</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="s2">&quot;In tensor products of superroperators,&quot;</span><span class="p">,</span>
+            <span class="s2">&quot; all must have the same representation&quot;</span>
+        <span class="p">]))</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span>
+    <span class="n">isherm</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_isherm</span>
+    <span class="n">isunitary</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_isunitary</span>
+    <span class="n">out_data</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">dims_l</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">dims_r</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">out_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># If both _are_ Hermitian and/or unitary, then so is the output, but if</span>
+        <span class="c1"># both _aren&#39;t_, then output still can be.</span>
+        <span class="n">isherm</span> <span class="o">=</span> <span class="p">(</span><span class="n">isherm</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="n">isunitary</span> <span class="o">=</span> <span class="p">(</span><span class="n">isunitary</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">:</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims_l</span><span class="p">,</span> <span class="n">dims_r</span><span class="p">],</span>
+                <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span>
+                <span class="n">isherm</span><span class="o">=</span><span class="n">isherm</span><span class="p">,</span>
+                <span class="n">isunitary</span><span class="o">=</span><span class="n">isunitary</span><span class="p">,</span>
+                <span class="n">superrep</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="super_tensor"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.tensor.super_tensor">[docs]</a><span class="k">def</span> <span class="nf">super_tensor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the tensor product of input superoperators, by tensoring together</span>
+<span class="sd">    the underlying Hilbert spaces on which each vectorized operator acts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    args : array_like</span>
+<span class="sd">        ``list`` or ``array`` of quantum objects with ``type=&quot;super&quot;``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    obj : qobj</span>
+<span class="sd">        A composite quantum object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Check if we&#39;re tensoring vectors or superoperators.</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">issuper</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s2">&quot;super&quot;</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;super_tensor on type=&#39;super&#39; is only implemented for &quot;</span>
+                <span class="s2">&quot;superrep=&#39;super&#39;.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Reshuffle the superoperators.</span>
+        <span class="n">shuffled_ops</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">reshuffle</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+
+        <span class="c1"># Tensor the result.</span>
+        <span class="n">shuffled_tensor</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">shuffled_ops</span><span class="p">)</span>
+
+        <span class="c1"># Unshuffle and return.</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">reshuffle</span><span class="p">(</span><span class="n">shuffled_tensor</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">superrep</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">isoperket</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+
+        <span class="c1"># Reshuffle the superoperators.</span>
+        <span class="n">shuffled_ops</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">reshuffle</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+
+        <span class="c1"># Tensor the result.</span>
+        <span class="n">shuffled_tensor</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">shuffled_ops</span><span class="p">)</span>
+
+        <span class="c1"># Unshuffle and return.</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">reshuffle</span><span class="p">(</span><span class="n">shuffled_tensor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">isoperbra</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">super_tensor</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">))</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="s2">&quot;All arguments must be the same type, &quot;</span>
+        <span class="s2">&quot;either super, operator-ket or operator-bra.&quot;</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_isoperlike</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">isoper</span> <span class="ow">or</span> <span class="n">q</span><span class="o">.</span><span class="n">issuper</span>
+
+
+<span class="k">def</span> <span class="nf">_isketlike</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">q</span><span class="o">.</span><span class="n">isoperket</span>
+
+
+<span class="k">def</span> <span class="nf">_isbralike</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">isbra</span> <span class="ow">or</span> <span class="n">q</span><span class="o">.</span><span class="n">isoperbra</span>
+
+
+<div class="viewcode-block" id="composite"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.tensor.composite">[docs]</a><span class="k">def</span> <span class="nf">composite</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given two or more operators, kets or bras, returns the Qobj</span>
+<span class="sd">    corresponding to a composite system over each argument.</span>
+<span class="sd">    For ordinary operators and vectors, this is the tensor product,</span>
+<span class="sd">    while for superoperators and vectorized operators, this is</span>
+<span class="sd">    the column-reshuffled tensor product.</span>
+
+<span class="sd">    If a mix of Qobjs supported on Hilbert and Liouville spaces</span>
+<span class="sd">    are passed in, the former are promoted. Ordinary operators</span>
+<span class="sd">    are assumed to be unitaries, and are promoted using ``to_super``,</span>
+<span class="sd">    while kets and bras are promoted by taking their projectors and</span>
+<span class="sd">    using ``operator_to_vector(ket2dm(arg))``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">qutip.core.superop_reps</span>
+    <span class="c1"># First step will be to ensure everything is a Qobj at all.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;All arguments must be Qobjs.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Next, figure out if we have something oper-like (isoper or issuper),</span>
+    <span class="c1"># or something ket-like (isket or isoperket). Bra-like we&#39;ll deal with</span>
+    <span class="c1"># by turning things into ket-likes and back.</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_isoperlike</span><span class="p">,</span> <span class="n">args</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">issuper</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+            <span class="c1"># to_super will promote &#39;oper&#39; and leave &#39;super&#39; untouched</span>
+            <span class="k">return</span> <span class="n">super_tensor</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">superop_reps</span><span class="o">.</span><span class="n">to_super</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_isketlike</span><span class="p">,</span> <span class="n">args</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">isoperket</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">super_tensor</span><span class="p">(</span><span class="o">*</span><span class="p">(</span>
+                <span class="n">arg</span> <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">isoperket</span> <span class="k">else</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">proj</span><span class="p">())</span>
+                <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span>
+            <span class="p">))</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_isbralike</span><span class="p">,</span> <span class="n">args</span><span class="p">)):</span>
+        <span class="c1"># Turn into ket-likes and recurse.</span>
+        <span class="k">return</span> <span class="n">composite</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">))</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported Qobj types [</span><span class="si">{}</span><span class="s2">].&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">type</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_tensor_contract_single</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Contracts a dense tensor along a single index pair.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot contract over indices of different length.&quot;</span><span class="p">)</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">sl</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">else</span> <span class="n">idxs</span>
+               <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+    <span class="n">contract_at</span> <span class="o">=</span> <span class="n">i</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">sl</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="n">contract_at</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_tensor_contract_dense</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="o">*</span><span class="n">pairs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Contracts a dense tensor along one or more index pairs,</span>
+<span class="sd">    keeping track of how the indices are relabeled by the removal</span>
+<span class="sd">    of other indices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">axis_idxs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+        <span class="c1"># axis_idxs.index effectively evaluates the mapping from original index</span>
+        <span class="c1"># labels to the labels after contraction.</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">_tensor_contract_single</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">axis_idxs</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pair</span><span class="p">))</span>
+        <span class="n">axis_idxs</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">axis_idxs</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">arr</span>
+
+
+<span class="k">def</span> <span class="nf">tensor_swap</span><span class="p">(</span><span class="n">q_oper</span><span class="p">,</span> <span class="o">*</span><span class="n">pairs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transposes one or more pairs of indices of a Qobj.</span>
+<span class="sd">    Note that this uses dense representations and thus</span>
+<span class="sd">    should *not* be used for very large Qobjs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    pairs : tuple</span>
+<span class="sd">        One or more tuples ``(i, j)`` indicating that the</span>
+<span class="sd">        ``i`` and ``j`` dimensions of the original qobj</span>
+<span class="sd">        should be swapped.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    sqobj : Qobj</span>
+<span class="sd">        The original Qobj with all named index pairs swapped with each other</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span>
+    <span class="n">tensor_pairs</span> <span class="o">=</span> <span class="n">dims_idxs_to_tensor_idxs</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
+    <span class="c1"># Reshape into tensor indices</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dims_to_tensor_shape</span><span class="p">(</span><span class="n">dims</span><span class="p">))</span>
+    <span class="c1"># Now permute the dims list so we know how to get back.</span>
+    <span class="n">flat_dims</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flat_dims</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+        <span class="n">flat_dims</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">flat_dims</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">flat_dims</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">flat_dims</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">tensor_pairs</span><span class="p">:</span>
+        <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">perm</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">unflatten</span><span class="p">(</span><span class="n">flat_dims</span><span class="p">,</span> <span class="n">enumerate_flat</span><span class="p">(</span><span class="n">dims</span><span class="p">))</span>
+    <span class="c1"># Next, permute the actual indices of the dense tensor.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
+    <span class="c1"># Reshape back, using the left and right of dims.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">,</span> <span class="n">dims</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="tensor_contract"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.tensor.tensor_contract">[docs]</a><span class="k">def</span> <span class="nf">tensor_contract</span><span class="p">(</span><span class="n">qobj</span><span class="p">,</span> <span class="o">*</span><span class="n">pairs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Contracts a qobj along one or more index pairs.</span>
+<span class="sd">    Note that this uses dense representations and thus</span>
+<span class="sd">    should *not* be used for very large Qobjs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    pairs : tuple</span>
+<span class="sd">        One or more tuples ``(i, j)`` indicating that the</span>
+<span class="sd">        ``i`` and ``j`` dimensions of the original qobj</span>
+<span class="sd">        should be contracted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    cqobj : Qobj</span>
+<span class="sd">        The original Qobj with all named index pairs contracted</span>
+<span class="sd">        away.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Record and label the original dims.</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">qobj</span><span class="o">.</span><span class="n">dims</span>
+    <span class="n">dims_idxs</span> <span class="o">=</span> <span class="n">enumerate_flat</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="n">tensor_dims</span> <span class="o">=</span> <span class="n">dims_to_tensor_shape</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="c1"># Convert to dense first, since sparse won&#39;t support the reshaping we need.</span>
+    <span class="n">qtens</span> <span class="o">=</span> <span class="n">qobj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
+
+    <span class="c1"># Reshape by the flattened dims.</span>
+    <span class="n">qtens</span> <span class="o">=</span> <span class="n">qtens</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">tensor_dims</span><span class="p">)</span>
+
+    <span class="c1"># Contract out the indices from the flattened object.</span>
+    <span class="c1"># Note that we need to feed pairs through dims_idxs_to_tensor_idxs</span>
+    <span class="c1"># to ensure that we are contracting the right indices.</span>
+    <span class="n">qtens</span> <span class="o">=</span> <span class="n">_tensor_contract_dense</span><span class="p">(</span><span class="n">qtens</span><span class="p">,</span>
+                                   <span class="o">*</span><span class="n">dims_idxs_to_tensor_idxs</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">pairs</span><span class="p">))</span>
+
+    <span class="c1"># Remove the contracted indexes from dims so we know how to</span>
+    <span class="c1"># reshape back.</span>
+    <span class="c1"># This concerns dims, and not the tensor indices, so we need</span>
+    <span class="c1"># to make sure to use the original dims indices and not the ones</span>
+    <span class="c1"># generated by dims_to_* functions.</span>
+    <span class="n">contracted_idxs</span> <span class="o">=</span> <span class="n">deep_remove</span><span class="p">(</span><span class="n">dims_idxs</span><span class="p">,</span> <span class="o">*</span><span class="n">flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">pairs</span><span class="p">))))</span>
+    <span class="n">contracted_dims</span> <span class="o">=</span> <span class="n">unflatten</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">),</span> <span class="n">contracted_idxs</span><span class="p">)</span>
+
+    <span class="c1"># We don&#39;t need to check for tensor idxs versus dims idxs here,</span>
+    <span class="c1"># as column- versus row-stacking will never move an index for the</span>
+    <span class="c1"># vectorized operator spaces all the way from the left to the right.</span>
+    <span class="n">l_mtx_dims</span><span class="p">,</span> <span class="n">r_mtx_dims</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="n">flatten</span><span class="p">,</span> <span class="n">contracted_dims</span><span class="p">))</span>
+
+    <span class="c1"># Reshape back into a 2D matrix.</span>
+    <span class="n">qmtx</span> <span class="o">=</span> <span class="n">qtens</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">l_mtx_dims</span><span class="p">,</span> <span class="n">r_mtx_dims</span><span class="p">))</span>
+
+    <span class="c1"># Return back as a qobj.</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">qmtx</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">contracted_dims</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="n">qobj</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_check_oper_dims</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the given operator is valid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    oper : :class:`qutip.Qobj`</span>
+<span class="sd">        The quantum object to be checked.</span>
+<span class="sd">    dims : list, optional</span>
+<span class="sd">        A list of integer for the dimension of each composite system.</span>
+<span class="sd">        e.g ``[2, 2, 2, 2, 2]`` for 5 qubits system.</span>
+<span class="sd">    targets : int or list of int, optional</span>
+<span class="sd">        The indices of subspace that are acted on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if operator matches N</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">or</span> <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The operator is not an &quot;</span>
+            <span class="s2">&quot;Qobj with the same input and output dimensions.&quot;</span><span class="p">)</span>
+    <span class="c1"># if operator dims matches the target dims</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">targ_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">dims</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">targ_dims</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The operator dims </span><span class="si">{}</span><span class="s2"> do not match &quot;</span>
+                <span class="s2">&quot;the target dims </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">targ_dims</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_targets_to_list</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">oper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    transform targets to a list and check validity.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    targets : int or list of int</span>
+<span class="sd">        The indices of subspace that are acted on.</span>
+<span class="sd">    oper : :class:`qutip.Qobj`, optional</span>
+<span class="sd">        An operator, the type of the :class:`qutip.Qobj`</span>
+<span class="sd">        has to be an operator</span>
+<span class="sd">        and the dimension matches the tensored qubit Hilbert space</span>
+<span class="sd">        e.g. dims = ``[[2, 2, 2], [2, 2, 2]]``</span>
+<span class="sd">    N : int, optional</span>
+<span class="sd">        The number of subspace in the system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if targets is a list of integer</span>
+    <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">targets</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;targets should be &quot;</span>
+            <span class="s2">&quot;an integer or a list of integer&quot;</span><span class="p">)</span>
+    <span class="c1"># if targets has correct length</span>
+    <span class="k">if</span> <span class="n">oper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">req_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">!=</span> <span class="n">req_num</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The given operator needs </span><span class="si">{}</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;target qutbis, &quot;</span>
+                <span class="s2">&quot;but </span><span class="si">{}</span><span class="s2"> given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">req_num</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)))</span>
+    <span class="c1"># if targets is smaller than N</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Targets must be smaller than N=</span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">targets</span>
+
+
+<span class="k">def</span> <span class="nf">expand_operator</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Expand an operator to one that acts on a system with desired dimensions.</span>
+<span class="sd">    e.g.</span>
+<span class="sd">    ```</span>
+<span class="sd">    expand_operator(oper, [2, 3, 4, 5], 2) ==</span>
+<span class="sd">        tensor(qeye(2), qeye(3), oper, qeye(5))</span>
+<span class="sd">    expand_operator(tensor(oper1, oper2), [2, 3, 4, 5], [2, 0]) ==</span>
+<span class="sd">        tensor(oper2, qeye(3), oper1, qeye(5))</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    oper : :class:`qutip.Qobj`</span>
+<span class="sd">        An operator that act on the subsystem, has to be an operator and the</span>
+<span class="sd">        dimension matches the tensored dims Hilbert space</span>
+<span class="sd">        e.g. oper.dims = ``[[2, 3], [2, 3]]``</span>
+<span class="sd">    dims : list</span>
+<span class="sd">        A list of integer for the dimension of each composite system.</span>
+<span class="sd">        E.g ``[2, 3, 2, 3, 4]``.</span>
+<span class="sd">    targets : int or list of int</span>
+<span class="sd">        The indices of subspace that are acted on.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    expanded_oper : :class:`qutip.Qobj`</span>
+<span class="sd">        The expanded operator acting on a system with desired dimension.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.operators</span> <span class="kn">import</span> <span class="n">identity</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">_targets_to_list</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">oper</span><span class="o">=</span><span class="n">oper</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">_check_oper_dims</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">)</span>
+
+    <span class="c1"># Generate the correct order for permutation,</span>
+    <span class="c1"># eg. if N = 5, targets = [3,0], the order is [1,2,3,0,4].</span>
+    <span class="c1"># If the operator is cnot,</span>
+    <span class="c1"># this order means that the 3rd qubit controls the 0th qubit.</span>
+    <span class="n">new_order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">targets</span><span class="p">):</span>
+        <span class="n">new_order</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="c1"># allocate the rest qutbits (not targets) to the empty</span>
+    <span class="c1"># position in new_order</span>
+    <span class="n">rest_pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+    <span class="n">rest_qubits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">),</span> <span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rest_pos</span><span class="p">):</span>
+        <span class="n">new_order</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">rest_qubits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">id_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">identity</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rest_pos</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">tensor</span><span class="p">([</span><span class="n">oper</span><span class="p">]</span> <span class="o">+</span> <span class="n">id_list</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="n">new_order</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

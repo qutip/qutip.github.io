@@ -1,0 +1,756 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.solver.mcsolve &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
+        <script src="../../../static/jquery.js"></script>
+        <script src="../../../static/underscore.js"></script>
+        <script src="../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.solver.mcsolve</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.solver.mcsolve</h1><div class="highlight"><pre>
+<span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mcsolve&#39;</span><span class="p">,</span> <span class="s2">&quot;MCSolver&quot;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">QobjEvo</span><span class="p">,</span> <span class="n">spre</span><span class="p">,</span> <span class="n">spost</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">unstack_columns</span><span class="p">,</span> <span class="n">liouvillian</span>
+<span class="kn">from</span> <span class="nn">.multitraj</span> <span class="kn">import</span> <span class="n">MultiTrajSolver</span>
+<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">from</span> <span class="nn">.result</span> <span class="kn">import</span> <span class="n">McResult</span><span class="p">,</span> <span class="n">Result</span>
+<span class="kn">from</span> <span class="nn">.mesolve</span> <span class="kn">import</span> <span class="n">mesolve</span><span class="p">,</span> <span class="n">MESolver</span>
+<span class="kn">import</span> <span class="nn">qutip.core.data</span> <span class="k">as</span> <span class="nn">_data</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+
+<div class="viewcode-block" id="mcsolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve">[docs]</a><span class="k">def</span> <span class="nf">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">e_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Monte Carlo evolution of a state vector :math:`|\psi \rangle` for a</span>
+<span class="sd">    given Hamiltonian and sets of collapse operators. Options for the</span>
+<span class="sd">    underlying ODE solver are given by the Options class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    H : :class:`qutip.Qobj`, :class:`qutip.QobjEvo`, ``list``, callable.</span>
+<span class="sd">        System Hamiltonian as a Qobj, QobjEvo. It can also be any input type</span>
+<span class="sd">        that QobjEvo accepts (see :class:`qutip.QobjEvo`&#39;s documentation).</span>
+<span class="sd">        ``H`` can also be a superoperator (liouvillian) if some collapse</span>
+<span class="sd">        operators are to be treated deterministically.</span>
+
+<span class="sd">    state : :class:`qutip.Qobj`</span>
+<span class="sd">        Initial state vector.</span>
+
+<span class="sd">    tlist : array_like</span>
+<span class="sd">        Times at which results are recorded.</span>
+
+<span class="sd">    c_ops : list</span>
+<span class="sd">        A ``list`` of collapse operators in any input type that QobjEvo accepts</span>
+<span class="sd">        (see :class:`qutip.QobjEvo`&#39;s documentation). They must be operators</span>
+<span class="sd">        even if ``H`` is a superoperator. If none are given, the solver will</span>
+<span class="sd">        defer to ``sesolve`` or ``mesolve``.</span>
+
+<span class="sd">    e_ops : list, [optional]</span>
+<span class="sd">        A ``list`` of operator as Qobj, QobjEvo or callable with signature of</span>
+<span class="sd">        (t, state: Qobj) for calculating expectation values. When no ``e_ops``</span>
+<span class="sd">        are given, the solver will default to save the states.</span>
+
+<span class="sd">    ntraj : int</span>
+<span class="sd">        Maximum number of trajectories to run. Can be cut short if a time limit</span>
+<span class="sd">        is passed with the ``timeout`` keyword or if the target tolerance is</span>
+<span class="sd">        reached, see ``target_tol``.</span>
+
+<span class="sd">    args : None / dict</span>
+<span class="sd">        Arguments for time-dependent Hamiltonian and collapse operator terms.</span>
+
+<span class="sd">    options : None / dict</span>
+<span class="sd">        Dictionary of options for the solver.</span>
+
+<span class="sd">        - store_final_state : bool [False]</span>
+<span class="sd">          Whether or not to store the final state of the evolution in the</span>
+<span class="sd">          result class.</span>
+<span class="sd">        - store_states : bool, NoneType, [None]</span>
+<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">          given.</span>
+<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, [&#39;text&#39;]</span>
+<span class="sd">          How to present the solver progress.</span>
+<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - progress_kwargs : dict, [{&quot;chunk_size&quot;: 10}]</span>
+<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - method : str {&quot;adams&quot;, &quot;bdf&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.} [&quot;adams&quot;]</span>
+<span class="sd">          Which differential equation integration method to use.</span>
+<span class="sd">        - keep_runs_results : bool, [False]</span>
+<span class="sd">          Whether to store results from all trajectories or just store the</span>
+<span class="sd">          averages.</span>
+<span class="sd">        - map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;}, [&quot;serial&quot;]</span>
+<span class="sd">          How to run the trajectories. &quot;parallel&quot; uses concurent module to run</span>
+<span class="sd">          in parallel while &quot;loky&quot; use the module of the same name to do so.</span>
+<span class="sd">        - job_timeout : NoneType, int, [None]</span>
+<span class="sd">          Maximum time to compute one trajectory.</span>
+<span class="sd">        - num_cpus : NoneType, int, [None]</span>
+<span class="sd">          Number of cpus to use when running in parallel. ``None`` detect the</span>
+<span class="sd">          number of available cpus.</span>
+<span class="sd">        - norm_t_tol, norm_tol, norm_steps : float, float, int, [1e-6, 1e-4, 5]</span>
+<span class="sd">          Parameters used to find the collapse location. ``norm_t_tol`` and</span>
+<span class="sd">          ``norm_tol`` are the tolerance in time and norm respectively.</span>
+<span class="sd">          An error will be raised if the collapse could not be found within</span>
+<span class="sd">          ``norm_steps`` tries.</span>
+<span class="sd">        - mc_corr_eps : float, [1e-10]</span>
+<span class="sd">          Small number used to detect non-physical collapse caused by numerical</span>
+<span class="sd">          imprecision.</span>
+<span class="sd">        - atol, rtol : float, [1e-8, 1e-6]</span>
+<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
+<span class="sd">        - nsteps : int [2500]</span>
+<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
+<span class="sd">          step.</span>
+<span class="sd">        - max_step : float, [0]</span>
+<span class="sd">          Maximum lenght of one internal step. When using pulses, it should be</span>
+<span class="sd">          less than half the width of the thinnest pulse.</span>
+
+<span class="sd">    seeds : int, SeedSequence, list, [optional]</span>
+<span class="sd">        Seed for the random number generator. It can be a single seed used to</span>
+<span class="sd">        spawn seeds for each trajectory or a list of seeds, one for each</span>
+<span class="sd">        trajectory. Seeds are saved in the result and they can be reused with::</span>
+
+<span class="sd">            seeds=prev_result.seeds</span>
+
+<span class="sd">    target_tol : {float, tuple, list}, optional</span>
+<span class="sd">        Target tolerance of the evolution. The evolution will compute</span>
+<span class="sd">        trajectories until the error on the expectation values is lower than</span>
+<span class="sd">        this tolerance. The maximum number of trajectories employed is</span>
+<span class="sd">        given by ``ntraj``. The error is computed using jackknife resampling.</span>
+<span class="sd">        ``target_tol`` can be an absolute tolerance or a pair of absolute and</span>
+<span class="sd">        relative tolerance, in that order. Lastly, it can be a list of pairs of</span>
+<span class="sd">        (atol, rtol) for each e_ops.</span>
+
+<span class="sd">    timeout : float [optional]</span>
+<span class="sd">        Maximum time for the evolution in second. When reached, no more</span>
+<span class="sd">        trajectories will be computed. Overwrite the option of the same name.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    results : :class:`qutip.solver.Result`</span>
+<span class="sd">        Object storing all results from the simulation. Which results is saved</span>
+<span class="sd">        depends on the presence of ``e_ops`` and the options used. ``collapse``</span>
+<span class="sd">        and ``photocurrent`` is available to Monte Carlo simulation results.</span>
+
+<span class="sd">    .. note:</span>
+<span class="sd">        The simulation will end when the first end condition is reached between</span>
+<span class="sd">        ``ntraj``, ``timeout`` and ``target_tol``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ops</span><span class="p">]</span>
+    <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">options</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">options</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">MESolver</span><span class="o">.</span><span class="n">solver_options</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+                       <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ntraj</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;ntraj must be an integer. &quot;</span>
+            <span class="s2">&quot;A list of numbers is not longer supported.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">mc</span> <span class="o">=</span> <span class="n">MCSolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="n">ntraj</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>
+                    <span class="n">seed</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="k">class</span> <span class="nc">MCIntegrator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Integrator like object for mcsolve trajectory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mcsolve&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrator</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">n_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span> <span class="o">=</span> <span class="n">integrator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span> <span class="o">=</span> <span class="n">c_ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span> <span class="o">=</span> <span class="n">n_ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="n">c_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">issuper</span>
+
+    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the state of the ODE solver.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Initial time</span>
+
+<span class="sd">        state0 : qutip.Data</span>
+<span class="sd">            Initial state.</span>
+
+<span class="sd">        generator : numpy.random.generator</span>
+<span class="sd">            Random number generator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collapses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span> <span class="o">=</span> <span class="n">generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">state0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">copy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span>
+
+    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">t_old</span><span class="p">,</span> <span class="n">y_old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">norm_old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prob_func</span><span class="p">(</span><span class="n">y_old</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">t_old</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">:</span>
+            <span class="n">t_step</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">mcstep</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prob_func</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">norm</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span><span class="p">:</span>
+                <span class="n">t_col</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_collapse_time</span><span class="p">(</span><span class="n">norm_old</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span>
+                                                        <span class="n">t_old</span><span class="p">,</span> <span class="n">t_step</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_do_collapse</span><span class="p">(</span><span class="n">t_col</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+                <span class="n">t_old</span><span class="p">,</span> <span class="n">y_old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">norm_old</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t_old</span><span class="p">,</span> <span class="n">y_old</span> <span class="o">=</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">state</span>
+                <span class="n">norm_old</span> <span class="o">=</span> <span class="n">norm</span>
+
+        <span class="k">return</span> <span class="n">t_old</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">y_old</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norm_func</span><span class="p">(</span><span class="n">y_old</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tlist</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hard</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">hard</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_prob_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">unstack_columns</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">_norm_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">unstack_columns</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_find_collapse_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">norm_old</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">t_prev</span><span class="p">,</span> <span class="n">t_final</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Find the time of the collapse and state just before it.&quot;&quot;&quot;</span>
+        <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;norm_steps&#39;</span><span class="p">]:</span>
+            <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t_final</span> <span class="o">-</span> <span class="n">t_prev</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;norm_t_tol&#39;</span><span class="p">]:</span>
+                <span class="n">t_guess</span> <span class="o">=</span> <span class="n">t_final</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="n">t_guess</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">t_prev</span>
+                <span class="o">+</span> <span class="p">((</span><span class="n">t_final</span> <span class="o">-</span> <span class="n">t_prev</span><span class="p">)</span>
+                   <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">norm_old</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span><span class="p">)</span>
+                   <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">norm_old</span> <span class="o">/</span> <span class="n">norm</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t_guess</span> <span class="o">-</span> <span class="n">t_prev</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;norm_t_tol&#39;</span><span class="p">]:</span>
+                <span class="n">t_guess</span> <span class="o">=</span> <span class="n">t_prev</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;norm_t_tol&#39;</span><span class="p">]</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">mcstep</span><span class="p">(</span><span class="n">t_guess</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">norm2_guess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prob_func</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span> <span class="o">-</span> <span class="n">norm2_guess</span><span class="p">)</span> <span class="o">&lt;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;norm_tol&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span>
+            <span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">norm2_guess</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span><span class="p">):</span>
+                <span class="c1"># t_guess is still &gt; t_jump</span>
+                <span class="n">t_final</span> <span class="o">=</span> <span class="n">t_guess</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">norm2_guess</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># t_guess &lt; t_jump</span>
+                <span class="n">t_prev</span> <span class="o">=</span> <span class="n">t_guess</span>
+                <span class="n">norm_old</span> <span class="o">=</span> <span class="n">norm2_guess</span>
+
+        <span class="k">if</span> <span class="n">tries</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;norm_steps&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Could not find the collapse time within desired tolerance. &quot;</span>
+                <span class="s2">&quot;Increase accuracy of the ODE solver or lower the tolerance &quot;</span>
+                <span class="s2">&quot;with the options &#39;norm_steps&#39;, &#39;norm_tol&#39;, &#39;norm_t_tol&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">t_guess</span><span class="p">,</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">_do_collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collapse_time</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Do the collapse:</span>
+<span class="sd">        - Find which operator did the collapse.</span>
+<span class="sd">        - Update the state and Integrator.</span>
+<span class="sd">        - Next collapse norm location</span>
+<span class="sd">        - Store collapse info.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># collapse_time, state is at the collapse</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">which</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n_op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">):</span>
+                <span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_op</span><span class="o">.</span><span class="n">expect_data</span><span class="p">(</span><span class="n">collapse_time</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+            <span class="n">which</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span>
+                                    <span class="n">probs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
+
+        <span class="n">state_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span><span class="p">[</span><span class="n">which</span><span class="p">]</span><span class="o">.</span><span class="n">matmul_data</span><span class="p">(</span><span class="n">collapse_time</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">new_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norm_func</span><span class="p">(</span><span class="n">state_new</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_norm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;mc_corr_eps&#39;</span><span class="p">]:</span>
+            <span class="c1"># This happen when the collapse is caused by numerical error</span>
+            <span class="n">state_new</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norm_func</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">state_new</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">state_new</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">new_norm</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collapses</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">collapse_time</span><span class="p">,</span> <span class="n">which</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">collapse_time</span><span class="p">,</span> <span class="n">state_new</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span><span class="p">:</span>
+                <span class="n">c_op</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">:</span>
+                <span class="n">n_op</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">integrator_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">integrator_options</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># MONTE CARLO CLASS</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="k">class</span> <span class="nc">MCSolver</span><span class="p">(</span><span class="n">MultiTrajSolver</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Monte Carlo Solver of a state vector :math:`|\psi \rangle` for a</span>
+<span class="sd">    given Hamiltonian and sets of collapse operators. Options for the</span>
+<span class="sd">    underlying ODE solver are given by the Options class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    H : :class:`qutip.Qobj`, :class:`qutip.QobjEvo`, ``list``, callable.</span>
+<span class="sd">        System Hamiltonian as a Qobj, QobjEvo. It can also be any input type</span>
+<span class="sd">        that QobjEvo accepts (see :class:`qutip.QobjEvo`&#39;s documentation).</span>
+<span class="sd">        ``H`` can also be a superoperator (liouvillian) if some collapse</span>
+<span class="sd">        operators are to be treated deterministically.</span>
+
+<span class="sd">    c_ops : list</span>
+<span class="sd">        A ``list`` of collapse operators in any input type that QobjEvo accepts</span>
+<span class="sd">        (see :class:`qutip.QobjEvo`&#39;s documentation). They must be operators</span>
+<span class="sd">        even if ``H`` is a superoperator.</span>
+
+<span class="sd">    options : SolverOptions, [optional]</span>
+<span class="sd">        Options for the evolution.</span>
+
+<span class="sd">    seed : int, SeedSequence, list, [optional]</span>
+<span class="sd">        Seed for the random number generator. It can be a single seed used to</span>
+<span class="sd">        spawn seeds for each trajectory or a list of seed, one for each</span>
+<span class="sd">        trajectory. Seeds are saved in the result and can be reused with::</span>
+<span class="sd">            seeds=prev_result.seeds</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mcsolve&quot;</span>
+    <span class="n">resultclass</span> <span class="o">=</span> <span class="n">McResult</span>
+    <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;keep_runs_results&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;adams&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;job_timeout&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;num_cpus&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;bitgenerator&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;mc_corr_eps&quot;</span><span class="p">:</span> <span class="mf">1e-10</span><span class="p">,</span>
+        <span class="s2">&quot;norm_steps&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;norm_t_tol&quot;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+        <span class="s2">&quot;norm_tol&quot;</span><span class="p">:</span> <span class="mf">1e-4</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">_time_start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)):</span>
+            <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ops</span><span class="p">]</span>
+        <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">(</span><span class="n">c_op</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">spre</span><span class="p">(</span><span class="n">c_op</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">c_op</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="k">if</span> <span class="n">c_op</span><span class="o">.</span><span class="n">isoper</span> <span class="k">else</span> <span class="n">c_op</span>
+                <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
+                <span class="n">cdc</span> <span class="o">=</span> <span class="n">c_op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">@</span> <span class="n">c_op</span>
+                <span class="n">rhs</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span> <span class="o">+</span> <span class="n">spost</span><span class="p">(</span><span class="n">cdc</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span> <span class="o">=</span> <span class="n">c_ops</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c_op</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">]</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">:</span>
+                <span class="n">rhs</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">n_op</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_collapse</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_restore_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retore the Qobj state from its data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_metadata</span><span class="p">[</span><span class="s1">&#39;dims&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">unstack_columns</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_initialize_stats</span><span class="p">()</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="s2">&quot;Master Equation Evolution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;num_collapse&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_collapse</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">stats</span>
+
+    <span class="k">def</span> <span class="nf">_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span><span class="p">:</span>
+            <span class="n">c_op</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">:</span>
+            <span class="n">n_op</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_run_one_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run one trajectory and return the result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The integrators is reused, but non-reentrant. They are are fine for</span>
+        <span class="c1"># multiprocessing, but will fail with multithreading.</span>
+        <span class="c1"># If a thread base parallel map is created, eahc trajectory should use</span>
+        <span class="c1"># a copy of the integrator.</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span><span class="n">e_ops</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_generator</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">state</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_restore_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_restore_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">collapses</span>
+        <span class="k">return</span> <span class="n">seed</span><span class="p">,</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_get_integrator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_time_start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">avail_integrators</span><span class="p">():</span>
+            <span class="n">integrator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avail_integrators</span><span class="p">()[</span><span class="n">method</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">Integrator</span><span class="p">):</span>
+            <span class="n">integrator</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Integrator method not supported.&quot;</span><span class="p">)</span>
+        <span class="n">integrator_instance</span> <span class="o">=</span> <span class="n">integrator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">mc_integrator</span> <span class="o">=</span> <span class="n">MCIntegrator</span><span class="p">(</span>
+            <span class="n">integrator_instance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_integrator_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">_time_start</span>
+        <span class="k">return</span> <span class="n">mc_integrator</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Options for monte carlo solver:</span>
+
+<span class="sd">        store_final_state: bool, default=False</span>
+<span class="sd">            Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+
+<span class="sd">        store_states: bool, default=None</span>
+<span class="sd">            Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+
+<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default=&quot;text&quot;</span>
+<span class="sd">            How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error if</span>
+<span class="sd">            not installed. Empty string or False will disable the bar.</span>
+
+<span class="sd">        progress_kwargs: dict, default={&quot;chunk_size&quot;:10}</span>
+<span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
+<span class="sd">            ``chunk_size``.</span>
+
+<span class="sd">        keep_runs_results: bool</span>
+<span class="sd">          Whether to store results from all trajectories or just store the</span>
+<span class="sd">          averages.</span>
+
+<span class="sd">        method: str, default=&quot;adams&quot;</span>
+<span class="sd">            Which ODE integrator methods are supported.</span>
+
+<span class="sd">        map: str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;}</span>
+<span class="sd">            How to run the trajectories. &quot;parallel&quot; uses concurent module to</span>
+<span class="sd">            run in parallel while &quot;loky&quot; use the module of the same name to do</span>
+<span class="sd">            so.</span>
+
+<span class="sd">        job_timeout: None, int</span>
+<span class="sd">            Maximum time to compute one trajectory.</span>
+
+<span class="sd">        num_cpus: None, int</span>
+<span class="sd">            Number of cpus to use when running in parallel. ``None`` detect the</span>
+<span class="sd">            number of available cpus.</span>
+
+<span class="sd">        bitgenerator: {None, &quot;MT19937&quot;, &quot;PCG64&quot;, &quot;PCG64DXSM&quot;, ...}</span>
+<span class="sd">            Which of numpy.random&#39;s bitgenerator to use. With ``None``, your</span>
+<span class="sd">            numpy version&#39;s default is used.</span>
+
+<span class="sd">        mc_corr_eps: float</span>
+<span class="sd">            Small number used to detect non-physical collapse caused by</span>
+<span class="sd">            numerical imprecision.</span>
+
+<span class="sd">        norm_t_tol: float</span>
+<span class="sd">            Tolerance in time used when finding the collapse.</span>
+
+<span class="sd">        norm_tol: float</span>
+<span class="sd">            Tolerance in norm used when finding the collapse.</span>
+
+<span class="sd">        norm_steps: int</span>
+<span class="sd">            Maximum number of tries to find the collapse.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
+        <span class="n">MultiTrajSolver</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">avail_integrators</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Solver</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_avail_integrators</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="o">**</span><span class="n">Solver</span><span class="o">.</span><span class="n">avail_integrators</span><span class="p">(),</span>
+            <span class="o">**</span><span class="bp">cls</span><span class="o">.</span><span class="n">_avail_integrators</span><span class="p">,</span>
+        <span class="p">}</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

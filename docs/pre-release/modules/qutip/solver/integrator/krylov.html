@@ -1,0 +1,461 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.solver.integrator.krylov &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../static/documentation_options.js"></script>
+        <script src="../../../../static/jquery.js"></script>
+        <script src="../../../../static/underscore.js"></script>
+        <script src="../../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.solver.integrator.krylov</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.solver.integrator.krylov</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..integrator</span> <span class="kn">import</span> <span class="n">IntegratorException</span><span class="p">,</span> <span class="n">Integrator</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qutip.core</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root_scalar</span>
+<span class="kn">from</span> <span class="nn">..sesolve</span> <span class="kn">import</span> <span class="n">SESolver</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;IntegratorKrylov&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="IntegratorKrylov"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.solver.integrator.krylov.IntegratorKrylov">[docs]</a><span class="k">class</span> <span class="nc">IntegratorKrylov</span><span class="p">(</span><span class="n">Integrator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evolve the state vector (&quot;psi0&quot;) finding an approximation for the time</span>
+<span class="sd">    evolution operator of Hamiltonian (&quot;H&quot;) by obtaining the projection of</span>
+<span class="sd">    the time evolution operator on a set of small dimensional Krylov</span>
+<span class="sd">    subspaces (m &lt;&lt; dim(H)).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">integrator_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;atol&#39;</span><span class="p">:</span> <span class="mf">1e-7</span><span class="p">,</span>
+        <span class="s1">&#39;nsteps&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;min_step&#39;</span><span class="p">:</span> <span class="mf">1e-5</span><span class="p">,</span>
+        <span class="s1">&#39;max_step&#39;</span><span class="p">:</span> <span class="mf">1e5</span><span class="p">,</span>
+        <span class="s1">&#39;krylov_dim&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;sub_system_tol&#39;</span><span class="p">:</span> <span class="mf">1e-7</span><span class="p">,</span>
+        <span class="s1">&#39;always_compute_step&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">support_time_dependant</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">supports_blackbox</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;krylov&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">isconstant</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;krylov method only support constant system.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">krylov_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;krylov_dim&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">krylov_dim</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">krylov_dim</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The options &#39;krylov_dim&#39;, must be a positive &quot;</span>
+                             <span class="s2">&quot;integer smaller that the system size&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">krylov_dim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># TODO: krylov_dim, max_step and error (atol) are related by</span>
+            <span class="c1"># err ~= exp(-krylov_dim / dt**(1~2))</span>
+            <span class="c1"># We could ask for 2 and determine the third one.</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">krylov_dim</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">N</span> <span class="o">+</span> <span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;krylov_dim&quot;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">krylov_dim</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;always_compute_step&quot;</span><span class="p">]:</span>
+            <span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">rand_ket</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_lanczos_algorithm</span><span class="p">(</span><span class="n">rand_ket</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">krylov_tridiag</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;krylov_dim&quot;</span><span class="p">]</span>
+                <span class="ow">or</span> <span class="n">krylov_tridiag</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">N</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_max_step</span><span class="p">(</span><span class="n">krylov_tridiag</span><span class="p">,</span>
+                                                        <span class="n">krylov_basis</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_lanczos_algorithm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes a basis of the Krylov subspace for Hamiltonian &#39;H&#39;, a system</span>
+<span class="sd">        state &#39;psi&#39; and Krylov dimension &#39;krylov_dim&#39;. The space is spanned</span>
+<span class="sd">        by {psi, H psi, H^2 psi, ..., H^(krylov_dim) psi}.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        psi: np.ndarray</span>
+<span class="sd">            State used to calculate Krylov subspace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">krylov_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;krylov_dim&#39;</span><span class="p">]</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">T_diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">krylov_dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="n">T_subdiag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">krylov_dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+        <span class="n">w_prime</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+        <span class="n">T_diag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">w_prime</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">w_prime</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">T_diag</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">T_subdiag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">krylov_dim</span> <span class="ow">and</span> <span class="n">T_subdiag</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;sub_system_tol&#39;</span><span class="p">]:</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">T_subdiag</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">w_prime</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">T_diag</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">w_prime</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">w_prime</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">T_diag</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="o">-</span><span class="n">T_subdiag</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">T_subdiag</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="n">krylov_tridiag</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">diag</span><span class="p">[</span><span class="s2">&quot;dense&quot;</span><span class="p">](</span>
+            <span class="p">[</span><span class="n">T_subdiag</span><span class="p">[:</span><span class="n">j</span><span class="p">],</span> <span class="n">T_diag</span><span class="p">[:</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">T_subdiag</span><span class="p">[:</span><span class="n">j</span><span class="p">]],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">krylov_basis</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">psi</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span> <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span>
+
+    <span class="k">def</span> <span class="nf">_compute_krylov_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the eigen energies, basis transformation operator (U) and e0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">eigs</span><span class="p">(</span><span class="n">krylov_tridiag</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">eigenvalues</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">krylov_basis</span><span class="p">,</span> <span class="n">eigenvectors</span><span class="p">)</span>
+        <span class="n">e0</span> <span class="o">=</span> <span class="n">eigenvectors</span><span class="o">.</span><span class="n">adjoint</span><span class="p">()</span> <span class="o">@</span> <span class="n">_data</span><span class="o">.</span><span class="n">one_element_dense</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">e0</span>
+
+    <span class="k">def</span> <span class="nf">_compute_psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">e0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compute the state at time ``t``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phases</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">eigenvalues</span><span class="p">))</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">phases</span><span class="p">,</span> <span class="n">e0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compute_max_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span><span class="p">,</span> <span class="n">krylov_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the maximum step length to stay under the desired tolerance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">krylov_state</span><span class="p">:</span>
+            <span class="n">krylov_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_krylov_set</span><span class="p">(</span><span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span><span class="p">)</span>
+
+        <span class="n">small_tridiag</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">krylov_tridiag</span><span class="o">.</span><span class="n">as_ndarray</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">small_basis</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">krylov_basis</span><span class="o">.</span><span class="n">as_ndarray</span><span class="p">()[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">reduced_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_krylov_set</span><span class="p">(</span><span class="n">small_tridiag</span><span class="p">,</span> <span class="n">small_basis</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">krylov_error</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="c1"># we divide by atol and take the log so that the error returned is 0</span>
+            <span class="c1"># at atol, which is convenient for calling root_scalar with.</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_psi</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">krylov_state</span><span class="p">)</span> <span class="o">-</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_psi</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">reduced_state</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;atol&quot;</span><span class="p">])</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;min_step&quot;</span><span class="p">]</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">krylov_error</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;With the krylov dim of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;krylov_dim&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, the &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;error with the minimum step </span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">, higher than the &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;desired tolerance of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">krylov_error</span><span class="p">(</span><span class="n">dt</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dt</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;max_step&quot;</span><span class="p">]:</span>
+            <span class="n">dt</span> <span class="o">*=</span> <span class="mi">10</span>
+
+        <span class="k">if</span> <span class="n">dt</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;max_step&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;max_step&quot;</span><span class="p">]</span>
+
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">root_scalar</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">krylov_error</span><span class="p">,</span> <span class="n">bracket</span><span class="o">=</span><span class="p">[</span><span class="n">dt</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="mi">10</span><span class="p">],</span>
+                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;brentq&quot;</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">converged</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sol</span><span class="o">.</span><span class="n">root</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dt</span>
+
+    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t_0</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lanczos_algorithm</span><span class="p">(</span><span class="n">state0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_krylov_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_krylov_set</span><span class="p">(</span><span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">krylov_tridiag</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;krylov_dim&#39;</span><span class="p">]</span>
+            <span class="ow">or</span> <span class="n">krylov_tridiag</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">shape</span>
+        <span class="p">):</span>
+            <span class="c1"># happy_breakdown</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;always_compute_step&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_max_step</span><span class="p">(</span>
+                <span class="n">krylov_tridiag</span><span class="p">,</span> <span class="n">krylov_basis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_krylov_state</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_psi</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_krylov_state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span><span class="p">:</span>
+            <span class="c1"># The approximation in only valid in the range t_0, t_0 + max step</span>
+            <span class="c1"># If outside, advance the range</span>
+            <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;nsteps&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="n">IntegratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Maximum number of integration steps (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;nsteps&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">) exceeded&quot;</span><span class="p">)</span>
+            <span class="n">new_psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_psi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_krylov_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_step</span><span class="p">,</span> <span class="n">new_psi</span><span class="p">)</span>
+
+        <span class="n">delta_t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_0</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_psi</span><span class="p">(</span><span class="n">delta_t</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_krylov_state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">out</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Supported options by krylov method:</span>
+
+<span class="sd">        atol : float, default=1e-7</span>
+<span class="sd">            Absolute tolerance.</span>
+
+<span class="sd">        nsteps : int, default=100</span>
+<span class="sd">            Max. number of internal steps/call.</span>
+
+<span class="sd">        min_step, max_step : float, default=(1e-5, 1e5)</span>
+<span class="sd">            Minimum and maximum step size.</span>
+
+<span class="sd">        krylov_dim: int, default=0</span>
+<span class="sd">            Dimension of Krylov approximation subspaces used for the time</span>
+<span class="sd">            evolution approximation. If the defaut 0 is given, the dimension is calculated</span>
+<span class="sd">            from the system size N, using `min(int((N + 100)**0.5), N-1)`.</span>
+
+<span class="sd">        sub_system_tol: float, default=1e-7</span>
+<span class="sd">            Tolerance to detect a happy breakdown. A happy breakdown occurs</span>
+<span class="sd">            when the initial ket is in a subspace of the Hamiltonian smaller</span>
+<span class="sd">            than ``krylov_dim``.</span>
+
+<span class="sd">        always_compute_step: bool, default=False</span>
+<span class="sd">            If True, the step length is computed each time a new Krylov</span>
+<span class="sd">            subspace is computed. Otherwise it is computed only once when</span>
+<span class="sd">            creating the integrator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
+        <span class="n">Integrator</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span></div>
+
+
+<span class="n">SESolver</span><span class="o">.</span><span class="n">add_integrator</span><span class="p">(</span><span class="n">IntegratorKrylov</span><span class="p">,</span> <span class="s1">&#39;krylov&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

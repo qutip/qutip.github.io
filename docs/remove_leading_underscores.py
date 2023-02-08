@@ -9,11 +9,12 @@ for dirpath, subdirs, files in os.walk(curr_vers_dir):
     for d in subdirs:
         if d in dirs.keys():
             shutil.move(os.path.join(dirpath,d),os.path.join(dirpath,dirs[d]))
-            
+
     for f in files:
         if f.lower().endswith('.html'):
             # Read in the file
-            with open(os.path.join(dirpath,f), 'r', encoding='utf-8', errors='ignore') as fl:
+            print(f"removing underscores from {os.path.join(dirpath, f)}")
+            with open(os.path.join(dirpath, f), 'r', encoding='utf-8', errors='ignore') as fl:
                 filedata = fl.read()
 
                 # Replace the target string
@@ -24,5 +25,5 @@ for dirpath, subdirs, files in os.walk(curr_vers_dir):
                 filedata = filedata.replace(u'_downloads', u'downloads')
 
                 # Write the file out again
-                with open(os.path.join(dirpath,f), 'w', encoding='utf-8') as fl:
+                with open(os.path.join(dirpath, f), 'w', encoding='utf-8') as fl:
                     fl.write(filedata)
