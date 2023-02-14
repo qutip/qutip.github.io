@@ -1,1 +1,0 @@
-a_ops = [ [ (a, a.dag()), ('{0} * (w >= 0)'.format(kappa), 'exp(1j*t)', 'exp(-1j*t)') ] ]

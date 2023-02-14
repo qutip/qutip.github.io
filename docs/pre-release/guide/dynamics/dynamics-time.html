@@ -1,0 +1,615 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Solving Problems with Time-dependent Hamiltonians &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bra": ["\\left\\langle{#1}\\right\\rvert", 1], "ket": ["\\left\\lvert{#1}\\right\\rangle", 1], "tr": "\\operatorname{tr}"}}})</script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="next" title="Bloch-Redfield master equation" href="dynamics-bloch-redfield.html" />
+    <link rel="prev" title="Stochastic Solver" href="dynamics-stochastic.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dynamics-intro.html">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-data.html">Dynamics Simulation Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-master.html">Lindblad Master Equation Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-monte.html">Monte Carlo Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-krylov.html">Krylov Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-photocurrent.html">Stochastic Solver - Photocurrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Solving Problems with Time-dependent Hamiltonians</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#time-dependent-operators">Time-Dependent Operators</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qobjevo">Qobjevo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#coefficients">Coefficients</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accessing-the-state-from-solver">Accessing the state from solver</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-piqs.html">Permutational Invariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+        
+          <li><a href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a> &raquo;</li>
+        
+      <li>Solving Problems with Time-dependent Hamiltonians</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="solving-problems-with-time-dependent-hamiltonians">
+<span id="time"></span><h1>Solving Problems with Time-dependent Hamiltonians<a class="headerlink" href="#solving-problems-with-time-dependent-hamiltonians" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="time-dependent-operators">
+<h2>Time-Dependent Operators<a class="headerlink" href="#time-dependent-operators" title="Permalink to this headline">¶</a></h2>
+<p>In the previous examples of quantum evolution,
+we assumed that the systems under consideration were described by time-independent Hamiltonians.
+However, many systems have explicit time dependence in either the Hamiltonian,
+or the collapse operators describing coupling to the environment, and sometimes both components might depend on time.
+The time-evolutions solvers such as <code class="xref py py-func docutils literal notranslate"><span class="pre">sesolve</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">brmesolve</span></code>, etc. are all capable of handling time-dependent Hamiltonians and collapse terms.
+QuTiP use <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> to represent time-dependent quantum operators.
+There are three different ways to build a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>: :</p>
+<ol class="arabic simple">
+<li><p><strong>Function based</strong>: Build the time dependent operator from a function returning a <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code>:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">oper</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">H_t</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">oper</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><strong>List based</strong>: The time dependent quantum operator is represented as a list of <code class="docutils literal notranslate"><span class="pre">qobj</span></code> and <code class="docutils literal notranslate"><span class="pre">[qobj,</span> <span class="pre">coefficient]</span></code> pairs.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H_t</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="p">[</span><span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)],</span> <span class="p">[</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)]])</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>coefficent based</strong>: The product of a <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code> with a <code class="xref py py-class docutils literal notranslate"><span class="pre">Coefficient</span></code> result in a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coefficent</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+<span class="n">H_t</span> <span class="o">=</span> <span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">))</span> <span class="o">*</span> <span class="n">coeff</span>
+</pre></div>
+</div>
+<p>These 3 examples will create the same time dependent operator, however the function based method will usually be slower when used in solver.</p>
+<p>Solvers will accept a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>: when an operator is expected: this include the Hamiltonian <code class="docutils literal notranslate"><span class="pre">H</span></code>, collapse operators, expectation values operators, the operator of <code class="xref py py-func docutils literal notranslate"><span class="pre">brmesolve</span></code>’s <code class="docutils literal notranslate"><span class="pre">a_ops</span></code>, etc.
+Exception are <code class="xref py py-func docutils literal notranslate"><span class="pre">krylovsolve</span></code>’s Hamiltonian and HEOM’s Bath operators.</p>
+<p>Most solvers will accept any format that could be made into a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>: for the Hamiltonian.
+All of the following are equivalent:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H_t</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">([</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="p">[</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)]],</span> <span class="o">...</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Collapse operator also accept a list of object that could be made into <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>:.
+However one needs to be careful about not confusing the list nature of the <cite>c_ops</cite> parameter with list format quantum system.
+In the following call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H_t</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="p">[</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)]])</span>
+</pre></div>
+</div>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code> will see 2 collapses operators: <code class="docutils literal notranslate"><span class="pre">num(N)</span></code> and <code class="docutils literal notranslate"><span class="pre">[destroy(N)</span> <span class="pre">+</span> <span class="pre">create(N),</span> <span class="pre">lambda</span> <span class="pre">t:</span> <span class="pre">np.sin(t)]</span></code>.
+It is therefore preferred to pass each collapse operator as either a <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code>: or a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>:.</p>
+<p>As an example, we will look at a case with a time-dependent Hamiltonian of the form <span class="math notranslate nohighlight">\(H=H_{0}+f(t)H_{1}\)</span> where <span class="math notranslate nohighlight">\(f(t)\)</span> is the time-dependent driving strength given as <span class="math notranslate nohighlight">\(f(t)=A\exp\left[-\left( t/\sigma \right)^{2}\right]\)</span>.
+The following code sets up the problem</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ustate</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">excited</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ground</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># Set where to truncate Fock state for cavity</span>
+<span class="n">sigma_ge</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">ground</span> <span class="o">*</span> <span class="n">excited</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>  <span class="c1"># |g&gt;&lt;e|</span>
+<span class="n">sigma_ue</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">ustate</span> <span class="o">*</span> <span class="n">excited</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>  <span class="c1"># |u&gt;&lt;e|</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">ada</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Build collapse operators</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="c1"># Cavity decay rate</span>
+<span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># Atomic decay rate</span>
+<span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">gamma</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma_ue</span><span class="p">)</span> <span class="c1"># Use Rb branching ratio of 5/9 e-&gt;u</span>
+<span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">gamma</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma_ge</span><span class="p">)</span> <span class="c1"># 4/9 e-&gt;g</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># Define time vector</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ustate</span><span class="p">)</span> <span class="c1"># Define initial state</span>
+
+<span class="n">state_GG</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ground</span><span class="p">)</span> <span class="c1"># Define states onto which to project</span>
+<span class="n">sigma_GG</span> <span class="o">=</span> <span class="n">state_GG</span> <span class="o">*</span> <span class="n">state_GG</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="n">state_UU</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ustate</span><span class="p">)</span>
+<span class="n">sigma_UU</span> <span class="o">=</span> <span class="n">state_UU</span> <span class="o">*</span> <span class="n">state_UU</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># coupling strength</span>
+<span class="n">H0</span> <span class="o">=</span> <span class="o">-</span><span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">sigma_ge</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sigma_ge</span><span class="p">)</span>  <span class="c1"># time-independent term</span>
+<span class="n">H1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma_ue</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sigma_ue</span><span class="p">)</span>  <span class="c1"># time-dependent term</span>
+</pre></div>
+</div>
+<p>Given that we have a single time-dependent Hamiltonian term, and constant collapse terms, we need to specify a single Python function for the coefficient <span class="math notranslate nohighlight">\(f(t)\)</span>.  In this case, one can simply do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">H1_coeff</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="mf">5.</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, the return value depends only on time.  However it is possible to add optional arguments to the call, see <a class="reference internal" href="#using-arguments">Using arguments</a>.
+Having specified our coefficient function, we can now specify the Hamiltonian in list format and call the solver (in this case <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="n">H1_coeff</span><span class="p">]]</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">ada</span><span class="p">,</span> <span class="n">sigma_UU</span><span class="p">,</span> <span class="n">sigma_GG</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>We can call the Monte Carlo solver in the exact same way (if using the default <code class="docutils literal notranslate"><span class="pre">ntraj=500</span></code>):</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="go">output = mcsolve(H, psi0, t, c_ops, [ada, sigma_UU, sigma_GG])</span>
+</pre></div>
+</div>
+<p>The output from the master equation solver is identical to that shown in the examples, the Monte Carlo however will be noticeably off, suggesting we should increase the number of trajectories for this example.
+In addition, we can also consider the decay of a simple Harmonic oscillator with time-varying decay rate</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="k">def</span> <span class="nf">col_coeff</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>  <span class="c1"># coefficient function</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># number of basis states</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>  <span class="c1"># simple HO</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>  <span class="c1"># initial state</span>
+<span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">col_coeff</span><span class="p">])]</span>  <span class="c1"># time-dependent collapse term</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qobjevo">
+<h2>Qobjevo<a class="headerlink" href="#qobjevo" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> as a time dependent quantum system, as it’s main functionality create a <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code> at a time:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">H_t</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">Quantum object: dims=[[2], [2]], shape=(2, 2), type=&#39;oper&#39;, isherm=True</span>
+<span class="go">Qobj data =</span>
+<span class="go">[[0. 1.]</span>
+<span class="go"> [1. 1.]]</span>
+</pre></div>
+</div>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> shares a lot of properties with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 25%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dimensions</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.dims</span></code></p></td>
+<td><p>List keeping track of shapes for
+individual components of a
+multipartite system (for tensor
+products and partial traces).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shape</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.shape</span></code></p></td>
+<td><p>Dimensions of underlying data matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p>Type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.type</span></code></p></td>
+<td><p>Is object of type ‘ket, ‘bra’,
+‘oper’, or ‘super’?</p></td>
+</tr>
+<tr class="row-odd"><td><p>is constant?</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q.isconstant</span></code></p></td>
+<td><p>Is the operator Hermitian or not?</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>’s follow the same mathematical operations rules than <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code>.
+They can be added, subtracted and multiplied with scalar, <code class="docutils literal notranslate"><span class="pre">Qobj</span></code> and <code class="docutils literal notranslate"><span class="pre">QobjEvo</span></code>.
+They also support the <cite>dag</cite> and <cite>trans</cite> and <cite>conj</cite> method and can be used for tensor operations and super operator transformation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">H_t</span><span class="p">,</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">c_op</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">QobjEvo</span><span class="p">([</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">)]),</span> <span class="n">sigmax</span><span class="p">())</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="o">-</span> <span class="n">spost</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span>
+<span class="n">L</span> <span class="o">+=</span> <span class="n">spre</span><span class="p">(</span><span class="n">c_op</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">c_op</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">c_op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c_op</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">c_op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c_op</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or equivalently:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="n">liouvillian</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="p">[</span><span class="n">c_op</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="section" id="using-arguments">
+<h3>Using arguments<a class="headerlink" href="#using-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Until now, the coefficient were only functions of time.
+In the definition of <code class="docutils literal notranslate"><span class="pre">H1_coeff</span></code>, the driving amplitude <code class="docutils literal notranslate"><span class="pre">A</span></code> and width <code class="docutils literal notranslate"><span class="pre">sigma</span></code> were hardcoded with their numerical values.
+This is fine for problems that are specialized, or that we only want to run once.
+However, in many cases, we would like study the same problem with a range of parameters and not have to worry about manually changing the values on each run.
+QuTiP allows you to accomplish this using by adding extra arguments to coefficients function that make the <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>.
+For instance, instead of explicitly writing 9 for the amplitude and 5 for the width of the gaussian driving term, we can add an <cite>args</cite> positional variable:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">H1_coeff</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span><span class="o">/</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or, new from v5, add the extra parameter directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">H1_coeff</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When the second positional input of the coefficient function is named <code class="docutils literal notranslate"><span class="pre">args</span></code>, the arguments are passed as a Python dictionary of <code class="docutils literal notranslate"><span class="pre">key:</span> <span class="pre">value</span></code> pairs.
+Otherwise the coefficient function is called as <code class="docutils literal notranslate"><span class="pre">coeff(t,</span> <span class="pre">**args)</span></code>.
+In the last example, <code class="docutils literal notranslate"><span class="pre">args</span> <span class="pre">=</span> <span class="pre">{'A':</span> <span class="pre">a,</span> <span class="pre">'sigma':</span> <span class="pre">b}</span></code> where <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> are the two parameters for the amplitude and width, respectively.
+This <code class="docutils literal notranslate"><span class="pre">args</span></code> dictionary need to be given at creation of the <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> when function using then are included:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="p">[</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="n">H1_coeff</span><span class="p">]]</span>
+<span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="n">qevo</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But without <code class="docutils literal notranslate"><span class="pre">args</span></code>, the <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> creation will fail:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">QobjEvo</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When evaluation the <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> at a time, new arguments can be passed either with the <code class="docutils literal notranslate"><span class="pre">args</span></code> dictionary positional arguments, or with specific keywords arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">qevo</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qevo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qevo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Whether the original coefficient used the <code class="docutils literal notranslate"><span class="pre">args</span></code> or specific input does not matter.
+It is fine to mix the different signatures.</p>
+<p>Solver calls take an <code class="docutils literal notranslate"><span class="pre">args</span></code> input that is used to build the time dependent system.
+If the Hamiltonian or collapse operators are already <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>, their arguments will be overwritten.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">system</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">H0</span> <span class="o">+</span> <span class="n">H1</span> <span class="o">*</span> <span class="p">(</span><span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="n">mesolve</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To update arguments of an existing time dependent quantum system, you can pass the previous object as the input of a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> with new <code class="docutils literal notranslate"><span class="pre">args</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">qevo</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qevo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}))</span>
+<span class="n">new_qevo</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">qevo</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">new_qevo</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code> created from a monolithic function can also use arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">oper</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">create</span><span class="p">(</span><span class="n">N</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
+
+<span class="n">H_t</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>When merging two or more <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>, each will keep it arguments, but calling it with updated are will affect all parts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">qevo1</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([[</span><span class="n">sigmap</span><span class="p">(),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="p">],</span> <span class="p">[</span><span class="n">sigmam</span><span class="p">(),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">b</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="n">qevo2</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([[</span><span class="n">num</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">c</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="n">summed_evo</span> <span class="o">=</span> <span class="n">qevo1</span> <span class="o">+</span> <span class="n">qevo2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summed_evo</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summed_evo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="coefficients">
+<h2>Coefficients<a class="headerlink" href="#coefficients" title="Permalink to this headline">¶</a></h2>
+<p>To build time dependent quantum system we often use a list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Qobj</span></code> and <em>coefficient</em>.
+These <em>coefficients</em> represent the strength of the corresponding quantum object a function that of time.
+Up to now, we used functions for these, but QuTiP support multiple formats: <code class="docutils literal notranslate"><span class="pre">callable</span></code>, <code class="docutils literal notranslate"><span class="pre">strings</span></code>, <code class="docutils literal notranslate"><span class="pre">array</span></code>.</p>
+<p><strong>Function coefficients</strong> :
+Use a callable with the signature <code class="docutils literal notranslate"><span class="pre">f(t:</span> <span class="pre">double,</span> <span class="pre">...)</span> <span class="pre">-&gt;</span> <span class="pre">double</span></code> as coefficient.
+Any function or method that can be called by <code class="docutils literal notranslate"><span class="pre">f(t,</span> <span class="pre">args)</span></code>, <code class="docutils literal notranslate"><span class="pre">f(t,</span> <span class="pre">**args)</span></code> is accepted.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">coeff</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="n">coeff</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>String coefficients</strong> :
+Use a string containing a simple Python expression.
+The variable <code class="docutils literal notranslate"><span class="pre">t</span></code>, common mathematical functions such as <code class="docutils literal notranslate"><span class="pre">sin</span></code> or <code class="docutils literal notranslate"><span class="pre">exp</span></code> an variable in args will be available.
+If available, the string will be compiled using cython, fixing variable type when possible, allowing slightly faster excution than function.
+While the speed up is usually very small, in long evolution, numerous calls to the functions are made and it’s can accumulate.
+From version 5, compilation of the coefficient is done only once and saved between sessions.
+When Cython is not available, the code will be executed in python with the same environment.
+This, however, as no advantage over using python function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coeff</span> <span class="o">=</span> <span class="s2">&quot;A * exp(-(t / sigma)**2)&quot;</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="n">coeff</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Here is a list of defined variables:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">sin</span></code>, <code class="docutils literal notranslate"><span class="pre">cos</span></code>, <code class="docutils literal notranslate"><span class="pre">tan</span></code>, <code class="docutils literal notranslate"><span class="pre">asin</span></code>, <code class="docutils literal notranslate"><span class="pre">acos</span></code>, <code class="docutils literal notranslate"><span class="pre">atan</span></code>, <code class="docutils literal notranslate"><span class="pre">pi</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sinh</span></code>, <code class="docutils literal notranslate"><span class="pre">cosh</span></code>, <code class="docutils literal notranslate"><span class="pre">tanh</span></code>, <code class="docutils literal notranslate"><span class="pre">asinh</span></code>, <code class="docutils literal notranslate"><span class="pre">acosh</span></code>, <code class="docutils literal notranslate"><span class="pre">atanh</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">log</span></code>, <code class="docutils literal notranslate"><span class="pre">log10</span></code>, <code class="docutils literal notranslate"><span class="pre">erf</span></code>, <code class="docutils literal notranslate"><span class="pre">zerf</span></code>, <code class="docutils literal notranslate"><span class="pre">sqrt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">real</span></code>, <code class="docutils literal notranslate"><span class="pre">imag</span></code>, <code class="docutils literal notranslate"><span class="pre">conj</span></code>, <code class="docutils literal notranslate"><span class="pre">abs</span></code>, <code class="docutils literal notranslate"><span class="pre">norm</span></code>, <code class="docutils literal notranslate"><span class="pre">arg</span></code>, <code class="docutils literal notranslate"><span class="pre">proj</span></code>,
+<code class="docutils literal notranslate"><span class="pre">np</span></code> (numpy) and <code class="docutils literal notranslate"><span class="pre">spe</span></code> (scipy.special).</p>
+</dd>
+</dl>
+<p><strong>Array coefficients</strong> :
+Use the spline interpolation of an array.
+Useful when the coefficient is hard to define as a function or obtained from experimental data.
+The times at which the array are defined must be passed as <code class="docutils literal notranslate"><span class="pre">tlist</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">sigma</span><span class="o">*</span><span class="mi">5</span><span class="p">,</span> <span class="n">sigma</span><span class="o">*</span><span class="mi">5</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">coeff</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">times</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">H0</span><span class="p">,</span> <span class="p">[</span><span class="n">H1</span><span class="p">,</span> <span class="n">coeff</span><span class="p">]],</span> <span class="n">tlist</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Per default, a cubic spline interpolation is used, but the order of the interpolation can be controlled with the order input:
+Outside the interpolation range, the first or last value are used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">coeff</span> <span class="o">=</span> <span class="n">times</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.1</span> <span class="o">-</span> <span class="n">times</span><span class="p">)</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">qeye</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">coeff</span><span class="p">],</span> <span class="n">tlist</span><span class="o">=</span><span class="n">times</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">H</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;CubicSpline&quot;</span><span class="p">)</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">qeye</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">coeff</span><span class="p">],</span> <span class="n">tlist</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">H</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;step&quot;</span><span class="p">)</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">([</span><span class="n">qeye</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">coeff</span><span class="p">],</span> <span class="n">tlist</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="p">[</span><span class="n">H</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-12.png" src="../../images/dynamics-time-12.png" />
+</div>
+<p>When using array coefficients in solver, if the time dependent quantum system is in list format, the solver tlist is used as times of the array.
+This is often not ideal as the interpolation is usually less precise close the extremities of the range.
+It is therefore better to create the QobjEvo using an extended range prior to the solver:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">times</span><span class="p">)</span>
+
+<span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">([</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">coeff</span><span class="p">],</span> <span class="n">tlist</span><span class="o">=</span><span class="n">times</span><span class="p">)]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">mesolve</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span><span class="o">.</span><span class="n">expect</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../../images/dynamics-time-13.png" src="../../images/dynamics-time-13.png" />
+</div>
+<p>Different coefficient types can be mixed in a <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>.</p>
+<p>Given the multiple choices of input style, the first question that arises is which option to choose?
+In short, the function based method (first option) is the most general,
+allowing for essentially arbitrary coefficients expressed via user defined functions.
+However, by automatically compiling your system into C++ code,
+the second option (string based) tends to be more efficient and run faster.
+Of course, for small system sizes and evolution times, the difference will be minor.
+Lastly the spline method is usually as fast the string method, but it cannot be modified once created.</p>
+</div>
+<div class="section" id="accessing-the-state-from-solver">
+<span id="time-dynargs"></span><h2>Accessing the state from solver<a class="headerlink" href="#accessing-the-state-from-solver" title="Permalink to this headline">¶</a></h2>
+<p>In QuTiP 4.4 to 4.7, it was possible to request that the solver pass the state, expectation values or collapse operators via arguments to <code class="xref py py-class docutils literal notranslate"><span class="pre">QobjEvo</span></code>. Support for this is not yet available in QuTiP 5.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="dynamics-bloch-redfield.html" class="btn btn-neutral float-right" title="Bloch-Redfield master equation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dynamics-stochastic.html" class="btn btn-neutral float-left" title="Stochastic Solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

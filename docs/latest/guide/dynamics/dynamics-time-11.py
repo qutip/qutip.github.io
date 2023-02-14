@@ -1,1 +1,0 @@
-output = mesolve(H, psi0, t, c_ops, [a.dag() * a])

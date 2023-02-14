@@ -1,0 +1,595 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.measurement &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.measurement</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.measurement</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for measuring quantum objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">expect</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">tensor</span>
+
+
+<span class="k">def</span> <span class="nf">_verify_input</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;op must be a Qobj&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;op must be all operators or all kets&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;state must be a Qobj&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;op and state dims should be compatible when state is a ket&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="n">state</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;op and state dims should match&quot;</span>
+                <span class="s2">&quot; when state is a density matrix&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;state must be a ket or a density matrix&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_measurement_statistics_povm_ket</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns measurement statistics (resultant states and probabilities)</span>
+<span class="sd">    for a measurements specified by a set of positive operator valued</span>
+<span class="sd">    measurements on a specified ket.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj` (ket)</span>
+<span class="sd">            The ket specifying the state to measure.</span>
+
+<span class="sd">    ops : list of :class:`.Qobj`</span>
+<span class="sd">      List of measurement operators :math:`M_i` (specifying a POVM such that</span>
+<span class="sd">      :math:`E_i = M_i^\dagger M_i`).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    collapsed_states : list of :class:`.Qobj` (kets)</span>
+<span class="sd">        The collapsed states (kets) obtained after measuring the qubits and</span>
+<span class="sd">        obtaining the qubit specified by the target in the state specified by</span>
+<span class="sd">        the index.</span>
+
+<span class="sd">    probabilities : list of floats</span>
+<span class="sd">        The probability of measuring a state in a the state specified by the</span>
+<span class="sd">        index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">collapsed_states</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">((</span><span class="n">state</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">op</span> <span class="o">*</span> <span class="n">state</span><span class="p">))</span>
+        <span class="n">probabilities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">collapsed_states</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">op</span> <span class="o">*</span> <span class="n">state</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">collapsed_states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">collapsed_states</span><span class="p">,</span> <span class="n">probabilities</span>
+
+
+<span class="k">def</span> <span class="nf">_measurement_statistics_povm_dm</span><span class="p">(</span><span class="n">density_mat</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns measurement statistics (resultant states and probabilities)</span>
+<span class="sd">    for a measurements specified by a set of positive operator valued</span>
+<span class="sd">    measurements on a specified ket or density matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj` (density matrix)</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    ops : list of :class:`.Qobj`</span>
+<span class="sd">        List of measurement operators :math:`M_i` (specifying a POVM s.t.</span>
+<span class="sd">        :mathm:`E_i = M_i^\dagger M_i`)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    collapsed_states : list of :class:`.Qobj`</span>
+<span class="sd">        The collapsed states (density matrices) obtained after measuring the</span>
+<span class="sd">        qubits and obtaining the qubit specified by the target in the state</span>
+<span class="sd">        specified by the index.</span>
+
+<span class="sd">    probabilities : list of float</span>
+<span class="sd">        The probability of measuring a state in a the state specified by the</span>
+<span class="sd">        index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">collapsed_states</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ops</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">op</span> <span class="o">*</span> <span class="n">density_mat</span> <span class="o">*</span> <span class="n">op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
+        <span class="n">probabilities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">collapsed_states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">st</span><span class="o">/</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">collapsed_states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">collapsed_states</span><span class="p">,</span> <span class="n">probabilities</span>
+
+
+<div class="viewcode-block" id="measurement_statistics_povm"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.measurement.measurement_statistics_povm">[docs]</a><span class="k">def</span> <span class="nf">measurement_statistics_povm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns measurement statistics (resultant states and probabilities) for a</span>
+<span class="sd">    measurement specified by a set of positive operator valued measurements on</span>
+<span class="sd">    a specified ket or density matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    ops : list of :class:`.Qobj`</span>
+<span class="sd">        List of measurement operators :math:`M_i` or kets.  Either:</span>
+
+<span class="sd">        1. specifying a POVM s.t. :math:`E_i = M_i^\dagger M_i`</span>
+<span class="sd">        2. projection operators if ops correspond to</span>
+<span class="sd">           projectors (s.t. :math:`E_i = M_i^\dagger = M_i`)</span>
+<span class="sd">        3. kets (transformed to projectors)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    collapsed_states : list of :class:`.Qobj`</span>
+<span class="sd">        The collapsed states obtained after measuring the qubits and obtaining</span>
+<span class="sd">        the qubit specified by the target in the state specified by the index.</span>
+
+<span class="sd">    probabilities : list of floats</span>
+<span class="sd">        The probability of measuring a state in a the state specified by the</span>
+<span class="sd">        index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">isket</span><span class="p">,</span> <span class="n">ops</span><span class="p">)):</span>
+        <span class="n">ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">op</span> <span class="o">*</span> <span class="n">op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+        <span class="n">_verify_input</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+    <span class="n">E</span> <span class="o">=</span> <span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">op</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">]</span>
+
+    <span class="n">is_ID</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ID</span> <span class="o">==</span> <span class="n">identity</span><span class="p">(</span><span class="n">is_ID</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;measurement operators must sum to identity&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_measurement_statistics_povm_ket</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_measurement_statistics_povm_dm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="measurement_statistics_observable"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.measurement.measurement_statistics_observable">[docs]</a><span class="k">def</span> <span class="nf">measurement_statistics_observable</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the measurement eigenvalues, eigenstates (or projectors) and</span>
+<span class="sd">    measurement probabilities for the given state and measurement operator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    op : :class:`.Qobj`</span>
+<span class="sd">        The measurement operator.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eigenvalues: list of float</span>
+<span class="sd">        The list of eigenvalues of the measurement operator.</span>
+
+<span class="sd">    eigenstates_or_projectors: list of :class:`.Qobj`</span>
+<span class="sd">        If the state was a ket, return the eigenstates of the measurement</span>
+<span class="sd">        operator. Otherwise return the projectors onto the eigenstates.</span>
+
+<span class="sd">    probabilities: list of float</span>
+<span class="sd">        The probability of measuring the state as being in the corresponding</span>
+<span class="sd">        eigenstate (and the measurement result being the corresponding</span>
+<span class="sd">        eigenvalue).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_verify_input</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+    <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenstates</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">state</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">eigenstates</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenstates</span><span class="p">,</span> <span class="n">probabilities</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">projectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">eigenstates</span><span class="p">]</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="p">[</span><span class="n">expect</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">projectors</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">projectors</span><span class="p">,</span> <span class="n">probabilities</span></div>
+
+
+<div class="viewcode-block" id="measure_observable"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.measurement.measure_observable">[docs]</a><span class="k">def</span> <span class="nf">measure_observable</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a measurement specified by an operator on the given state.</span>
+
+<span class="sd">    This function simulates the classic quantum measurement described in many</span>
+<span class="sd">    introductory texts on quantum mechanics. The measurement collapses the</span>
+<span class="sd">    state to one of the eigenstates of the given operator and the result of the</span>
+<span class="sd">    measurement is the corresponding eigenvalue.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    op : :class:`.Qobj`</span>
+<span class="sd">        The measurement operator.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    measured_value : float</span>
+<span class="sd">        The result of the measurement (one of the eigenvalues of op).</span>
+
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The new state (a ket if a ket was given, otherwise a density matrix).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Measure the z-component of the spin of the spin-up basis state:</span>
+
+<span class="sd">    &gt;&gt;&gt; measure_observable(basis(2, 0), sigmaz())</span>
+<span class="sd">    (1.0, Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket</span>
+<span class="sd">    Qobj data =</span>
+<span class="sd">    [[-1.]</span>
+<span class="sd">     [ 0.]])</span>
+
+<span class="sd">    Since the spin-up basis is an eigenstate of sigmaz, this measurement always</span>
+<span class="sd">    returns 1 as the measurement result (the eigenvalue of the spin-up basis)</span>
+<span class="sd">    and the original state (up to a global phase).</span>
+
+<span class="sd">    Measure the x-component of the spin of the spin-down basis state:</span>
+
+<span class="sd">    &gt;&gt;&gt; measure_observable(basis(2, 1), sigmax())</span>
+<span class="sd">    (-1.0, Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket</span>
+<span class="sd">    Qobj data =</span>
+<span class="sd">    [[-0.70710678]</span>
+<span class="sd">     [ 0.70710678]])</span>
+
+<span class="sd">    This measurement returns 1 fifty percent of the time and -1 the other fifty</span>
+<span class="sd">    percent of the time. The new state returned is the corresponding eigenstate</span>
+<span class="sd">    of sigmax.</span>
+
+<span class="sd">    One may also perform a measurement on a density matrix. Below we perform</span>
+<span class="sd">    the same measurement as above, but on the density matrix representing the</span>
+<span class="sd">    pure spin-down state:</span>
+
+<span class="sd">    &gt;&gt;&gt; measure_observable(ket2dm(basis(2, 1)), sigmax())</span>
+<span class="sd">    (-1.0, Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper</span>
+<span class="sd">    Qobj data =</span>
+<span class="sd">    [[ 0.5 -0.5]</span>
+<span class="sd">     [-0.5  0.5]])</span>
+
+<span class="sd">    The measurement result is the same, but the new state is returned as a</span>
+<span class="sd">    density matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenstates_or_projectors</span><span class="p">,</span> <span class="n">probabilities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">measurement_statistics_observable</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">op</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">probabilities</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
+        <span class="n">eigenstates</span> <span class="o">=</span> <span class="n">eigenstates_or_projectors</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">projectors</span> <span class="o">=</span> <span class="n">eigenstates_or_projectors</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="n">projectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">state</span> <span class="o">*</span> <span class="n">projectors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">eigenvalues</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="measure_povm"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.measurement.measure_povm">[docs]</a><span class="k">def</span> <span class="nf">measure_povm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a measurement specified by list of POVMs.</span>
+
+<span class="sd">    This function simulates a POVM measurement. The measurement collapses the</span>
+<span class="sd">    state to one of the resultant states of the measurement and returns the</span>
+<span class="sd">    index of the operator corresponding to the collapsed state as well as the</span>
+<span class="sd">    collapsed state.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    ops : list of :class:`.Qobj`</span>
+<span class="sd">        List of measurement operators :math:`M_i` or kets.  Either:</span>
+
+<span class="sd">        1. specifying a POVM s.t. :math:`E_i = M_i^\dagger M_i`</span>
+<span class="sd">        2. projection operators if ops correspond to projectors (s.t.</span>
+<span class="sd">           :math:`E_i = M_i^\dagger = M_i`)</span>
+<span class="sd">        3. kets (transformed to projectors)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    index : float</span>
+<span class="sd">        The resultant index of the measurement.</span>
+
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The new state (a ket if a ket was given, otherwise a density matrix).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">collapsed_states</span><span class="p">,</span> <span class="n">probabilities</span> <span class="o">=</span> <span class="n">measurement_statistics_povm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">collapsed_states</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">probabilities</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">collapsed_states</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">index</span><span class="p">,</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="measurement_statistics"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.measurement.measurement_statistics">[docs]</a><span class="k">def</span> <span class="nf">measurement_statistics</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A dispatch method that provides measurement statistics handling both</span>
+<span class="sd">    observable style measurements and projector style measurements(POVMs and</span>
+<span class="sd">    PVMs).</span>
+
+<span class="sd">    For return signatures, please check:</span>
+
+<span class="sd">    - :func:`~measurement_statistics_observable` for observable measurements.</span>
+<span class="sd">    - :func:`~measurement_statistics_povm` for POVM measurements.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    ops : :class:`.Qobj` or list of :class:`.Qobj`</span>
+<span class="sd">        - measurement observable (:class:.Qobj); or</span>
+<span class="sd">        - list of measurement operators :math:`M_i` or kets (list of</span>
+<span class="sd">          :class:`.Qobj`) Either:</span>
+
+<span class="sd">          1. specifying a POVM s.t. :math:`E_i = M_i^\dagger * M_i`</span>
+<span class="sd">          2. projection operators if ops correspond to projectors (s.t.</span>
+<span class="sd">             :math:`E_i = M_i^\dagger = M_i`)</span>
+<span class="sd">          3. kets (transformed to projectors)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">measurement_statistics_povm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">measurement_statistics_observable</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="measure"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.measurement.measure">[docs]</a><span class="k">def</span> <span class="nf">measure</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A dispatch method that provides measurement results handling both</span>
+<span class="sd">    observable style measurements and projector style measurements (POVMs and</span>
+<span class="sd">    PVMs).</span>
+
+<span class="sd">    For return signatures, please check:</span>
+
+<span class="sd">    - :func:`~measure_observable` for observable measurements.</span>
+<span class="sd">    - :func:`~measure_povm` for POVM measurements.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : :class:`.Qobj`</span>
+<span class="sd">        The ket or density matrix specifying the state to measure.</span>
+
+<span class="sd">    ops : :class:`.Qobj` or list of :class:`.Qobj`</span>
+<span class="sd">        - measurement observable (:class:`.Qobj`); or</span>
+<span class="sd">        - list of measurement operators :math:`M_i` or kets (list of</span>
+<span class="sd">          :class:`.Qobj`) Either:</span>
+
+<span class="sd">          1. specifying a POVM s.t. :math:`E_i = M_i^\dagger M_i`</span>
+<span class="sd">          2. projection operators if ops correspond to projectors (s.t.</span>
+<span class="sd">             :math:`E_i = M_i^\dagger = M_i`)</span>
+<span class="sd">          3. kets (transformed to projectors)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">measure_povm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">measure_observable</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ops</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

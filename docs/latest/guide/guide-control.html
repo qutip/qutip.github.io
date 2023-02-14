@@ -214,9 +214,9 @@
 <li><p>What is the shape of the control pulse required to achieve this?</p></li>
 </ol>
 <p>These questions are addressed as <em>controllability</em> and <em>quantum optimal control</em> <a class="reference internal" href="../biblio.html#daless08" id="id1"><span>[dAless08]</span></a>. The answer to question of <em>controllability</em> is determined by the commutability of the dynamics generators and is formalised as the <em>Lie Algebra Rank Criterion</em> and is discussed in detail in <a class="reference internal" href="../biblio.html#daless08" id="id2"><span>[dAless08]</span></a>. The solutions to the second question can be determined through optimal control algorithms, or control pulse optimisation.</p>
-<div class="figure align-center" id="id10">
+<div class="figure align-center" id="id11">
 <a class="reference internal image-reference" href="../images/quant_optim_ctrl.png"><img alt="../images/quant_optim_ctrl.png" src="../images/quant_optim_ctrl.png" style="width: 2.5in;" /></a>
-<p class="caption"><span class="caption-text">Schematic showing the principle of quantum control.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Schematic showing the principle of quantum control.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
 </div>
 <p>Quantum Control has many applications including NMR, <em>quantum metrology</em>, <em>control of chemical reactions</em>, and <em>quantum information processing</em>.</p>
 <p>To explain the physics behind these algorithms we will first consider only finite-dimensional, closed quantum systems.</p>
@@ -240,7 +240,7 @@
 </div>
 <div class="section" id="the-grape-algorithm">
 <h2>The GRAPE algorithm<a class="headerlink" href="#the-grape-algorithm" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>GR</strong>adient <strong>A</strong>scent <strong>P</strong>ulse <strong>E</strong>ngineering was first proposed in [2]. Solutions to Schrödinger’s equation for a time-dependent Hamiltonian are not generally possible to obtain analytically. Therefore, a piecewise constant approximation to the pulse amplitudes is made. Time allowed for the system to evolve <span class="math notranslate nohighlight">\(T\)</span> is split into <span class="math notranslate nohighlight">\(M\)</span> timeslots (typically these are of equal duration), during which the control amplitude is assumed to remain constant. The combined Hamiltonian can then be approximated as:</p>
+<p>The <strong>GR</strong>adient <strong>A</strong>scent <strong>P</strong>ulse <strong>E</strong>ngineering was first proposed in <a class="reference internal" href="../biblio.html#nkanej" id="id3"><span>[NKanej]</span></a>. Solutions to Schrödinger’s equation for a time-dependent Hamiltonian are not generally possible to obtain analytically. Therefore, a piecewise constant approximation to the pulse amplitudes is made. Time allowed for the system to evolve <span class="math notranslate nohighlight">\(T\)</span> is split into <span class="math notranslate nohighlight">\(M\)</span> timeslots (typically these are of equal duration), during which the control amplitude is assumed to remain constant. The combined Hamiltonian can then be approximated as:</p>
 <div class="math notranslate nohighlight">
 \[H(t) \approx H(t_k) = H_0 + \sum_{j=1}^N u_{jk} H_j\quad\]</div>
 <p>where <span class="math notranslate nohighlight">\(k\)</span> is a timeslot index, <span class="math notranslate nohighlight">\(j\)</span> is the control index, and <span class="math notranslate nohighlight">\(N\)</span> is the number of controls. Hence <span class="math notranslate nohighlight">\(t_k\)</span> is the evolution time at the start of the timeslot, and <span class="math notranslate nohighlight">\(u_{jk}\)</span> is the amplitude of control <span class="math notranslate nohighlight">\(j\)</span> throughout timeslot <span class="math notranslate nohighlight">\(k\)</span>. The time evolution operator, or propagator, within the timeslot can then be calculated as:</p>
@@ -291,7 +291,7 @@ approximate the Hessian based on successive iterations. The most popular of
 these (in quantum optimal control) is the Broyden–Fletcher–Goldfarb–Shanno
 algorithm (BFGS). The default method in the QuTiP Qtrl GRAPE implementation is
 the L-BFGS-B method in Scipy, which is a wrapper to the implementation
-described in <a class="reference internal" href="../biblio.html#byrd95" id="id3"><span>[Byrd95]</span></a>. This limited memory and bounded method does not need to
+described in <a class="reference internal" href="../biblio.html#byrd95" id="id4"><span>[Byrd95]</span></a>. This limited memory and bounded method does not need to
 store the entire Hessian, which reduces the computer memory required, and
 allows bounds to be set for variable values, which considering these are field
 amplitudes is often physical.</p>
@@ -303,21 +303,21 @@ systems, with unitary dynamics, a method using the eigendecomposition is used,
 which is efficient as it is also used in the propagator calculation (to
 exponentiate the combined Hamiltonian). More generally (for example open
 systems and symplectic dynamics) the Frechet derivative (or augmented matrix)
-method is used, which is described in <a class="reference internal" href="../biblio.html#flo12" id="id4"><span>[Flo12]</span></a>. For other optimisation goals it
+method is used, which is described in <a class="reference internal" href="../biblio.html#flo12" id="id5"><span>[Flo12]</span></a>. For other optimisation goals it
 may not be possible to calculate analytic gradients. In these cases it is
 necessary to approximate the gradients, but this can be very expensive, and can
 lead to other algorithms out-performing GRAPE.</p>
 </div>
 <div class="section" id="the-crab-algorithm">
 <h2>The CRAB Algorithm<a class="headerlink" href="#the-crab-algorithm" title="Permalink to this headline">¶</a></h2>
-<p>It has been shown <a class="reference internal" href="../biblio.html#lloyd14" id="id5"><span>[Lloyd14]</span></a>, the dimension of a quantum optimal control
+<p>It has been shown <a class="reference internal" href="../biblio.html#lloyd14" id="id6"><span>[Lloyd14]</span></a>, the dimension of a quantum optimal control
 problem is a polynomial function of the dimension of the manifold of the
 time-polynomial reachable states, when allowing for a finite control precision
 and evolution time. You can think of this as the information content of the
 pulse (as being the only effective input) being very limited e.g. the pulse is
 compressible to a few bytes without loosing the target.</p>
 <p>This is where the <strong>C</strong>hopped <strong>RA</strong>ndom <strong>B</strong>asis (CRAB) algorithm
-<a class="reference internal" href="../biblio.html#doria11" id="id6"><span>[Doria11]</span></a>, <a class="reference internal" href="../biblio.html#caneva11" id="id7"><span>[Caneva11]</span></a> comes into play: Since the pulse complexity is usually
+<a class="reference internal" href="../biblio.html#doria11" id="id7"><span>[Doria11]</span></a>, <a class="reference internal" href="../biblio.html#caneva11" id="id8"><span>[Caneva11]</span></a> comes into play: Since the pulse complexity is usually
 very low, it is sufficient to transform the optimal control problem to a few
 parameter search by introducing a physically motivated function basis that
 builds up the pulse. Compared to the number of time slices needed to accurately
@@ -335,7 +335,7 @@ the pulse and many more. Moreover initial guesses, if they are available, can
 (however not have to) be included to speed up convergence.</p>
 <p>As mentioned in the GRAPE paragraph, for CRAB local minima arising from
 algorithmic design can occur, too. However, for CRAB a ‘dressed’ version has
-recently been introduced <a class="reference internal" href="../biblio.html#rach15" id="id8"><span>[Rach15]</span></a> that allows to escape local minima.</p>
+recently been introduced <a class="reference internal" href="../biblio.html#rach15" id="id9"><span>[Rach15]</span></a> that allows to escape local minima.</p>
 <p>For some control objectives and/or dynamical quantum descriptions, it is either
 not possible to derive the gradient for the cost functional with respect to
 each time slice or it is computationally expensive to do so. The same can apply
@@ -359,16 +359,16 @@ integrated into QuTiP. Qtrl uses the Scipy optimize functions to perform the
 multi-variable optimisation, typically the L-BFGS-B method for GRAPE and
 Nelder-Mead for CRAB. The GRAPE implementation in Qtrl was initially based on
 the open-source package  DYNAMO, which is a MATLAB implementation, and is
-described in <a class="reference internal" href="../biblio.html#dynamo" id="id9"><span>[DYNAMO]</span></a>. It has since been restructured and extended for
+described in <a class="reference internal" href="../biblio.html#dynamo" id="id10"><span>[DYNAMO]</span></a>. It has since been restructured and extended for
 flexibility and compatibility within QuTiP.</p>
 <p>The rest of this section describes the Qtrl implementation and how to use it.</p>
 <dl class="simple">
 <dt>Object Model</dt><dd><p>The Qtrl code is organised in a hierarchical object model in order to try and maximise configurability whilst maintaining some clarity. It is not necessary to understand the model in order to use the pulse optimisation functions, but it is the most flexible method of using Qtrl. If you just want to use a simple single function call interface, then jump to <a class="reference internal" href="#pulseoptim-functions"><span class="std std-ref">Using the pulseoptim functions</span></a></p>
 </dd>
 </dl>
-<div class="figure align-center" id="id11">
+<div class="figure align-center" id="id12">
 <a class="reference internal image-reference" href="../images/qtrl-code_object_model.png"><img alt="../images/qtrl-code_object_model.png" src="../images/qtrl-code_object_model.png" style="width: 3.5in;" /></a>
-<p class="caption"><span class="caption-text">Qtrl code object model.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">Qtrl code object model.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
 </div>
 <p>The object’s properties and methods are described in detail in the documentation, so that will not be repeated here.</p>
 <dl class="simple">
@@ -418,7 +418,7 @@ There is a specific subclass that is used by the CRAB algorithm to generate the 
     <p>
         &#169; <a href="../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>

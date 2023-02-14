@@ -1,0 +1,412 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.solver.sesolve &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
+        <script src="../../../static/jquery.js"></script>
+        <script src="../../../static/underscore.js"></script>
+        <script src="../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.solver.sesolve</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.solver.sesolve</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides solvers for the unitary Schrodinger equation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sesolve&#39;</span><span class="p">,</span> <span class="s1">&#39;SESolver&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span>
+<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">Solver</span>
+
+
+<div class="viewcode-block" id="sesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.sesolve.sesolve">[docs]</a><span class="k">def</span> <span class="nf">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Schrodinger equation evolution of a state vector or unitary matrix</span>
+<span class="sd">    for a given Hamiltonian.</span>
+
+<span class="sd">    Evolve the state vector (`psi0`) using a given</span>
+<span class="sd">    Hamiltonian (`H`), by integrating the set of ordinary differential</span>
+<span class="sd">    equations that define the system. Alternatively evolve a unitary matrix in</span>
+<span class="sd">    solving the Schrodinger operator equation.</span>
+
+<span class="sd">    The output is either the state vector or unitary matrix at arbitrary points</span>
+<span class="sd">    in time (`tlist`), or the expectation values of the supplied operators</span>
+<span class="sd">    (`e_ops`). If e_ops is a callback function, it is invoked for each</span>
+<span class="sd">    time in `tlist` with time and the state as arguments, and the function</span>
+<span class="sd">    does not use any return values. e_ops cannot be used in conjunction</span>
+<span class="sd">    with solving the Schrodinger operator equation</span>
+
+<span class="sd">    **Time-dependent operators**</span>
+
+<span class="sd">    For time-dependent problems, `H` and `c_ops` can be a :class:`QobjEvo` or</span>
+<span class="sd">    object that can be interpreted as :class:`QobjEvo` such as a list of</span>
+<span class="sd">    (Qobj, Coefficient) pairs or a function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
+<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
+<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+
+<span class="sd">    psi0 : :class:`qutip.qobj`</span>
+<span class="sd">        initial state vector (ket)</span>
+<span class="sd">        or initial unitary operator `psi0 = U`</span>
+
+<span class="sd">    tlist : *list* / *array*</span>
+<span class="sd">        list of times for :math:`t`.</span>
+
+<span class="sd">    e_ops : :class:`qutip.qobj`, callable, or list.</span>
+<span class="sd">        Single operator or list of operators for which to evaluate</span>
+<span class="sd">        expectation values or callable or list of callable.</span>
+<span class="sd">        Callable signature must be, `f(t: float, state: Qobj)`.</span>
+<span class="sd">        See :func:`expect` for more detail of operator expectation.</span>
+
+<span class="sd">    args : None / *dictionary*</span>
+<span class="sd">        dictionary of parameters for time-dependent Hamiltonians</span>
+
+<span class="sd">    options : None / dict</span>
+<span class="sd">        Dictionary of options for the solver.</span>
+
+<span class="sd">        - store_final_state : bool</span>
+<span class="sd">          Whether or not to store the final state of the evolution in the</span>
+<span class="sd">          result class.</span>
+<span class="sd">        - store_states : bool, None</span>
+<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">          given.</span>
+<span class="sd">        - normalize_output : bool</span>
+<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          How to present the solver progress.</span>
+<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - progress_kwargs : dict</span>
+<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
+<span class="sd">          Which differential equation integration method to use.</span>
+<span class="sd">        - atol, rtol : float</span>
+<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
+<span class="sd">        - nsteps :</span>
+<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
+<span class="sd">          step.</span>
+<span class="sd">        - max_step : float, 0</span>
+<span class="sd">          Maximum lenght of one internal step. When using pulses, it should be</span>
+<span class="sd">          less than half the width of the thinnest pulse.</span>
+
+<span class="sd">        Other options could be supported depending on the integration method,</span>
+<span class="sd">        see `Integrator &lt;./classes.html#classes-ode&gt;`_.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result: :class:`qutip.Result`</span>
+
+<span class="sd">        An instance of the class :class:`qutip.Result`, which contains</span>
+<span class="sd">        a *list of array* `result.expect` of expectation values for the times</span>
+<span class="sd">        specified by `tlist`, and/or a *list* `result.states` of state vectors</span>
+<span class="sd">        or density matrices corresponding to the times in `tlist` [if `e_ops`</span>
+<span class="sd">        is an empty list of `store_states=True` in options].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">SESolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SESolver"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.sesolve.SESolver">[docs]</a><span class="k">class</span> <span class="nc">SESolver</span><span class="p">(</span><span class="n">Solver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Schrodinger equation evolution of a state vector or unitary matrix</span>
+<span class="sd">    for a given Hamiltonian.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
+<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
+<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+
+<span class="sd">    options : dict, optional</span>
+<span class="sd">        Options for the solver, see :obj:`SESolver.options` and</span>
+<span class="sd">        `Integrator &lt;./classes.html#classes-ode&gt;`_ for a list of all options.</span>
+
+<span class="sd">    attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stats: dict</span>
+<span class="sd">        Diverse diagnostic statistics of the evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sesolve&quot;</span>
+    <span class="n">_avail_integrators</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span>
+        <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="s1">&#39;adams&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">_time_start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The Hamiltonian must be a Qobj or QobjEvo&quot;</span><span class="p">)</span>
+
+        <span class="n">rhs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">H</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rhs</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The hamiltonian must be an operator&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_initialize_stats</span><span class="p">()</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="s2">&quot;Schrodinger Evolution&quot;</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">stats</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solver&#39;s options:</span>
+
+<span class="sd">        store_final_state: bool, default=False</span>
+<span class="sd">            Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+
+<span class="sd">        store_states: bool, default=None</span>
+<span class="sd">            Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+
+<span class="sd">        normalize_output: bool, default=True</span>
+<span class="sd">            Normalize output state to hide ODE numerical errors.</span>
+
+<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, {}</span>
+<span class="sd">            How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+
+<span class="sd">        progress_kwargs: dict, default={&quot;chunk_size&quot;: 10}</span>
+<span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
+<span class="sd">            ``chunk_size``.</span>
+
+<span class="sd">        method: str, default=&quot;adams&quot;</span>
+<span class="sd">            Which ordinary differential equation integration method to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
+        <span class="n">Solver</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

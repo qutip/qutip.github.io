@@ -12,17 +12,17 @@
   
 
   
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/site.css" type="text/css" />
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
 
   
@@ -32,16 +32,16 @@
 
   
   <!--[if lt IE 9]>
-    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-        <script src="../../static/jquery.js"></script>
-        <script src="../../static/underscore.js"></script>
-        <script src="../../static/doctools.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -195,7 +195,7 @@
 <span class="kn">import</span> <span class="nn">qutip.settings</span> <span class="k">as</span> <span class="nn">settings</span>
 
 <span class="kn">import</span> <span class="nn">qutip.logging_utils</span> <span class="k">as</span> <span class="nn">logging</span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="s1">&#39;qutip.metrics&#39;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cvxpy</span>
@@ -227,12 +227,13 @@
 <span class="sd">    &gt;&gt;&gt; np.testing.assert_almost_equal(fidelity(x,y), 0.24104350624628332)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">A</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
+            <span class="c1"># The fidelity for pure states reduces to the modulus of their</span>
+            <span class="c1"># inner product.</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">B</span><span class="p">))</span>
         <span class="c1"># Take advantage of the fact that the density operator for A</span>
         <span class="c1"># is a projector to avoid a sqrtm call.</span>
         <span class="n">sqrtmA</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-        <span class="c1"># Check whether we have to turn B into a density operator, too.</span>
-        <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
-            <span class="n">B</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
             <span class="c1"># Swap the order so that we can take a more numerically</span>
@@ -431,7 +432,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">fidelity</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span></div>
 
 
-<span class="k">def</span> <span class="nf">hellinger_dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="hellinger_dist"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.metrics.hellinger_dist">[docs]</a><span class="k">def</span> <span class="nf">hellinger_dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the quantum Hellinger distance between two density matrices.</span>
 
@@ -482,14 +483,14 @@
     <span class="c1"># np.maximum() is to avoid nan appearing sometimes due to numerical</span>
     <span class="c1"># instabilities causing np.sum(eigs) slightly (~1e-8) larger than 1</span>
     <span class="c1"># when hellinger_dist(A, B) is called for A=B</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigs</span><span class="p">)))))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigs</span><span class="p">)))))</span></div>
 
 
-<span class="k">def</span> <span class="nf">dnorm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;CVXOPT&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_solve</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<div class="viewcode-block" id="dnorm"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.metrics.dnorm">[docs]</a><span class="k">def</span> <span class="nf">dnorm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;CVXOPT&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_solve</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
           <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the diamond norm of the quantum map q_oper, using</span>
-<span class="sd">    the simplified semidefinite program of [Wat12]_.</span>
+<span class="sd">    the simplified semidefinite program of [Wat13]_.</span>
 
 <span class="sd">    The diamond norm SDP is solved by using CVXPY_.</span>
 
@@ -621,10 +622,10 @@
 
     <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">problem</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">return</span> <span class="n">problem</span><span class="o">.</span><span class="n">value</span></div>
 
 
-<span class="k">def</span> <span class="nf">unitarity</span><span class="p">(</span><span class="n">oper</span><span class="p">):</span>
+<div class="viewcode-block" id="unitarity"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.metrics.unitarity">[docs]</a><span class="k">def</span> <span class="nf">unitarity</span><span class="p">(</span><span class="n">oper</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the unitarity of a quantum map, defined as the Frobenius norm</span>
 <span class="sd">    of the unital block of that map&#39;s superoperator representation.</span>
@@ -641,7 +642,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Eu</span> <span class="o">=</span> <span class="n">_super_to_superpauli</span><span class="p">(</span><span class="n">oper</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span>
     <span class="c1">#return np.real(np.trace(np.dot(Eu, Eu.conj().T))) / len(Eu)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Eu</span><span class="p">,</span> <span class="s1">&#39;fro&#39;</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">Eu</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Eu</span><span class="p">,</span> <span class="s1">&#39;fro&#39;</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">Eu</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -655,7 +656,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>

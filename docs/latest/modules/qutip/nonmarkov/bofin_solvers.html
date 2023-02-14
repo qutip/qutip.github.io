@@ -12,17 +12,17 @@
   
 
   
-  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
-  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/site.css" type="text/css" />
 
   
   
-    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
   
 
   
@@ -32,16 +32,16 @@
 
   
   <!--[if lt IE 9]>
-    <script src="../../../static/js/html5shiv.min.js"></script>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
-        <script src="../../../static/jquery.js"></script>
-        <script src="../../../static/underscore.js"></script>
-        <script src="../../../static/doctools.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -486,7 +486,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rho : :class:`Qobj`</span>
+<span class="sd">    rho : :class:`~qutip.Qobj`</span>
 <span class="sd">        The current state of the system (i.e. the 0th component of the</span>
 <span class="sd">        hierarchy).</span>
 <span class="sd">    ados : :class:`HierarchyADOs`</span>
@@ -530,7 +530,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Qobj</span>
-<span class="sd">            A :obj:`Qobj` representing the state of the specified ADO.</span>
+<span class="sd">            A :obj:`~qutip.Qobj` representing the state of the specified ADO.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx_or_label</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">idx_or_label</span>
@@ -549,8 +549,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    H_sys : QObj, QobjEvo or a list</span>
 <span class="sd">        The system Hamiltonian or Liouvillian specified as either a</span>
-<span class="sd">        :obj:`Qobj`, a :obj:`QobjEvo`, or a list of elements that may</span>
-<span class="sd">        be converted to a :obj:`ObjEvo`.</span>
+<span class="sd">        :obj:`~qutip.Qobj`, a :obj:`~qutip.QobjEvo`, or a list of elements</span>
+<span class="sd">        that may be converted to a :obj:`~qutip.QobjEvo`.</span>
 
 <span class="sd">    bath : Bath or list of Bath</span>
 <span class="sd">        A :obj:`Bath` containing the exponents of the expansion of the</span>
@@ -631,8 +631,15 @@
 
         <span class="k">if</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span> <span class="o">=</span> <span class="n">BaseProgressBar</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span> <span class="o">=</span> <span class="n">TextProgressBar</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">BaseProgressBar</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span> <span class="o">=</span> <span class="n">progress_bar</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;progress_bar is not an instance of &quot;</span>
+                <span class="s2">&quot;qutip.ui.BaseProgressBar&quot;</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_configure_solver</span><span class="p">()</span>
 
@@ -999,7 +1006,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        rho0 : Qobj or HierarchyADOsState or numpy.array</span>
-<span class="sd">            Initial state (:obj:`~Qobj` density matrix) of the system</span>
+<span class="sd">            Initial state (:obj:`~qutip.Qobj` density matrix) of the system</span>
 <span class="sd">            if ``ado_init`` is ``False``.</span>
 
 <span class="sd">            If ``ado_init`` is ``True``, then ``rho0`` should be an</span>
@@ -1112,7 +1119,7 @@
                 <span class="n">solver</span><span class="o">.</span><span class="n">y</span><span class="p">[:</span><span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rho_shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">rho_dims</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">store_states</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">store_states</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">e_ops</span><span class="p">:</span>
                 <span class="n">output</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ado_return</span> <span class="ow">or</span> <span class="n">e_ops_callables</span><span class="p">:</span>
                 <span class="n">ado_state</span> <span class="o">=</span> <span class="n">HierarchyADOsState</span><span class="p">(</span>
@@ -1198,11 +1205,6 @@
 <span class="sd">        Use boundary cut off approximation. If true, the Matsubara</span>
 <span class="sd">        terminator is added to the system Liouvillian (and H_sys is</span>
 <span class="sd">        promoted to a Liouvillian if it was a Hamiltonian).</span>
-
-<span class="sd">    progress_bar : None, True or :class:`BaseProgressBar`</span>
-<span class="sd">        Optional instance of BaseProgressBar, or a subclass thereof, for</span>
-<span class="sd">        showing the progress of the solver. If True, an instance of</span>
-<span class="sd">        :class:`TextProgressBar` is used instead.</span>
 
 <span class="sd">    options : :class:`qutip.solver.Options`</span>
 <span class="sd">        Generic solver options.</span>
@@ -1358,7 +1360,7 @@
     <p>
         &#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>

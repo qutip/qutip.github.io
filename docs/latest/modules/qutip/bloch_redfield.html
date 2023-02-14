@@ -12,17 +12,17 @@
   
 
   
-  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
-  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/site.css" type="text/css" />
 
   
   
-    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
 
   
@@ -32,16 +32,16 @@
 
   
   <!--[if lt IE 9]>
-    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-        <script src="../../static/jquery.js"></script>
-        <script src="../../static/underscore.js"></script>
-        <script src="../../static/doctools.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../../static/js/theme.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -207,48 +207,48 @@
               <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solves for the dynamics of a system using the Bloch-Redfield master equation,</span>
-<span class="sd">    given an input Hamiltonian, Hermitian bath-coupling terms and their associated </span>
+<span class="sd">    given an input Hamiltonian, Hermitian bath-coupling terms and their associated</span>
 <span class="sd">    spectrum functions, as well as possible Lindblad collapse operators.</span>
-<span class="sd">              </span>
+
 <span class="sd">    For time-independent systems, the Hamiltonian must be given as a Qobj,</span>
 <span class="sd">    whereas the bath-coupling terms (a_ops), must be written as a nested list</span>
 <span class="sd">    of operator - spectrum function pairs, where the frequency is specified by</span>
 <span class="sd">    the `w` variable.</span>
-<span class="sd">              </span>
+
 <span class="sd">    *Example*</span>
 
-<span class="sd">        a_ops = [[a+a.dag(),lambda w: 0.2*(w&gt;=0)]] </span>
-<span class="sd">              </span>
+<span class="sd">        a_ops = [[a+a.dag(),lambda w: 0.2*(w&gt;=0)]]</span>
+
 <span class="sd">    For time-dependent systems, the Hamiltonian, a_ops, and Lindblad collapse</span>
 <span class="sd">    operators (c_ops), can be specified in the QuTiP string-based time-dependent</span>
-<span class="sd">    format.  For the a_op spectra, the frequency variable must be `w`, and the </span>
+<span class="sd">    format.  For the a_op spectra, the frequency variable must be `w`, and the</span>
 <span class="sd">    string cannot contain any other variables other than the possibility of having</span>
 <span class="sd">    a time-dependence through the time variable `t`:</span>
-<span class="sd">                            </span>
+
 <span class="sd">    *Example*</span>
 
 <span class="sd">        a_ops = [[a+a.dag(), &#39;0.2*exp(-t)*(w&gt;=0)&#39;]]</span>
-<span class="sd">              </span>
+
 <span class="sd">    It is also possible to use Cubic_Spline objects for time-dependence.  In</span>
 <span class="sd">    the case of a_ops, Cubic_Splines must be passed as a tuple:</span>
-<span class="sd">              </span>
+
 <span class="sd">    *Example*</span>
-<span class="sd">              </span>
+
 <span class="sd">        a_ops = [ [a+a.dag(), ( f(w), g(t)] ]</span>
-<span class="sd">              </span>
+
 <span class="sd">    where f(w) and g(t) are strings or Cubic_spline objects for the bath</span>
 <span class="sd">    spectrum and time-dependence, respectively.</span>
-<span class="sd">              </span>
+
 <span class="sd">    Finally, if one has bath-couplimg terms of the form</span>
 <span class="sd">    H = f(t)*a + conj[f(t)]*a.dag(), then the correct input format is</span>
-<span class="sd">              </span>
+
 <span class="sd">    *Example*</span>
-<span class="sd">    </span>
+
 <span class="sd">              a_ops = [ [(a,a.dag()), (f(w), g1(t), g2(t))],... ]</span>
 
 <span class="sd">    where f(w) is the spectrum of the operators while g1(t) and g2(t)</span>
-<span class="sd">    are the time-dependence of the operators `a` and `a.dag()`, respectively </span>
-<span class="sd">    </span>
+<span class="sd">    are the time-dependence of the operators `a` and `a.dag()`, respectively</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    H : Qobj / list</span>
@@ -262,7 +262,7 @@
 <span class="sd">        List of times for evaluating evolution</span>
 
 <span class="sd">    a_ops : list</span>
-<span class="sd">        Nested list of Hermitian system operators that couple to </span>
+<span class="sd">        Nested list of Hermitian system operators that couple to</span>
 <span class="sd">        the bath degrees of freedom, along with their associated</span>
 <span class="sd">        spectra.</span>
 
@@ -273,25 +273,25 @@
 <span class="sd">        List of system collapse operators, or nested list in</span>
 <span class="sd">        string-based format.</span>
 
-<span class="sd">    args : dict </span>
+<span class="sd">    args : dict</span>
 <span class="sd">        Placeholder for future implementation, kept for API consistency.</span>
 
 <span class="sd">    use_secular : bool {True}</span>
 <span class="sd">        Use secular approximation when evaluating bath-coupling terms.</span>
-<span class="sd">    </span>
+
 <span class="sd">    sec_cutoff : float {0.1}</span>
 <span class="sd">        Cutoff for secular approximation.</span>
-<span class="sd">    </span>
+
 <span class="sd">    tol : float {qutip.setttings.atol}</span>
-<span class="sd">        Tolerance used for removing small values after </span>
+<span class="sd">        Tolerance used for removing small values after</span>
 <span class="sd">        basis transformation.</span>
-<span class="sd">              </span>
+
 <span class="sd">    spectra_cb : list</span>
 <span class="sd">        DEPRECIATED. Do not use.</span>
-<span class="sd">    </span>
+
 <span class="sd">    options : :class:`qutip.solver.Options`</span>
 <span class="sd">        Options for the solver.</span>
-<span class="sd">              </span>
+
 <span class="sd">    progress_bar : BaseProgressBar</span>
 <span class="sd">        Optional instance of BaseProgressBar, or a subclass thereof, for</span>
 <span class="sd">        showing the progress of the simulation.</span>
@@ -310,7 +310,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">Qobj</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">H</span><span class="p">]):</span>
             <span class="n">H</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_ops</span><span class="p">]</span>
 
@@ -322,7 +322,7 @@
         <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">e_ops</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">e_ops_dict</span> <span class="o">=</span> <span class="kc">None</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">spectra_cb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;The use of spectra_cb is depreciated.&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
         <span class="n">_a_ops</span> <span class="o">=</span> <span class="p">[]</span>
@@ -332,27 +332,27 @@
 
     <span class="k">if</span> <span class="n">_safe_mode</span><span class="p">:</span>
         <span class="n">_solver_safety_check</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">+</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
-    
+
     <span class="c1"># check for type (if any) of time-dependent inputs</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">n_func</span><span class="p">,</span> <span class="n">n_str</span> <span class="o">=</span> <span class="n">_td_format_check</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">+</span><span class="n">c_ops</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">BaseProgressBar</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">TextProgressBar</span><span class="p">()</span>
-        
+
     <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">rhs_reuse</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">tdfunc</span><span class="p">):</span>
         <span class="c1"># reset config collapse and time-dependence flags to default values</span>
         <span class="n">config</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-    
+
     <span class="c1">#check if should use OPENMP</span>
     <span class="n">check_use_openmp</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">n_str</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    
+
         <span class="n">R</span><span class="p">,</span> <span class="n">ekets</span> <span class="o">=</span> <span class="n">bloch_redfield_tensor</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">a_ops</span><span class="p">,</span> <span class="n">spectra_cb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span>
                     <span class="n">use_secular</span><span class="o">=</span><span class="n">use_secular</span><span class="p">,</span> <span class="n">sec_cutoff</span><span class="o">=</span><span class="n">sec_cutoff</span><span class="p">)</span>
 
@@ -369,18 +369,18 @@
             <span class="n">output</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">results</span>
 
         <span class="k">return</span> <span class="n">output</span>
-        
+
     <span class="k">elif</span> <span class="n">n_str</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">n_func</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">_td_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">=</span><span class="n">a_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> 
-                        <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">use_secular</span><span class="o">=</span><span class="n">use_secular</span><span class="p">,</span> 
+        <span class="n">output</span> <span class="o">=</span> <span class="n">_td_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">=</span><span class="n">a_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>
+                        <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">use_secular</span><span class="o">=</span><span class="n">use_secular</span><span class="p">,</span>
                         <span class="n">sec_cutoff</span><span class="o">=</span><span class="n">sec_cutoff</span><span class="p">,</span>
-                        <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> 
+                        <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
                          <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
-                         <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> 
+                         <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
                          <span class="n">_prep_time</span><span class="o">=</span><span class="n">_prep_time</span><span class="p">)</span>
-                         
+
         <span class="k">return</span> <span class="n">output</span>
-        
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Cannot mix func and str formats.&#39;</span><span class="p">)</span></div>
 
@@ -413,15 +413,15 @@
 <span class="sd">    e_ops : list of :class:`qutip.qobj` / callback function</span>
 <span class="sd">        List of operators for which to evaluate expectation values.</span>
 
-<span class="sd">    options : :class:`qutip.Qdeoptions`</span>
+<span class="sd">    options : :class:`qutip.solver.Options`</span>
 <span class="sd">        Options for the ODE solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    output: :class:`qutip.solver`</span>
+<span class="sd">    output: :class:`qutip.solver.Result`</span>
 
-<span class="sd">        An instance of the class :class:`qutip.solver`, which contains either</span>
+<span class="sd">        An instance of the class :class:`qutip.solver.Result`, which contains either</span>
 <span class="sd">        an *array* of expectation values for the times specified by `tlist`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -436,7 +436,7 @@
         <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">BaseProgressBar</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">TextProgressBar</span><span class="p">()</span>
-    
+
     <span class="c1">#</span>
     <span class="c1"># check initial state</span>
     <span class="c1">#</span>
@@ -484,7 +484,9 @@
     <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tlist</span><span class="p">):</span>
         <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">t_idx</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">successful</span><span class="p">():</span>
-            <span class="k">break</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ODE integration error: Try to increase &quot;</span>
+                            <span class="s2">&quot;the allowed number of substeps by increasing &quot;</span>
+                            <span class="s2">&quot;the nsteps parameter in the Options class.&quot;</span><span class="p">)</span>
 
         <span class="n">rho_eb</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">dense2D_to_fastcsr_fmode</span><span class="p">(</span><span class="n">vec2mat</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">rho0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rho0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
@@ -506,17 +508,17 @@
 
 <span class="k">def</span> <span class="nf">_td_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
                  <span class="n">use_secular</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sec_cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                 <span class="n">tol</span><span class="o">=</span><span class="n">qset</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">tol</span><span class="o">=</span><span class="n">qset</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">_safe_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">_prep_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    
+
     <span class="k">if</span> <span class="n">isket</span><span class="p">(</span><span class="n">psi0</span><span class="p">):</span>
         <span class="n">rho0</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">psi0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">rho0</span> <span class="o">=</span> <span class="n">psi0</span>
     <span class="n">nrows</span> <span class="o">=</span> <span class="n">rho0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    
+
     <span class="n">H_terms</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">H_td_terms</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">H_obj</span> <span class="o">=</span> <span class="p">[]</span>
@@ -529,11 +531,11 @@
     <span class="n">coupled_ops</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">coupled_lengths</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">coupled_spectra</span> <span class="o">=</span> <span class="p">[]</span>
-    
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
         <span class="n">H_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">))</span>
         <span class="n">H_td_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span> 
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">kk</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
                 <span class="n">H_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">))</span>
@@ -546,8 +548,8 @@
                 <span class="n">H_td_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid Hamiltonian specification.&#39;</span><span class="p">)</span>
-    
-            
+
+
     <span class="k">for</span> <span class="n">kk</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c_ops</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
             <span class="n">C_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">))</span>
@@ -560,7 +562,7 @@
             <span class="n">C_td_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid collapse operator specification.&#39;</span><span class="p">)</span>
-            
+
     <span class="n">coupled_offset</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">kk</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a_ops</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -579,25 +581,25 @@
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid bath-coupling specification.&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;BR a_ops tuple lengths not compatible.&#39;</span><span class="p">)</span>
-                
+
                 <span class="n">coupled_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kk</span><span class="o">+</span><span class="n">coupled_offset</span><span class="p">)</span>
                 <span class="n">coupled_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
                 <span class="n">coupled_spectra</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">coupled_offset</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">Cubic_Spline</span><span class="p">):</span>
                     <span class="n">spline_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                
+
                 <span class="k">for</span> <span class="n">nn</span><span class="p">,</span> <span class="n">_a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                     <span class="n">A_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_a</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">))</span>
                     <span class="n">A_td_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">nn</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">nn</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">Cubic_Spline</span><span class="p">):</span>
                         <span class="n">CA_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">nn</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span>
                         <span class="n">spline_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                                
+
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid bath-coupling specification.&#39;</span><span class="p">)</span>
-            
-    
+
+
     <span class="n">string_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">kk</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">H_td_terms</span><span class="p">):</span>
         <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;H_terms[</span><span class="si">{0}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kk</span><span class="p">))</span>
@@ -617,7 +619,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
     <span class="n">parameter_string</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">string_list</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BR prep time:&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">_prep_time</span><span class="p">)</span>
     <span class="c1">#</span>
@@ -630,9 +632,9 @@
             <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">rhs_filename</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="n">_st</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">cgen</span> <span class="o">=</span> <span class="n">BR_Codegen</span><span class="p">(</span><span class="n">h_terms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">H_terms</span><span class="p">),</span> 
+        <span class="n">cgen</span> <span class="o">=</span> <span class="n">BR_Codegen</span><span class="p">(</span><span class="n">h_terms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">H_terms</span><span class="p">),</span>
                     <span class="n">h_td_terms</span><span class="o">=</span><span class="n">H_td_terms</span><span class="p">,</span> <span class="n">h_obj</span><span class="o">=</span><span class="n">H_obj</span><span class="p">,</span>
-                    <span class="n">c_terms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">C_terms</span><span class="p">),</span> 
+                    <span class="n">c_terms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">C_terms</span><span class="p">),</span>
                     <span class="n">c_td_terms</span><span class="o">=</span><span class="n">C_td_terms</span><span class="p">,</span> <span class="n">c_obj</span><span class="o">=</span><span class="n">CA_obj</span><span class="p">,</span>
                     <span class="n">a_terms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">A_terms</span><span class="p">),</span> <span class="n">a_td_terms</span><span class="o">=</span><span class="n">A_td_terms</span><span class="p">,</span>
                     <span class="n">spline_count</span><span class="o">=</span><span class="n">spline_count</span><span class="p">,</span>
@@ -643,11 +645,11 @@
                     <span class="n">use_secular</span> <span class="o">=</span> <span class="n">use_secular</span><span class="p">,</span>
                     <span class="n">sec_cutoff</span> <span class="o">=</span> <span class="n">sec_cutoff</span><span class="p">,</span>
                     <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
-                    <span class="n">use_openmp</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">use_openmp</span><span class="p">,</span> 
+                    <span class="n">use_openmp</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">use_openmp</span><span class="p">,</span>
                     <span class="n">omp_thresh</span><span class="o">=</span><span class="n">qset</span><span class="o">.</span><span class="n">openmp_thresh</span> <span class="k">if</span> <span class="n">qset</span><span class="o">.</span><span class="n">has_openmp</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-                    <span class="n">omp_threads</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">num_cpus</span><span class="p">,</span> 
+                    <span class="n">omp_threads</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">num_cpus</span><span class="p">,</span>
                     <span class="n">atol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
-        
+
         <span class="n">cgen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">+</span> <span class="s2">&quot;.pyx&quot;</span><span class="p">)</span>
         <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="s1">&#39;from &#39;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">+</span> <span class="s1">&#39; import cy_td_ode_rhs&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
@@ -656,19 +658,19 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BR compile time:&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">_st</span><span class="p">)</span>
     <span class="n">initial_vector</span> <span class="o">=</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">rho0</span><span class="o">.</span><span class="n">full</span><span class="p">())</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    
+
     <span class="n">_ode</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">ode</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdfunc</span><span class="p">)</span>
     <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="s1">&#39;_ode.set_f_params(&#39;</span> <span class="o">+</span> <span class="n">parameter_string</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
-    <span class="n">_ode</span><span class="o">.</span><span class="n">set_integrator</span><span class="p">(</span><span class="s1">&#39;zvode&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> 
-                    <span class="n">order</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> 
+    <span class="n">_ode</span><span class="o">.</span><span class="n">set_integrator</span><span class="p">(</span><span class="s1">&#39;zvode&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span>
                     <span class="n">rtol</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">rtol</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">nsteps</span><span class="p">,</span>
-                    <span class="n">first_step</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">first_step</span><span class="p">,</span> 
+                    <span class="n">first_step</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">first_step</span><span class="p">,</span>
                     <span class="n">min_step</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">min_step</span><span class="p">,</span>
                     <span class="n">max_step</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">max_step</span><span class="p">)</span>
     <span class="n">_ode</span><span class="o">.</span><span class="n">set_initial_value</span><span class="p">(</span><span class="n">initial_vector</span><span class="p">,</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="nb">locals</span><span class="p">())</span>
-    
+
     <span class="c1">#</span>
     <span class="c1"># prepare output array</span>
     <span class="c1">#</span>
@@ -712,7 +714,7 @@
     <span class="c1">#</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">progress_bar</span><span class="p">)</span><span class="o">==</span><span class="n">BaseProgressBar</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="n">_run_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    
+
     <span class="n">progress_bar</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">n_tsteps</span><span class="p">)</span>
 
     <span class="n">rho</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">rho0</span><span class="p">)</span>
@@ -748,13 +750,13 @@
             <span class="n">_ode</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">_ode</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">dt</span><span class="p">[</span><span class="n">t_idx</span><span class="p">])</span>
 
     <span class="n">progress_bar</span><span class="o">.</span><span class="n">finished</span><span class="p">()</span>
-    
+
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">progress_bar</span><span class="p">)</span><span class="o">==</span><span class="n">BaseProgressBar</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BR runtime:&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">_run_time</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">rhs_reuse</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">_cython_build_cleanup</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">store_final_state</span><span class="p">:</span>
         <span class="n">rho</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">dense2D_to_fastcsr_fmode</span><span class="p">(</span><span class="n">vec2mat</span><span class="p">(</span><span class="n">_ode</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">output</span><span class="o">.</span><span class="n">final_state</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">rho0</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -773,7 +775,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Apr 13, 2022.
+        Last updated on Dec 12, 2022.
       </span>
 
     </p>

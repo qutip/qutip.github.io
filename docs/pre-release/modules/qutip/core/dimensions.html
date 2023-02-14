@@ -1,0 +1,568 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.core.dimensions &mdash; QuTiP 5.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
+        <script src="../../../static/jquery.js"></script>
+        <script src="../../../static/underscore.js"></script>
+        <script src="../../../static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.core.dimensions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.core.dimensions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Internal use module for manipulating dims specifications.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Everything should be explicitly imported, not made available by default.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">getitem</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+
+<div class="viewcode-block" id="is_scalar"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.is_scalar">[docs]</a><span class="k">def</span> <span class="nf">is_scalar</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns True if a dims specification is effectively</span>
+<span class="sd">    a scalar (has dimension 1).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<span class="k">def</span> <span class="nf">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">))</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">type_from_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">enforce_square</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">bra_like</span><span class="p">,</span> <span class="n">ket_like</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">is_scalar</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bra_like</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="s1">&#39;bra&#39;</span>
+        <span class="k">elif</span> <span class="n">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="s1">&#39;operator-bra&#39;</span>
+
+    <span class="k">if</span> <span class="n">ket_like</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="s1">&#39;ket&#39;</span>
+        <span class="k">elif</span> <span class="n">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="s1">&#39;operator-ket&#39;</span>
+
+    <span class="k">elif</span> <span class="n">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">enforce_square</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;oper&#39;</span>
+
+    <span class="k">elif</span> <span class="p">(</span>
+        <span class="n">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">enforce_square</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;super&#39;</span>
+    <span class="k">return</span> <span class="s1">&#39;other&#39;</span>
+
+
+<div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Flattens a list of lists to the first level.</span>
+
+<span class="sd">    Given a list containing a mix of scalars and lists,</span>
+<span class="sd">    flattens down to a list of the scalars within the original</span>
+<span class="sd">    list.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; flatten([[[0], 1], 2]) # doctest: +SKIP</span>
+<span class="sd">    [0, 1, 2]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">l</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">flatten</span><span class="p">,</span> <span class="n">l</span><span class="p">),</span> <span class="p">[])</span></div>
+
+
+<div class="viewcode-block" id="deep_remove"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.deep_remove">[docs]</a><span class="k">def</span> <span class="nf">deep_remove</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="o">*</span><span class="n">what</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Removes scalars from all levels of a nested list.</span>
+
+<span class="sd">    Given a list containing a mix of scalars and lists,</span>
+<span class="sd">    returns a list of the same structure, but where one or</span>
+<span class="sd">    more scalars have been removed.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; deep_remove([[[[0, 1, 2]], [3, 4], [5], [6, 7]]], 0, 5) # doctest: +SKIP</span>
+<span class="sd">    [[[[1, 2]], [3, 4], [], [6, 7]]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># Make a shallow copy at this level.</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="p">[:]</span>
+        <span class="k">for</span> <span class="n">to_remove</span> <span class="ow">in</span> <span class="n">what</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">to_remove</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+                <span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">to_remove</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">deep_remove</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">to_remove</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">l</span></div>
+
+
+<div class="viewcode-block" id="unflatten"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.unflatten">[docs]</a><span class="k">def</span> <span class="nf">unflatten</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idxs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Unflattens a list by a given structure.</span>
+
+<span class="sd">    Given a list of scalars and a deep list of indices</span>
+<span class="sd">    as produced by `flatten`, returns an &quot;unflattened&quot;</span>
+<span class="sd">    form of the list. This perfectly inverts `flatten`.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; l = [[[10, 20, 30], [40, 50, 60]], [[70, 80, 90], [100, 110, 120]]] # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; idxs = enumerate_flat(l) # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; unflatten(flatten(l), idxs) == l # doctest: +SKIP</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unflatten</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idx</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">acc</span></div>
+
+
+<span class="k">def</span> <span class="nf">_enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># Found a scalar, so return and increment.</span>
+        <span class="k">return</span> <span class="n">idx</span><span class="p">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Found a list, so append all the scalars</span>
+        <span class="c1"># from it and recurse to keep the increment</span>
+        <span class="c1"># correct.</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+            <span class="n">labels</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">_enumerate_flat</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="n">acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">acc</span><span class="p">,</span> <span class="n">idx</span>
+
+
+<span class="k">def</span> <span class="nf">_collapse_composite_index</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the dimensions specification for a composite index</span>
+<span class="sd">    (e.g.: [2, 3] for the right index of a ket with dims [[1], [2, 3]]),</span>
+<span class="sd">    returns a dimensions specification for an index of the same shape,</span>
+<span class="sd">    but collapsed to a single &quot;leg.&quot; In the previous example, [2, 3]</span>
+<span class="sd">    would collapse to [6].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">dims</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively collapses all indices in a dimensions specification</span>
+<span class="sd">    appearing at a given level, such that the returned dimensions</span>
+<span class="sd">    specification does not represent any composite systems.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_collapse_composite_index</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="collapse_dims_oper"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.collapse_dims_oper">[docs]</a><span class="k">def</span> <span class="nf">collapse_dims_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the dimensions specifications for a ket-, bra- or oper-type</span>
+<span class="sd">    Qobj, returns a dimensions specification describing the same shape</span>
+<span class="sd">    by collapsing all composite systems. For instance, the bra-type</span>
+<span class="sd">    dimensions specification ``[[2, 3], [1]]`` collapses to</span>
+<span class="sd">    ``[[6], [1]]``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    dims : list of lists of ints</span>
+<span class="sd">        Dimensions specifications to be collapsed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    collapsed_dims : list of lists of ints</span>
+<span class="sd">        Collapsed dimensions specification describing the same shape</span>
+<span class="sd">        such that ``len(collapsed_dims[0]) == len(collapsed_dims[1]) == 1``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="collapse_dims_super"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.collapse_dims_super">[docs]</a><span class="k">def</span> <span class="nf">collapse_dims_super</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the dimensions specifications for an operator-ket-, operator-bra- or</span>
+<span class="sd">    super-type Qobj, returns a dimensions specification describing the same shape</span>
+<span class="sd">    by collapsing all composite systems. For instance, the super-type</span>
+<span class="sd">    dimensions specification ``[[[2, 3], [2, 3]], [[2, 3], [2, 3]]]`` collapses to</span>
+<span class="sd">    ``[[[6], [6]], [[6], [6]]]``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    dims : list of lists of ints</span>
+<span class="sd">        Dimensions specifications to be collapsed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    collapsed_dims : list of lists of ints</span>
+<span class="sd">        Collapsed dimensions specification describing the same shape</span>
+<span class="sd">        such that ``len(collapsed_dims[i][j]) == 1`` for ``i`` and ``j``</span>
+<span class="sd">        in ``range(2)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="enumerate_flat"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.enumerate_flat">[docs]</a><span class="k">def</span> <span class="nf">enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Labels the indices at which scalars occur in a flattened list.</span>
+
+<span class="sd">    Given a list containing a mix of scalars and lists,</span>
+<span class="sd">    returns a list of the same structure, where each scalar</span>
+<span class="sd">    has been replaced by an index into the flattened list.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; print(enumerate_flat([[[10], [20, 30]], 40])) # doctest: +SKIP</span>
+<span class="sd">    [[[0], [1, 2]], 3]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">deep_map</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">over</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">collection</span><span class="p">)(</span><span class="n">deep_map</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="dims_to_tensor_perm"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.dims_to_tensor_perm">[docs]</a><span class="k">def</span> <span class="nf">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the dims of a Qobj instance, returns a list representing</span>
+<span class="sd">    a permutation from the flattening of that dims specification to</span>
+<span class="sd">    the corresponding tensor indices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    dims : list</span>
+<span class="sd">        Dimensions specification for a Qobj.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    perm : list</span>
+<span class="sd">        A list such that ``data[flatten(dims)[idx]]`` gives the</span>
+<span class="sd">        index of the tensor ``data`` corresponding to the ``idx``th</span>
+<span class="sd">        dimension of ``dims``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We figure out the type of the dims specification,</span>
+    <span class="c1"># relaxing the requirement that operators be square.</span>
+    <span class="c1"># This means that dims_type need not coincide with</span>
+    <span class="c1"># Qobj.type, but that works fine for our purposes here.</span>
+    <span class="n">dims_type</span> <span class="o">=</span> <span class="n">type_from_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">enforce_square</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">enumerate_flat</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dims_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;ket&#39;</span><span class="p">,</span> <span class="s1">&#39;bra&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">flatten</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
+
+    <span class="c1"># If the type is other, we need to figure out if the</span>
+    <span class="c1"># dims is superlike on its outputs and inputs</span>
+    <span class="c1"># This is the case if the dims type for left or right</span>
+    <span class="c1"># are, respectively, oper-like.</span>
+    <span class="k">if</span> <span class="n">dims_type</span> <span class="o">==</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not yet implemented for type=&#39;other&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If we&#39;re still here, the story is more complicated. We&#39;ll</span>
+    <span class="c1"># follow the strategy of creating a permutation by using</span>
+    <span class="c1"># enumerate_flat then transforming the result to swap</span>
+    <span class="c1"># input and output indices of vectorized matrices, then flattening</span>
+    <span class="c1"># the result. We&#39;ll then rebuild indices using this permutation.</span>
+    <span class="k">if</span> <span class="n">dims_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span>
+        <span class="c1"># Swap the input and output spaces of the right part of</span>
+        <span class="c1"># perm.</span>
+        <span class="n">perm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">dims_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;operator-bra&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span>
+        <span class="c1"># Ditto, but for the left indices.</span>
+        <span class="n">perm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">flatten</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="dims_to_tensor_shape"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.dims_to_tensor_shape">[docs]</a><span class="k">def</span> <span class="nf">dims_to_tensor_shape</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the dims of a Qobj instance, returns the shape of the</span>
+<span class="sd">    corresponding tensor. This helps, for instance, resolve the</span>
+<span class="sd">    column-stacking convention for superoperators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    dims : list</span>
+<span class="sd">        Dimensions specification for a Qobj.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    tensor_shape : tuple</span>
+<span class="sd">        NumPy shape of the corresponding tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">getitem</span><span class="p">,</span> <span class="n">dims</span><span class="p">),</span> <span class="n">perm</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="dims_idxs_to_tensor_idxs"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.dims_idxs_to_tensor_idxs">[docs]</a><span class="k">def</span> <span class="nf">dims_idxs_to_tensor_idxs</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the dims of a Qobj instance, and some indices into</span>
+<span class="sd">    dims, returns the corresponding tensor indices. This helps</span>
+<span class="sd">    resolve, for instance, that column-stacking for superoperators,</span>
+<span class="sd">    oper-ket and oper-bra implies that the input and output tensor</span>
+<span class="sd">    indices are reversed from their order in dims.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    dims : list</span>
+<span class="sd">        Dimensions specification for a Qobj.</span>
+
+<span class="sd">    indices : int, list or tuple</span>
+<span class="sd">        Indices to convert to tensor indices. Can be specified</span>
+<span class="sd">        as a single index, or as a collection of indices.</span>
+<span class="sd">        In the latter case, this can be nested arbitrarily</span>
+<span class="sd">        deep. For instance, [0, [0, (2, 3)]].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    tens_indices : int, list or tuple</span>
+<span class="sd">        Container of the same structure as indices containing</span>
+<span class="sd">        the tensor indices for each element of indices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">deep_map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">getitem</span><span class="p">,</span> <span class="n">perm</span><span class="p">),</span> <span class="n">indices</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Feb 07, 2023.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
