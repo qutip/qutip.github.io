@@ -1531,9 +1531,12 @@
         <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
             <span class="n">q</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">()</span>
             <span class="n">q</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_ptrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sel</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">tidyup</span><span class="p">()</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">auto_tidyup</span> <span class="k">else</span> <span class="n">q</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">tidyup</span><span class="p">()</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">auto_tidyup</span> <span class="k">else</span> <span class="n">q</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">_ptrace_dense</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sel</span><span class="p">)</span></div>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">_ptrace_dense</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sel</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">isket</span><span class="p">(</span><span class="n">out</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="Qobj.permute"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.Qobj.permute">[docs]</a>    <span class="k">def</span> <span class="nf">permute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Permutes a composite quantum object.</span>
@@ -2716,7 +2719,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Dec 12, 2022.
+        Last updated on Jun 29, 2023.
       </span>
 
     </p>

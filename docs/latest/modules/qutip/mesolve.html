@@ -623,10 +623,12 @@
 
     <span class="n">e_ops_data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">output</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">need_qobj_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">store_states</span>
     <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">e_ops</span><span class="p">):</span>
         <span class="n">n_expt_op</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">expt_callback</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">output</span><span class="o">.</span><span class="n">num_expect</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">need_qobj_state</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e_ops</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">n_expt_op</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
         <span class="n">expt_callback</span> <span class="o">=</span> <span class="kc">False</span>
@@ -634,10 +636,13 @@
         <span class="k">if</span> <span class="n">n_expt_op</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># fall back on storing states</span>
             <span class="n">opt</span><span class="o">.</span><span class="n">store_states</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">need_qobj_state</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">e_ops</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
                     <span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_tsteps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">))</span>
+                    <span class="n">need_qobj_state</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">e_ops_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
                     <span class="k">continue</span>
                 <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="n">rho0</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;e_ops dims (</span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">) are not &quot;</span>
@@ -671,7 +676,7 @@
                             <span class="s2">&quot;the allowed number of substeps by increasing &quot;</span>
                             <span class="s2">&quot;the nsteps parameter in the Options class.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">store_states</span> <span class="ow">or</span> <span class="n">expt_callback</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">need_qobj_state</span><span class="p">:</span>
             <span class="n">cdata</span> <span class="o">=</span> <span class="n">get_curr_state_data</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
             <span class="n">fdata</span> <span class="o">=</span> <span class="n">dense2D_to_fastcsr_fmode</span><span class="p">(</span><span class="n">cdata</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
 
@@ -691,10 +696,10 @@
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_expt_op</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e_ops</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="n">e_ops</span><span class="p">[</span><span class="n">m</span><span class="p">]):</span>
                 <span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">t_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_ops</span><span class="p">[</span><span class="n">m</span><span class="p">](</span><span class="n">t</span><span class="p">,</span> <span class="n">rho_t</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">t_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">expect_rho_vec</span><span class="p">(</span><span class="n">e_ops_data</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
-                                                     <span class="n">e_ops</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">isherm</span>
-                                                     <span class="ow">and</span> <span class="n">rho0</span><span class="o">.</span><span class="n">isherm</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">t_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">expect_rho_vec</span><span class="p">(</span><span class="n">e_ops_data</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                                                         <span class="n">e_ops</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">isherm</span>
+                                                         <span class="ow">and</span> <span class="n">rho0</span><span class="o">.</span><span class="n">isherm</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">t_idx</span> <span class="o">&lt;</span> <span class="n">n_tsteps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">r</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">dt</span><span class="p">[</span><span class="n">t_idx</span><span class="p">])</span>
@@ -720,7 +725,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Dec 12, 2022.
+        Last updated on Jun 29, 2023.
       </span>
 
     </p>

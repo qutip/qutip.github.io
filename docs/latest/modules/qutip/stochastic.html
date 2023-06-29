@@ -771,13 +771,20 @@
     <span class="k">elif</span> <span class="n">sso</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;heterodyne&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">m_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sc_ops</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;When using the heterodyne method there should be two&quot;</span>
+                <span class="s2">&quot; measurement operators (m_ops) for each collapse operator&quot;</span>
+                <span class="s2">&quot; (sc_ops).&quot;</span>
+            <span class="p">)</span>
         <span class="n">sso</span><span class="o">.</span><span class="n">sops</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">m_ops</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">())]</span>
             <span class="n">sso</span><span class="o">.</span><span class="n">sops</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
                          <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()))</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-        <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="o">=</span> <span class="n">m_ops</span>
+        <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="o">=</span> <span class="n">m_ops</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">sops</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">dW_factors</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">):</span>
@@ -863,7 +870,7 @@
     <span class="k">if</span> <span class="s2">&quot;method&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;photocurrent&quot;</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stochastic solver with photocurrent method has been moved to &quot;</span>
               <span class="s2">&quot;it&#39;s own function: photocurrent_sesolve&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">photocurrent_sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span>
+        <span class="k">return</span> <span class="n">photocurrent_sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">sc_ops</span><span class="o">=</span><span class="n">sc_ops</span><span class="p">,</span>
                                     <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">_safe_mode</span><span class="o">=</span><span class="n">_safe_mode</span><span class="p">,</span>
                                     <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -1306,7 +1313,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Safety check: d1 and d2 must return &quot;</span> <span class="o">+</span>
                              <span class="s2">&quot;complex numpy array.&quot;</span><span class="p">)</span>
         <span class="n">msg_e_ops</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Safety check: The shape of the e_ops &quot;</span>
-                     <span class="s2">&quot;does not fit the intial state.&quot;</span><span class="p">)</span>
+                     <span class="s2">&quot;does not fit the initial state.&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">e_ops</span><span class="p">:</span>
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
@@ -1367,17 +1374,17 @@
         <span class="n">shape_op</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the hamiltonian does &quot;</span>
-                            <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                            <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">shape_op</span> <span class="o">=</span> <span class="n">sso</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the hamiltonian does &quot;</span>
-                                <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the hamiltonian does &quot;</span>
-                                <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
@@ -1388,17 +1395,17 @@
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the sc_ops does &quot;</span>
-                                <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the sc_ops does &quot;</span>
-                                    <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                    <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the sc_ops does &quot;</span>
-                                    <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                    <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">c_ops</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
@@ -1409,28 +1416,28 @@
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the c_ops does &quot;</span>
-                                <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">cte</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the c_ops does &quot;</span>
-                                    <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                    <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the c_ops does &quot;</span>
-                                    <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                    <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">e_ops</span><span class="p">:</span>
         <span class="n">shape_op</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the e_ops does &quot;</span>
-                                <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the e_ops does &quot;</span>
-                                <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">sso</span><span class="o">.</span><span class="n">m_ops</span><span class="p">:</span>
@@ -1438,11 +1445,11 @@
             <span class="k">if</span> <span class="n">sso</span><span class="o">.</span><span class="n">me</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the m_ops does &quot;</span>
-                                    <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                    <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span> <span class="ow">or</span> <span class="n">shape_op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">l_vec</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The size of the m_ops does &quot;</span>
-                                    <span class="s2">&quot;not fit the intial state&quot;</span><span class="p">)</span>
+                                    <span class="s2">&quot;not fit the initial state&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_sesolve_generic</span><span class="p">(</span><span class="n">sso</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">):</span>
@@ -1627,7 +1634,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Dec 12, 2022.
+        Last updated on Jun 29, 2023.
       </span>
 
     </p>
