@@ -172,7 +172,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for qutip.rhs_generate</h1><div class="highlight"><pre>
-<span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rhs_generate&#39;</span><span class="p">,</span> <span class="s1">&#39;rhs_clear&#39;</span><span class="p">]</span>
+<span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rhs_clear&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -210,167 +210,6 @@
         <span class="k">del</span> <span class="n">solver_safe</span><span class="p">[</span><span class="s2">&quot;mesolve&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="s2">&quot;mcsolve&quot;</span> <span class="ow">in</span> <span class="n">solver_safe</span><span class="p">:</span>
         <span class="k">del</span> <span class="n">solver_safe</span><span class="p">[</span><span class="s2">&quot;mcsolve&quot;</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="rhs_generate"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.rhs_generate.rhs_generate">[docs]</a><span class="k">def</span> <span class="nf">rhs_generate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">options</span><span class="o">=</span><span class="n">Options</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates the Cython functions needed for solving the dynamics of a</span>
-<span class="sd">    given system using the mesolve function inside a parfor loop.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    H : qobj</span>
-<span class="sd">        System Hamiltonian.</span>
-
-<span class="sd">    c_ops : list</span>
-<span class="sd">        ``list`` of collapse operators.</span>
-
-<span class="sd">    args : dict</span>
-<span class="sd">        Arguments for time-dependent Hamiltonian and collapse operator terms.</span>
-
-<span class="sd">    options : Options</span>
-<span class="sd">        Instance of ODE solver options.</span>
-
-<span class="sd">    name: str</span>
-<span class="sd">        Name of generated RHS</span>
-
-<span class="sd">    cleanup: bool</span>
-<span class="sd">        Whether the generated cython file should be automatically removed or</span>
-<span class="sd">        not.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Using this function with any solver other than the mesolve function</span>
-<span class="sd">    will result in an error.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
-
-    <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">=</span> <span class="s2">&quot;rhs&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">cgen_num</span><span class="p">)</span>
-
-    <span class="n">Lconst</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">Ldata</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">Linds</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">Lptrs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">Lcoeff</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">Lobj</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># loop over all hamiltonian terms, convert to superoperator form and</span>
-    <span class="c1"># add the data of sparse matrix represenation to</span>
-
-    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Incorrect specification of time-dependence: &quot;</span>
-
-    <span class="k">for</span> <span class="n">h_spec</span> <span class="ow">in</span> <span class="n">H</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_spec</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="n">h_spec</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected Qobj&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
-                <span class="n">Lconst</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">spost</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">h</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
-                <span class="n">Lconst</span> <span class="o">+=</span> <span class="n">h</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected operator or superoperator&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="n">h_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">h_coeff</span> <span class="o">=</span> <span class="n">h_spec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected Qobj&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">spre</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">spost</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">h</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="n">h</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected operator or superoperator&quot;</span><span class="p">)</span>
-
-            <span class="n">Ldata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">Linds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-            <span class="n">Lptrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_coeff</span><span class="p">,</span> <span class="n">Cubic_Spline</span><span class="p">):</span>
-                <span class="n">Lobj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h_coeff</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span>
-            <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h_coeff</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected string format&quot;</span><span class="p">)</span>
-
-    <span class="c1"># loop over all collapse operators</span>
-    <span class="k">for</span> <span class="n">c_spec</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_spec</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">c_spec</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected Qobj&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
-                <span class="n">cdc</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c</span>
-                <span class="n">Lconst</span> <span class="o">+=</span> <span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span> \
-                                                   <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">c</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
-                <span class="n">Lconst</span> <span class="o">+=</span> <span class="n">c</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected operator or superoperator&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">c_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">c_coeff</span> <span class="o">=</span> <span class="n">c_spec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected Qobj&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isoper</span><span class="p">:</span>
-                <span class="n">cdc</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">c</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="n">spre</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spre</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span> \
-                                             <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">spost</span><span class="p">(</span><span class="n">cdc</span><span class="p">)</span>
-                <span class="n">c_coeff</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">c_coeff</span> <span class="o">+</span> <span class="s2">&quot;)**2&quot;</span>
-            <span class="k">elif</span> <span class="n">c</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
-                <span class="n">L</span> <span class="o">=</span> <span class="n">c</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected operator or superoperator&quot;</span><span class="p">)</span>
-
-            <span class="n">Ldata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">Linds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-            <span class="n">Lptrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
-            <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_coeff</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;expected string format&quot;</span><span class="p">)</span>
-
-    <span class="c1"># add the constant part of the lagrangian</span>
-    <span class="k">if</span> <span class="n">Lconst</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">Ldata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">Linds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-        <span class="n">Lptrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lconst</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
-        <span class="n">Lcoeff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span>
-
-    <span class="c1"># the total number of liouvillian terms (hamiltonian terms + collapse</span>
-    <span class="c1"># operators)</span>
-    <span class="n">n_L_terms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ldata</span><span class="p">)</span>
-
-    <span class="n">cgen</span> <span class="o">=</span> <span class="n">Codegen</span><span class="p">(</span><span class="n">h_terms</span><span class="o">=</span><span class="n">n_L_terms</span><span class="p">,</span> <span class="n">h_tdterms</span><span class="o">=</span><span class="n">Lcoeff</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
-                   <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-    <span class="n">cgen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">+</span> <span class="s2">&quot;.pyx&quot;</span><span class="p">)</span>
-
-    <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="s1">&#39;from &#39;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">+</span>
-                   <span class="s1">&#39; import cy_td_ode_rhs&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
-    <span class="n">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
-
-    <span class="n">config</span><span class="o">.</span><span class="n">tdfunc</span> <span class="o">=</span> <span class="n">cy_td_ode_rhs</span>
-
-    <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tdname</span> <span class="o">+</span> <span class="s2">&quot;.pyx&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span></div>
 
 
 <span class="k">def</span> <span class="nf">_td_format_check</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;me&#39;</span><span class="p">):</span>
@@ -601,7 +440,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Dec 12, 2022.
+        Last updated on Aug 23, 2023.
       </span>
 
     </p>
