@@ -364,30 +364,47 @@
 <span class="sd">    TODO: Create a new class structure for quantum channels, perhaps as a</span>
 <span class="sd">    strict sub-class of Qobj.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">full</span><span class="p">())</span>
-    <span class="n">vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vecs</span><span class="p">)]</span>
-    <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">inpt</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">*</span><span class="n">vec2mat</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">),</span>
-            <span class="n">dims</span><span class="o">=</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">]</span></div>
+    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">(</span><span class="n">phase_fix</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">elements_to_keep</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">tol</span>
+    <span class="n">sqrt_vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">elements_to_keep</span><span class="p">]),</span> <span class="n">vecs</span><span class="p">[</span><span class="n">elements_to_keep</span><span class="p">]</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">Qobj</span><span class="p">(</span><span class="n">inpt</span><span class="o">=</span><span class="n">sqrt_val</span> <span class="o">*</span> <span class="n">vec</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sqrt_val</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sqrt_vals</span><span class="p">,</span> <span class="n">vecs</span><span class="p">)</span>
+    <span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="kraus_to_choi"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superop_reps.kraus_to_choi">[docs]</a><span class="k">def</span> <span class="nf">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Takes a list of Kraus operators and returns the Choi matrix for the channel</span>
-<span class="sd">    represented by the Kraus operators in `kraus_list`</span>
+<div class="viewcode-block" id="kraus_to_choi"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superop_reps.kraus_to_choi">[docs]</a><span class="k">def</span> <span class="nf">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_ops</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a list of Kraus operators into Choi representation of the channel.</span>
+
+<span class="sd">    Essentially, kraus operators are a decomposition of a Choi matrix,</span>
+<span class="sd">    so in this function we build Choi matrix from vector representation of Kraus operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kraus_ops : list[Qobj]</span>
+<span class="sd">        The list of Kraus operators to be converted to Choi representation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    choi : Qobj</span>
+<span class="sd">        A quantum object representing the same map as ``kraus_ops``, such that</span>
+<span class="sd">        ``choi.superrep == &quot;choi&quot;``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kraus_mat_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">kraus_list</span><span class="p">))</span>
-    <span class="n">op_rng</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">kraus_mat_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">choi_blocks</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="nb">sum</span><span class="p">([</span>
-                              <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">op</span><span class="p">[:,</span> <span class="n">c_ix</span><span class="p">],</span>
-                                       <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">op</span><span class="p">))[</span><span class="n">r_ix</span><span class="p">,</span> <span class="p">:])</span>
-                              <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">kraus_mat_list</span><span class="p">])</span>
-                          <span class="k">for</span> <span class="n">r_ix</span> <span class="ow">in</span> <span class="n">op_rng</span><span class="p">]</span>
-                         <span class="k">for</span> <span class="n">c_ix</span> <span class="ow">in</span> <span class="n">op_rng</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">inpt</span><span class="o">=</span><span class="n">hstack</span><span class="p">(</span><span class="n">hstack</span><span class="p">(</span><span class="n">choi_blocks</span><span class="p">)),</span>
-                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">kraus_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">kraus_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;choi&#39;</span><span class="p">)</span></div>
+    <span class="n">len_op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">kraus_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># If Kraus ops have dims [M, N] in qutip notation (act on [N, N] density matrix and produce [M, M] d.m.),</span>
+    <span class="c1"># Choi matrix Hilbert space will be [[M, N], [M, N]] because Choi Hilbert space is (output space) x (input space).</span>
+    <span class="n">choi_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">kraus_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="c1"># transform a list of Qobj matrices list[sum_ij k_ij |i&gt;&lt;j|]</span>
+    <span class="c1"># into an array of array vectors sum_ij k_ij |i, j&gt;&gt; = sum_I k_I |I&gt;&gt;</span>
+    <span class="n">kraus_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">kraus_op</span><span class="o">.</span><span class="n">full</span><span class="p">(),</span> <span class="n">len_op</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">kraus_op</span> <span class="ow">in</span> <span class="n">kraus_ops</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="c1"># sum_{I} |k_I|^2 |I&gt;&gt;&lt;&lt;I|</span>
+    <span class="n">choi_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">kraus_vectors</span><span class="p">,</span> <span class="n">kraus_vectors</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">axes</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">choi_array</span><span class="p">,</span> <span class="n">choi_dims</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s2">&quot;choi&quot;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="kraus_to_super"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.superop_reps.kraus_to_super">[docs]</a><span class="k">def</span> <span class="nf">kraus_to_super</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">):</span>
@@ -740,7 +757,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Aug 23, 2023.
+        Last updated on Jan 17, 2024.
       </span>
 
     </p>
