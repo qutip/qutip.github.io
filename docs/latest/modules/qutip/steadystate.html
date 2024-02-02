@@ -227,6 +227,20 @@
     <span class="k">return</span> <span class="n">out</span>
 
 
+<span class="k">def</span> <span class="nf">_rename_kwargs</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">names_pairs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a wrapped version of `function` that rename any keyword</span>
+<span class="sd">    arguments from the first value of the pair, to the second.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">out</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="n">names_pairs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">old</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">new</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
 <span class="c1"># From SciPy 1.4 onwards we need to pass the `callback_type=&#39;legacy&#39;` argument</span>
 <span class="c1"># to gmres to maintain the same behaviour we used to have.  Since this should</span>
 <span class="c1"># be the default behaviour, we use that in the main code and just &quot;eat&quot; the</span>
@@ -241,6 +255,14 @@
     <span class="n">bicgstab</span> <span class="o">=</span> <span class="n">_eat_kwargs</span><span class="p">(</span><span class="n">bicgstab</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">])</span>
 <span class="k">elif</span> <span class="n">_parse_version</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">_parse_version</span><span class="p">(</span><span class="s2">&quot;1.4&quot;</span><span class="p">):</span>
     <span class="n">gmres</span> <span class="o">=</span> <span class="n">_eat_kwargs</span><span class="p">(</span><span class="n">gmres</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;callback_type&#39;</span><span class="p">])</span>
+
+
+<span class="c1"># From SciPy 1.12, the `tol` keyword argument to iterative solvers was renamed</span>
+<span class="c1"># to `rtol`.</span>
+<span class="k">if</span> <span class="n">_parse_version</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">_parse_version</span><span class="p">(</span><span class="s2">&quot;1.12&quot;</span><span class="p">):</span>
+    <span class="n">gmres</span> <span class="o">=</span> <span class="n">_rename_kwargs</span><span class="p">(</span><span class="n">gmres</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;tol&#39;</span><span class="p">,</span> <span class="s1">&#39;rtol&#39;</span><span class="p">)])</span>
+    <span class="n">lgmres</span> <span class="o">=</span> <span class="n">_rename_kwargs</span><span class="p">(</span><span class="n">lgmres</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;tol&#39;</span><span class="p">,</span> <span class="s1">&#39;rtol&#39;</span><span class="p">)])</span>
+    <span class="n">bicgstab</span> <span class="o">=</span> <span class="n">_rename_kwargs</span><span class="p">(</span><span class="n">bicgstab</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;tol&#39;</span><span class="p">,</span> <span class="s1">&#39;rtol&#39;</span><span class="p">)])</span>
 
 
 <span class="k">def</span> <span class="nf">_empty_info_dict</span><span class="p">():</span>
@@ -1504,7 +1526,7 @@
     <p>
         &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
       <span class="lastupdated">
-        Last updated on Jan 17, 2024.
+        Last updated on Jan 29, 2024.
       </span>
 
     </p>
