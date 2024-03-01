@@ -1,0 +1,137 @@
+---
+title: Trying QuTiP in the Browser
+---
+{% include header.html %}
+{% include navbar.html %}
+
+<div class="row">
+<div class="col-md-12">
+
+<h1>Trying QuTiP in the Browser</h1>
+
+<p>QuTiP is now available in the browser!</p>
+
+<p>You can open it by clicking on the button below:</p>
+
+<a class="btn btn-primary" href="/try-qutip/" role="button">Try QuTiP</a>
+
+<p>
+  The button opens a JupyterLite notebook server with the qutip package
+  preinstalled. It runs entirely in your browser and includes copies of the
+  <a href="/qutip-tutorials/">QuTiP tutorials</a> for you to explore. There is
+  no server.
+</p>
+
+<p>
+  Once JupterLite loads, you'll find the tutorials in the file browser on
+  the left. If you click on a tutorial notebook, you'll need to select the
+  XPython kernel (there is only one option) and then the notebook will open.
+  The first imports will be slightly slow, but after that the performance
+  should be similar to that of running QuTiP locally.
+</p>
+
+<p>
+  Running QuTiP this way relies on a complex set of underlying layers of
+  software that are still maturing. You can read about some of the minor
+  caveats and a description of how it was built below.
+</p>
+
+<p>Contents:</p>
+
+<ul>
+  <li>Caveats</li>
+  <li>Contributing</li>
+  <li>How the try-qutip site is built</li>
+</ul>
+
+
+<h2>Caveats</h2>
+
+<p>Most QuTiP features already work. These are the known limitations:</p>
+
+<ul>
+  <li>A recent version of Firefox or Chrome is required.</li>
+  <li>QobjEvo objects cannot currently be usefully compiled.</li>
+  <li>Cython is not yet availabe.</li>
+  <li>You can save notebooks but, they are <em>stored in your web browser's
+    internal storage and might be lost if, for example, the browser cache
+    is cleared. If you do create notebooks you'd like to keep, please
+    use the download button to save them.</em>
+  </li>
+  <li>
+    Notebooks are slow to start, but performance is not too bad after that.
+  </li>
+  <li>
+    Having to select the XPython kernel all the time is not ideal.
+  </li>
+</ul>
+
+
+<h2>Contributing</h2>
+
+<p>
+  If you encounter bugs with QuTiP in the browser that aren't listed in the
+  caveats above, you are welcome to open issues in the
+  <a href="https://github.com/qutip/try-qutip/">try-qutip GitHub repository</a>.
+</p>
+
+<p>
+  If you know a way to address any of the caveats above, please let us
+  know by open an issue or pull request in the
+  <a href="https://github.com/qutip/try-qutip/">try-qutip GitHub repository</a>.
+</p>
+
+<p>
+  If you find bugs in a specific tutorial, or would like to add a new tutorial
+  or improve an existing one, please see the contributing section at the bottom
+  of the <a href="/qutip-tutorials/">tutorials page</a>.
+</p>
+
+<p>
+  If you have general questions about how to use QuTiP, email the
+  <a href="https://groups.google.com/group/qutip">QuTiP mailing list</a>.
+</p>
+
+
+<h2>How the try-qutip site is built</h2>
+
+<p>The try-qutip site contains JupyterLite with QuTiP pre-installed.</p>
+
+<p>
+  <a href="https://github.com/jupyterlite/jupyterlite">JupyterLite</a> is a
+  version of <a href="https://github.com/jupyterlab/jupyterlab">JupyterLab</a>
+  that has been modified work run in the browser as a <a
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service
+  Worker</a>. A service worker acts like a web server that runs inside your
+  browser and in this case plays the role of the Jupyter server that would
+  otherwise need to be run locally.
+</p>
+
+<p>
+  Running this Jupyter server in the browser means running Python and packages
+  such as numpy, SciPy and matplotlib in the browser too. To do that, all
+  of these packages need to be recompiled to
+  <a href="https://webassembly.org/">WebAssembly (aka WASM)</a> and for
+  that one needs a suitable compiler, in this case,
+  <a href="https://emscripten.org/">Emscripten</a>.
+</p>
+
+<p>
+  Lastly, we need to compile QuTiP itself. The amazing team at
+  <a href="https://quantstack.net/">QuantStack</a> are building
+  <a href="https://beta.mamba.pm/channels/emscripten-forge/packages/?tab=packages">emscripten-forge</a>
+  which is like <a href="https://conda-forge.org/">conda-forge</a> but for building packages for
+  WebAssembly.
+</p>
+
+<p>
+  With the help of Wolf and Martin from QuantStack, we created a
+  <a href="https://beta.mamba.pm/channels/emscripten-forge/packages/qutip">QuTiP package on emscripten-forge</a>.
+  The recipe for building the package can be found in the
+  <a href="https://github.com/emscripten-forge/recipes">emscripten-forge/recipes</a> repository.
+</p>
+
+</div>
+</div>
+
+{% include footer.html %}
