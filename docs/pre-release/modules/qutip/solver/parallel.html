@@ -92,7 +92,7 @@
 <span class="sd">mappings, using the builtin Python module multiprocessing or the loky parallel</span>
 <span class="sd">execution library.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;parallel_map&#39;</span><span class="p">,</span> <span class="s1">&#39;serial_map&#39;</span><span class="p">,</span> <span class="s1">&#39;loky_pmap&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;parallel_map&#39;</span><span class="p">,</span> <span class="s1">&#39;serial_map&#39;</span><span class="p">,</span> <span class="s1">&#39;loky_pmap&#39;</span><span class="p">,</span> <span class="s1">&#39;mpi_pmap&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -100,6 +100,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">qutip.ui.progressbar</span> <span class="kn">import</span> <span class="n">progress_bars</span>
 <span class="kn">from</span> <span class="nn">qutip.settings</span> <span class="kn">import</span> <span class="n">available_cpu_count</span>
 
@@ -114,7 +115,6 @@
 
 
 <span class="n">default_map_kw</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;job_timeout&#39;</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">TIMEOUT_MAX</span><span class="p">,</span>
     <span class="s1">&#39;timeout&#39;</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">TIMEOUT_MAX</span><span class="p">,</span>
     <span class="s1">&#39;num_cpus&#39;</span><span class="p">:</span> <span class="n">available_cpu_count</span><span class="p">(),</span>
     <span class="s1">&#39;fail_fast&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -145,7 +145,7 @@
 
 <span class="sd">        result = [task(value, *task_args, **task_kwargs) for value in values]</span>
 
-<span class="sd">    This function work as a drop-in replacement of :func:`qutip.parallel_map`.</span>
+<span class="sd">    This function work as a drop-in replacement of :func:`parallel_map`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -154,20 +154,20 @@
 <span class="sd">    values : array / list</span>
 <span class="sd">        The list or array of values for which the ``task`` function is to be</span>
 <span class="sd">        evaluated.</span>
-<span class="sd">    task_args : list / dictionary</span>
+<span class="sd">    task_args : list, optional</span>
 <span class="sd">        The optional additional argument to the ``task`` function.</span>
-<span class="sd">    task_kwargs : list / dictionary</span>
+<span class="sd">    task_kwargs : dictionary, optional</span>
 <span class="sd">        The optional additional keyword argument to the ``task`` function.</span>
-<span class="sd">    reduce_func : func (optional)</span>
+<span class="sd">    reduce_func : func, optional</span>
 <span class="sd">        If provided, it will be called with the output of each tasks instead of</span>
 <span class="sd">        storing a them in a list. It should return None or a number.</span>
 <span class="sd">        When returning a number, it represent the estimation of the number of</span>
 <span class="sd">        task left. On a return &lt;= 0, the map will end early.</span>
-<span class="sd">    progress_bar : string</span>
+<span class="sd">    progress_bar : str, optional</span>
 <span class="sd">        Progress bar options&#39;s string for showing progress.</span>
-<span class="sd">    progress_bar_kwargs : dict</span>
+<span class="sd">    progress_bar_kwargs : dict, optional</span>
 <span class="sd">        Options for the progress bar.</span>
-<span class="sd">    map_kw: dict (optional)</span>
+<span class="sd">    map_kw: dict, optional</span>
 <span class="sd">        Dictionary containing:</span>
 <span class="sd">        - timeout: float, Maximum time (sec) for the whole map.</span>
 <span class="sd">        - fail_fast: bool, Raise an error at the first.</span>
@@ -221,59 +221,33 @@
     <span class="k">return</span> <span class="n">results</span></div>
 
 
-<div class="viewcode-block" id="parallel_map"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.parallel.parallel_map">[docs]</a><span class="k">def</span> <span class="nf">parallel_map</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">reduce_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">map_kw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+<span class="k">def</span> <span class="nf">_generic_pmap</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="p">,</span> <span class="n">reduce_func</span><span class="p">,</span>
+                  <span class="n">timeout</span><span class="p">,</span> <span class="n">fail_fast</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">,</span>
+                  <span class="n">progress_bar</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="p">,</span>
+                  <span class="n">setup_executor</span><span class="p">,</span> <span class="n">extract_result</span><span class="p">,</span> <span class="n">shutdown_executor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parallel execution of a mapping of `values` to the function `task`. This</span>
-<span class="sd">    is functionally equivalent to::</span>
+<span class="sd">    Common functionality for parallel_map, loky_pmap and mpi_pmap.</span>
+<span class="sd">    The parameters `setup_executor`, `extract_result` and `shutdown_executor`</span>
+<span class="sd">    are callback functions with the following signatures:</span>
 
-<span class="sd">        result = [task(value, *task_args, **task_kwargs) for value in values]</span>
+<span class="sd">    setup_executor: () -&gt; ProcessPoolExecutor</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    task : a Python function</span>
-<span class="sd">        The function that is to be called for each value in ``task_vec``.</span>
-<span class="sd">    values : array / list</span>
-<span class="sd">        The list or array of values for which the ``task`` function is to be</span>
-<span class="sd">        evaluated.</span>
-<span class="sd">    task_args : list / dictionary</span>
-<span class="sd">        The optional additional argument to the ``task`` function.</span>
-<span class="sd">    task_kwargs : list / dictionary</span>
-<span class="sd">        The optional additional keyword argument to the ``task`` function.</span>
-<span class="sd">    reduce_func : func (optional)</span>
-<span class="sd">        If provided, it will be called with the output of each tasks instead of</span>
-<span class="sd">        storing a them in a list. Note that the order in which results are</span>
-<span class="sd">        passed to ``reduce_func`` is not defined. It should return None or a</span>
-<span class="sd">        number. When returning a number, it represent the estimation of the</span>
-<span class="sd">        number of task left. On a return &lt;= 0, the map will end early.</span>
-<span class="sd">    progress_bar : string</span>
-<span class="sd">        Progress bar options&#39;s string for showing progress.</span>
-<span class="sd">    progress_bar_kwargs : dict</span>
-<span class="sd">        Options for the progress bar.</span>
-<span class="sd">    map_kw: dict (optional)</span>
-<span class="sd">        Dictionary containing entry for:</span>
-<span class="sd">        - timeout: float, Maximum time (sec) for the whole map.</span>
-<span class="sd">        - job_timeout: float, Maximum time (sec) for each job in the map.</span>
-<span class="sd">        - num_cpus: int, Number of job to run at once.</span>
-<span class="sd">        - fail_fast: bool, Raise an error at the first.</span>
+<span class="sd">    extract_result: Future -&gt; (Any, BaseException)</span>
+<span class="sd">        If there was an exception e, returns (None, e).</span>
+<span class="sd">        Otherwise returns (result, None).</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    result : list</span>
-<span class="sd">        The result list contains the value of</span>
-<span class="sd">        ``task(value, *task_args, **task_kwargs)`` for</span>
-<span class="sd">        each value in ``values``. If a ``reduce_func`` is provided, and empty</span>
-<span class="sd">        list will be returned.</span>
-
+<span class="sd">    shutdown_executor: (executor: ProcessPoolExecutor,</span>
+<span class="sd">                        active_tasks: set[Future]) -&gt; None</span>
+<span class="sd">        executor: The ProcessPoolExecutor that was created in setup_executor</span>
+<span class="sd">        active_tasks: A set of Futures that are currently still being executed</span>
+<span class="sd">            (non-empty if: timeout, error, or reduce_func requesting exit)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">task_args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">task_args</span> <span class="o">=</span> <span class="p">()</span>
     <span class="k">if</span> <span class="n">task_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">task_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">map_kw</span> <span class="o">=</span> <span class="n">_read_map_kw</span><span class="p">(</span><span class="n">map_kw</span><span class="p">)</span>
-    <span class="n">end_time</span> <span class="o">=</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">job_time</span> <span class="o">=</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;job_timeout&#39;</span><span class="p">]</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">timeout</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
     <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">progress_bars</span><span class="p">[</span><span class="n">progress_bar</span><span class="p">](</span>
         <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="o">**</span><span class="n">progress_bar_kwargs</span>
@@ -283,41 +257,47 @@
     <span class="n">finished</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">reduce_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">results</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">result_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">reduce_func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">result_func</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">reduce_func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-        <span class="n">result_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">results</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">result_func</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="fm">__setitem__</span>
 
     <span class="k">def</span> <span class="nf">_done_callback</span><span class="p">(</span><span class="n">future</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">future</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">errors</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span>
-        <span class="n">remaining_ntraj</span> <span class="o">=</span> <span class="n">result_func</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">_i</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">remaining_ntraj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">remaining_ntraj</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">finished</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">,</span> <span class="n">exception</span> <span class="o">=</span> <span class="n">extract_result</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
+                <span class="c1"># When a keyboard interrupt happens, it is raised in the main</span>
+                <span class="c1"># thread and in all worker threads. At this point in the code,</span>
+                <span class="c1"># the worker threads have already returned and the main thread</span>
+                <span class="c1"># is only waiting for the ProcessPoolExecutor to shutdown</span>
+                <span class="c1"># before exiting. We therefore return immediately.</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">exception</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">exception</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exception</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">remaining_ntraj</span> <span class="o">=</span> <span class="n">result_func</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">_i</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">remaining_ntraj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">remaining_ntraj</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">finished</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
-        <span class="c1"># ProcessPoolExecutor only supports mp_context from 3.7 onwards</span>
-        <span class="n">ctx_kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mp_context&quot;</span><span class="p">:</span> <span class="n">mp_context</span><span class="p">}</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ctx_kw</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;QUTIP_IN_PARALLEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;TRUE&#39;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span>
-            <span class="n">max_workers</span><span class="o">=</span><span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">ctx_kw</span><span class="p">,</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">setup_executor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
             <span class="n">waiting</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">aborted</span> <span class="o">=</span> <span class="kc">False</span>
+
             <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
                 <span class="c1"># feed values to the executor, ensuring that there is at</span>
                 <span class="c1"># most one task per worker at any moment in time so that</span>
                 <span class="c1"># we can shutdown without waiting for greater than the time</span>
                 <span class="c1"># taken by the longest task</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">waiting</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">waiting</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">num_workers</span><span class="p">:</span>
                     <span class="c1"># no space left, wait for a task to complete or</span>
                     <span class="c1"># the time to run out</span>
                     <span class="n">timeout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
@@ -328,12 +308,13 @@
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="p">(</span>
                     <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">end_time</span>
-                    <span class="ow">or</span> <span class="p">(</span><span class="n">errors</span> <span class="ow">and</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;fail_fast&#39;</span><span class="p">])</span>
+                    <span class="ow">or</span> <span class="p">(</span><span class="n">errors</span> <span class="ow">and</span> <span class="n">fail_fast</span><span class="p">)</span>
                     <span class="ow">or</span> <span class="n">finished</span>
                 <span class="p">):</span>
                     <span class="c1"># no time left, exit the loop</span>
+                    <span class="n">aborted</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="k">break</span>
-                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">waiting</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">waiting</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_workers</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
                     <span class="c1"># space and time available, add tasks</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                     <span class="n">future</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
@@ -347,13 +328,21 @@
                     <span class="n">waiting</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-            <span class="n">timeout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
-            <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">waiting</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">aborted</span><span class="p">:</span>
+                <span class="c1"># all tasks have been submitted, timeout has not been reaches</span>
+                <span class="c1"># -&gt; wait for all workers to finish before shutting down</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+                <span class="n">_done</span><span class="p">,</span> <span class="n">waiting</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span>
+                    <span class="n">waiting</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                    <span class="n">return_when</span><span class="o">=</span><span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ALL_COMPLETED</span>
+                <span class="p">)</span>
+            <span class="n">shutdown_executor</span><span class="p">(</span><span class="n">executor</span><span class="p">,</span> <span class="n">waiting</span><span class="p">)</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;QUTIP_IN_PARALLEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;FALSE&#39;</span>
 
     <span class="n">progress_bar</span><span class="o">.</span><span class="n">finished</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">errors</span> <span class="ow">and</span> <span class="n">map_kw</span><span class="p">[</span><span class="s2">&quot;fail_fast&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">errors</span> <span class="ow">and</span> <span class="n">fail_fast</span><span class="p">:</span>
         <span class="k">raise</span> <span class="nb">list</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">errors</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MapExceptions</span><span class="p">(</span>
@@ -361,15 +350,92 @@
             <span class="n">errors</span><span class="p">,</span> <span class="n">results</span>
         <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">results</span></div>
+    <span class="k">return</span> <span class="n">results</span>
 
 
-<span class="k">def</span> <span class="nf">loky_pmap</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="parallel_map"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.parallel.parallel_map">[docs]</a><span class="k">def</span> <span class="nf">parallel_map</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">reduce_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">map_kw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parallel execution of a mapping of ``values`` to the function ``task``.</span>
+<span class="sd">    This is functionally equivalent to::</span>
+
+<span class="sd">        result = [task(value, *task_args, **task_kwargs) for value in values]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    task : a Python function</span>
+<span class="sd">        The function that is to be called for each value in ``task_vec``.</span>
+<span class="sd">    values : array / list</span>
+<span class="sd">        The list or array of values for which the ``task`` function is to be</span>
+<span class="sd">        evaluated.</span>
+<span class="sd">    task_args : list, optional</span>
+<span class="sd">        The optional additional arguments to the ``task`` function.</span>
+<span class="sd">    task_kwargs : dictionary, optional</span>
+<span class="sd">        The optional additional keyword arguments to the ``task`` function.</span>
+<span class="sd">    reduce_func : func, optional</span>
+<span class="sd">        If provided, it will be called with the output of each task instead of</span>
+<span class="sd">        storing them in a list. Note that the order in which results are</span>
+<span class="sd">        passed to ``reduce_func`` is not defined. It should return None or a</span>
+<span class="sd">        number. When returning a number, it represents the estimation of the</span>
+<span class="sd">        number of tasks left. On a return &lt;= 0, the map will end early.</span>
+<span class="sd">    progress_bar : str, optional</span>
+<span class="sd">        Progress bar options&#39;s string for showing progress.</span>
+<span class="sd">    progress_bar_kwargs : dict, optional</span>
+<span class="sd">        Options for the progress bar.</span>
+<span class="sd">    map_kw: dict, optional</span>
+<span class="sd">        Dictionary containing entry for:</span>
+<span class="sd">        - timeout: float, Maximum time (sec) for the whole map.</span>
+<span class="sd">        - num_cpus: int, Number of jobs to run at once.</span>
+<span class="sd">        - fail_fast: bool, Abort at the first error.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result : list</span>
+<span class="sd">        The result list contains the value of</span>
+<span class="sd">        ``task(value, *task_args, **task_kwargs)`` for</span>
+<span class="sd">        each value in ``values``. If a ``reduce_func`` is provided, and empty</span>
+<span class="sd">        list will be returned.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">map_kw</span> <span class="o">=</span> <span class="n">_read_map_kw</span><span class="p">(</span><span class="n">map_kw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+        <span class="c1"># ProcessPoolExecutor only supports mp_context from 3.7 onwards</span>
+        <span class="n">ctx_kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mp_context&quot;</span><span class="p">:</span> <span class="n">mp_context</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ctx_kw</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">setup_executor</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span>
+            <span class="n">max_workers</span><span class="o">=</span><span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">ctx_kw</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extract_result</span><span class="p">(</span><span class="n">future</span><span class="p">:</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">Future</span><span class="p">):</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">exception</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exception</span>
+        <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(),</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">shutdown_executor</span><span class="p">(</span><span class="n">executor</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="c1"># Since `ProcessPoolExecutor` leaves no other option,</span>
+        <span class="c1"># we wait for all worker processes to finish their current task</span>
+        <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">_generic_pmap</span><span class="p">(</span>
+        <span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="p">,</span> <span class="n">reduce_func</span><span class="p">,</span>
+        <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">],</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;fail_fast&#39;</span><span class="p">],</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span>
+        <span class="n">progress_bar</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="p">,</span>
+        <span class="n">setup_executor</span><span class="p">,</span> <span class="n">extract_result</span><span class="p">,</span> <span class="n">shutdown_executor</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="loky_pmap"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.parallel.loky_pmap">[docs]</a><span class="k">def</span> <span class="nf">loky_pmap</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">reduce_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">map_kw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="o">=</span><span class="p">{}):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parallel execution of a mapping of `values` to the function `task`. This</span>
-<span class="sd">    is functionally equivalent to::</span>
+<span class="sd">    Parallel execution of a mapping of ``values`` to the function ``task``.</span>
+<span class="sd">    This is functionally equivalent to::</span>
 
 <span class="sd">        result = [task(value, *task_args, **task_kwargs) for value in values]</span>
 
@@ -382,28 +448,28 @@
 <span class="sd">    values : array / list</span>
 <span class="sd">        The list or array of values for which the ``task`` function is to be</span>
 <span class="sd">        evaluated.</span>
-<span class="sd">    task_args : list / dictionary</span>
-<span class="sd">        The optional additional argument to the ``task`` function.</span>
-<span class="sd">    task_kwargs : list / dictionary</span>
-<span class="sd">        The optional additional keyword argument to the ``task`` function.</span>
-<span class="sd">    reduce_func : func (optional)</span>
-<span class="sd">        If provided, it will be called with the output of each tasks instead of</span>
-<span class="sd">        storing a them in a list. It should return None or a number.  When</span>
-<span class="sd">        returning a number, it represent the estimation of the number of task</span>
-<span class="sd">        left. On a return &lt;= 0, the map will end early.</span>
-<span class="sd">    progress_bar : string</span>
+<span class="sd">    task_args : list, optional</span>
+<span class="sd">        The optional additional arguments to the ``task`` function.</span>
+<span class="sd">    task_kwargs : dictionary, optional</span>
+<span class="sd">        The optional additional keyword arguments to the ``task`` function.</span>
+<span class="sd">    reduce_func : func, optional</span>
+<span class="sd">        If provided, it will be called with the output of each task instead of</span>
+<span class="sd">        storing them in a list. Note that the order in which results are</span>
+<span class="sd">        passed to ``reduce_func`` is not defined. It should return None or a</span>
+<span class="sd">        number. When returning a number, it represents the estimation of the</span>
+<span class="sd">        number of tasks left. On a return &lt;= 0, the map will end early.</span>
+<span class="sd">    progress_bar : str, optional</span>
 <span class="sd">        Progress bar options&#39;s string for showing progress.</span>
-<span class="sd">    progress_bar_kwargs : dict</span>
+<span class="sd">    progress_bar_kwargs : dict, optional</span>
 <span class="sd">        Options for the progress bar.</span>
-<span class="sd">    map_kw: dict (optional)</span>
+<span class="sd">    map_kw: dict, optional</span>
 <span class="sd">        Dictionary containing entry for:</span>
 <span class="sd">        - timeout: float, Maximum time (sec) for the whole map.</span>
-<span class="sd">        - job_timeout: float, Maximum time (sec) for each job in the map.</span>
-<span class="sd">        - num_cpus: int, Number of job to run at once.</span>
-<span class="sd">        - fail_fast: bool, Raise an error at the first.</span>
+<span class="sd">        - num_cpus: int, Number of jobs to run at once.</span>
+<span class="sd">        - fail_fast: bool, Abort at the first error.</span>
 
 <span class="sd">    Returns</span>
-<span class="sd">    --------</span>
+<span class="sd">    -------</span>
 <span class="sd">    result : list</span>
 <span class="sd">        The result list contains the value of</span>
 <span class="sd">        ``task(value, *task_args, **task_kwargs)`` for</span>
@@ -411,75 +477,159 @@
 <span class="sd">        list will be returned.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">task_args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">task_args</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="k">if</span> <span class="n">task_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">task_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="kn">from</span> <span class="nn">loky</span> <span class="kn">import</span> <span class="n">get_reusable_executor</span>
+    <span class="kn">from</span> <span class="nn">loky.process_executor</span> <span class="kn">import</span> <span class="n">ShutdownExecutorError</span>
     <span class="n">map_kw</span> <span class="o">=</span> <span class="n">_read_map_kw</span><span class="p">(</span><span class="n">map_kw</span><span class="p">)</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;QUTIP_IN_PARALLEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;TRUE&#39;</span>
-    <span class="kn">from</span> <span class="nn">loky</span> <span class="kn">import</span> <span class="n">get_reusable_executor</span><span class="p">,</span> <span class="ne">TimeoutError</span>
 
-    <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">progress_bars</span><span class="p">[</span><span class="n">progress_bar</span><span class="p">](</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="o">**</span><span class="n">progress_bar_kwargs</span>
-    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">setup_executor</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">get_reusable_executor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">])</span>
 
-    <span class="n">executor</span> <span class="o">=</span> <span class="n">get_reusable_executor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">])</span>
-    <span class="n">end_time</span> <span class="o">=</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">job_time</span> <span class="o">=</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;job_timeout&#39;</span><span class="p">]</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">remaining_ntraj</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">reduce_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">extract_result</span><span class="p">(</span><span class="n">future</span><span class="p">:</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">Future</span><span class="p">):</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">ShutdownExecutorError</span><span class="p">):</span>
+            <span class="c1"># Task was aborted due to timeout etc</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">exception</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exception</span>
+        <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(),</span> <span class="kc">None</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">task_args</span><span class="p">,</span> <span class="o">**</span><span class="n">task_kwargs</span><span class="p">)</span>
-               <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">shutdown_executor</span><span class="p">(</span><span class="n">executor</span><span class="p">,</span> <span class="n">active_tasks</span><span class="p">):</span>
+        <span class="c1"># If there are still tasks running, we kill all workers in  order to</span>
+        <span class="c1"># return immediately. Otherwise, `kill_workers` is set to False so</span>
+        <span class="c1"># that the worker threads can be reused in subsequent loky_pmap calls.</span>
+        <span class="n">kill_workers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">active_tasks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">kill_workers</span><span class="o">=</span><span class="n">kill_workers</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">job</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
-            <span class="n">remaining_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="n">job_time</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">remaining_time</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">map_kw</span><span class="p">[</span><span class="s2">&quot;fail_fast&quot;</span><span class="p">]:</span>
-                    <span class="k">raise</span> <span class="n">err</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">errors</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">reduce_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">remaining_ntraj</span> <span class="o">=</span> <span class="n">reduce_func</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">results</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
-            <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">remaining_ntraj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">remaining_ntraj</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">_generic_pmap</span><span class="p">(</span>
+        <span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="p">,</span> <span class="n">reduce_func</span><span class="p">,</span>
+        <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">],</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;fail_fast&#39;</span><span class="p">],</span> <span class="n">map_kw</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span>
+        <span class="n">progress_bar</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="p">,</span>
+        <span class="n">setup_executor</span><span class="p">,</span> <span class="n">extract_result</span><span class="p">,</span> <span class="n">shutdown_executor</span>
+    <span class="p">)</span></div>
 
-    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">job</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span> <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">]</span>
-        <span class="k">raise</span> <span class="n">e</span>
 
-    <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">job</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span> <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">]</span>
+<div class="viewcode-block" id="mpi_pmap"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.parallel.mpi_pmap">[docs]</a><span class="k">def</span> <span class="nf">mpi_pmap</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">reduce_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">map_kw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parallel execution of a mapping of ``values`` to the function ``task``.</span>
+<span class="sd">    This is functionally equivalent to::</span>
 
-    <span class="k">finally</span><span class="p">:</span>
+<span class="sd">        result = [task(value, *task_args, **task_kwargs) for value in values]</span>
+
+<span class="sd">    Uses the mpi4py module to execute the tasks asynchronously with MPI</span>
+<span class="sd">    processes. For more information, consult the documentation of mpi4py and</span>
+<span class="sd">    the mpi4py.MPIPoolExecutor class.</span>
+
+<span class="sd">    Note: in keeping consistent with the API of `parallel_map`, the parameter</span>
+<span class="sd">    determining the number of requested worker processes is called `num_cpus`.</span>
+<span class="sd">    The value of `map_kw[&#39;num_cpus&#39;]` is passed to the MPIPoolExecutor as its</span>
+<span class="sd">    `max_workers` argument.</span>
+<span class="sd">    If this parameter is not provided, the environment variable</span>
+<span class="sd">    `QUTIP_NUM_PROCESSES` is used instead. If this environment variable is not</span>
+<span class="sd">    set either, QuTiP will use default values that might be unsuitable for MPI</span>
+<span class="sd">    applications.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    task : a Python function</span>
+<span class="sd">        The function that is to be called for each value in ``task_vec``.</span>
+<span class="sd">    values : array / list</span>
+<span class="sd">        The list or array of values for which the ``task`` function is to be</span>
+<span class="sd">        evaluated.</span>
+<span class="sd">    task_args : list, optional</span>
+<span class="sd">        The optional additional arguments to the ``task`` function.</span>
+<span class="sd">    task_kwargs : dictionary, optional</span>
+<span class="sd">        The optional additional keyword arguments to the ``task`` function.</span>
+<span class="sd">    reduce_func : func, optional</span>
+<span class="sd">        If provided, it will be called with the output of each task instead of</span>
+<span class="sd">        storing them in a list. Note that the order in which results are</span>
+<span class="sd">        passed to ``reduce_func`` is not defined. It should return None or a</span>
+<span class="sd">        number. When returning a number, it represents the estimation of the</span>
+<span class="sd">        number of tasks left. On a return &lt;= 0, the map will end early.</span>
+<span class="sd">    progress_bar : str, optional</span>
+<span class="sd">        Progress bar options&#39;s string for showing progress.</span>
+<span class="sd">    progress_bar_kwargs : dict, optional</span>
+<span class="sd">        Options for the progress bar.</span>
+<span class="sd">    map_kw: dict, optional</span>
+<span class="sd">        Dictionary containing entry for:</span>
+<span class="sd">        - timeout: float, Maximum time (sec) for the whole map.</span>
+<span class="sd">        - num_cpus: int, Number of jobs to run at once.</span>
+<span class="sd">        - fail_fast: bool, Abort at the first error.</span>
+<span class="sd">        All remaining entries of map_kw will be passed to the</span>
+<span class="sd">        mpi4py.MPIPoolExecutor constructor.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result : list</span>
+<span class="sd">        The result list contains the value of</span>
+<span class="sd">        ``task(value, *task_args, **task_kwargs)`` for</span>
+<span class="sd">        each value in ``values``. If a ``reduce_func`` is provided, and empty</span>
+<span class="sd">        list will be returned.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">mpi4py.futures</span> <span class="kn">import</span> <span class="n">MPIPoolExecutor</span>
+
+    <span class="c1"># If the provided num_cpus is None, we use the default value instead.</span>
+    <span class="c1"># We thus intentionally make it impossible to call</span>
+    <span class="c1">#   MPIPoolExecutor(max_workers=None, ...)</span>
+    <span class="c1"># in which case mpi4py would determine a default value. That would be</span>
+    <span class="c1"># useful, but unfortunately mpi4py provides no public API to access the</span>
+    <span class="c1"># actual number of workers that is used in that case, which we would need.</span>
+    <span class="n">worker_number_provided</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">((</span><span class="n">map_kw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;num_cpus&#39;</span> <span class="ow">in</span> <span class="n">map_kw</span><span class="p">))</span>
+        <span class="ow">or</span> <span class="s1">&#39;QUTIP_NUM_PROCESSES&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+
+    <span class="n">map_kw</span> <span class="o">=</span> <span class="n">_read_map_kw</span><span class="p">(</span><span class="n">map_kw</span><span class="p">)</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="n">map_kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">)</span>
+    <span class="n">num_workers</span> <span class="o">=</span> <span class="n">map_kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">)</span>
+    <span class="n">fail_fast</span> <span class="o">=</span> <span class="n">map_kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fail_fast&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">worker_number_provided</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mpi_pmap was called without specifying the number of &#39;</span>
+                      <span class="sa">f</span><span class="s1">&#39;worker processes, using the default </span><span class="si">{</span><span class="n">num_workers</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup_executor</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">MPIPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="o">**</span><span class="n">map_kw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extract_result</span><span class="p">(</span><span class="n">future</span><span class="p">):</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">exception</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exception</span>
+        <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(),</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">shutdown_executor</span><span class="p">(</span><span class="n">executor</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
         <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
-    <span class="n">progress_bar</span><span class="o">.</span><span class="n">finished</span><span class="p">()</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;QUTIP_IN_PARALLEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;FALSE&#39;</span>
-    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">MapExceptions</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="si">}</span><span class="s2"> iterations failed in loky_pmap&quot;</span><span class="p">,</span>
-            <span class="n">errors</span><span class="p">,</span> <span class="n">results</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">results</span>
+
+    <span class="k">return</span> <span class="n">_generic_pmap</span><span class="p">(</span>
+        <span class="n">task</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">task_args</span><span class="p">,</span> <span class="n">task_kwargs</span><span class="p">,</span> <span class="n">reduce_func</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">,</span> <span class="n">fail_fast</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">,</span> <span class="n">progress_bar_kwargs</span><span class="p">,</span>
+        <span class="n">setup_executor</span><span class="p">,</span> <span class="n">extract_result</span><span class="p">,</span> <span class="n">shutdown_executor</span>
+    <span class="p">)</span></div>
 
 
-<span class="n">_get_map</span> <span class="o">=</span> <span class="p">{</span>
+<span class="n">_maps</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;parallel_map&quot;</span><span class="p">:</span> <span class="n">parallel_map</span><span class="p">,</span>
     <span class="s2">&quot;parallel&quot;</span><span class="p">:</span> <span class="n">parallel_map</span><span class="p">,</span>
     <span class="s2">&quot;serial_map&quot;</span><span class="p">:</span> <span class="n">serial_map</span><span class="p">,</span>
     <span class="s2">&quot;serial&quot;</span><span class="p">:</span> <span class="n">serial_map</span><span class="p">,</span>
-    <span class="s2">&quot;loky&quot;</span><span class="p">:</span> <span class="n">loky_pmap</span>
+    <span class="s2">&quot;loky&quot;</span><span class="p">:</span> <span class="n">loky_pmap</span><span class="p">,</span>
+    <span class="s2">&quot;mpi&quot;</span><span class="p">:</span> <span class="n">mpi_pmap</span>
 <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_get_map</span><span class="p">(</span><span class="n">options</span><span class="p">):</span>
+    <span class="n">map_func</span> <span class="o">=</span> <span class="n">_maps</span><span class="p">[</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]]</span>
+
+    <span class="k">if</span> <span class="n">map_func</span> <span class="o">==</span> <span class="n">mpi_pmap</span><span class="p">:</span>
+        <span class="n">map_kw</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;mpi_options&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">map_kw</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">return</span> <span class="n">map_func</span><span class="p">,</span> <span class="n">map_kw</span>
 </pre></div>
 
            </div>
@@ -490,7 +640,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

@@ -94,67 +94,25 @@
 <span class="c1"># Everything should be explicitly imported, not made available by default.</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">getitem</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">qutip.settings</span> <span class="kn">import</span> <span class="n">settings</span>
 
 
-<div class="viewcode-block" id="is_scalar"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.is_scalar">[docs]</a><span class="k">def</span> <span class="nf">is_scalar</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns True if a dims specification is effectively</span>
-<span class="sd">    a scalar (has dimension 1).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span></div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;to_tensor_rep&quot;</span><span class="p">,</span> <span class="s2">&quot;from_tensor_rep&quot;</span><span class="p">,</span> <span class="s2">&quot;Space&quot;</span><span class="p">,</span> <span class="s2">&quot;Dimensions&quot;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span>
-        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">))</span>
-    <span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span>
-        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
-    <span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">type_from_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">enforce_square</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">bra_like</span><span class="p">,</span> <span class="n">ket_like</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">is_scalar</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">bra_like</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-            <span class="k">return</span> <span class="s1">&#39;bra&#39;</span>
-        <span class="k">elif</span> <span class="n">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-            <span class="k">return</span> <span class="s1">&#39;operator-bra&#39;</span>
-
-    <span class="k">if</span> <span class="n">ket_like</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">return</span> <span class="s1">&#39;ket&#39;</span>
-        <span class="k">elif</span> <span class="n">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">return</span> <span class="s1">&#39;operator-ket&#39;</span>
-
-    <span class="k">elif</span> <span class="n">is_vector</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">enforce_square</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;oper&#39;</span>
-
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">is_vectorized_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="ow">and</span> <span class="p">(</span>
-            <span class="ow">not</span> <span class="n">enforce_square</span>
-            <span class="ow">or</span> <span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="p">)</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;super&#39;</span>
-    <span class="k">return</span> <span class="s1">&#39;other&#39;</span>
-
-
-<div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Flattens a list of lists to the first level.</span>
 
-<span class="sd">    Given a list containing a mix of scalars and lists,</span>
-<span class="sd">    flattens down to a list of the scalars within the original</span>
-<span class="sd">    list.</span>
+<span class="sd">    Given a list containing a mix of scalars and lists or a dimension object,</span>
+<span class="sd">    flattens it down to a list of the scalars within the original list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    l : scalar, list, Space, Dimension</span>
+<span class="sd">        Object to flatten.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -162,14 +120,21 @@
 <span class="sd">    &gt;&gt;&gt; flatten([[[0], 1], 2]) # doctest: +SKIP</span>
 <span class="sd">    [0, 1, 2]</span>
 
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Any scalar will be returned wrapped in a list: ``flaten(1) == [1]``.</span>
+<span class="sd">    A non-list iterable will not be treated as a list by flatten. For example, flatten would treat a tuple</span>
+<span class="sd">    as a scalar.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="p">(</span><span class="n">Space</span><span class="p">,</span> <span class="n">Dimensions</span><span class="p">)):</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">l</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">flatten</span><span class="p">,</span> <span class="n">l</span><span class="p">),</span> <span class="p">[])</span></div>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">flatten</span><span class="p">,</span> <span class="n">l</span><span class="p">),</span> <span class="p">[])</span>
 
 
-<div class="viewcode-block" id="deep_remove"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.deep_remove">[docs]</a><span class="k">def</span> <span class="nf">deep_remove</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="o">*</span><span class="n">what</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">deep_remove</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="o">*</span><span class="n">what</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes scalars from all levels of a nested list.</span>
 
 <span class="sd">    Given a list containing a mix of scalars and lists,</span>
@@ -191,10 +156,10 @@
                 <span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">to_remove</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">deep_remove</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">to_remove</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">l</span></div>
+    <span class="k">return</span> <span class="n">l</span>
 
 
-<div class="viewcode-block" id="unflatten"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.unflatten">[docs]</a><span class="k">def</span> <span class="nf">unflatten</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idxs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">unflatten</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idxs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Unflattens a list by a given structure.</span>
 
 <span class="sd">    Given a list of scalars and a deep list of indices</span>
@@ -216,7 +181,7 @@
             <span class="n">acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unflatten</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idx</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">acc</span></div>
+    <span class="k">return</span> <span class="n">acc</span>
 
 
 <span class="k">def</span> <span class="nf">_enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -256,7 +221,7 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="collapse_dims_oper"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.collapse_dims_oper">[docs]</a><span class="k">def</span> <span class="nf">collapse_dims_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">collapse_dims_oper</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the dimensions specifications for a ket-, bra- or oper-type</span>
 <span class="sd">    Qobj, returns a dimensions specification describing the same shape</span>
@@ -277,16 +242,16 @@
 <span class="sd">        Collapsed dimensions specification describing the same shape</span>
 <span class="sd">        such that ``len(collapsed_dims[0]) == len(collapsed_dims[1]) == 1``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="collapse_dims_super"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.collapse_dims_super">[docs]</a><span class="k">def</span> <span class="nf">collapse_dims_super</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">collapse_dims_super</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the dimensions specifications for an operator-ket-, operator-bra- or</span>
-<span class="sd">    super-type Qobj, returns a dimensions specification describing the same shape</span>
-<span class="sd">    by collapsing all composite systems. For instance, the super-type</span>
-<span class="sd">    dimensions specification ``[[[2, 3], [2, 3]], [[2, 3], [2, 3]]]`` collapses to</span>
-<span class="sd">    ``[[[6], [6]], [[6], [6]]]``.</span>
+<span class="sd">    super-type Qobj, returns a dimensions specification describing the same</span>
+<span class="sd">    shape by collapsing all composite systems. For instance, the super-type</span>
+<span class="sd">    dimensions specification ``[[[2, 3], [2, 3]], [[2, 3], [2, 3]]]`` collapses</span>
+<span class="sd">    to ``[[[6], [6]], [[6], [6]]]``.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -302,10 +267,10 @@
 <span class="sd">        such that ``len(collapsed_dims[i][j]) == 1`` for ``i`` and ``j``</span>
 <span class="sd">        in ``range(2)``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_collapse_dims_to_level</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="enumerate_flat"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.enumerate_flat">[docs]</a><span class="k">def</span> <span class="nf">enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Labels the indices at which scalars occur in a flattened list.</span>
 
 <span class="sd">    Given a list containing a mix of scalars and lists,</span>
@@ -319,7 +284,7 @@
 <span class="sd">    [[[0], [1, 2]], 3]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="n">_enumerate_flat</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">deep_map</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
@@ -329,7 +294,7 @@
         <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="dims_to_tensor_perm"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.dims_to_tensor_perm">[docs]</a><span class="k">def</span> <span class="nf">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the dims of a Qobj instance, returns a list representing</span>
 <span class="sd">    a permutation from the flattening of that dims specification to</span>
@@ -338,7 +303,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    dims : list</span>
+<span class="sd">    dims : list, Dimensions</span>
 <span class="sd">        Dimensions specification for a Qobj.</span>
 
 <span class="sd">    Returns</span>
@@ -349,38 +314,12 @@
 <span class="sd">        index of the tensor ``data`` corresponding to the ``idx``th</span>
 <span class="sd">        dimension of ``dims``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># We figure out the type of the dims specification,</span>
-    <span class="c1"># relaxing the requirement that operators be square.</span>
-    <span class="c1"># This means that dims_type need not coincide with</span>
-    <span class="c1"># Qobj.type, but that works fine for our purposes here.</span>
-    <span class="n">dims_type</span> <span class="o">=</span> <span class="n">type_from_dims</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">enforce_square</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">perm</span> <span class="o">=</span> <span class="n">enumerate_flat</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dims_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;ket&#39;</span><span class="p">,</span> <span class="s1">&#39;bra&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">flatten</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
-
-    <span class="c1"># If the type is other, we need to figure out if the</span>
-    <span class="c1"># dims is superlike on its outputs and inputs</span>
-    <span class="c1"># This is the case if the dims type for left or right</span>
-    <span class="c1"># are, respectively, oper-like.</span>
-    <span class="k">if</span> <span class="n">dims_type</span> <span class="o">==</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not yet implemented for type=&#39;other&#39;.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># If we&#39;re still here, the story is more complicated. We&#39;ll</span>
-    <span class="c1"># follow the strategy of creating a permutation by using</span>
-    <span class="c1"># enumerate_flat then transforming the result to swap</span>
-    <span class="c1"># input and output indices of vectorized matrices, then flattening</span>
-    <span class="c1"># the result. We&#39;ll then rebuild indices using this permutation.</span>
-    <span class="k">if</span> <span class="n">dims_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span>
-        <span class="c1"># Swap the input and output spaces of the right part of</span>
-        <span class="c1"># perm.</span>
-        <span class="n">perm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="k">if</span> <span class="n">dims_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;operator-bra&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span>
-        <span class="c1"># Ditto, but for the left indices.</span>
-        <span class="n">perm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="k">return</span> <span class="n">flatten</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dims</span><span class="o">.</span><span class="n">_get_tensor_perm</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="dims_to_tensor_shape"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.dims_to_tensor_shape">[docs]</a><span class="k">def</span> <span class="nf">dims_to_tensor_shape</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">dims_to_tensor_shape</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the dims of a Qobj instance, returns the shape of the</span>
 <span class="sd">    corresponding tensor. This helps, for instance, resolve the</span>
@@ -389,7 +328,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    dims : list</span>
+<span class="sd">    dims : list, Dimensions</span>
 <span class="sd">        Dimensions specification for a Qobj.</span>
 
 <span class="sd">    Returns</span>
@@ -400,10 +339,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">perm</span> <span class="o">=</span> <span class="n">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">getitem</span><span class="p">,</span> <span class="n">dims</span><span class="p">),</span> <span class="n">perm</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">getitem</span><span class="p">,</span> <span class="n">dims</span><span class="p">),</span> <span class="n">perm</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="dims_idxs_to_tensor_idxs"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.dims_idxs_to_tensor_idxs">[docs]</a><span class="k">def</span> <span class="nf">dims_idxs_to_tensor_idxs</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">dims_idxs_to_tensor_idxs</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the dims of a Qobj instance, and some indices into</span>
 <span class="sd">    dims, returns the corresponding tensor indices. This helps</span>
@@ -414,7 +353,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    dims : list</span>
+<span class="sd">    dims : list, Dimensions</span>
 <span class="sd">        Dimensions specification for a Qobj.</span>
 
 <span class="sd">    indices : int, list or tuple</span>
@@ -431,7 +370,677 @@
 <span class="sd">        the tensor indices for each element of indices.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">perm</span> <span class="o">=</span> <span class="n">dims_to_tensor_perm</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">deep_map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">getitem</span><span class="p">,</span> <span class="n">perm</span><span class="p">),</span> <span class="n">indices</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">deep_map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">getitem</span><span class="p">,</span> <span class="n">perm</span><span class="p">),</span> <span class="n">indices</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="to_tensor_rep"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.to_tensor_rep">[docs]</a><span class="k">def</span> <span class="nf">to_tensor_rep</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform a ``Qobj`` to a numpy array whose shape is the flattened</span>
+<span class="sd">    dimensions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q_oper: Qobj</span>
+<span class="sd">        Object to reshape</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray:</span>
+<span class="sd">        Numpy array with one dimension for each index in dims.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; ket.dims</span>
+<span class="sd">    [[2, 3], [1]]</span>
+<span class="sd">    &gt;&gt;&gt; to_tensor_rep(ket).shape</span>
+<span class="sd">    (2, 3, 1)</span>
+
+<span class="sd">    &gt;&gt;&gt; oper.dims</span>
+<span class="sd">    [[2, 3], [2, 3]]</span>
+<span class="sd">    &gt;&gt;&gt; to_tensor_rep(oper).shape</span>
+<span class="sd">    (2, 3, 2, 3)</span>
+
+<span class="sd">    &gt;&gt;&gt; super_oper.dims</span>
+<span class="sd">    [[[2, 3], [2, 3]], [[2, 3], [2, 3]]]</span>
+<span class="sd">    &gt;&gt;&gt; to_tensor_rep(super_oper).shape</span>
+<span class="sd">    (2, 3, 2, 3, 2, 3, 2, 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">full</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dims</span><span class="o">.</span><span class="n">_get_tensor_shape</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">dims</span><span class="o">.</span><span class="n">_get_tensor_perm</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="from_tensor_rep"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.dimensions.from_tensor_rep">[docs]</a><span class="k">def</span> <span class="nf">from_tensor_rep</span><span class="p">(</span><span class="n">tensorrep</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reverse operator of :func:`to_tensor_rep`.</span>
+<span class="sd">    Create a Qobj From a N-dimensions numpy array and dimensions with N</span>
+<span class="sd">    indices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tensorrep: ndarray</span>
+<span class="sd">        Numpy array with one dimension for each index in dims.</span>
+
+<span class="sd">    dims: list of list, Dimensions</span>
+<span class="sd">        Dimensions of the Qobj.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Qobj</span>
+<span class="sd">        Re constructed Qobj</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Qobj</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tensorrep</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">dims</span><span class="o">.</span><span class="n">_get_tensor_perm</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dims</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_frozen</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Dimension cannot be modified.&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MetaSpace</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select which subclass is instantiated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Space</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># From a list of int.</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">rep</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Space</span><span class="p">):</span>
+            <span class="c1"># Already a Space</span>
+            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Space</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Empty space: a Field.</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="n">Field</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Space(1): a Field.</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="n">Field</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Dimensions</span><span class="p">):</span>
+                <span class="c1"># Making a Space out of a Dimensions object: Super Operator.</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="n">SuperSpace</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Space</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+                <span class="c1"># list of space: tensor product space.</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="n">Compound</span>
+
+        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s1">&#39;auto_tidyup_dims&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Compound</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Field</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="n">Field</span>
+            <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">SuperSpace</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;scalar&quot;</span><span class="p">:</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="n">Field</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">arg</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span>
+        <span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Field</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">field_instance</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">SuperSpace</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">rep</span> <span class="ow">or</span> <span class="s1">&#39;super&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+            <span class="n">instance</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">[</span><span class="n">args</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">[</span><span class="n">args</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">list_dims</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty list can&#39;t be used as dims.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">list_dims</span><span class="p">)</span>
+            <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_dims</span><span class="p">)]</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Format dims not understood </span><span class="si">{</span><span class="n">list_dims</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">list_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># Tensor</span>
+            <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">Space</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">list_dims</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># [[2, 3]]: tensor with an extra layer of list.</span>
+            <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">Space</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">list_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_dims</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Superoperators or tensor of Superoperators</span>
+            <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Space</span><span class="p">(</span><span class="n">Dimensions</span><span class="p">(</span>
+                    <span class="n">Space</span><span class="p">(</span><span class="n">list_dims</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">Space</span><span class="p">(</span><span class="n">list_dims</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">),</span> <span class="n">rep</span><span class="o">=</span><span class="n">rep</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_dims</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Format not understood </span><span class="si">{</span><span class="n">list_dims</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">spaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Space</span><span class="p">(</span><span class="o">*</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Format not understood </span><span class="si">{</span><span class="n">list_dims</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Space</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">MetaSpace</span><span class="p">):</span>
+    <span class="n">_stored_dims</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="n">idims</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">idims</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">idims</span> <span class="o">!=</span> <span class="n">dims</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dimensions must be integers &gt; 0&quot;</span><span class="p">)</span>
+        <span class="c1"># Size of the hilbert space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># Super representation, should be an empty string except for SuperSpace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Does the size and dims match directly: size == prod(dims)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">_frozen</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Space(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_list</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">dims2idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform dimensions indices to full array indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dimensions must be a list of one element&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Dimensions out of range&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Dimensions must be integers&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">idx2dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform full array indices to dimensions indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Index out of range&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the step in the array between for each dimensions index.</span>
+
+<span class="sd">        If element ``[i, j, k]`` is ``ket.full()[m, 0]`` then element</span>
+<span class="sd">        ``[i, j+1, k]`` is ``ket.full()[m + ket._dims.step()[1], 0]``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Dimensions as a flat list. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove a Space from a Dimensons or complex Space.</span>
+
+<span class="sd">        ``Space([2, 3, 4]).remove(1) == Space([2, 4])``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot delete a flat space.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reshape a Space from a Dimensons or complex Space.</span>
+
+<span class="sd">        ``Space([2, 3, 4]).replace(1, 5) == Space([2, 5, 4])``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot replace a non-zero index in a flat space.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">Space</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace_superrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rep</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">scalar_like</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Field</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="n">Space</span><span class="p">):</span>
+    <span class="n">field_instance</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">_frozen</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Field</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Field()&quot;</span>
+
+    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Space</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+
+
+<span class="n">Field</span><span class="o">.</span><span class="n">field_instance</span> <span class="o">=</span> <span class="n">Field</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">Field</span><span class="p">)</span>
+<span class="n">Field</span><span class="o">.</span><span class="n">field_instance</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">Compound</span><span class="p">(</span><span class="n">Space</span><span class="p">):</span>
+    <span class="n">_stored_dims</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">spaces</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spaces</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Compound need multiple space to join.&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">spaces</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">Compound</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">+=</span> <span class="n">space</span><span class="o">.</span><span class="n">spaces</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">+=</span> <span class="p">[</span><span class="n">space</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">space</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">issuper</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">issuper</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot create compound space of super and non super.&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="n">superrep</span> <span class="o">=</span> <span class="p">[</span><span class="n">space</span><span class="o">.</span><span class="n">superrep</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">superrep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">rep</span> <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="n">superrep</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="n">superrep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot create compound space of of super operators &quot;</span>
+                <span class="s2">&quot;with different representation.&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">_frozen</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">spaces</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">parts_rep</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">space</span><span class="p">)</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Compound(</span><span class="si">{</span><span class="n">parts_rep</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">space</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">],</span> <span class="p">[])</span>
+
+    <span class="k">def</span> <span class="nf">dims2idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Length of supplied dims does not match the number of subspaces.&quot;</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">space</span><span class="p">,</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dims</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="n">space</span><span class="o">.</span><span class="n">dims2idx</span><span class="p">([</span><span class="n">dim</span><span class="p">])</span> <span class="o">*</span> <span class="n">step</span>
+            <span class="n">step</span> <span class="o">*=</span> <span class="n">space</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">return</span> <span class="n">pos</span>
+
+    <span class="k">def</span> <span class="nf">idx2dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">space</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">dims</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">idx2dims</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span> <span class="o">+</span> <span class="n">dims</span>
+        <span class="k">return</span> <span class="n">dims</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">step</span> <span class="o">*</span> <span class="n">N</span> <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">space</span><span class="o">.</span><span class="n">step</span><span class="p">()]</span> <span class="o">+</span> <span class="n">steps</span>
+            <span class="n">step</span> <span class="o">*=</span> <span class="n">space</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">return</span> <span class="n">steps</span>
+
+    <span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">space</span><span class="o">.</span><span class="n">flat</span><span class="p">()</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">],</span> <span class="p">[])</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">new_spaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">:</span>
+            <span class="n">n_indices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">flat</span><span class="p">())</span>
+            <span class="n">idx_space</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n_indices</span><span class="p">]</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n_indices</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n_indices</span><span class="p">]</span>
+            <span class="n">new_space</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">idx_space</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_spaces</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Compound</span><span class="p">(</span><span class="o">*</span><span class="n">new_spaces</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Field</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="n">new_spaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">:</span>
+            <span class="n">n_indices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">flat</span><span class="p">())</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">n_indices</span><span class="p">:</span>
+                <span class="n">new_spaces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_spaces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">space</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">-=</span> <span class="n">n_indices</span>
+        <span class="k">return</span> <span class="n">Compound</span><span class="p">(</span><span class="o">*</span><span class="n">new_spaces</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace_superrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rep</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Compound</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">[</span><span class="n">space</span><span class="o">.</span><span class="n">replace_superrep</span><span class="p">(</span><span class="n">super_rep</span><span class="p">)</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scalar_like</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">space</span><span class="o">.</span><span class="n">scalar_like</span><span class="p">()</span> <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">SuperSpace</span><span class="p">(</span><span class="n">Space</span><span class="p">):</span>
+    <span class="n">_stored_dims</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oper</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oper</span> <span class="o">=</span> <span class="n">oper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="n">rep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="o">=</span> <span class="n">oper</span><span class="o">.</span><span class="n">_pure_dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">_frozen</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span> <span class="o">==</span> <span class="n">other</span>
+            <span class="ow">or</span> <span class="p">(</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">oper</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">superrep</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Super(</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="p">)</span><span class="si">}</span><span class="s2">, rep=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">dims2idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="n">posl</span><span class="p">,</span> <span class="n">posr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">dims2idx</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">posl</span> <span class="o">+</span> <span class="n">posr</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">idx2dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">posl</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">posr</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">idx2dims</span><span class="p">(</span><span class="n">posl</span><span class="p">,</span> <span class="n">posr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stepl</span><span class="p">,</span> <span class="n">stepr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">stepl</span> <span class="o">+</span> <span class="p">[</span><span class="n">step</span> <span class="o">*</span> <span class="n">N</span> <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">stepr</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">flat</span><span class="p">(),</span> <span class="p">[])</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">new_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_dims</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;scalar&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Field</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">SuperSpace</span><span class="p">(</span><span class="n">new_dims</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SuperSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">),</span> <span class="n">rep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace_superrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rep</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SuperSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">super_rep</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scalar_like</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">scalar_like</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">MetaDims</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Dimensions</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Space</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">rep</span><span class="o">=</span><span class="n">rep</span><span class="p">),</span>
+                <span class="n">Space</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">rep</span><span class="o">=</span><span class="n">rep</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;No Dual, Ket, Bra...&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;auto_tidyup_dims&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">Field</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">Field</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+            <span class="n">instance</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">[</span><span class="n">args</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">[</span><span class="n">args</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Dimensions</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">MetaDims</span><span class="p">):</span>
+    <span class="n">_stored_dims</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">from_</span> <span class="o">=</span> <span class="n">from_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_</span> <span class="o">=</span> <span class="n">to_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">to_</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">from_</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="n">from_</span><span class="o">.</span><span class="n">issuper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="o">=</span> <span class="n">from_</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="ow">and</span> <span class="n">to_</span><span class="o">.</span><span class="n">_pure_dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issquare</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;scalar&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">issquare</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">issuper</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;operator-ket&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="k">else</span> <span class="s1">&#39;ket&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">superrep</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">issuper</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;operator-bra&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="k">else</span> <span class="s1">&#39;bra&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">superrep</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">issuper</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;super&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="k">else</span> <span class="s1">&#39;oper&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">superrep</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">issquare</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">from_</span><span class="o">.</span><span class="n">issuper</span> <span class="o">!=</span> <span class="n">to_</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s2">&quot;Operator with both space and superspace dimensions are &quot;</span>
+                    <span class="s2">&quot;not supported. Please open an issue if you have an use &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;case for these: </span><span class="si">{</span><span class="n">from_</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">to_</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;super&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">issuper</span> <span class="k">else</span> <span class="s1">&#39;oper&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">superrep</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">superrep</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="s1">&#39;mixed&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span> <span class="o">=</span> <span class="n">_frozen</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Dimensions</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span>
+                <span class="ow">or</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">to_</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">to_</span>
+                    <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">from_</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Dimensions</span><span class="p">):</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span>
+                <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span>
+                <span class="ow">or</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">to_</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">to_</span>
+                    <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">from_</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">to_</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;incompatible dimensions </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">other</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">from_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span>
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">Dimensions</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Dimensions</span><span class="o">.</span><span class="n">_stored_dims</span><span class="p">[</span><span class="n">args</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Dimensions</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Dimensions(</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_list</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the list representation of the Dimensions object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">as_list</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">as_list</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Dimensions index out of range&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dims2idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform dimensions indices to full array indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">dims2idx</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">dims2idx</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">idx2dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idxl</span><span class="p">,</span> <span class="n">idxr</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform full array indices to dimensions indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">idx2dims</span><span class="p">(</span><span class="n">idxl</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">idx2dims</span><span class="p">(</span><span class="n">idxr</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the step in the array between for each dimensions index.</span>
+
+<span class="sd">        If element ``[i, j, k]`` is ``ket.full()[m, 0]`` then element</span>
+<span class="sd">        ``[i, j+1, k]`` is ``ket.full()[m + ket._dims.step()[1], 0]``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">step</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">step</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="nf">flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Dimensions as a flat list. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">flat</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">flat</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="nf">_get_tensor_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the shape to of the Nd tensor with one dimensions for each</span>
+<span class="sd">        Dimension index. The order of the space values are not in the order of</span>
+<span class="sd">        the Dimension index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># dims_to_tensor_shape</span>
+        <span class="n">stepl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">flatl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">flat</span><span class="p">()</span>
+        <span class="n">stepr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">flatr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">flat</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flatl</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">stepl</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flatr</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">stepr</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">]))</span>
+
+    <span class="k">def</span> <span class="nf">_get_tensor_perm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the permutation of a tensor created using ``_get_tensor_shape`` to</span>
+<span class="sd">        reorder the tensor dimensions with those of the Dimensions object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># dims_to_tensor_perm</span>
+        <span class="n">stepl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">stepr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">stepl</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">stepr</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">stepl</span><span class="p">)</span>
+        <span class="p">]))</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove a Space from a Dimensons or complex Space.</span>
+
+<span class="sd">        ``Space([2, 3, 4]).remove(1) == Space([2, 4])``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">idx</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="n">n_indices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">flat</span><span class="p">())</span>
+        <span class="n">idx_to</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n_indices</span><span class="p">]</span>
+        <span class="n">idx_from</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">n_indices</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n_indices</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Dimensions</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">idx_from</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">idx_to</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reshape a Space from a Dimensons or complex Space.</span>
+
+<span class="sd">        ``Space([2, 3, 4]).replace(1, 5) == Space([2, 5, 4])``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_indices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">flat</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">n_indices</span><span class="p">:</span>
+            <span class="n">new_to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+            <span class="n">new_from</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_</span>
+            <span class="n">new_from</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">idx</span><span class="o">-</span><span class="n">n_indices</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">new_from</span><span class="p">,</span> <span class="n">new_to</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">replace_superrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rep</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="ow">and</span> <span class="n">super_rep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t set a superrep of a non super object.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Dimensions</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">replace_superrep</span><span class="p">(</span><span class="n">super_rep</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">replace_superrep</span><span class="p">(</span><span class="n">super_rep</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scalar_like</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">scalar_like</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="o">.</span><span class="n">scalar_like</span><span class="p">()]</span>
 </pre></div>
 
            </div>
@@ -442,7 +1051,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

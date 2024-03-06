@@ -75,23 +75,25 @@
 <li class="toctree-l3"><a class="reference internal" href="dynamics-krylov.html">Krylov Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-class.html">Solver Class Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dynamics-piqs.html">Permutational Invariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-nmmonte.html">Monte Carlo for Non-Markovian Dynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-propagator.html">Computing propagators</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-piqs.html">Permutational Invariance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
@@ -132,40 +134,81 @@
 <span id="monte"></span><h1>Monte Carlo Solver<a class="headerlink" href="#monte-carlo-solver" title="Permalink to this heading"></a></h1>
 <section id="introduction">
 <span id="monte-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
-<p>Where as the density matrix formalism describes the ensemble average over many identical realizations of a quantum system, the Monte Carlo (MC), or quantum-jump approach to wave function evolution, allows for simulating an individual realization of the system dynamics.  Here, the environment is continuously monitored, resulting in a series of quantum jumps in the system wave function, conditioned on the increase in information gained about the state of the system via the environmental measurements.  In general, this evolution is governed by the Schrödinger equation with a <strong>non-Hermitian</strong> effective Hamiltonian</p>
+<p>Where as the density matrix formalism describes the ensemble average over many
+identical realizations of a quantum system, the Monte Carlo (MC), or
+quantum-jump approach to wave function evolution, allows for simulating an
+individual realization of the system dynamics.  Here, the environment is
+continuously monitored, resulting in a series of quantum jumps in the system
+wave function, conditioned on the increase in information gained about the
+state of the system via the environmental measurements.  In general, this
+evolution is governed by the Schrödinger equation with a <strong>non-Hermitian</strong>
+effective Hamiltonian</p>
 <div class="math notranslate nohighlight" id="equation-heff">
 <span class="eqno">(1)<a class="headerlink" href="#equation-heff" title="Permalink to this equation"></a></span>\[H_{\rm eff}=H_{\rm sys}-\frac{i\hbar}{2}\sum_{i}C^{+}_{n}C_{n},\]</div>
-<p>where again, the <span class="math notranslate nohighlight">\(C_{n}\)</span> are collapse operators, each corresponding to a separate irreversible process with rate <span class="math notranslate nohighlight">\(\gamma_{n}\)</span>.  Here, the strictly negative non-Hermitian portion of Eq. <a class="reference internal" href="#equation-heff">(1)</a> gives rise to a reduction in the norm of the wave function, that to first-order in a small time <span class="math notranslate nohighlight">\(\delta t\)</span>, is given by <span class="math notranslate nohighlight">\(\left&lt;\psi(t+\delta t)|\psi(t+\delta t)\right&gt;=1-\delta p\)</span> where</p>
+<p>where again, the <span class="math notranslate nohighlight">\(C_{n}\)</span> are collapse operators, each corresponding to a
+separate irreversible process with rate <span class="math notranslate nohighlight">\(\gamma_{n}\)</span>.  Here, the strictly
+negative non-Hermitian portion of Eq. <a class="reference internal" href="#equation-heff">(1)</a> gives rise to a reduction in
+the norm of the wave function, that to first-order in a small time
+<span class="math notranslate nohighlight">\(\delta t\)</span>, is given by
+<span class="math notranslate nohighlight">\(\left&lt;\psi(t+\delta t)|\psi(t+\delta t)\right&gt;=1-\delta p\)</span> where</p>
 <div class="math notranslate nohighlight" id="equation-jump">
 <span class="eqno">(2)<a class="headerlink" href="#equation-jump" title="Permalink to this equation"></a></span>\[\delta p =\delta t \sum_{n}\left&lt;\psi(t)|C^{+}_{n}C_{n}|\psi(t)\right&gt;,\]</div>
-<p>and <span class="math notranslate nohighlight">\(\delta t\)</span> is such that <span class="math notranslate nohighlight">\(\delta p \ll 1\)</span>.  With a probability of remaining in the state <span class="math notranslate nohighlight">\(\left|\psi(t+\delta t)\right&gt;\)</span> given by <span class="math notranslate nohighlight">\(1-\delta p\)</span>, the corresponding quantum jump probability is thus Eq. <a class="reference internal" href="#equation-jump">(2)</a>.  If the environmental measurements register a quantum jump, say via the emission of a photon into the environment, or a change in the spin of a quantum dot, the wave function undergoes a jump into a state defined by projecting <span class="math notranslate nohighlight">\(\left|\psi(t)\right&gt;\)</span> using the collapse operator <span class="math notranslate nohighlight">\(C_{n}\)</span> corresponding to the measurement</p>
+<p>and <span class="math notranslate nohighlight">\(\delta t\)</span> is such that <span class="math notranslate nohighlight">\(\delta p \ll 1\)</span>.  With a probability
+of remaining in the state <span class="math notranslate nohighlight">\(\left|\psi(t+\delta t)\right&gt;\)</span> given by
+<span class="math notranslate nohighlight">\(1-\delta p\)</span>, the corresponding quantum jump probability is thus Eq.
+<a class="reference internal" href="#equation-jump">(2)</a>.  If the environmental measurements register a quantum jump, say via
+the emission of a photon into the environment, or a change in the spin of a
+quantum dot, the wave function undergoes a jump into a state defined by
+projecting <span class="math notranslate nohighlight">\(\left|\psi(t)\right&gt;\)</span> using the collapse operator
+<span class="math notranslate nohighlight">\(C_{n}\)</span> corresponding to the measurement</p>
 <div class="math notranslate nohighlight" id="equation-project">
 <span class="eqno">(3)<a class="headerlink" href="#equation-project" title="Permalink to this equation"></a></span>\[\left|\psi(t+\delta t)\right&gt;=C_{n}\left|\psi(t)\right&gt;/\left&lt;\psi(t)|C_{n}^{+}C_{n}|\psi(t)\right&gt;^{1/2}.\]</div>
-<p>If more than a single collapse operator is present in Eq. <a class="reference internal" href="#equation-heff">(1)</a>, the probability of collapse due to the <span class="math notranslate nohighlight">\(i\mathrm{th}\)</span>-operator <span class="math notranslate nohighlight">\(C_{i}\)</span> is given by</p>
+<p>If more than a single collapse operator is present in Eq. <a class="reference internal" href="#equation-heff">(1)</a>, the
+probability of collapse due to the <span class="math notranslate nohighlight">\(i\mathrm{th}\)</span>-operator <span class="math notranslate nohighlight">\(C_{i}\)</span>
+is given by</p>
 <div class="math notranslate nohighlight" id="equation-pcn">
 <span class="eqno">(4)<a class="headerlink" href="#equation-pcn" title="Permalink to this equation"></a></span>\[P_{i}(t)=\left&lt;\psi(t)|C_{i}^{+}C_{i}|\psi(t)\right&gt;/\delta p.\]</div>
-<p>Evaluating the MC evolution to first-order in time is quite tedious.  Instead, QuTiP uses the following algorithm to simulate a single realization of a quantum system.  Starting from a pure state <span class="math notranslate nohighlight">\(\left|\psi(0)\right&gt;\)</span>:</p>
+<p>Evaluating the MC evolution to first-order in time is quite tedious.  Instead,
+QuTiP uses the following algorithm to simulate a single realization of a quantum system.
+Starting from a pure state <span class="math notranslate nohighlight">\(\left|\psi(0)\right&gt;\)</span>:</p>
 <ul class="simple">
-<li><p><strong>Ia:</strong> Choose a random number <span class="math notranslate nohighlight">\(r_1\)</span> between zero and one, representing the probability that a quantum jump occurs.</p></li>
-<li><p><strong>Ib:</strong> Choose a random number <span class="math notranslate nohighlight">\(r_2\)</span> between zero and one, used to select which collapse operator was responsible for the jump.</p></li>
-<li><p><strong>II:</strong> Integrate the Schrödinger equation, using the effective Hamiltonian <a class="reference internal" href="#equation-heff">(1)</a> until a time <span class="math notranslate nohighlight">\(\tau\)</span> such that the norm of the wave function satisfies <span class="math notranslate nohighlight">\(\left&lt;\psi(\tau)\right.\left|\psi(\tau)\right&gt; = r_1\)</span>, at which point a jump occurs.</p></li>
-<li><p><strong>III:</strong> The resultant jump projects the system at time <span class="math notranslate nohighlight">\(\tau\)</span> into one of the renormalized states given by Eq. <a class="reference internal" href="#equation-project">(3)</a>.  The corresponding collapse operator <span class="math notranslate nohighlight">\(C_{n}\)</span> is chosen such that <span class="math notranslate nohighlight">\(n\)</span> is the smallest integer satisfying:</p></li>
+<li><p><strong>Ia:</strong> Choose a random number <span class="math notranslate nohighlight">\(r_1\)</span> between zero and one, representing
+the probability that a quantum jump occurs.</p></li>
+<li><p><strong>Ib:</strong> Choose a random number <span class="math notranslate nohighlight">\(r_2\)</span> between zero and one, used to
+select which collapse operator was responsible for the jump.</p></li>
+<li><p><strong>II:</strong> Integrate the Schrödinger equation, using the effective Hamiltonian
+<a class="reference internal" href="#equation-heff">(1)</a> until a time <span class="math notranslate nohighlight">\(\tau\)</span> such that the norm of the wave function
+satisfies <span class="math notranslate nohighlight">\(\left&lt;\psi(\tau)\right.\left|\psi(\tau)\right&gt; = r_1\)</span>, at
+which point a jump occurs.</p></li>
+<li><p><strong>III:</strong> The resultant jump projects the system at time <span class="math notranslate nohighlight">\(\tau\)</span> into one
+of the renormalized states given by Eq. <a class="reference internal" href="#equation-project">(3)</a>.  The corresponding
+collapse operator <span class="math notranslate nohighlight">\(C_{n}\)</span> is chosen such that <span class="math notranslate nohighlight">\(n\)</span> is the smallest
+integer satisfying:</p></li>
 </ul>
 <div class="math notranslate nohighlight" id="equation-mc3">
 <span class="eqno">(5)<a class="headerlink" href="#equation-mc3" title="Permalink to this equation"></a></span>\[\sum_{i=1}^{n} P_{n}(\tau) \ge r_2\]</div>
-<p>where the individual <span class="math notranslate nohighlight">\(P_{n}\)</span> are given by Eq. <a class="reference internal" href="#equation-pcn">(4)</a>.  Note that the left hand side of Eq. <a class="reference internal" href="#equation-mc3">(5)</a> is, by definition, normalized to unity.</p>
+<p>where the individual <span class="math notranslate nohighlight">\(P_{n}\)</span> are given by Eq. <a class="reference internal" href="#equation-pcn">(4)</a>.  Note that the
+left hand side of Eq. <a class="reference internal" href="#equation-mc3">(5)</a> is, by definition, normalized to unity.</p>
 <ul class="simple">
-<li><p><strong>IV:</strong> Using the renormalized state from step III as the new initial condition at time <span class="math notranslate nohighlight">\(\tau\)</span>, draw a new random number, and repeat the above procedure until the final simulation time is reached.</p></li>
+<li><p><strong>IV:</strong> Using the renormalized state from step III as the new initial
+condition at time <span class="math notranslate nohighlight">\(\tau\)</span>, draw a new random number, and repeat the
+above procedure until the final simulation time is reached.</p></li>
 </ul>
 </section>
 <section id="monte-carlo-in-qutip">
 <span id="monte-qutip"></span><h2>Monte Carlo in QuTiP<a class="headerlink" href="#monte-carlo-in-qutip" title="Permalink to this heading"></a></h2>
-<p>In QuTiP, Monte Carlo evolution is implemented with the <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code> function. It takes nearly the same arguments as the <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code>
-function for master-equation evolution, except that the initial state must be a ket vector, as oppose to a density matrix, and there is an optional keyword parameter <code class="docutils literal notranslate"><span class="pre">ntraj</span></code> that defines the number of stochastic trajectories to be simulated.  By default, <code class="docutils literal notranslate"><span class="pre">ntraj=500</span></code> indicating that 500 Monte Carlo trajectories will be performed.</p>
-<p>To illustrate the use of the Monte Carlo evolution of quantum systems in QuTiP, let’s again consider the case of a two-level atom coupled to a leaky cavity. The only differences to the master-equation treatment is that in this case we invoke the <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code> function instead of <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.solver.mcsolve</span> <span class="kn">import</span> <span class="n">MCSolver</span><span class="p">,</span> <span class="n">mcsolve</span>
-
-<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<p>In QuTiP, Monte Carlo evolution is implemented with the <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve" title="qutip.solver.mcsolve.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mcsolve</span></code></a>
+function. It takes nearly the same arguments as the <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mesolve.mesolve" title="qutip.solver.mesolve.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code></a>
+function for master-equation evolution, except that the initial state must be a
+ket vector, as oppose to a density matrix, and there is an optional keyword
+parameter <code class="docutils literal notranslate"><span class="pre">ntraj</span></code> that defines the number of stochastic trajectories to be
+simulated.  By default, <code class="docutils literal notranslate"><span class="pre">ntraj=500</span></code> indicating that 500 Monte Carlo
+trajectories will be performed.</p>
+<p>To illustrate the use of the Monte Carlo evolution of quantum systems in QuTiP,
+let’s again consider the case of a two-level atom coupled to a leaky cavity.
+The only differences to the master-equation treatment is that in this case we
+invoke the <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve" title="qutip.solver.mcsolve.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mcsolve</span></code></a> function instead of <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mesolve.mesolve" title="qutip.solver.mesolve.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 <span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
@@ -184,163 +227,112 @@ function for master-equation evolution, except that the initial state must be a 
 <figure class="align-default">
 <img alt="../../images/dynamics-monte-1.png" class="plot-directive" src="../../images/dynamics-monte-1.png" />
 </figure>
-<p>The advantage of the Monte Carlo method over the master equation approach is that only the state vector is required to be kept in the computers memory, as opposed to the entire density matrix. For large quantum system this becomes a significant advantage, and the Monte Carlo solver is therefore generally recommended for such systems. For example, simulating a Heisenberg spin-chain consisting of 10 spins with random parameters and initial states takes almost 7 times longer using the master equation rather than Monte Carlo approach with the default number of trajectories running on a quad-CPU machine.  Furthermore, it takes about 7 times the memory as well. However, for small systems, the added overhead of averaging a large number of stochastic trajectories to obtain the open system dynamics, as well as starting the multiprocessing functionality, outweighs the benefit of the minor (in this case) memory saving. Master equation methods are therefore generally more efficient when Hilbert space sizes are on the order of a couple of hundred states or smaller.</p>
+<p>The advantage of the Monte Carlo method over the master equation approach is that
+only the state vector is required to be kept in the computers memory, as opposed
+to the entire density matrix. For large quantum system this becomes a significant
+advantage, and the Monte Carlo solver is therefore generally recommended for such
+systems. For example, simulating a Heisenberg spin-chain consisting of 10 spins
+with random parameters and initial states takes almost 7 times longer using the
+master equation rather than Monte Carlo approach with the default number of
+trajectories running on a quad-CPU machine.  Furthermore, it takes about 7 times
+the memory as well. However, for small systems, the added overhead of averaging
+a large number of stochastic trajectories to obtain the open system dynamics, as
+well as starting the multiprocessing functionality, outweighs the benefit of the
+minor (in this case) memory saving. Master equation methods are therefore
+generally more efficient when Hilbert space sizes are on the order of a couple
+of hundred states or smaller.</p>
 <section id="monte-carlo-solver-result">
 <h3>Monte Carlo Solver Result<a class="headerlink" href="#monte-carlo-solver-result" title="Permalink to this heading"></a></h3>
-<p>The Monte Carlo solver returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.MultitrajResult</span></code> object consisting of expectation values and/or states.
-The main difference with <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mesolve</span></code>’s <code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.Result</span></code> is that it optionally stores the result of each trajectory together with their averages.
-When trajectories are stored, <code class="docutils literal notranslate"><span class="pre">result.runs_expect</span></code> is a list over the expectation operators, trajectories and times in that order.
-The averages are stored in <code class="docutils literal notranslate"><span class="pre">result.average_expect</span></code> and the standard derivation of the expectation values in <code class="docutils literal notranslate"><span class="pre">result.std_expect</span></code>.
-When the states are returned, <code class="docutils literal notranslate"><span class="pre">result.runs_states</span></code> will be an array of length <code class="docutils literal notranslate"><span class="pre">ntraj</span></code>. Each element contains an array of “Qobj” type ket with the same number of elements as <code class="docutils literal notranslate"><span class="pre">times</span></code>. <code class="docutils literal notranslate"><span class="pre">result.average_states</span></code> is a list of density matrices computed as the average of the states at each time step.
-Furthermore, the output will also contain a list of times at which the collapse occurred, and which collapse operators did the collapse. These can be obtained in  <code class="docutils literal notranslate"><span class="pre">result.col_times</span></code> and <code class="docutils literal notranslate"><span class="pre">result.col_which</span></code> respectively.</p>
-</section>
-<section id="photocurrent">
-<h3>Photocurrent<a class="headerlink" href="#photocurrent" title="Permalink to this heading"></a></h3>
-<p>The photocurrent, previously computed using the <code class="docutils literal notranslate"><span class="pre">photocurrent_sesolve</span></code> and <code class="docutils literal notranslate"><span class="pre">photocurrent_sesolve</span></code> functions, are now included in the output of <a class="reference internal" href="../../apidoc/functions.html#module-qutip.solver.mcsolve" title="qutip.solver.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.mcsolve</span></code></a> as <code class="docutils literal notranslate"><span class="pre">result.photocurrent</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">sm</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">])</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">times</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">photocurrent</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo Photocurrent&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Photon detections&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<figure class="align-default">
-<img alt="../../images/dynamics-monte-2.png" class="plot-directive" src="../../images/dynamics-monte-2.png" />
-</figure>
+<p>The Monte Carlo solver returns a <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.result.McResult" title="qutip.solver.result.McResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">McResult</span></code></a> object consisting of
+expectation values and/or states. The main difference with <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mesolve.mesolve" title="qutip.solver.mesolve.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code></a>’s
+<a class="reference internal" href="../../apidoc/classes.html#qutip.solver.result.Result" title="qutip.solver.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> is that it optionally stores the result of each trajectory
+together with their averages. When trajectories are stored, <code class="docutils literal notranslate"><span class="pre">result.runs_expect</span></code>
+is a list over the expectation operators, trajectories and times in that order.
+The averages are stored in <code class="docutils literal notranslate"><span class="pre">result.average_expect</span></code> and the standard derivation
+of the expectation values in <code class="docutils literal notranslate"><span class="pre">result.std_expect</span></code>. When the states are returned,
+<code class="docutils literal notranslate"><span class="pre">result.runs_states</span></code> will be an array of length <code class="docutils literal notranslate"><span class="pre">ntraj</span></code>. Each element
+contains an array of “Qobj” type ket with the same number of elements as <code class="docutils literal notranslate"><span class="pre">times</span></code>.
+<code class="docutils literal notranslate"><span class="pre">result.average_states</span></code> is a list of density matrices computed as the average
+of the states at each time step. Furthermore, the output will also contain a
+list of times at which the collapse occurred, and which collapse operators did
+the collapse. These can be obtained in  <code class="docutils literal notranslate"><span class="pre">result.col_times</span></code> and
+<code class="docutils literal notranslate"><span class="pre">result.col_which</span></code> respectively.</p>
 </section>
 <section id="changing-the-number-of-trajectories">
 <span id="monte-ntraj"></span><h3>Changing the Number of Trajectories<a class="headerlink" href="#changing-the-number-of-trajectories" title="Permalink to this heading"></a></h3>
 <p>By default, the <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> function runs 500 trajectories.
-This value was chosen because it gives good accuracy, Monte Carlo errors scale as <span class="math notranslate nohighlight">\(1/n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the number of trajectories, and simultaneously does not take an excessive amount of time to run.
-However, you can change the number of trajectories to fit your needs.
-In order to run 1000 trajectories in the above example, we can simply modify the call to <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+This value was chosen because it gives good accuracy, Monte Carlo errors scale
+as <span class="math notranslate nohighlight">\(1/n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the number of trajectories, and simultaneously
+does not take an excessive amount of time to run. However, you can change the
+number of trajectories to fit your needs. In order to run 1000 trajectories in
+the above example, we can simply modify the call to <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>where we have added the keyword argument <code class="docutils literal notranslate"><span class="pre">ntraj=1000</span></code> at the end of the inputs.
-Now, the Monte Carlo solver will calculate expectation values for both operators, <code class="docutils literal notranslate"><span class="pre">a.dag()</span> <span class="pre">*</span> <span class="pre">a,</span> <span class="pre">sm.dag()</span> <span class="pre">*</span> <span class="pre">sm</span></code> averaging over 1000 trajectories.</p>
-</section>
-<section id="using-the-improved-sampling-algorithm">
-<h3>Using the Improved Sampling Algorithm<a class="headerlink" href="#using-the-improved-sampling-algorithm" title="Permalink to this heading"></a></h3>
-<p>Oftentimes, quantum jumps are rare. This is especially true in the context of simulating gates
-for quantum information purposes, where typical gate times are orders of magnitude smaller than
-typical timescales for decoherence. In this case, using the standard monte-carlo sampling algorithm,
-we often repeatedly sample the no-jump trajectory. We can thus reduce the number of required runs
-by only sampling the no-jump trajectory once. We then extract the no-jump probability <span class="math notranslate nohighlight">\(p\)</span>,
-and for all future runs we only sample random numbers <span class="math notranslate nohighlight">\(r_1\)</span> where <span class="math notranslate nohighlight">\(r_1&gt;p\)</span>, thus ensuring
-that a jump will occur. When it comes time to compute expectation values, we weight the no-jump
-trajectory by <span class="math notranslate nohighlight">\(p\)</span> and the jump trajectories by <span class="math notranslate nohighlight">\(1-p\)</span>. This algorithm is described
-in <a class="reference internal" href="../../biblio.html#abd19" id="id1"><span>[Abd19]</span></a> and can be utilized by setting the option <code class="docutils literal notranslate"><span class="pre">&quot;improved_sampling&quot;</span></code> in the call to
-<code class="docutils literal notranslate"><span class="pre">mcsolve</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;improved_sampling&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+Now, the Monte Carlo solver will calculate expectation values for both operators,
+<code class="docutils literal notranslate"><span class="pre">a.dag()</span> <span class="pre">*</span> <span class="pre">a,</span> <span class="pre">sm.dag()</span> <span class="pre">*</span> <span class="pre">sm</span></code> averaging over 1000 trajectories.</p>
+<p>Other than a target number of trajectories, it is possible to use a computation
+time or errors bars as condition to stop computing trajectories.</p>
+<p><code class="docutils literal notranslate"><span class="pre">timeout</span></code> is quite simple as <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> will stop starting the computation of
+new trajectories when it is reached. Thus:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where in this case the first run samples the no-jump trajectory, and the remaining 499 trajectories are all
-guaranteed to include (at least) one jump.</p>
-<p>The power of this algorithm is most obvious when considering systems that rarely undergo jumps.
-For instance, consider the following T1 simulation of a qubit with a lifetime of 10 microseconds
-(assuming time is in units of nanoseconds)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
-<span class="n">omega</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">1.0</span>
-<span class="n">H0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">sigmaz</span><span class="p">()</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10000</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">([</span><span class="n">H0</span><span class="p">],</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="p">[</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">data_imp</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">([</span><span class="n">H0</span><span class="p">],</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="p">[</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span><span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;improved_sampling&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data_imp</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;improved sampling&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">times</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\exp(-\gamma t)$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo: improved sampling algorithm&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;time [ns]&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<p>Will compute 60 seconds of trajectories or 1000, which ever is reached first.
+The solver will finish any trajectory started when the timeout is reached. Therefore
+if the computation time of a single trajectory is quite long, the overall computation
+time can be much longer that the provided timeout.</p>
+<p>Lastly, <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> can be instructed to stop when the statistical error of the
+expectation values get under a certain value. When computing the average over
+trajectories, the error on these are computed using
+<a class="reference external" href="https://en.wikipedia.org/wiki/Jackknife_resampling">jackknife resampling</a>
+for each expect and each time and the computation will be stopped when all these values
+are under the tolerance passed to <code class="docutils literal notranslate"><span class="pre">target_tol</span></code>. Therefore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>
+               <span class="n">ntraj</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
 </pre></div>
 </div>
-<figure class="align-default">
-<img alt="../../images/dynamics-monte-5.png" class="plot-directive" src="../../images/dynamics-monte-5.png" />
-</figure>
-<p>The original sampling algorithm samples the no-jump trajectory on average 96.7% of the time, while the improved
-sampling algorithm only does so once.</p>
-</section>
-<section id="reusing-hamiltonian-data">
-<span id="monte-reuse"></span><h3>Reusing Hamiltonian Data<a class="headerlink" href="#reusing-hamiltonian-data" title="Permalink to this heading"></a></h3>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This section covers a specialized topic and may be skipped if you are new to QuTiP.</p>
-</div>
-<p>In order to solve a given simulation as fast as possible, the solvers in QuTiP take the given input operators and break them down into simpler components before passing them on to the ODE solvers.
-Although these operations are reasonably fast, the time spent organizing data can become appreciable when repeatedly solving a system over, for example, many different initial conditions.
-In cases such as this, the Monte Carlo Solver may be reused after the initial configuration, thus speeding up calculations.</p>
-<p>Using the previous example, we will calculate the dynamics for two different initial states, with the Hamiltonian data being reused on the second call</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-
-<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">sm</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
-<span class="n">solver</span> <span class="o">=</span> <span class="n">MCSolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
-<span class="n">data1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">psi1</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">coherent</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="p">))</span>
-<span class="n">data2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi1</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<p>will stop either after all errors bars on expectation values are under <code class="docutils literal notranslate"><span class="pre">0.01</span></code>, 1000
+trajectories are computed or 10 minutes have passed, whichever comes first. When a
+single values is passed, it is used as the absolute value of the tolerance.
+When a pair of values is passed, it is understood as an absolute and relative
+tolerance pair. For even finer control, one such pair can be passed for each <code class="docutils literal notranslate"><span class="pre">e_ops</span></code>.
+For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>  <span class="n">target_tol</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="p">])</span>
 </pre></div>
 </div>
-<figure class="align-default">
-<img alt="../../images/dynamics-monte-6.png" class="plot-directive" src="../../images/dynamics-monte-6.png" />
-</figure>
-<p>The <code class="docutils literal notranslate"><span class="pre">MCSolver</span></code> also allows adding new trajectories after the first computation. This is shown in the next example where the results of two separated runs with identical conditions are merged into a single <code class="docutils literal notranslate"><span class="pre">result</span></code> object.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-
-<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">sm</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
-<span class="n">solver</span> <span class="o">=</span> <span class="n">MCSolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
-<span class="n">data1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">data2</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">data_merged</span> <span class="o">=</span> <span class="n">data1</span> <span class="o">+</span> <span class="n">data2</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">,</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data2</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data_merged</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">data_merged</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;cavity photon number&quot;</span><span class="p">,</span> <span class="s2">&quot;atom excitation probability&quot;</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<p>will stop when the error bars on the expectation values of the first <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> are
+under 10% of their average values.</p>
+<p>If after computation of some trajectories, it is determined that more are needed, it
+is possible to add trajectories to existing result by adding result together:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">run1</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span>
+<span class="go">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run2</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">run2</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span>
+<span class="go">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merged</span> <span class="o">=</span> <span class="n">run1</span> <span class="o">+</span> <span class="n">run2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span>
+<span class="go">50</span>
 </pre></div>
 </div>
-<figure class="align-default">
-<img alt="../../images/dynamics-monte-7.png" class="plot-directive" src="../../images/dynamics-monte-7.png" />
-</figure>
+<p>Note that this merging operation only checks that the result are compatible –
+i.e. that the <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> and <code class="docutils literal notranslate"><span class="pre">tlist</span></code> are the same. It does not check that the same initial state or
+Hamiltonian where used.</p>
 <p>This can be used to explore the convergence of the Monte Carlo solver.
-For example, the following code block plots expectation values for 1, 10 and 100 trajectories:</p>
+For example, the following code block plots expectation values for 1, 10 and 100
+trajectories:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span> <span class="o">=</span> <span class="n">MCSolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">])</span>
+<span class="n">c_ops</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">]</span>
+<span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span>
 
-<span class="n">data1</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">data10</span> <span class="o">=</span> <span class="n">data1</span> <span class="o">+</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-<span class="n">data100</span> <span class="o">=</span> <span class="n">data10</span> <span class="o">+</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data10</span> <span class="o">=</span> <span class="n">data1</span> <span class="o">+</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">data100</span> <span class="o">=</span> <span class="n">data10</span> <span class="o">+</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 
 <span class="n">expt1</span> <span class="o">=</span> <span class="n">data1</span><span class="o">.</span><span class="n">expect</span>
 <span class="n">expt10</span> <span class="o">=</span> <span class="n">data10</span><span class="o">.</span><span class="n">expect</span>
@@ -358,13 +350,144 @@ For example, the following code block plots expectation values for 1, 10 and 100
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="../../images/dynamics-monte-8.png" class="plot-directive" src="../../images/dynamics-monte-8.png" />
+<img alt="../../images/dynamics-monte-2.png" class="plot-directive" src="../../images/dynamics-monte-2.png" />
+</figure>
+</section>
+<section id="using-the-improved-sampling-algorithm">
+<h3>Using the Improved Sampling Algorithm<a class="headerlink" href="#using-the-improved-sampling-algorithm" title="Permalink to this heading"></a></h3>
+<p>Oftentimes, quantum jumps are rare. This is especially true in the context of
+simulating gates for quantum information purposes, where typical gate times are
+orders of magnitude smaller than typical timescales for decoherence. In this case,
+using the standard monte-carlo sampling algorithm, we often repeatedly sample the
+no-jump trajectory. We can thus reduce the number of required runs by only
+sampling the no-jump trajectory once. We then extract the no-jump probability
+<span class="math notranslate nohighlight">\(p\)</span>, and for all future runs we only sample random numbers <span class="math notranslate nohighlight">\(r_1\)</span>
+where <span class="math notranslate nohighlight">\(r_1&gt;p\)</span>, thus ensuring that a jump will occur. When it comes time to
+compute expectation values, we weight the no-jump trajectory by <span class="math notranslate nohighlight">\(p\)</span> and
+the jump trajectories by <span class="math notranslate nohighlight">\(1-p\)</span>. This algorithm is described in <a class="reference internal" href="../../biblio.html#abd19" id="id1"><span>[Abd19]</span></a>
+and can be utilized by setting the option <code class="docutils literal notranslate"><span class="pre">&quot;improved_sampling&quot;</span></code> in the call
+to <code class="docutils literal notranslate"><span class="pre">mcsolve</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;improved_sampling&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>where in this case the first run samples the no-jump trajectory, and the
+remaining 499 trajectories are all guaranteed to include (at least) one jump.</p>
+<p>The power of this algorithm is most obvious when considering systems that rarely
+undergo jumps. For instance, consider the following T1 simulation of a qubit with
+a lifetime of 10 microseconds (assuming time is in units of nanoseconds)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">1.0</span>
+<span class="n">H0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">sigmaz</span><span class="p">()</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10000</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">H0</span><span class="p">],</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="p">[</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+<span class="n">data_imp</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">H0</span><span class="p">],</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="p">[</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;improved_sampling&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">data_imp</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;improved sampling&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">times</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\exp(-\gamma t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo: improved sampling algorithm&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;time [ns]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../../images/dynamics-monte-4.png" class="plot-directive" src="../../images/dynamics-monte-4.png" />
+</figure>
+<p>The original sampling algorithm samples the no-jump trajectory on average 96.7%
+of the time, while the improved sampling algorithm only does so once.</p>
+</section>
+<section id="reproducibility">
+<span id="monte-seeds"></span><h3>Reproducibility<a class="headerlink" href="#reproducibility" title="Permalink to this heading"></a></h3>
+<p>For reproducibility of Monte-Carlo computations it is possible to set the seed of the random
+number generator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res2</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res3</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">res1</span><span class="p">,</span> <span class="n">res2</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">res1</span><span class="p">,</span> <span class="n">res3</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">seeds</span></code> parameter can either be an integer or a numpy <code class="docutils literal notranslate"><span class="pre">SeedSequence</span></code>, which
+will then be used to create seeds for each trajectory. Alternatively it may be a list of
+intergers or <code class="docutils literal notranslate"><span class="pre">SeedSequence</span></code> s with one seed for each trajectories. Seeds available in
+the result object can be used to redo the same evolution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res1</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res2</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="n">res1</span><span class="o">.</span><span class="n">seeds</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">res1</span><span class="p">,</span> <span class="n">res2</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+<section id="running-trajectories-in-parallel">
+<span id="monte-parallel"></span><h3>Running trajectories in parallel<a class="headerlink" href="#running-trajectories-in-parallel" title="Permalink to this heading"></a></h3>
+<p>Monte-Carlo evolutions often need hundreds of trajectories to obtain sufficient
+statistics. Since all trajectories are independent of each other, they can be computed
+in parallel. The option <code class="docutils literal notranslate"><span class="pre">map</span></code> can take <code class="docutils literal notranslate"><span class="pre">&quot;serial&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;parallel&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;loky&quot;</span></code>.
+Both <code class="docutils literal notranslate"><span class="pre">&quot;parallel&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;loky&quot;</span></code> compute trajectories on multiple CPUs using
+respectively the <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a>
+and <a class="reference external" href="https://loky.readthedocs.io/en/stable/index.html">loky</a> python modules.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res_par</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">},</span> <span class="n">seeds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res_ser</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">},</span> <span class="n">seeds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">res_par</span><span class="o">.</span><span class="n">average_expect</span><span class="p">,</span> <span class="n">res_ser</span><span class="o">.</span><span class="n">average_expect</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Note that when running in parallel, the order in which the trajectories are added
+to the result can differ. Therefore</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">res_par</span><span class="o">.</span><span class="n">seeds</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">[SeedSequence(entropy=1,spawn_key=(1,),),</span>
+<span class="go"> SeedSequence(entropy=1,spawn_key=(0,),),</span>
+<span class="go"> SeedSequence(entropy=1,spawn_key=(2,),)]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">res_ser</span><span class="o">.</span><span class="n">seeds</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">[SeedSequence(entropy=1,spawn_key=(0,),),</span>
+<span class="go"> SeedSequence(entropy=1,spawn_key=(1,),),</span>
+<span class="go"> SeedSequence(entropy=1,spawn_key=(2,),)]</span>
+</pre></div>
+</div>
+</section>
+<section id="photocurrent">
+<h3>Photocurrent<a class="headerlink" href="#photocurrent" title="Permalink to this heading"></a></h3>
+<p>The photocurrent, previously computed using the <code class="docutils literal notranslate"><span class="pre">photocurrent_sesolve</span></code> and
+<code class="docutils literal notranslate"><span class="pre">photocurrent_sesolve</span></code> functions, are now included in the output of
+<a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve" title="qutip.solver.mcsolve.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mcsolve</span></code></a> as <code class="docutils literal notranslate"><span class="pre">result.photocurrent</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">qeye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">sm</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">sm</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">times</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">photocurrent</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo Photocurrent&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Photon detections&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../../images/dynamics-monte-5.png" class="plot-directive" src="../../images/dynamics-monte-5.png" />
 </figure>
 </section>
 <section id="open-systems">
 <h3>Open Systems<a class="headerlink" href="#open-systems" title="Permalink to this heading"></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> can be used to study system with have measured and dissipative interaction with the bath.
-This is done by using a liouvillian including the dissipative interaction instead of an Hamiltonian.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mcsolve</span></code> can be used to study systems which have measurement and dissipative
+interactions with their environment.  This is done by passing a Liouvillian including the
+dissipative interaction to the solver instead of a Hamiltonian.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 <span class="n">psi0</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">fock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fock</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">a</span>  <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">destroy</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
@@ -382,89 +505,7 @@ This is done by using a liouvillian including the dissipative interaction instea
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="../../images/dynamics-monte-9.png" class="plot-directive" src="../../images/dynamics-monte-9.png" />
-</figure>
-</section>
-<section id="monte-carlo-for-non-markovian-dynamics">
-<span id="monte-nonmarkov"></span><h3>Monte Carlo for Non-Markovian Dynamics<a class="headerlink" href="#monte-carlo-for-non-markovian-dynamics" title="Permalink to this heading"></a></h3>
-<p>The Monte Carlo solver of QuTiP can also be used to solve the dynamics of time-local non-Markovian master equations, i.e., master equations of the Lindblad form</p>
-<div class="math notranslate nohighlight" id="equation-lindblad-master-equation-with-rates">
-<span class="eqno">(6)<a class="headerlink" href="#equation-lindblad-master-equation-with-rates" title="Permalink to this equation"></a></span>\[\dot\rho(t) = -\frac{i}{\hbar} [H, \rho(t)] + \sum_n \frac{\gamma_n(t)}{2} \left[2 A_n \rho(t) A_n^\dagger - \rho(t) A_n^\dagger A_n - A_n^\dagger A_n \rho(t)\right]\]</div>
-<p>with “rates” <span class="math notranslate nohighlight">\(\gamma_n(t)\)</span> that can take negative values.
-This can be done with the <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.nm_mcsolve</span></code> function.
-The function is based on the influence martingale formalism <a class="reference internal" href="../../biblio.html#donvil22" id="id2"><span>[Donvil22]</span></a> and formally requires that the collapse operators <span class="math notranslate nohighlight">\(A_n\)</span> satisfy a completeness relation of the form</p>
-<div class="math notranslate nohighlight" id="equation-nmmcsolve-completeness">
-<span class="eqno">(7)<a class="headerlink" href="#equation-nmmcsolve-completeness" title="Permalink to this equation"></a></span>\[\sum_n A_n^\dagger A_n = \alpha \mathbb{I} ,\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbb{I}\)</span> is the identity operator on the system Hilbert space and <span class="math notranslate nohighlight">\(\alpha&gt;0\)</span>.
-Note that when the collapse operators of a model don’t satisfy such a relation, <code class="docutils literal notranslate"><span class="pre">qutip.nm_mcsolve</span></code> automatically adds an extra collapse operator such that <a class="reference internal" href="#equation-nmmcsolve-completeness">(7)</a> is satisfied.
-The rate corresponding to this extra collapse operator is set to zero.</p>
-<p>Technically, the influence martingale formalism works as follows.
-We introduce an influence martingale <span class="math notranslate nohighlight">\(\mu(t)\)</span>, which follows the evolution of the system state.
-When no jump happens, it evolves as</p>
-<div class="math notranslate nohighlight" id="equation-influence-cont">
-<span class="eqno">(8)<a class="headerlink" href="#equation-influence-cont" title="Permalink to this equation"></a></span>\[\mu(t) = \exp\left( \alpha\int_0^t K(\tau) d\tau \right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(K(t)\)</span> is for now an arbitrary function.
-When a jump corresponding to the collapse operator <span class="math notranslate nohighlight">\(A_n\)</span> happens, the influence martingale becomes</p>
-<div class="math notranslate nohighlight" id="equation-influence-disc">
-<span class="eqno">(9)<a class="headerlink" href="#equation-influence-disc" title="Permalink to this equation"></a></span>\[\mu(t+\delta t) = \mu(t)\left(\frac{K(t)-\gamma_n(t)}{\gamma_n(t)}\right)\]</div>
-<p>Assuming that the state <span class="math notranslate nohighlight">\(\bar\rho(t)\)</span> computed by the Monte Carlo average</p>
-<div class="math notranslate nohighlight" id="equation-mc-paired-state">
-<span class="eqno">(10)<a class="headerlink" href="#equation-mc-paired-state" title="Permalink to this equation"></a></span>\[\bar\rho(t) = \frac{1}{N}\sum_{l=1}^N |\psi_l(t)\rangle\langle \psi_l(t)|\]</div>
-<p>solves a Lindblad master equation with collapse operators <span class="math notranslate nohighlight">\(A_n\)</span> and rates <span class="math notranslate nohighlight">\(\Gamma_n(t)\)</span>, the state <span class="math notranslate nohighlight">\(\rho(t)\)</span> defined by</p>
-<div class="math notranslate nohighlight" id="equation-mc-martingale-state">
-<span class="eqno">(11)<a class="headerlink" href="#equation-mc-martingale-state" title="Permalink to this equation"></a></span>\[\rho(t) = \frac{1}{N}\sum_{l=1}^N \mu_l(t) |\psi_l(t)\rangle\langle \psi_l(t)|\]</div>
-<p>solves a Lindblad master equation with collapse operators <span class="math notranslate nohighlight">\(A_n\)</span> and shifted rates <span class="math notranslate nohighlight">\(\gamma_n(t)-K(t)\)</span>.
-Thus, while <span class="math notranslate nohighlight">\(\Gamma_n(t) \geq 0\)</span>, the new “rates” <span class="math notranslate nohighlight">\(\gamma_n(t) = \Gamma_n(t) - K(t)\)</span> satisfy no positivity requirement.</p>
-<p>The input of <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.nm_mcsolve</span></code> is almost the same as for <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.mcsolve</span></code>.
-The only difference is how the collapse operators and rate functions should be defined.
-<code class="docutils literal notranslate"><span class="pre">nm_mcsolve</span></code> requires collapse operators <span class="math notranslate nohighlight">\(A_n\)</span> and target “rates” <span class="math notranslate nohighlight">\(\gamma_n\)</span> (which are allowed to take negative values) to be given in list form <code class="docutils literal notranslate"><span class="pre">[[C_1,</span> <span class="pre">gamma_1],</span> <span class="pre">[C_2,</span> <span class="pre">gamma_2],</span> <span class="pre">...]</span></code>.
-Note that we give the actual rate and not its square root, and that <code class="docutils literal notranslate"><span class="pre">nm_mcsolve</span></code> automatically computes associated jump rates <span class="math notranslate nohighlight">\(\Gamma_n(t)\geq0\)</span> appropriate for simulation.</p>
-<p>We conclude with a simple example demonstrating the usage of the <code class="docutils literal notranslate"><span class="pre">nm_mcsolve</span></code> function.
-For more elaborate, physically motivated examples, we refer to the <a class="reference external" href="https://github.com/qutip/qutip-tutorials/blob/main/tutorials-v5/time-evolution/013_nonmarkovian_monte_carlo.md">accompanying tutorial notebook</a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qutip</span> <span class="k">as</span> <span class="nn">qt</span>
-
-<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">a0</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a0</span>
-
-<span class="c1"># Rate functions</span>
-<span class="n">gamma1</span> <span class="o">=</span> <span class="s2">&quot;kappa * nth&quot;</span>
-<span class="n">gamma2</span> <span class="o">=</span> <span class="s2">&quot;kappa * (nth+1) + 12 * np.exp(-2*t**3) * (-np.sin(15*t)**2)&quot;</span>
-<span class="c1"># gamma2 becomes negative during some time intervals</span>
-
-<span class="c1"># nm_mcsolve integration</span>
-<span class="n">ops_and_rates</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">ops_and_rates</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">gamma1</span><span class="p">])</span>
-<span class="n">ops_and_rates</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">a0</span><span class="p">,</span>       <span class="n">gamma2</span><span class="p">])</span>
-<span class="n">MCSol</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">nm_mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">ops_and_rates</span><span class="p">,</span>
-                      <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">0.129</span><span class="p">,</span> <span class="s1">&#39;nth&#39;</span><span class="p">:</span> <span class="mf">0.063</span><span class="p">},</span>
-                      <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">()],</span>
-                      <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;map&#39;</span><span class="p">:</span> <span class="s1">&#39;parallel&#39;</span><span class="p">},</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">2500</span><span class="p">)</span>
-
-<span class="c1"># mesolve integration for comparison</span>
-<span class="n">d_ops</span> <span class="o">=</span> <span class="p">[[</span><span class="n">qt</span><span class="o">.</span><span class="n">lindblad_dissipator</span><span class="p">(</span><span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">()),</span> <span class="n">gamma1</span><span class="p">],</span>
-         <span class="p">[</span><span class="n">qt</span><span class="o">.</span><span class="n">lindblad_dissipator</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">a0</span><span class="p">),</span>             <span class="n">gamma2</span><span class="p">]]</span>
-<span class="n">MESol</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">d_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">a0</span><span class="o">.</span><span class="n">dag</span><span class="p">()],</span>
-                   <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">0.129</span><span class="p">,</span> <span class="s1">&#39;nth&#39;</span><span class="p">:</span> <span class="mf">0.063</span><span class="p">})</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">MCSol</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span>
-         <span class="n">times</span><span class="p">,</span> <span class="n">MCSol</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span>
-         <span class="n">times</span><span class="p">,</span> <span class="n">MCSol</span><span class="o">.</span><span class="n">trace</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">MESol</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;g--&#39;</span><span class="p">,</span>
-         <span class="n">times</span><span class="p">,</span> <span class="n">MESol</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Monte Carlo time evolution&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Expectation values&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="sa">r</span><span class="s1">&#39;$\langle 1 | \rho | 1 \rangle$&#39;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s1">&#39;$\langle 0 | \rho | 0 \rangle$&#39;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s1">&#39;$\operatorname</span><span class="si">{tr}</span><span class="s1"> \rho$&#39;</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<figure class="align-default">
-<img alt="../../images/dynamics-monte-10.png" class="plot-directive" src="../../images/dynamics-monte-10.png" />
+<img alt="../../images/dynamics-monte-6.png" class="plot-directive" src="../../images/dynamics-monte-6.png" />
 </figure>
 </section>
 </section>
@@ -482,7 +523,7 @@ For more elaborate, physically motivated examples, we refer to the <a class="ref
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

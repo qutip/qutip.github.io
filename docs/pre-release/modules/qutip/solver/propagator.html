@@ -111,10 +111,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format</span>
 <span class="sd">        Possibly time-dependent system Liouvillian or Hamiltonian as a Qobj or</span>
-<span class="sd">        QobjEvo. ``list`` of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        QobjEvo. ``list`` of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
 <span class="sd">    t : float or array-like</span>
 <span class="sd">        Time or list of times for which to evaluate the propagator.</span>
@@ -130,12 +130,12 @@
 <span class="sd">        Options for the solver.</span>
 
 <span class="sd">    **kwargs :</span>
-<span class="sd">        Extra parameters to use when creating the :class:`QobjEvo` from a list</span>
-<span class="sd">        format ``H``.</span>
+<span class="sd">        Extra parameters to use when creating the</span>
+<span class="sd">        :obj:`.QobjEvo` from a list format ``H``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    U : qobj, list</span>
+<span class="sd">    U : :obj:`.Qobj`, list</span>
 <span class="sd">        Instance representing the propagator(s) :math:`U(t)`. Return a single</span>
 <span class="sd">        Qobj when ``t`` is a number or a list when ``t`` is a list.</span>
 
@@ -172,12 +172,12 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    U : qobj</span>
+<span class="sd">    U : :obj:`.Qobj`</span>
 <span class="sd">        Operator representing the propagator.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    a : qobj</span>
+<span class="sd">    a : :obj:`.Qobj`</span>
 <span class="sd">        Instance representing the steady-state density matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">evals</span><span class="p">,</span> <span class="n">estates</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
@@ -187,17 +187,18 @@
     <span class="n">rho_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">rho_data</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">/</span> <span class="n">_data</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">rho_data</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rho_data</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">adjoint</span><span class="p">(</span><span class="n">rho_data</span><span class="p">)),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">U</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span>
                 <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">Propagator</span><span class="p">:</span>
+<div class="viewcode-block" id="Propagator"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.propagator.Propagator">[docs]</a><span class="k">class</span> <span class="nc">Propagator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A generator of propagator for a system.</span>
 
 <span class="sd">    Usage:</span>
+
 <span class="sd">        U = Propagator(H, c_ops)</span>
+
 <span class="sd">        psi_t = U(t) @ psi_0</span>
 
 <span class="sd">    Save some previously computed propagator are stored to speed up subsequent</span>
@@ -205,38 +206,42 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    system : :class:`Qobj`, :class:`QobjEvo`, :class:`Solver`</span>
+<span class="sd">    system : :obj:`.Qobj`, :obj:`.QobjEvo`, :class:`.Solver`</span>
 <span class="sd">        Possibly time-dependent system driving the evolution, either already</span>
-<span class="sd">        packaged in a solver, such as :class:`SESolver` or :class:`BRSolver`,</span>
-<span class="sd">        or the Liouvillian or Hamiltonian as a :class:`Qobj`, :class:`QobjEvo`.</span>
-<span class="sd">        ``list`` of [:class:`Qobj`, :class:`Coefficient`] or callable that can</span>
-<span class="sd">        be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        packaged in a solver, such as :class:`.SESolver` or :class:`.BRSolver`,</span>
+<span class="sd">        or the Liouvillian or Hamiltonian as a :obj:`.Qobj`,</span>
+<span class="sd">        :obj:`.QobjEvo`. ``list`` of [:obj:`.Qobj`, :obj:`.Coefficient`]</span>
+<span class="sd">        or callable that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">        Solvers that run non-deterministacilly, such as :class:`MCSolver`, are</span>
+<span class="sd">        Solvers that run non-deterministacilly, such as :class:`.MCSolver`, are</span>
 <span class="sd">        not supported.</span>
 
 <span class="sd">    c_ops : list, optional</span>
-<span class="sd">        List of Qobj or QobjEvo collapse operators.</span>
+<span class="sd">        List of :obj:`.Qobj` or :obj:`.QobjEvo` collapse operators.</span>
 
-<span class="sd">    args : dictionary</span>
+<span class="sd">    args : dictionary, optional</span>
 <span class="sd">        Parameters to callback functions for time-dependent Hamiltonians and</span>
 <span class="sd">        collapse operators.</span>
 
-<span class="sd">    options : dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Options for the solver.</span>
 
-<span class="sd">    memoize : int [10]</span>
+<span class="sd">    memoize : int, default: 10</span>
 <span class="sd">        Max number of propagator to save.</span>
 
-<span class="sd">    tol : float [1e-14]</span>
+<span class="sd">    tol : float, default: 1e-14</span>
 <span class="sd">        Absolute tolerance for the time. If a previous propagator was computed</span>
 <span class="sd">        at a time within tolerance, that propagator will be returned.</span>
 
-<span class="sd">    .. note::</span>
-<span class="sd">        The :class:`Propagator` is not a :class:`QobjEvo` so it cannot be used</span>
-<span class="sd">        for operations with :class:`Qobj` or :class:`QobjEvo`. It can be made</span>
-<span class="sd">        into a :class:`QobjEvo` with ::</span>
-<span class="sd">            U = QobjEvo(Propagator(H))</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The :class:`Propagator` is not a :obj:`.QobjEvo` so</span>
+<span class="sd">    it cannot be used for operations with :obj:`.Qobj` or</span>
+<span class="sd">    :obj:`.QobjEvo`. It can be made into a</span>
+<span class="sd">    :obj:`.QobjEvo` with ::</span>
+
+<span class="sd">        U = QobjEvo(Propagator(H))</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">memoize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">):</span>
@@ -283,7 +288,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">U</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="Propagator.__call__"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.propagator.Propagator.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the propagator from ``t_start`` to ``t``.</span>
 
@@ -317,9 +322,9 @@
                 <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_or_compute</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">@</span> <span class="n">Uinv</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_or_compute</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">U</span>
+        <span class="k">return</span> <span class="n">U</span></div>
 
-    <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="Propagator.inv"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.propagator.Propagator.inv">[docs]</a>    <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the inverse of the propagator at ``t``, such that</span>
 <span class="sd">            ``psi_0 = U.inv(t) @ psi_t``</span>
@@ -333,7 +338,7 @@
 <span class="sd">            Updating ``args`` take effect since ``t=0`` and the new ``args``</span>
 <span class="sd">            will be used in future call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inv</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inv</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -367,7 +372,7 @@
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="n">rm_idx</span><span class="p">]</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="n">rm_idx</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -378,7 +383,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

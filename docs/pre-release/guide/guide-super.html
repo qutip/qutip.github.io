@@ -70,15 +70,15 @@
 <li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-piqs.html">Permutational Invariance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-bloch.html">Plotting on the Bloch Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Parallel computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-measurement.html">Measurement of Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../gallery/build/index.html">Gallery</a></li>
@@ -117,11 +117,11 @@
   <section id="superoperators-pauli-basis-and-channel-contraction">
 <span id="super"></span><h1>Superoperators, Pauli Basis and Channel Contraction<a class="headerlink" href="#superoperators-pauli-basis-and-channel-contraction" title="Permalink to this heading"></a></h1>
 <p>written by <cite>Christopher Granade &lt;http://www.cgranade.com&gt;</cite>, Institute for Quantum Computing</p>
-<p>In this guide, we will demonstrate the <code class="xref py py-func docutils literal notranslate"><span class="pre">tensor_contract</span></code> function, which contracts one or more pairs of indices of a Qobj. This functionality can be used to find rectangular superoperators that implement the partial trace channel :math:S(rho) = Tr_2(rho)`, for instance. Using this functionality, we can quickly turn a system-environment representation of an open quantum process into a superoperator representation.</p>
+<p>In this guide, we will demonstrate the <a class="reference internal" href="../apidoc/functions.html#qutip.core.tensor.tensor_contract" title="qutip.core.tensor.tensor_contract"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensor_contract</span></code></a> function, which contracts one or more pairs of indices of a Qobj. This functionality can be used to find rectangular superoperators that implement the partial trace channel :math:S(rho) = Tr_2(rho)`, for instance. Using this functionality, we can quickly turn a system-environment representation of an open quantum process into a superoperator representation.</p>
 <section id="superoperator-representations-and-plotting">
 <span id="super-representation-plotting"></span><h2>Superoperator Representations and Plotting<a class="headerlink" href="#superoperator-representations-and-plotting" title="Permalink to this heading"></a></h2>
 <p>We start off by first demonstrating plotting of superoperators, as this will be useful to us in visualizing the results of a contracted channel.</p>
-<p>In particular, we will use Hinton diagrams as implemented by <a class="reference internal" href="../apidoc/functions.html#qutip.visualization.hinton" title="qutip.visualization.hinton"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.visualization.hinton</span></code></a>, which
+<p>In particular, we will use Hinton diagrams as implemented by <a class="reference internal" href="../apidoc/functions.html#qutip.visualization.hinton" title="qutip.visualization.hinton"><code class="xref py py-func docutils literal notranslate"><span class="pre">hinton</span></code></a>, which
 show the real parts of matrix elements as squares whose size and color both correspond to the magnitude of each element. To illustrate, we first plot a few density operators.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">hinton</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">to_super</span><span class="p">,</span> <span class="n">sigmaz</span><span class="p">,</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">tensor_contract</span>
 <span class="kn">from</span> <span class="nn">qutip.core.gates</span> <span class="kn">import</span> <span class="n">cnot</span><span class="p">,</span> <span class="n">hadamard_transform</span>
@@ -142,13 +142,7 @@ show the real parts of matrix elements as squares whose size and color both corr
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="../images/guide-super-2_00.png" class="plot-directive" src="../images/guide-super-2_00.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-2_01.png" class="plot-directive" src="../images/guide-super-2_01.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-2_02.png" class="plot-directive" src="../images/guide-super-2_02.png" />
+<img alt="../images/guide-super-2.png" class="plot-directive" src="../images/guide-super-2.png" />
 </figure>
 <p>As a couple more examples, we also consider the supermatrix for a Hadamard transform and for <span class="math notranslate nohighlight">\(\sigma_z \otimes H\)</span>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hinton</span><span class="p">(</span><span class="n">to_super</span><span class="p">(</span><span class="n">hadamard_transform</span><span class="p">()))</span>
@@ -161,15 +155,6 @@ show the real parts of matrix elements as squares whose size and color both corr
 <figure class="align-default">
 <img alt="../images/guide-super-3_01.png" class="plot-directive" src="../images/guide-super-3_01.png" />
 </figure>
-<figure class="align-default">
-<img alt="../images/guide-super-3_02.png" class="plot-directive" src="../images/guide-super-3_02.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-3_03.png" class="plot-directive" src="../images/guide-super-3_03.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-3_04.png" class="plot-directive" src="../images/guide-super-3_04.png" />
-</figure>
 </section>
 <section id="reduced-channels">
 <span id="super-reduced-channels"></span><h2>Reduced Channels<a class="headerlink" href="#reduced-channels" title="Permalink to this heading"></a></h2>
@@ -180,11 +165,12 @@ show the real parts of matrix elements as squares whose size and color both corr
 <figure class="align-center">
 <a class="reference internal image-reference" href="../images/sprep-wood-diagram.png"><img alt="../images/sprep-wood-diagram.png" src="../images/sprep-wood-diagram.png" style="width: 2.5in;" /></a>
 </figure>
-<p>The two tensor wires on the left indicate where we must take a tensor contraction to obtain the measurement map. Numbering the tensor wires from 0 to 3, this corresponds to a <code class="xref py py-func docutils literal notranslate"><span class="pre">tensor_contract</span></code> argument of <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">3)</span></code>.</p>
+<p>The two tensor wires on the left indicate where we must take a tensor contraction to obtain the measurement map.
+Numbering the tensor wires from 0 to 3, this corresponds to a <a class="reference internal" href="../apidoc/functions.html#qutip.core.tensor.tensor_contract" title="qutip.core.tensor.tensor_contract"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensor_contract</span></code></a> argument of <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">3)</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tensor_contract</span><span class="p">(</span><span class="n">to_super</span><span class="p">(</span><span class="n">identity</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Meanwhile, the <code class="xref py py-func docutils literal notranslate"><span class="pre">super_tensor</span></code> function implements the swap on the right, such that we can quickly find the preparation map.</p>
+<p>Meanwhile, the <a class="reference internal" href="../apidoc/functions.html#qutip.core.tensor.super_tensor" title="qutip.core.tensor.super_tensor"><code class="xref py py-func docutils literal notranslate"><span class="pre">super_tensor</span></code></a> function implements the swap on the right, such that we can quickly find the preparation map.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">s_prep</span> <span class="o">=</span> <span class="n">sprepost</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
 </pre></div>
@@ -194,47 +180,14 @@ show the real parts of matrix elements as squares whose size and color both corr
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="../images/guide-super-6_00.png" class="plot-directive" src="../images/guide-super-6_00.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-6_01.png" class="plot-directive" src="../images/guide-super-6_01.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-6_02.png" class="plot-directive" src="../images/guide-super-6_02.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-6_03.png" class="plot-directive" src="../images/guide-super-6_03.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-6_04.png" class="plot-directive" src="../images/guide-super-6_04.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-6_05.png" class="plot-directive" src="../images/guide-super-6_05.png" />
+<img alt="../images/guide-super-6.png" class="plot-directive" src="../images/guide-super-6.png" />
 </figure>
 <p>We now complete by multiplying the superunitary <span class="math notranslate nohighlight">\(\scriptstyle \rm CNOT\)</span> by the preparation channel above, then applying the partial trace channel by contracting the second and fourth index indices. As expected, this gives us a dephasing map.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hinton</span><span class="p">(</span><span class="n">tensor_contract</span><span class="p">(</span><span class="n">to_super</span><span class="p">(</span><span class="n">cnot</span><span class="p">()),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="n">s_prep</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="../images/guide-super-7_00.png" class="plot-directive" src="../images/guide-super-7_00.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-7_01.png" class="plot-directive" src="../images/guide-super-7_01.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-7_02.png" class="plot-directive" src="../images/guide-super-7_02.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-7_03.png" class="plot-directive" src="../images/guide-super-7_03.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-7_04.png" class="plot-directive" src="../images/guide-super-7_04.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-7_05.png" class="plot-directive" src="../images/guide-super-7_05.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-super-7_06.png" class="plot-directive" src="../images/guide-super-7_06.png" />
+<img alt="../images/guide-super-7.png" class="plot-directive" src="../images/guide-super-7.png" />
 </figure>
 </section>
 </section>
@@ -251,7 +204,7 @@ show the real parts of matrix elements as squares whose size and color both corr
 
   <div role="contentinfo">
     <p>&#169; <a href="../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

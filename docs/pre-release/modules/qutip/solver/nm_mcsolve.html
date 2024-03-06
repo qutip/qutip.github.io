@@ -127,13 +127,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`qutip.Qobj`, :class:`qutip.QobjEvo`, ``list``, callable.</span>
+<span class="sd">    H : :class:`.Qobj`, :class:`.QobjEvo`, ``list``, callable.</span>
 <span class="sd">        System Hamiltonian as a Qobj, QobjEvo. It can also be any input type</span>
-<span class="sd">        that QobjEvo accepts (see :class:`qutip.QobjEvo`&#39;s documentation).</span>
+<span class="sd">        that QobjEvo accepts (see :class:`.QobjEvo`&#39;s documentation).</span>
 <span class="sd">        ``H`` can also be a superoperator (liouvillian) if some collapse</span>
 <span class="sd">        operators are to be treated deterministically.</span>
 
-<span class="sd">    state : :class:`qutip.Qobj`</span>
+<span class="sd">    state : :class:`.Qobj`</span>
 <span class="sd">        Initial state vector.</span>
 
 <span class="sd">    tlist : array_like</span>
@@ -141,87 +141,95 @@
 
 <span class="sd">    ops_and_rates : list</span>
 <span class="sd">        A ``list`` of tuples ``(L, Gamma)``, where the Lindblad operator ``L``</span>
-<span class="sd">        is a :class:`qutip.Qobj` and ``Gamma`` represents the corresponding</span>
+<span class="sd">        is a :class:`.Qobj` and ``Gamma`` represents the corresponding</span>
 <span class="sd">        rate, which is allowed to be negative. The Lindblad operators must be</span>
 <span class="sd">        operators even if ``H`` is a superoperator. If none are given, the</span>
 <span class="sd">        solver will defer to ``sesolve`` or ``mesolve``. Each rate ``Gamma``</span>
 <span class="sd">        may be just a number (in the case of a constant rate) or, otherwise,</span>
-<span class="sd">        specified using any format accepted by :func:`qutip.coefficient`.</span>
+<span class="sd">        specified using any format accepted by</span>
+<span class="sd">        :func:`~qutip.core.coefficient.coefficient`.</span>
 
-<span class="sd">    e_ops : list, [optional]</span>
+<span class="sd">    e_ops : list, optional</span>
 <span class="sd">        A ``list`` of operator as Qobj, QobjEvo or callable with signature of</span>
 <span class="sd">        (t, state: Qobj) for calculating expectation values. When no ``e_ops``</span>
 <span class="sd">        are given, the solver will default to save the states.</span>
 
-<span class="sd">    ntraj : int</span>
+<span class="sd">    ntraj : int, default: 500</span>
 <span class="sd">        Maximum number of trajectories to run. Can be cut short if a time limit</span>
 <span class="sd">        is passed with the ``timeout`` keyword or if the target tolerance is</span>
 <span class="sd">        reached, see ``target_tol``.</span>
 
-<span class="sd">    args : None / dict</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        Arguments for time-dependent Hamiltonian and collapse operator terms.</span>
 
-<span class="sd">    options : None / dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Dictionary of options for the solver.</span>
 
-<span class="sd">        - store_final_state : bool, [False]</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, NoneType, [None]</span>
-<span class="sd">          Whether or not to store the state density matrices.</span>
-<span class="sd">          On ``None`` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, [&#39;text&#39;]</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict, [{&quot;chunk_size&quot;: 10}]</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use ``chunk_size``.</span>
-<span class="sd">        - method : str {&quot;adams&quot;, &quot;bdf&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.}, [&quot;adams&quot;]</span>
-<span class="sd">          Which differential equation integration method to use.</span>
-<span class="sd">        - keep_runs_results : bool, [False]</span>
-<span class="sd">          Whether to store results from all trajectories or just store the</span>
-<span class="sd">          averages.</span>
-<span class="sd">        - map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;}, [&quot;serial&quot;]</span>
-<span class="sd">          How to run the trajectories. &quot;parallel&quot; uses concurrent module to run</span>
-<span class="sd">          in parallel while &quot;loky&quot; use the module of the same name to do so.</span>
-<span class="sd">        - job_timeout : NoneType, int, [None]</span>
-<span class="sd">          Maximum time to compute one trajectory.</span>
-<span class="sd">        - num_cpus : NoneType, int, [None]</span>
-<span class="sd">          Number of cpus to use when running in parallel. ``None`` detect the</span>
-<span class="sd">          number of available cpus.</span>
-<span class="sd">        - norm_t_tol, norm_tol, norm_steps : float, float, int, [1e-6, 1e-4, 5]</span>
-<span class="sd">          Parameters used to find the collapse location. ``norm_t_tol`` and</span>
-<span class="sd">          ``norm_tol`` are the tolerance in time and norm respectively.</span>
-<span class="sd">          An error will be raised if the collapse could not be found within</span>
-<span class="sd">          ``norm_steps`` tries.</span>
-<span class="sd">        - mc_corr_eps : float, [1e-10]</span>
-<span class="sd">          Small number used to detect non-physical collapse caused by numerical</span>
-<span class="sd">          imprecision.</span>
-<span class="sd">        - atol, rtol : float, [1e-8, 1e-6]</span>
-<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
-<span class="sd">        - nsteps : int [2500]</span>
-<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
-<span class="sd">          step.</span>
-<span class="sd">        - max_step : float, [0]</span>
-<span class="sd">          Maximum length of one internal step. When using pulses, it should be</span>
-<span class="sd">          less than half the width of the thinnest pulse.</span>
-<span class="sd">        - completeness_rtol, completeness_atol : float, float, [1e-5, 1e-8]</span>
-<span class="sd">          Parameters used in determining whether the given Lindblad operators</span>
-<span class="sd">          satisfy a certain completeness relation. If they do not, an</span>
-<span class="sd">          additional Lindblad operator is added automatically (with zero rate).</span>
-<span class="sd">        - martingale_quad_limit : float or int, [100]</span>
-<span class="sd">          An upper bound on the number of subintervals used in the adaptive</span>
-<span class="sd">          integration of the martingale.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
+<span class="sd">          | Which differential equation integration method to use.</span>
+<span class="sd">        - | atol, rtol : float</span>
+<span class="sd">          | Absolute and relative tolerance of the ODE integrator.</span>
+<span class="sd">        - | nsteps : int</span>
+<span class="sd">          | Maximum number of (internally defined) steps allowed in one</span>
+<span class="sd">            ``tlist`` step.</span>
+<span class="sd">        - | max_step : float</span>
+<span class="sd">          | Maximum length of one internal step. When using pulses, it should</span>
+<span class="sd">            be less than half the width of the thinnest pulse.</span>
+<span class="sd">        - | keep_runs_results : bool, [False]</span>
+<span class="sd">          | Whether to store results from all trajectories or just store the</span>
+<span class="sd">            averages.</span>
+<span class="sd">        - | map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;, &quot;mpi&quot;}</span>
+<span class="sd">          | How to run the trajectories. &quot;parallel&quot; uses the multiprocessing</span>
+<span class="sd">            module to run in parallel while &quot;loky&quot; and &quot;mpi&quot; use the &quot;loky&quot; and</span>
+<span class="sd">            &quot;mpi4py&quot; modules to do so.</span>
+<span class="sd">        - | num_cpus : int</span>
+<span class="sd">          | Number of cpus to use when running in parallel. ``None`` detect the</span>
+<span class="sd">            number of available cpus.</span>
+<span class="sd">        - | norm_t_tol, norm_tol, norm_steps : float, float, int</span>
+<span class="sd">          | Parameters used to find the collapse location. ``norm_t_tol`` and</span>
+<span class="sd">            ``norm_tol`` are the tolerance in time and norm respectively.</span>
+<span class="sd">            An error will be raised if the collapse could not be found within</span>
+<span class="sd">            ``norm_steps`` tries.</span>
+<span class="sd">        - | mc_corr_eps : float</span>
+<span class="sd">          | Small number used to detect non-physical collapse caused by</span>
+<span class="sd">            numerical imprecision.</span>
+<span class="sd">        - | completeness_rtol, completeness_atol : float, float</span>
+<span class="sd">          | Parameters used in determining whether the given Lindblad operators</span>
+<span class="sd">            satisfy a certain completeness relation. If they do not, an</span>
+<span class="sd">            additional Lindblad operator is added automatically (with zero</span>
+<span class="sd">            rate).</span>
+<span class="sd">        - | martingale_quad_limit : float or int</span>
+<span class="sd">          | An upper bound on the number of subintervals used in the adaptive</span>
+<span class="sd">            integration of the martingale.</span>
 
-<span class="sd">    seeds : int, SeedSequence, list, [optional]</span>
+<span class="sd">        Note that the &#39;improved_sampling&#39; option is not currently supported.</span>
+<span class="sd">        Additional options are listed under `options</span>
+<span class="sd">        &lt;./classes.html#qutip.solver.nm_mcsolve.NonMarkovianMCSolver.options&gt;`__.</span>
+<span class="sd">        More options may be available depending on the selected</span>
+<span class="sd">        differential equation integration method, see</span>
+<span class="sd">        `Integrator &lt;./classes.html#classes-ode&gt;`_.</span>
+
+<span class="sd">    seeds : int, SeedSequence, list, optional</span>
 <span class="sd">        Seed for the random number generator. It can be a single seed used to</span>
 <span class="sd">        spawn seeds for each trajectory or a list of seeds, one for each</span>
 <span class="sd">        trajectory. Seeds are saved in the result and they can be reused with::</span>
 
 <span class="sd">            seeds=prev_result.seeds</span>
 
-<span class="sd">    target_tol : float, tuple, list, [optional]</span>
+<span class="sd">    target_tol : float, tuple, list, optional</span>
 <span class="sd">        Target tolerance of the evolution. The evolution will compute</span>
 <span class="sd">        trajectories until the error on the expectation values is lower than</span>
 <span class="sd">        this tolerance. The maximum number of trajectories employed is</span>
@@ -230,13 +238,13 @@
 <span class="sd">        relative tolerance, in that order. Lastly, it can be a list of pairs of</span>
 <span class="sd">        (atol, rtol) for each e_ops.</span>
 
-<span class="sd">    timeout : float, [optional]</span>
+<span class="sd">    timeout : float, optional</span>
 <span class="sd">        Maximum time for the evolution in seconds. When reached, no more</span>
 <span class="sd">        trajectories will be computed.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    results : :class:`qutip.solver.NmmcResult`</span>
+<span class="sd">    results : :class:`.NmmcResult`</span>
 <span class="sd">        Object storing all results from the simulation. Compared to a result</span>
 <span class="sd">        returned by ``mcsolve``, this result contains the additional field</span>
 <span class="sd">        ``trace`` (and ``runs_trace`` if ``store_final_state`` is set). Note</span>
@@ -265,7 +273,7 @@
 
     <span class="n">nmmc</span> <span class="o">=</span> <span class="n">NonMarkovianMCSolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">ops_and_rates</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">nmmc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="n">ntraj</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>
-                      <span class="n">seed</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+                      <span class="n">seeds</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span></div>
 
 
@@ -377,21 +385,21 @@
 <div class="viewcode-block" id="NonMarkovianMCSolver"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.nm_mcsolve.NonMarkovianMCSolver">[docs]</a><span class="k">class</span> <span class="nc">NonMarkovianMCSolver</span><span class="p">(</span><span class="n">MCSolver</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Monte Carlo Solver for Lindblad equations with &quot;rates&quot; that may be</span>
-<span class="sd">    negative. The ``c_ops`` parameter of :class:`qutip.MCSolver` is replaced by</span>
+<span class="sd">    negative. The ``c_ops`` parameter of :class:`.MCSolver` is replaced by</span>
 <span class="sd">    an ``ops_and_rates`` parameter to allow for negative rates. Options for the</span>
 <span class="sd">    underlying ODE solver are given by the Options class.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`qutip.Qobj`, :class:`qutip.QobjEvo`, ``list``, callable.</span>
+<span class="sd">    H : :class:`.Qobj`, :class:`.QobjEvo`, ``list``, callable.</span>
 <span class="sd">        System Hamiltonian as a Qobj, QobjEvo. It can also be any input type</span>
-<span class="sd">        that QobjEvo accepts (see :class:`qutip.QobjEvo` documentation).</span>
+<span class="sd">        that QobjEvo accepts (see :class:`.QobjEvo` documentation).</span>
 <span class="sd">        ``H`` can also be a superoperator (liouvillian) if some collapse</span>
 <span class="sd">        operators are to be treated deterministically.</span>
 
 <span class="sd">    ops_and_rates : list</span>
 <span class="sd">        A ``list`` of tuples ``(L, Gamma)``, where the Lindblad operator ``L``</span>
-<span class="sd">        is a :class:`qutip.Qobj` and ``Gamma`` represents the corresponding</span>
+<span class="sd">        is a :class:`.Qobj` and ``Gamma`` represents the corresponding</span>
 <span class="sd">        rate, which is allowed to be negative. The Lindblad operators must be</span>
 <span class="sd">        operators even if ``H`` is a superoperator. Each rate ``Gamma`` may be</span>
 <span class="sd">        just a number (in the case of a constant rate) or, otherwise, specified</span>
@@ -402,29 +410,35 @@
 
 <span class="sd">    options : SolverOptions, [optional]</span>
 <span class="sd">        Options for the evolution.</span>
-
-<span class="sd">    seed : int, SeedSequence, list, [optional]</span>
-<span class="sd">        Seed for the random number generator. It can be a single seed used to</span>
-<span class="sd">        spawn seeds for each trajectory or a list of seed, one for each</span>
-<span class="sd">        trajectory. Seeds are saved in the result and can be reused with::</span>
-
-<span class="sd">            seeds=prev_result.seeds</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;nm_mcsolve&quot;</span>
-    <span class="n">resultclass</span> <span class="o">=</span> <span class="n">NmmcResult</span>
+    <span class="n">_resultclass</span> <span class="o">=</span> <span class="n">NmmcResult</span>
     <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="o">**</span><span class="n">MCSolver</span><span class="o">.</span><span class="n">solver_options</span><span class="p">,</span>
+        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;keep_runs_results&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mpi_options&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="s2">&quot;num_cpus&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;bitgenerator&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;adams&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mc_corr_eps&quot;</span><span class="p">:</span> <span class="mf">1e-10</span><span class="p">,</span>
+        <span class="s2">&quot;norm_steps&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;norm_t_tol&quot;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+        <span class="s2">&quot;norm_tol&quot;</span><span class="p">:</span> <span class="mf">1e-4</span><span class="p">,</span>
         <span class="s2">&quot;completeness_rtol&quot;</span><span class="p">:</span> <span class="mf">1e-5</span><span class="p">,</span>
         <span class="s2">&quot;completeness_atol&quot;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">,</span>
         <span class="s2">&quot;martingale_quad_limit&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># both classes will be partially initialized in constructor</span>
-    <span class="n">trajectory_resultclass</span> <span class="o">=</span> <span class="n">NmmcTrajectoryResult</span>
-    <span class="n">mc_integrator_class</span> <span class="o">=</span> <span class="n">NmMCIntegrator</span>
+    <span class="n">_trajectory_resultclass</span> <span class="o">=</span> <span class="n">NmmcTrajectoryResult</span>
+    <span class="n">_mc_integrator_class</span> <span class="o">=</span> <span class="n">NmMCIntegrator</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">ops_and_rates</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">ops_and_rates</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
 
@@ -455,13 +469,13 @@
             <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">sqrt_shifted_rate</span>
             <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqrt_shifted_rates</span><span class="p">)</span>
         <span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_resultclass</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trajectory_resultclass</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
             <span class="n">NmmcTrajectoryResult</span><span class="p">,</span> <span class="n">__nm_solver</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mc_integrator_class</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mc_integrator_class</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
             <span class="n">NmMCIntegrator</span><span class="p">,</span> <span class="n">__martingale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_martingale</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_check_completeness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ops_and_rates</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -500,6 +514,11 @@
             <span class="n">rate</span><span class="o">.</span><span class="n">replace_arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">for</span> <span class="n">rate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqrt_shifted_rates</span>
         <span class="p">]</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_argument</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_feedback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;NM mcsolve does not support feedback currently.&quot;</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="NonMarkovianMCSolver.rate_shift"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.nm_mcsolve.NonMarkovianMCSolver.rate_shift">[docs]</a>    <span class="k">def</span> <span class="nf">rate_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -594,16 +613,99 @@
             <span class="n">state</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">state</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_martingale</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="NonMarkovianMCSolver.run"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.nm_mcsolve.NonMarkovianMCSolver.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="NonMarkovianMCSolver.run"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.nm_mcsolve.NonMarkovianMCSolver.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># update `args` dictionary before precomputing martingale</span>
-        <span class="k">if</span> <span class="s1">&#39;args&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_argument</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;args&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_argument</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_martingale</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cache</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_martingale</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Options for non-Markovian Monte Carlo solver:</span>
+
+<span class="sd">        store_final_state: bool, default: False</span>
+<span class="sd">            Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+
+<span class="sd">        store_states: bool, default: None</span>
+<span class="sd">            Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+
+<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default: &quot;text&quot;</span>
+<span class="sd">            How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+
+<span class="sd">        progress_kwargs: dict, default: {&quot;chunk_size&quot;:10}</span>
+<span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
+<span class="sd">            ``chunk_size``.</span>
+
+<span class="sd">        keep_runs_results: bool, default: False</span>
+<span class="sd">            Whether to store results from all trajectories or just store the</span>
+<span class="sd">            averages.</span>
+
+<span class="sd">        method: str, default: &quot;adams&quot;</span>
+<span class="sd">            Which differential equation integration method to use.</span>
+
+<span class="sd">        map: str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;, &quot;mpi&quot;}, default: &quot;serial&quot;</span>
+<span class="sd">            How to run the trajectories. &quot;parallel&quot; uses the multiprocessing</span>
+<span class="sd">            module to run in parallel while &quot;loky&quot; and &quot;mpi&quot; use the &quot;loky&quot; and</span>
+<span class="sd">            &quot;mpi4py&quot; modules to do so.</span>
+
+<span class="sd">        mpi_options: dict, default: {}</span>
+<span class="sd">            Only applies if map is &quot;mpi&quot;. This dictionary will be passed as</span>
+<span class="sd">            keyword arguments to the `mpi4py.futures.MPIPoolExecutor`</span>
+<span class="sd">            constructor. Note that the `max_workers` argument is provided</span>
+<span class="sd">            separately through the `num_cpus` option.</span>
+
+<span class="sd">        num_cpus: None, int</span>
+<span class="sd">            Number of cpus to use when running in parallel. ``None`` detect the</span>
+<span class="sd">            number of available cpus.</span>
+
+<span class="sd">        bitgenerator: {None, &quot;MT19937&quot;, &quot;PCG64&quot;, &quot;PCG64DXSM&quot;, ...}</span>
+<span class="sd">            Which of numpy.random&#39;s bitgenerator to use. With ``None``, your</span>
+<span class="sd">            numpy version&#39;s default is used.</span>
+
+<span class="sd">        mc_corr_eps: float, default: 1e-10</span>
+<span class="sd">            Small number used to detect non-physical collapse caused by</span>
+<span class="sd">            numerical imprecision.</span>
+
+<span class="sd">        norm_t_tol: float, default: 1e-6</span>
+<span class="sd">            Tolerance in time used when finding the collapse.</span>
+
+<span class="sd">        norm_tol: float, default: 1e-4</span>
+<span class="sd">            Tolerance in norm used when finding the collapse.</span>
+
+<span class="sd">        norm_steps: int, default: 5</span>
+<span class="sd">            Maximum number of tries to find the collapse.</span>
+
+<span class="sd">        completeness_rtol: float, default: 1e-5</span>
+<span class="sd">            Used in determining whether the given Lindblad operators satisfy</span>
+<span class="sd">            a certain completeness relation. If they do not, an additional</span>
+<span class="sd">            Lindblad operator is added automatically (with zero rate).</span>
+
+<span class="sd">        completeness_atol: float, default: 1e-8</span>
+<span class="sd">            Used in determining whether the given Lindblad operators satisfy</span>
+<span class="sd">            a certain completeness relation. If they do not, an additional</span>
+<span class="sd">            Lindblad operator is added automatically (with zero rate).</span>
+
+<span class="sd">        martingale_quad_limit: float or int, default: 100</span>
+<span class="sd">            An upper bound on the number of subintervals used in the adaptive</span>
+<span class="sd">            integration of the martingale.</span>
+
+<span class="sd">        Note that the &#39;improved_sampling&#39; option is not currently supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
+        <span class="n">MCSolver</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span>
 
     <span class="n">start</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">MultiTrajSolver</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="vm">__doc__</span>
     <span class="n">step</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">MultiTrajSolver</span><span class="o">.</span><span class="n">step</span><span class="o">.</span><span class="vm">__doc__</span>
@@ -618,7 +720,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

@@ -75,23 +75,25 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-class.html">Solver Class Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dynamics-piqs.html">Permutational Invariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-nmmonte.html">Monte Carlo for Non-Markovian Dynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-propagator.html">Computing propagators</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-piqs.html">Permutational Invariance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
@@ -135,7 +137,7 @@ The solution of these stochastic equations are quantum trajectories, which repre
 <p>In general, the stochastic evolution of a quantum state is calculated in
 QuTiP by solving the general equation</p>
 <div class="math notranslate nohighlight" id="equation-general-form">
-<span class="eqno">(1)<a class="headerlink" href="#equation-general-form" title="Permalink to this equation"></a></span>\[d \rho (t) = d_1 \rho dt + \sum_n d_{2,n} \rho dW_n,\]</div>
+<span class="eqno">(1)<a class="headerlink" href="#equation-general-form" title="Permalink to this equation"></a></span>\[d \rho (t) = d_1 \rho \, dt + \sum_n d_{2,n} \rho \, dW_n,\]</div>
 <p>where <span class="math notranslate nohighlight">\(dW_n\)</span> is a Wiener increment, which has the expectation values <span class="math notranslate nohighlight">\(E[dW] = 0\)</span> and <span class="math notranslate nohighlight">\(E[dW^2] = dt\)</span>.</p>
 <section id="stochastic-schrodinger-equation">
 <h2>Stochastic Schrodinger Equation<a class="headerlink" href="#stochastic-schrodinger-equation" title="Permalink to this heading"></a></h2>
@@ -148,17 +150,21 @@ QuTiP by solving the general equation</p>
 <p>where <span class="math notranslate nohighlight">\(H\)</span> is the Hamiltonian, <span class="math notranslate nohighlight">\(S_n\)</span> are the stochastic collapse operators, and <span class="math notranslate nohighlight">\(e_n\)</span> is</p>
 <div class="math notranslate nohighlight" id="equation-jump-matrix-element">
 <span class="eqno">(3)<a class="headerlink" href="#equation-jump-matrix-element" title="Permalink to this equation"></a></span>\[e_n = \left&lt;\psi(t)|S_n + S_n^\dagger|\psi(t)\right&gt;\]</div>
-<p>In QuTiP, this equation can be solved using the function <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.ssesolve" title="qutip.solver.stochastic.ssesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.stochastic.ssesolve</span></code></a>, which is implemented by defining <span class="math notranslate nohighlight">\(d_1\)</span> and <span class="math notranslate nohighlight">\(d_{2,n}\)</span> from Equation <a class="reference internal" href="#equation-general-form">(1)</a> as</p>
+<p>In QuTiP, this equation can be solved using the function <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.ssesolve" title="qutip.solver.stochastic.ssesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">ssesolve</span></code></a>,
+which is implemented by defining <span class="math notranslate nohighlight">\(d_1\)</span> and <span class="math notranslate nohighlight">\(d_{2,n}\)</span> from Equation <a class="reference internal" href="#equation-general-form">(1)</a> as</p>
 <div class="math notranslate nohighlight" id="equation-d1-def">
 <span class="eqno">(4)<a class="headerlink" href="#equation-d1-def" title="Permalink to this equation"></a></span>\[d_1 = -iH - \frac{1}{2} \sum_n \left(S_n^\dagger S_n - e_n S_n + \frac{e_i^2}{4} \right),\]</div>
 <p>and</p>
 <div class="math notranslate nohighlight" id="equation-d2-def">
 <span class="eqno">(5)<a class="headerlink" href="#equation-d2-def" title="Permalink to this equation"></a></span>\[d_{2, n} = S_n - \frac{e_n}{2}.\]</div>
-<p>The solver <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.ssesolve" title="qutip.solver.stochastic.ssesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.stochastic.ssesolve</span></code></a> will construct the operators <span class="math notranslate nohighlight">\(d_1\)</span> and <span class="math notranslate nohighlight">\(d_{2,n}\)</span> once the user passes the Hamiltonian (<code class="docutils literal notranslate"><span class="pre">H</span></code>) and the stochastic operator list (<code class="docutils literal notranslate"><span class="pre">sc_ops</span></code>).
-As with the <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve" title="qutip.solver.mcsolve.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.mcsolve.mcsolve</span></code></a>, the number of trajectories and the seed for the noise realisation can be fixed using the arguments: <code class="docutils literal notranslate"><span class="pre">ntraj</span></code> and <code class="docutils literal notranslate"><span class="pre">seeds</span></code>, respectively.
-If the user also requires the measurement output, the options entry <code class="docutils literal notranslate"><span class="pre">{&quot;store_measurement&quot;:</span> <span class="pre">True}</span></code> should be included.</p>
-<p>Per default, homodyne is used. Heterodyne detections can be easily simulated by passing the arguments <code class="docutils literal notranslate"><span class="pre">'heterodyne=True'</span></code> to <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.ssesolve" title="qutip.solver.stochastic.ssesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.stochastic.ssesolve</span></code></a>.</p>
-<p>Examples of how to solve the stochastic Schrodinger equation using QuTiP can be found in this <a class="reference external" href="https://nbviewer.ipython.org/github/qutip/qutip-notebooks/blob/master/development/development-ssesolve-tests.ipynb">development notebook</a>.</p>
+<p>The solver <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.ssesolve" title="qutip.solver.stochastic.ssesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">ssesolve</span></code></a> will construct the operators
+<span class="math notranslate nohighlight">\(d_1\)</span> and <span class="math notranslate nohighlight">\(d_{2,n}\)</span> once the user passes the Hamiltonian (<code class="docutils literal notranslate"><span class="pre">H</span></code>) and
+the stochastic operator list (<code class="docutils literal notranslate"><span class="pre">sc_ops</span></code>). As with the <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve" title="qutip.solver.mcsolve.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mcsolve</span></code></a>,
+the number of trajectories and the seed for the noise realisation can be fixed using
+the arguments: <code class="docutils literal notranslate"><span class="pre">ntraj</span></code> and <code class="docutils literal notranslate"><span class="pre">seeds</span></code>, respectively. If the user also requires the
+measurement output, the options entry <code class="docutils literal notranslate"><span class="pre">{&quot;store_measurement&quot;:</span> <span class="pre">True}</span></code> should be included.</p>
+<p>Per default, homodyne is used. Heterodyne detections can be easily simulated by passing
+the arguments <code class="docutils literal notranslate"><span class="pre">'heterodyne=True'</span></code> to <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.ssesolve" title="qutip.solver.stochastic.ssesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">ssesolve</span></code></a>.</p>
 </section>
 <section id="stochastic-master-equation">
 <h2>Stochastic Master Equation<a class="headerlink" href="#stochastic-master-equation" title="Permalink to this heading"></a></h2>
@@ -172,32 +178,34 @@ The stochastic master equation is given by (see section 4.4, <a class="reference
            - \rho A^\dagger A - A^\dagger A \rho \right],\]</div>
 <p>and</p>
 <div class="math notranslate nohighlight" id="equation-h-cal">
-<span class="eqno">(8)<a class="headerlink" href="#equation-h-cal" title="Permalink to this equation"></a></span>\[\mathcal{H}[A]\rho = A\rho(t) + \rho(t) A^\dagger - \tr[A\rho(t) + \rho(t) A^\dagger].\]</div>
-<p>In QuTiP, solutions for the stochastic master equation are obtained using the solver <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.smesolve" title="qutip.solver.stochastic.smesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.stochastic.smesolve</span></code></a>.
-The implementation takes into account 2 types of collapse operators. <span class="math notranslate nohighlight">\(C_i\)</span> (<code class="docutils literal notranslate"><span class="pre">c_ops</span></code>) represent the dissipation in the environment, while <span class="math notranslate nohighlight">\(S_n\)</span> (<code class="docutils literal notranslate"><span class="pre">sc_ops</span></code>) are monitored operators.
-The deterministic part of the evolution, described by the <span class="math notranslate nohighlight">\(d_1\)</span> in Equation <a class="reference internal" href="#equation-general-form">(1)</a>, takes into account all operators <span class="math notranslate nohighlight">\(C_i\)</span> and <span class="math notranslate nohighlight">\(S_n\)</span>:</p>
+<span class="eqno">(8)<a class="headerlink" href="#equation-h-cal" title="Permalink to this equation"></a></span>\[\mathcal{H}[A]\rho = A\rho(t) + \rho(t) A^\dagger - \mathrm{tr}[A\rho(t) + \rho(t) A^\dagger].\]</div>
+<p>In QuTiP, solutions for the stochastic master equation are obtained using the solver
+<a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.smesolve" title="qutip.solver.stochastic.smesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">smesolve</span></code></a>. The implementation takes into account 2
+types of collapse operators. <span class="math notranslate nohighlight">\(C_i\)</span> (<code class="docutils literal notranslate"><span class="pre">c_ops</span></code>) represent the dissipation in
+the environment, while <span class="math notranslate nohighlight">\(S_n\)</span> (<code class="docutils literal notranslate"><span class="pre">sc_ops</span></code>) are monitored operators.
+The deterministic part of the evolution, described by the <span class="math notranslate nohighlight">\(d_1\)</span> in Equation
+<a class="reference internal" href="#equation-general-form">(1)</a>, takes into account all operators <span class="math notranslate nohighlight">\(C_i\)</span> and <span class="math notranslate nohighlight">\(S_n\)</span>:</p>
 <div class="math notranslate nohighlight" id="equation-liouvillian">
 <span class="eqno">(9)<a class="headerlink" href="#equation-liouvillian" title="Permalink to this equation"></a></span>\[d_1 = - i[H(t),\rho(t)]
              + \sum_i D[C_i]\rho
              + \sum_n D[S_n]\rho,\]</div>
 <p>The stochastic part, <span class="math notranslate nohighlight">\(d_{2,n}\)</span>, is given solely by the operators <span class="math notranslate nohighlight">\(S_n\)</span></p>
 <div class="math notranslate nohighlight" id="equation-stochastic-smesolve">
-<span class="eqno">(10)<a class="headerlink" href="#equation-stochastic-smesolve" title="Permalink to this equation"></a></span>\[d_{2,n} = S_n \rho(t) + \rho(t) S_n^\dagger - \tr \left(S_n \rho (t)
-                 + \rho(t) S_n^\dagger \right)\rho(t).\]</div>
+<span class="eqno">(10)<a class="headerlink" href="#equation-stochastic-smesolve" title="Permalink to this equation"></a></span>\[d_{2,n} = S_n \rho(t) + \rho(t) S_n^\dagger - \mathrm{tr}\left(S_n \rho (t)
+                 + \rho(t) S_n^\dagger \right)\,\rho(t).\]</div>
 <p>As in the stochastic Schrodinger equation, heterodyne detection can be chosen by passing <code class="docutils literal notranslate"><span class="pre">heterodyne=True</span></code>.</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
-<p>Below, we solve the dynamics for an optical cavity at 0K whose output is monitored using homodyne detection.
-The cavity decay rate is given by <span class="math notranslate nohighlight">\(\kappa\)</span> and the <span class="math notranslate nohighlight">\(\Delta\)</span> is the cavity detuning with respect to the driving field.
-The measurement operators can be passed using the option <code class="docutils literal notranslate"><span class="pre">m_ops</span></code>. The homodyne current <span class="math notranslate nohighlight">\(J_x\)</span> is calculated using</p>
+<p>Below, we solve the dynamics for an optical cavity at 0K whose output is monitored
+using homodyne detection. The cavity decay rate is given by <span class="math notranslate nohighlight">\(\kappa\)</span> and the
+<span class="math notranslate nohighlight">\(\Delta\)</span> is the cavity detuning with respect to the driving field.
+The measurement operators can be passed using the option <code class="docutils literal notranslate"><span class="pre">m_ops</span></code>. The homodyne
+current <span class="math notranslate nohighlight">\(J_x\)</span> is calculated using</p>
 <div class="math notranslate nohighlight" id="equation-measurement-result">
 <span class="eqno">(11)<a class="headerlink" href="#equation-measurement-result" title="Permalink to this equation"></a></span>\[J_x = \langle x \rangle + dW / dt,\]</div>
-<p>where <span class="math notranslate nohighlight">\(x\)</span> is the operator passed using <code class="docutils literal notranslate"><span class="pre">m_ops</span></code>. The results are available in <code class="docutils literal notranslate"><span class="pre">result.measurements</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">qutip</span>
-
-<span class="c1"># parameters</span>
+<p>where <span class="math notranslate nohighlight">\(x\)</span> is the operator passed using <code class="docutils literal notranslate"><span class="pre">m_ops</span></code>. The results are available
+in <code class="docutils literal notranslate"><span class="pre">result.measurements</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># parameters</span>
 <span class="n">DIM</span> <span class="o">=</span> <span class="mi">20</span>               <span class="c1"># Hilbert space dimension</span>
 <span class="n">DELTA</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># cavity detuning</span>
 <span class="n">KAPPA</span> <span class="o">=</span> <span class="mi">2</span>              <span class="c1"># cavity decay rate</span>
@@ -205,20 +213,20 @@ The measurement operators can be passed using the option <code class="docutils l
 <span class="n">NUMBER_OF_TRAJECTORIES</span> <span class="o">=</span> <span class="mi">500</span>
 
 <span class="c1"># operators</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">DIM</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">destroy</span><span class="p">(</span><span class="n">DIM</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
 <span class="n">H</span> <span class="o">=</span> <span class="n">DELTA</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
 
-<span class="n">rho_0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">coherent</span><span class="p">(</span><span class="n">DIM</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">INTENSITY</span><span class="p">))</span>
+<span class="n">rho_0</span> <span class="o">=</span> <span class="n">coherent</span><span class="p">(</span><span class="n">DIM</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">INTENSITY</span><span class="p">))</span>
 <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.0025</span><span class="p">)</span>
 
-<span class="n">stoc_solution</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">smesolve</span><span class="p">(</span>
+<span class="n">stoc_solution</span> <span class="o">=</span> <span class="n">smesolve</span><span class="p">(</span>
     <span class="n">H</span><span class="p">,</span> <span class="n">rho_0</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span>
     <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span>
     <span class="n">sc_ops</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">KAPPA</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">],</span>
     <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">],</span>
     <span class="n">ntraj</span><span class="o">=</span><span class="n">NUMBER_OF_TRAJECTORIES</span><span class="p">,</span>
-    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dt&quot;</span><span class="p">:</span> <span class="mf">0.00125</span><span class="p">,</span> <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,}</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dt&quot;</span><span class="p">:</span> <span class="mf">0.00125</span><span class="p">,</span> <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,}</span>
 <span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -234,7 +242,9 @@ The measurement operators can be passed using the option <code class="docutils l
 <figure class="align-default">
 <img alt="../../images/dynamics-stochastic-1.png" class="plot-directive" src="../../images/dynamics-stochastic-1.png" />
 </figure>
-<p>For other examples on <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.stochastic.smesolve" title="qutip.solver.stochastic.smesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.solver.stochastic.smesolve</span></code></a>, see the <a class="reference external" href="https://nbviewer.ipython.org/github/qutip/qutip-notebooks/blob/master/development/development-smesolve-tests.ipynb">following notebook</a>, as well as these notebooks available at <a class="reference external" href="https://qutip.org/tutorials.html">QuTiP Tutorials page</a>: <a class="reference external" href="https://nbviewer.ipython.org/github/qutip/qutip-notebooks/blob/master/examples/smesolve-heterodyne.ipynb">heterodyne detection</a>, <a class="reference external" href="https://nbviewer.ipython.org/github/qutip/qutip-notebooks/blob/master/examples/smesolve-inefficient-detection.ipynb">inefficient detection</a>, and <a class="reference external" href="https://nbviewer.ipython.org/github/jrjohansson/reproduced-papers/blob/master/Reproduce-SIAM-JCO-46-445-2007-Mirrahimi.ipynb">feedback control</a>.</p>
+<p>The stochastic solvers share many features with <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mcsolve.mcsolve" title="qutip.solver.mcsolve.mcsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mcsolve</span></code></a>, such as
+end conditions, seed control and running in parallel. See the sections
+<a class="reference internal" href="dynamics-monte.html#monte-ntraj"><span class="std std-ref">Changing the Number of Trajectories</span></a>, <a class="reference internal" href="dynamics-monte.html#monte-seeds"><span class="std std-ref">Reproducibility</span></a> and <a class="reference internal" href="dynamics-monte.html#monte-parallel"><span class="std std-ref">Running trajectories in parallel</span></a> for details.</p>
 </section>
 </section>
 </section>
@@ -251,7 +261,7 @@ The measurement operators can be passed using the option <code class="docutils l
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

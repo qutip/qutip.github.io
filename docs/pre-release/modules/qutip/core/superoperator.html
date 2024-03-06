@@ -99,6 +99,7 @@
 
 <span class="kn">from</span> <span class="nn">.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
+<span class="kn">from</span> <span class="nn">.dimensions</span> <span class="kn">import</span> <span class="n">Compound</span><span class="p">,</span> <span class="n">SuperSpace</span><span class="p">,</span> <span class="n">Space</span>
 
 <span class="k">def</span> <span class="nf">_map_over_compound_operators</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -123,23 +124,25 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : Qobj or QobjEvo (optional)</span>
+<span class="sd">    H : Qobj or QobjEvo, optional</span>
 <span class="sd">        System Hamiltonian or Hamiltonian component of a Liouvillian.</span>
 <span class="sd">        Considered `0` if not given.</span>
 
-<span class="sd">    c_ops : array_like of Qobj or QobjEvo</span>
+<span class="sd">    c_ops : array_like of Qobj or QobjEvo, optional</span>
 <span class="sd">        A ``list`` or ``array`` of collapse operators.</span>
 
-<span class="sd">    data_only :  bool [False]</span>
+<span class="sd">    data_only : bool, default: False</span>
 <span class="sd">        Return the data object instead of a Qobj</span>
 
-<span class="sd">    chi : array_like of float [None]</span>
-<span class="sd">        In some systems it is possible to determine the statistical moments (mean, variance, etc) of the</span>
-<span class="sd">        probability distributions of occupation of various states by numerically evaluating the derivatives</span>
-<span class="sd">        of the steady state occupation probability as a function of artificial phase parameters ``chi``</span>
-<span class="sd">        which are included in the :func:`lindblad_dissipator` for each collapse operator. See</span>
-<span class="sd">        the documentation of :func:`lindblad_dissipator` for references and further details.</span>
-<span class="sd">        This parameter is deprecated and may be removed in QuTiP 5.</span>
+<span class="sd">    chi : array_like of float, optional</span>
+<span class="sd">        In some systems it is possible to determine the statistical moments</span>
+<span class="sd">        (mean, variance, etc) of the probability distributions of occupation of</span>
+<span class="sd">        various states by numerically evaluating the derivatives of the steady</span>
+<span class="sd">        state occupation probability as a function of artificial phase </span>
+<span class="sd">        parameters ``chi`` which are included in the</span>
+<span class="sd">        :func:`lindblad_dissipator` for each collapse operator. See the</span>
+<span class="sd">        documentation of :func:`lindblad_dissipator` for references and further</span>
+<span class="sd">        details. This parameter is deprecated and may be removed in QuTiP 5.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -204,7 +207,6 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                     <span class="n">dims</span><span class="o">=</span><span class="n">sop_dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                     <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -224,20 +226,25 @@
 <span class="sd">    a : Qobj or QobjEvo</span>
 <span class="sd">        Left part of collapse operator.</span>
 
-<span class="sd">    b : Qobj or QobjEvo (optional)</span>
+<span class="sd">    b : Qobj or QobjEvo, optional</span>
 <span class="sd">        Right part of collapse operator. If not specified, b defaults to a.</span>
 
-<span class="sd">    chi : float [None]</span>
-<span class="sd">        In some systems it is possible to determine the statistical moments (mean, variance, etc) of the</span>
-<span class="sd">        probability distribution of the occupation numbers of states by numerically evaluating the derivatives</span>
-<span class="sd">        of the steady state occupation probability as a function of an artificial phase parameter ``chi``</span>
-<span class="sd">        which multiplies the ``a \\rho a^dagger`` term of the dissipator by ``e ^ (i * chi)``. The factor ``e ^ (i * chi)``</span>
-<span class="sd">        is introduced via the generating function of the statistical moments. For examples of the technique,</span>
-<span class="sd">        see `Full counting statistics of nano-electromechanical systems &lt;https://arxiv.org/abs/cond-mat/0410322&gt;`_</span>
-<span class="sd">        and `Photon-mediated electron transport in hybrid circuit-QED &lt;https://arxiv.org/abs/1303.7449&gt;`_.</span>
-<span class="sd">        This parameter is deprecated and may be removed in QuTiP 5.</span>
+<span class="sd">    chi : float, optional</span>
+<span class="sd">        In some systems it is possible to determine the statistical moments</span>
+<span class="sd">        (mean, variance, etc) of the probability distribution of the occupation</span>
+<span class="sd">        numbers of states by numerically evaluating the derivatives of the</span>
+<span class="sd">        steady state occupation probability as a function of an artificial</span>
+<span class="sd">        phase parameter ``chi`` which multiplies the ``a \\rho a^dagger`` term</span>
+<span class="sd">        of the dissipator by ``e ^ (i * chi)``. The factor ``e ^ (i * chi)`` is</span>
+<span class="sd">        introduced via the generating function of the statistical moments. For</span>
+<span class="sd">        examples of the technique, see `Full counting statistics of</span>
+<span class="sd">        nano-electromechanical systems</span>
+<span class="sd">        &lt;https://arxiv.org/abs/cond-mat/0410322&gt;`_ and `Photon-mediated</span>
+<span class="sd">        electron transport in hybrid circuit-QED</span>
+<span class="sd">        &lt;https://arxiv.org/abs/1303.7449&gt;`_. This parameter is deprecated and</span>
+<span class="sd">        may be removed in QuTiP 5.</span>
 
-<span class="sd">    data_only :  bool [False]</span>
+<span class="sd">    data_only : bool, default: False</span>
 <span class="sd">        Return the data object instead of a Qobj</span>
 
 <span class="sd">    Returns</span>
@@ -289,7 +296,6 @@
                         <span class="s2">&quot;in super representation&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">stack_columns</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -403,7 +409,6 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">kron_transpose</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">identity_like</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                 <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">isherm</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -427,8 +432,7 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Input is not a quantum operator&#39;</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">identity_like</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
-                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">A</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">_dims</span><span class="p">],</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">isherm</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -470,35 +474,106 @@
              <span class="n">_drop_projected_dims</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])]]</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">kron_transpose</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">isherm</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">reshuffle</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_to_super_of_tensor</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Column-reshuffles a ``type=&quot;super&quot;`` Qobj.</span>
+<span class="sd">    Transform a superoperator composed of multiple space into a superoperator</span>
+<span class="sd">    over a composite spaces.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;super&#39;</span><span class="p">,</span> <span class="s1">&#39;operator-ket&#39;</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Reshuffling is only supported for square operators.&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Reshuffling is only supported on type=&#39;super&#39; &quot;</span>
                         <span class="s2">&quot;or type=&#39;operator-ket&#39;.&quot;</span><span class="p">)</span>
-    <span class="c1"># How many indices are there, and how many subsystems can we decompose</span>
-    <span class="c1"># each index into?</span>
-    <span class="n">n_indices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">n_subsystems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-    <span class="c1"># Generate a list of lists (lol) that represents the permutation order we</span>
-    <span class="c1"># need. It&#39;s easiest to do so if we make an array, then turn it into a lol</span>
-    <span class="c1"># by using map(list, ...). That array is generated by using reshape and</span>
-    <span class="c1"># transpose to turn an array like [a, b, a, b, ..., a, b] into one like</span>
-    <span class="c1"># [a, a, ..., a, b, b, ..., b].</span>
-    <span class="n">perm_idxs</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_subsystems</span> <span class="o">*</span> <span class="n">n_indices</span><span class="p">)[</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_subsystems</span> <span class="o">*</span> <span class="n">n_indices</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-                            <span class="p">(</span><span class="n">n_indices</span><span class="p">,</span> <span class="n">n_subsystems</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-                    <span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_subsystems</span><span class="p">,</span> <span class="n">n_indices</span><span class="p">))</span>
-                    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">perm_idxs</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">isoper</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">issquare</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">SuperSpace</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">perm_idxs</span> <span class="o">=</span> <span class="p">[[],</span> <span class="p">[]]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">Compound</span><span class="p">):</span>
+        <span class="n">shift</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">dims</span><span class="o">.</span><span class="n">spaces</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">SuperSpace</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">space</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">issquare</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">space_dims</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">to_</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">space_dims</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Space</span><span class="p">:</span>
+                <span class="n">perm_idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shift</span><span class="p">]</span>
+                <span class="n">perm_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shift</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">shift</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space_dims</span><span class="p">,</span> <span class="n">Compound</span><span class="p">):</span>
+                <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space_dims</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+                <span class="n">perm_idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shift</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+                <span class="n">perm_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shift</span> <span class="o">+</span> <span class="n">N</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+                <span class="n">shift</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ENR space or other complex spaces</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Reshuffling with non standard space&quot;</span>
+                                          <span class="s2">&quot;is not supported.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="n">perm_idxs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_to_tensor_of_super</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform a superoperator composed of multiple space into a tensor of</span>
+<span class="sd">    superoperator on each spaces.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Reshuffling is only supported for square operators.&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Reshuffling is only supported on type=&#39;super&#39; &quot;</span>
+                        <span class="s2">&quot;or type=&#39;operator-ket&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">perm_idxs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">Compound</span><span class="p">):</span>
+        <span class="n">shift</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">space</span> <span class="ow">in</span> <span class="n">dims</span><span class="o">.</span><span class="n">spaces</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">SuperSpace</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">space</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">issquare</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">space_dims</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">to_</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">space_dims</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Space</span><span class="p">:</span>
+                <span class="n">perm_idxs</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">shift</span><span class="p">],</span> <span class="p">[</span><span class="n">shift</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+                <span class="n">shift</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space_dims</span><span class="p">,</span> <span class="n">Compound</span><span class="p">):</span>
+                <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space_dims</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+                <span class="n">idxs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">perm_idxs</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">]</span>
+                <span class="n">perm_idxs</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">]</span>
+                <span class="n">shift</span> <span class="o">+=</span> <span class="n">N</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ENR space or other complex spaces</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Reshuffling with non standard space&quot;</span>
+                                          <span class="s2">&quot;is not supported.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">SuperSpace</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">to_</span><span class="p">,</span> <span class="n">Compound</span><span class="p">):</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="o">.</span><span class="n">oper</span><span class="o">.</span><span class="n">to_</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+            <span class="n">perm_idxs</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([[[</span><span class="n">i</span><span class="p">],</span> <span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">step</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">step</span><span class="p">)],</span> <span class="p">[])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">q_oper</span>
+
+    <span class="k">return</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="n">perm_idxs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">reshuffle</span><span class="p">(</span><span class="n">q_oper</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Column-reshuffles a super operator or a operator-ket Qobj.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;super&quot;</span><span class="p">,</span> <span class="s2">&quot;operator-ket&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Reshuffling is only supported on type=&#39;super&#39; &quot;</span>
+                        <span class="s2">&quot;or type=&#39;operator-ket&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Compound</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_to_super_of_tensor</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_to_tensor_of_super</span><span class="p">(</span><span class="n">q_oper</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -509,7 +584,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

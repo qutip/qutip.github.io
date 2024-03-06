@@ -148,7 +148,6 @@
     <span class="n">sci</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nnz</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">adjoint</span><span class="p">(),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">isherm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">isunitary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -221,36 +220,59 @@
     <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">unstack_columns</span><span class="p">(</span><span class="n">vec</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">val</span><span class="p">)),</span>
-                 <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">)</span>
+                 <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">tol</span><span class="p">]</span>
 
 
 <span class="c1"># Individual conversions from Kraus operators are public because the output</span>
 <span class="c1"># list of Kraus operators is not itself a quantum object.</span>
 
-<div class="viewcode-block" id="kraus_to_choi"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.superop_reps.kraus_to_choi">[docs]</a><span class="k">def</span> <span class="nf">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Take a list of Kraus operators and returns the Choi matrix for the channel</span>
-<span class="sd">    represented by the Kraus operators in `kraus_list`</span>
+<div class="viewcode-block" id="kraus_to_choi"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.superop_reps.kraus_to_choi">[docs]</a><span class="k">def</span> <span class="nf">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_ops</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a list of Kraus operators into Choi representation of the channel.</span>
+
+<span class="sd">    Essentially, kraus operators are a decomposition of a Choi matrix,</span>
+<span class="sd">    and its reconstruction from them should go as</span>
+<span class="sd">    :math:`E = \sum_{i} |K_i\rangle\rangle \langle\langle K_i|`,</span>
+<span class="sd">    where we use vector representation of Kraus operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kraus_ops : list[Qobj]</span>
+<span class="sd">        The list of Kraus operators to be converted to Choi representation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    choi : Qobj</span>
+<span class="sd">        A quantum object representing the same map as ``kraus_ops``, such that</span>
+<span class="sd">        ``choi.superrep == &quot;choi&quot;``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kraus_mat_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">full</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kraus_list</span><span class="p">]</span>
-    <span class="n">op_rng</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">kraus_mat_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">choi_blocks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[[</span><span class="nb">sum</span><span class="p">(</span><span class="n">op</span><span class="p">[:,</span> <span class="n">c_ix</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">op</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="n">r_ix</span><span class="p">])</span>
-              <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">kraus_mat_list</span><span class="p">)</span>
-          <span class="k">for</span> <span class="n">r_ix</span> <span class="ow">in</span> <span class="n">op_rng</span><span class="p">]</span>
-         <span class="k">for</span> <span class="n">c_ix</span> <span class="ow">in</span> <span class="n">op_rng</span><span class="p">]</span>
+    <span class="n">len_op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">kraus_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># If Kraus ops have dims [M, N] in qutip notation (act on [N, N] density</span>
+    <span class="c1"># matrix and produce [M, M] d.m.), Choi matrix Hilbert space will</span>
+    <span class="c1"># be [[M, N], [M, N]] because Choi Hilbert space</span>
+    <span class="c1"># is (output space) x (input space).</span>
+    <span class="n">choi_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">kraus_ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="c1"># transform a list of Qobj matrices list[sum_ij k_ij |i&gt;&lt;j|]</span>
+    <span class="c1"># into an array of array vectors sum_ij k_ij |i, j&gt;&gt; = sum_I k_I |I&gt;&gt;</span>
+    <span class="n">kraus_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">kraus_op</span><span class="o">.</span><span class="n">full</span><span class="p">(),</span> <span class="n">len_op</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">kraus_op</span> <span class="ow">in</span> <span class="n">kraus_ops</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">choi_blocks</span><span class="p">)),</span>
-                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">kraus_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
-                <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;choi&#39;</span><span class="p">,</span>
-                <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="c1"># sum_{I} |k_I|^2 |I&gt;&gt;&lt;&lt;I|</span>
+    <span class="n">choi_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span>
+        <span class="n">kraus_vectors</span><span class="p">,</span> <span class="n">kraus_vectors</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">axes</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">choi_array</span><span class="p">,</span> <span class="n">choi_dims</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s2">&quot;choi&quot;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="kraus_to_super"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.superop_reps.kraus_to_super">[docs]</a><span class="k">def</span> <span class="nf">kraus_to_super</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a list of Kraus operators to a superoperator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kraus_list : list of Qobj</span>
+<span class="sd">        The list of Kraus super operators to convert.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">to_super</span><span class="p">(</span><span class="n">kraus_to_choi</span><span class="p">(</span><span class="n">kraus_list</span><span class="p">))</span></div>
 
@@ -275,7 +297,6 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">new_dims</span><span class="p">,</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;super&#39;</span> <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s1">&#39;choi&#39;</span> <span class="k">else</span> <span class="s1">&#39;choi&#39;</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -291,7 +312,6 @@
     <span class="n">B</span> <span class="o">=</span> <span class="n">_superpauli_basis</span><span class="p">(</span><span class="n">nq</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">adjoint</span><span class="p">(),</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">B</span><span class="p">),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;chi&#39;</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -312,7 +332,6 @@
                     <span class="mi">1</span> <span class="o">/</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="p">),</span>
                 <span class="n">dims</span><span class="o">=</span><span class="n">q_oper</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">,</span>
                 <span class="n">superrep</span><span class="o">=</span><span class="s1">&#39;choi&#39;</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -333,7 +352,6 @@
     <span class="k">return</span> <span class="p">[</span>
         <span class="n">Qobj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>
              <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">outdims</span><span class="p">,</span> <span class="n">indims</span><span class="p">],</span>
-             <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span>
              <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span>
     <span class="p">]</span>
@@ -397,13 +415,11 @@
 
     <span class="n">A</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dK</span> <span class="o">*</span> <span class="n">dL</span><span class="p">,</span> <span class="n">dL</span><span class="p">),</span>
              <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">out_left</span> <span class="o">+</span> <span class="p">[</span><span class="n">dK</span><span class="p">],</span> <span class="n">out_right</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-             <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span>
              <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
              <span class="n">isunitary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dK</span> <span class="o">*</span> <span class="n">dR</span><span class="p">,</span> <span class="n">dR</span><span class="p">),</span>
              <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">in_left</span> <span class="o">+</span> <span class="p">[</span><span class="n">dK</span><span class="p">],</span> <span class="n">in_right</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-             <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span>
              <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
              <span class="n">isunitary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -413,8 +429,8 @@
         <span class="n">B</span> <span class="o">+=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">KR</span><span class="p">,</span> <span class="n">basis</span><span class="p">(</span><span class="n">dK</span><span class="p">,</span> <span class="n">idx_kraus</span><span class="p">))</span>
 
     <span class="c1"># There is no input (right) Kraus index, so strip that off.</span>
-    <span class="k">del</span> <span class="n">A</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">del</span> <span class="n">B</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">out_left</span> <span class="o">+</span> <span class="p">[</span><span class="n">dK</span><span class="p">],</span> <span class="n">out_right</span><span class="p">]</span>
+    <span class="n">B</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">in_left</span> <span class="o">+</span> <span class="p">[</span><span class="n">dK</span><span class="p">],</span> <span class="n">in_right</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span>
 
@@ -440,8 +456,9 @@
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
-<span class="sd">    TypeError: if the given quantum object is not a map, or cannot be converted</span>
-<span class="sd">        to Choi representation.</span>
+<span class="sd">    TypeError:</span>
+<span class="sd">        If the given quantum object is not a map, or cannot be converted to</span>
+<span class="sd">        Choi representation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">superrep</span> <span class="o">==</span> <span class="s1">&#39;choi&#39;</span><span class="p">:</span>
@@ -482,7 +499,8 @@
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
-<span class="sd">    TypeError: if the given quantum object is not a map, or cannot be converted</span>
+<span class="sd">    TypeError:</span>
+<span class="sd">        If the given quantum object is not a map, or cannot be converted</span>
 <span class="sd">        to Chi representation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">q_oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
@@ -559,9 +577,8 @@
 <span class="sd">        ``q_oper`` is ``type=&quot;oper&quot;``, then it is taken to act by conjugation,</span>
 <span class="sd">        such that ``to_kraus(A) == to_kraus(sprepost(A, A.dag())) == [A]``.</span>
 
-<span class="sd">    tol : Float</span>
+<span class="sd">    tol : Float, default: 1e-9</span>
 <span class="sd">        Optional threshold parameter for eigenvalues/Kraus ops to be discarded.</span>
-<span class="sd">        The default is to=1e-9.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -589,18 +606,22 @@
 
 <div class="viewcode-block" id="to_stinespring"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.superop_reps.to_stinespring">[docs]</a><span class="k">def</span> <span class="nf">to_stinespring</span><span class="p">(</span><span class="n">q_oper</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts a Qobj representing a quantum map $\Lambda$ to a pair of partial</span>
-<span class="sd">    isometries $A$ and $B$ such that $\Lambda(X) = \Tr_2(A X B^\dagger)$ for</span>
-<span class="sd">    all inputs $X$, where the partial trace is taken over a a new index on the</span>
-<span class="sd">    output dimensions of $A$ and $B$.</span>
+<span class="sd">    Converts a Qobj representing a quantum map :math:`\Lambda` to a pair of</span>
+<span class="sd">    partial isometries ``A`` and ``B`` such that</span>
+<span class="sd">    :math:`\Lambda(X) = \Tr_2(A X B^\dagger)` for all inputs ``X``, where the</span>
+<span class="sd">    partial trace is taken over a a new index on the output dimensions of</span>
+<span class="sd">    ``A`` and ``B``.</span>
 
-<span class="sd">    For completely positive inputs, $A$ will always equal $B$ up to precision</span>
-<span class="sd">    errors.</span>
+<span class="sd">    For completely positive inputs, ``A`` will always equal ``B`` up to</span>
+<span class="sd">    precision errors.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q_oper : Qobj</span>
 <span class="sd">        Superoperator to be converted to a Stinespring pair.</span>
+
+<span class="sd">    threshold : float, default: 1e-10</span>
+<span class="sd">        Threshold parameter for eigenvalues/Kraus ops to be discarded.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -619,7 +640,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

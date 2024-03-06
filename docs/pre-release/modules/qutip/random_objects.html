@@ -112,7 +112,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">create</span><span class="p">,</span> <span class="n">destroy</span><span class="p">,</span> <span class="n">jmat</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span>
                <span class="n">to_super</span><span class="p">,</span> <span class="n">to_choi</span><span class="p">,</span> <span class="n">to_chi</span><span class="p">,</span> <span class="n">to_kraus</span><span class="p">,</span> <span class="n">to_stinespring</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
-<span class="kn">from</span> <span class="nn">.core.dimensions</span> <span class="kn">import</span> <span class="n">flatten</span>
+<span class="kn">from</span> <span class="nn">.core.dimensions</span> <span class="kn">import</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">Dimensions</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">settings</span>
 
 
@@ -311,10 +311,10 @@
 <span class="sd">        the new Qobj are set to this list.  This can produce either `oper` or</span>
 <span class="sd">        `super` depending on the passed `dimensions`.</span>
 
-<span class="sd">    density : float, [0.30]</span>
+<span class="sd">    density : float, default: 0.30</span>
 <span class="sd">        Density between [0,1] of output Hermitian operator.</span>
 
-<span class="sd">    distribution : str {&quot;fill&quot;, &quot;pos_def&quot;, &quot;eigen&quot;}</span>
+<span class="sd">    distribution : str {&quot;fill&quot;, &quot;pos_def&quot;, &quot;eigen&quot;}, default: &quot;fill&quot;</span>
 <span class="sd">        Method used to obtain the density matrices.</span>
 
 <span class="sd">        - &quot;fill&quot; : Uses :math:`H=0.5*(X+X^{+})` where :math:`X` is a randomly</span>
@@ -333,13 +333,13 @@
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    oper : :class:`qobj`</span>
+<span class="sd">    oper : :obj:`.Qobj`</span>
 <span class="sd">        Hermitian quantum operator.</span>
 
 <span class="sd">    Notes</span>
@@ -363,7 +363,7 @@
         <span class="n">out</span> <span class="o">=</span> <span class="n">_rand_jacobi_rotation</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
         <span class="k">while</span> <span class="n">_data</span><span class="o">.</span><span class="n">csr</span><span class="o">.</span><span class="n">nnz</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.95</span> <span class="o">*</span> <span class="n">nvals</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">_rand_jacobi_rotation</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">CSR</span>
 
     <span class="k">else</span><span class="p">:</span>
@@ -375,7 +375,7 @@
             <span class="n">M</span> <span class="o">=</span> <span class="n">_rand_herm_dense</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">pos_def</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
             <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span>
 
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
 
@@ -436,10 +436,10 @@
 <span class="sd">        the new Qobj are set to this list.  This can produce either `oper` or</span>
 <span class="sd">        `super` depending on the passed `dimensions`.</span>
 
-<span class="sd">    density : float, [1]</span>
+<span class="sd">    density : float, default: 1</span>
 <span class="sd">        Density between [0,1] of output unitary operator.</span>
 
-<span class="sd">    distribution : [&quot;haar&quot;, &quot;exp&quot;]</span>
+<span class="sd">    distribution : str {&quot;haar&quot;, &quot;exp&quot;}, default: &quot;haar&quot;</span>
 <span class="sd">        Method used to obtain the unitary matrices.</span>
 
 <span class="sd">        - haar : Haar random unitary matrix using the algorithm of [Mez07]_.</span>
@@ -450,8 +450,8 @@
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
@@ -479,7 +479,7 @@
 
     <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge_shuffle_blocks</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
 
-    <span class="n">mat</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isunitary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isunitary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">mat</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
 
 
@@ -539,11 +539,11 @@
 <span class="sd">        the new Qobj are set to this list.  This can produce either `oper` or</span>
 <span class="sd">        `super` depending on the passed `dimensions`.</span>
 
-<span class="sd">    density : float, [1]</span>
+<span class="sd">    density : float, default: 1</span>
 <span class="sd">        Density between [0,1] of output ket state when using the ``fill``</span>
 <span class="sd">        method.</span>
 
-<span class="sd">    distribution : str {&quot;haar&quot;, &quot;fill&quot;}</span>
+<span class="sd">    distribution : str {&quot;haar&quot;, &quot;fill&quot;}, default: &quot;haar&quot;</span>
 <span class="sd">        Method used to obtain the kets.</span>
 
 <span class="sd">        - haar : Haar random pure state obtained by applying a Haar random</span>
@@ -554,8 +554,8 @@
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
@@ -569,7 +569,9 @@
     <span class="k">if</span> <span class="n">distribution</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;haar&quot;</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;distribution must be one of {&#39;haar&#39;, &#39;fill&#39;}&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">distribution</span> <span class="o">==</span> <span class="s2">&quot;haar&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ket</span> <span class="o">=</span> <span class="n">rand_unitary</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">distribution</span> <span class="o">==</span> <span class="s2">&quot;haar&quot;</span><span class="p">:</span>
         <span class="n">ket</span> <span class="o">=</span> <span class="n">rand_unitary</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="s2">&quot;haar&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span> <span class="o">@</span> <span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">,</span>
@@ -583,7 +585,7 @@
         <span class="n">Y</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">csr</span><span class="o">.</span><span class="n">CSR</span><span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">Y</span><span class="p">)</span>
         <span class="n">ket</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span>
-                   <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ket&quot;</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isunitary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                   <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isunitary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">ket</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="k">return</span> <span class="n">ket</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
 
@@ -601,11 +603,12 @@
 <span class="sd">        the new Qobj are set to this list.  This can produce either ``oper`` or</span>
 <span class="sd">        ``super`` depending on the passed ``dimensions``.</span>
 
-<span class="sd">    density : float</span>
+<span class="sd">    density : float, default: 0.75</span>
 <span class="sd">        Density between [0,1] of output density matrix. Used by the &quot;pure&quot;,</span>
 <span class="sd">        &quot;eigen&quot; and &quot;herm&quot;.</span>
 
-<span class="sd">    distribution : str {&quot;ginibre&quot;, &quot;hs&quot;, &quot;pure&quot;, &quot;eigen&quot;, &quot;uniform&quot;}</span>
+<span class="sd">    distribution : str {&quot;ginibre&quot;, &quot;hs&quot;, &quot;pure&quot;, &quot;eigen&quot;, &quot;uniform&quot;}, \</span>
+<span class="sd">default: &quot;ginibre&quot;</span>
 <span class="sd">        Method used to obtain the density matrices.</span>
 
 <span class="sd">        - &quot;ginibre&quot; : Ginibre random density operator of rank ``rank`` by using</span>
@@ -628,8 +631,8 @@
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
@@ -680,7 +683,7 @@
         <span class="n">H</span> <span class="o">=</span> <span class="n">_merge_shuffle_blocks</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">generator</span><span class="p">)</span>
         <span class="n">H</span> <span class="o">/=</span> <span class="n">H</span><span class="o">.</span><span class="n">trace</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_rand_dm_ginibre</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
@@ -717,8 +720,7 @@
     <span class="k">return</span> <span class="n">rho</span>
 
 
-<span class="k">def</span> <span class="nf">rand_kraus_map</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rand_kraus_map"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_kraus_map">[docs]</a><span class="k">def</span> <span class="nf">rand_kraus_map</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a random CPTP map on an N-dimensional Hilbert space in Kraus</span>
 <span class="sd">    form.</span>
@@ -735,8 +737,8 @@
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
@@ -747,17 +749,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span>
     <span class="n">N</span><span class="p">,</span> <span class="n">dims</span> <span class="o">=</span> <span class="n">_implicit_tensor_dimensions</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dims</span><span class="o">.</span><span class="n">issuper</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Each kraus operator cannot itself a super operator.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Random unitary (Stinespring Dilation)</span>
     <span class="n">big_unitary</span> <span class="o">=</span> <span class="n">rand_unitary</span><span class="p">(</span><span class="n">N</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()</span>
     <span class="n">orthog_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">big_unitary</span><span class="p">[:,</span> <span class="p">:</span><span class="n">N</span><span class="p">])</span>
     <span class="n">oper_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">orthog_cols</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">oper_list</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">oper_list</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="rand_super"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_super">[docs]</a><span class="k">def</span> <span class="nf">rand_super</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="rand_super"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.random_objects.rand_super">[docs]</a><span class="k">def</span> <span class="nf">rand_super</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a randomly drawn superoperator acting on operators acting on</span>
 <span class="sd">    N dimensions.</span>
@@ -770,15 +773,15 @@
 <span class="sd">        the new Qobj are set to this list.  This can produce either `oper` or</span>
 <span class="sd">        `super` depending on the passed `dimensions`.</span>
 
-<span class="sd">    superrop : str, optional, {&quot;super&quot;}</span>
+<span class="sd">    superrop : str, default: &quot;super&quot;</span>
 <span class="sd">        Representation of the super operator</span>
 
 <span class="sd">    seed : int, SeedSequence, Generator, optional</span>
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span>
@@ -818,11 +821,11 @@
 <span class="sd">        density matrices this superoperator is applied to: ``dimensions=[2,2]``</span>
 <span class="sd">        ``dims=[[[2,2],[2,2]], [[2,2],[2,2]]]``.</span>
 
-<span class="sd">    enforce_tp : bool</span>
+<span class="sd">    enforce_tp : bool, default: True</span>
 <span class="sd">        If True, the trace-preserving condition of [BCSZ08]_ is enforced;</span>
 <span class="sd">        otherwise only complete positivity is enforced.</span>
 
-<span class="sd">    rank : int or None</span>
+<span class="sd">    rank : int, optional</span>
 <span class="sd">        Rank of the sampled superoperator. If None, a full-rank</span>
 <span class="sd">        superoperator is generated.</span>
 
@@ -830,11 +833,11 @@
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    superrop : str, optional, {&quot;super&quot;}</span>
+<span class="sd">    superrop : str, default: &quot;super&quot;</span>
 <span class="sd">        representation of the</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
@@ -883,9 +886,9 @@
         <span class="c1"># marking the dimensions as that of a type=super (that is,</span>
         <span class="c1"># with left and right compound indices, each representing</span>
         <span class="c1"># left and right indices on the underlying Hilbert space).</span>
-        <span class="n">D</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">XXdag</span><span class="p">,</span> <span class="n">Z</span><span class="p">)),</span> <span class="n">dims</span><span class="o">=</span><span class="n">tmp_dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">XXdag</span><span class="p">,</span> <span class="n">Z</span><span class="p">)),</span> <span class="n">dims</span><span class="o">=</span><span class="n">tmp_dims</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">D</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">XXdag</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">XXdag</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="n">tmp_dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;super&#39;</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">XXdag</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">XXdag</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="n">tmp_dims</span><span class="p">)</span>
 
     <span class="c1"># Since [BCSZ08] gives a row-stacking Choi matrix, but QuTiP</span>
     <span class="c1"># expects a column-stacking Choi matrix, we must permute the indices.</span>
@@ -914,18 +917,18 @@
 <span class="sd">        the new Qobj are set to this list.  This can produce either `oper` or</span>
 <span class="sd">        `super` depending on the passed `dimensions`.</span>
 
-<span class="sd">    density : float, [0.75]</span>
+<span class="sd">    density : float, default: 0.75</span>
 <span class="sd">        Density between [0,1] of output density matrix.</span>
 
-<span class="sd">    kind : str (Default = &#39;left&#39;)</span>
+<span class="sd">    kind : str {&quot;left&quot;, &quot;right&quot;}, default: &quot;left&quot;</span>
 <span class="sd">        Generate &#39;left&#39; or &#39;right&#39; stochastic matrix.</span>
 
 <span class="sd">    seed : int, SeedSequence, Generator, optional</span>
 <span class="sd">        Seed to create the random number generator or a pre prepared</span>
 <span class="sd">        generator. When none is suplied, a default generator is used.</span>
 
-<span class="sd">    dtype : type or str</span>
-<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to ``qutip.data.to`` is</span>
 <span class="sd">        accepted.</span>
 
 <span class="sd">    Returns</span>
@@ -965,7 +968,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

@@ -1,0 +1,923 @@
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qutip.core.coefficient &mdash; QuTiP 5.0 Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-rendered-html.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/site.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            QuTiP: Quantum Toolbox in Python
+          </a>
+              <div class="version">
+                5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qutip.core.coefficient</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qutip.core.coefficient</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">dis</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Cython.Build</span> <span class="kn">import</span> <span class="n">cythonize</span>
+    <span class="kn">import</span> <span class="nn">filelock</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">..settings</span> <span class="kn">import</span> <span class="n">settings</span> <span class="k">as</span> <span class="n">qset</span>
+<span class="kn">from</span> <span class="nn">.options</span> <span class="kn">import</span> <span class="n">QutipOptions</span>
+<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">Data</span>
+<span class="kn">from</span> <span class="nn">.cy.coefficient</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Coefficient</span><span class="p">,</span> <span class="n">InterCoefficient</span><span class="p">,</span> <span class="n">FunctionCoefficient</span><span class="p">,</span> <span class="n">StrFunctionCoefficient</span><span class="p">,</span>
+    <span class="n">ConjCoefficient</span><span class="p">,</span> <span class="n">NormCoefficient</span><span class="p">,</span> <span class="n">ConstantCoefficient</span>
+<span class="p">)</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">,</span> <span class="s2">&quot;CompilationOptions&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;clean_compiled_coefficient&quot;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">StringParsingWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">_return</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">base</span>
+
+
+<span class="c1"># The `coefficient` function is dispatcher for the type of the `base` to the</span>
+<span class="c1"># function that created the `Coefficient` object. `coefficient_builders` stores</span>
+<span class="c1"># the map `type -&gt; function(base, **kw)`. Optional module can add their</span>
+<span class="c1"># `Coefficient` specializations here.</span>
+<span class="n">coefficient_builders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Coefficient</span><span class="p">:</span> <span class="n">_return</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span> <span class="n">InterCoefficient</span><span class="p">,</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">PPoly</span><span class="p">:</span> <span class="n">InterCoefficient</span><span class="o">.</span><span class="n">from_PPoly</span><span class="p">,</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">BSpline</span><span class="p">:</span> <span class="n">InterCoefficient</span><span class="o">.</span><span class="n">from_Bspline</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="coefficient"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.coefficient.coefficient">[docs]</a><span class="k">def</span> <span class="nf">coefficient</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">args_ctypes</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">compile_opt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">function_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">boundary_conditions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build ``Coefficient`` for time dependent systems:</span>
+
+<span class="sd">    ```</span>
+<span class="sd">    QobjEvo = Qobj + Qobj * Coefficient + Qobj * Coefficient + ...</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    The coefficients can be a function, a string or a numpy array. Other</span>
+<span class="sd">    packages may add support for other kind of coefficients.</span>
+
+<span class="sd">    For function based coefficients, the function signature must be either:</span>
+
+<span class="sd">    * ``f(t, ...)`` where the other arguments are supplied as ordinary</span>
+<span class="sd">      &quot;pythonic&quot; arguments (e.g. ``f(t, w, a=5)``)</span>
+<span class="sd">    * ``f(t, args)`` where the arguments are supplied in a &quot;dict&quot; named</span>
+<span class="sd">      ``args``</span>
+
+<span class="sd">    By default the signature style is controlled by the</span>
+<span class="sd">    ``qutip.settings.core[&quot;function_coefficient_style&quot;]`` setting, but it</span>
+<span class="sd">    may be overriden here by specifying either ``function_style=&quot;pythonic&quot;``</span>
+<span class="sd">    or ``function_style=&quot;dict&quot;``.</span>
+
+<span class="sd">    *Examples*:</span>
+
+<span class="sd">        - pythonic style function signature::</span>
+
+<span class="sd">            def f1_t(t, w):</span>
+<span class="sd">                return np.exp(-1j * t * w)</span>
+
+<span class="sd">            coeff1 = coefficient(f1_t, args={&quot;w&quot;: 1.})</span>
+
+<span class="sd">        - dict style function signature::</span>
+
+<span class="sd">            def f2_t(t, args):</span>
+<span class="sd">                return np.exp(-1j * t * args[&quot;w&quot;])</span>
+
+<span class="sd">            coeff2 = coefficient(f2_t, args={&quot;w&quot;: 1.})</span>
+
+<span class="sd">    For string based coeffients, the string must be a compilable python code</span>
+<span class="sd">    resulting in a complex. The following symbols are defined:</span>
+
+<span class="sd">        sin, cos, tan, asin, acos, atan, pi,</span>
+<span class="sd">        sinh, cosh, tanh, asinh, acosh, atanh,</span>
+<span class="sd">        exp, log, log10, erf, zerf, sqrt,</span>
+<span class="sd">        real, imag, conj, abs, norm, arg, proj,</span>
+<span class="sd">        numpy as np,</span>
+<span class="sd">        scipy.special as spe (python interface)</span>
+<span class="sd">        and cython_special (scipy cython interface)</span>
+
+<span class="sd">    *Examples*::</span>
+
+<span class="sd">        coeff = coefficient(&#39;exp(-1j*w1*t)&#39;, args={&quot;w1&quot;:1.})</span>
+
+<span class="sd">    &#39;args&#39; is needed for string coefficient at compilation.</span>
+<span class="sd">    It is a dict of (name:object). The keys must be a valid variables string.</span>
+
+<span class="sd">    Compilation options can be passed as &quot;compile_opt=CompilationOptions(...)&quot;.</span>
+
+<span class="sd">    For numpy array format, the array must be an 1d of dtype float or complex.</span>
+<span class="sd">    A list of times (float64) at which the coeffients must be given (tlist).</span>
+<span class="sd">    The coeffients array must have the same len as the tlist.</span>
+<span class="sd">    The time of the tlist do not need to be equidistant, but must be sorted.</span>
+<span class="sd">    By default, a cubic spline interpolation will be used to compute the</span>
+<span class="sd">    coefficient at time t. The keyword ``order`` sets the order of the</span>
+<span class="sd">    interpolation. When ``order = 0``, the interpolation is step function that</span>
+<span class="sd">    evaluates to the most recent value.</span>
+
+<span class="sd">    *Examples*::</span>
+
+<span class="sd">        tlist = np.logspace(-5,0,100)</span>
+<span class="sd">        H = QobjEvo(np.exp(-1j*tlist), tlist=tlist)</span>
+
+<span class="sd">    ``scipy.interpolate``&#39;s ``CubicSpline``, ``PPoly`` and ``Bspline`` are</span>
+<span class="sd">    also converted to interpolated coefficients (the same kind of coefficient</span>
+<span class="sd">    created from ``ndarray``). Other interpolation methods from</span>
+<span class="sd">    scipy are converted to a function-based coefficient (the same kind of</span>
+<span class="sd">    coefficient created from callables).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base : object</span>
+<span class="sd">        Base object to make into a Coefficient.</span>
+
+<span class="sd">    args : dict, optional</span>
+<span class="sd">        Dictionary of arguments to pass to the function or string coefficient.</span>
+
+<span class="sd">    order : int, default=3</span>
+<span class="sd">        Order of the spline for array based coefficient.</span>
+
+<span class="sd">    tlist : iterable, optional</span>
+<span class="sd">        Times for each element of an array based coefficient.</span>
+
+<span class="sd">    function_style : str {&quot;dict&quot;, &quot;pythonic&quot;, None}, optional</span>
+<span class="sd">        Function signature of function based coefficients.</span>
+
+<span class="sd">    args_ctypes : dict, optional</span>
+<span class="sd">        C type for the args when compiling array based coefficients.</span>
+
+<span class="sd">    compile_opt : CompilationOptions, optional</span>
+<span class="sd">        Sets of options for the compilation of string based coefficients.</span>
+
+<span class="sd">    boundary_conditions: 2-tupule, str or None, optional</span>
+<span class="sd">        Specify boundary conditions for spline interpolation.</span>
+
+<span class="sd">    **kwargs</span>
+<span class="sd">        Extra arguments to pass the the coefficients.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+        <span class="s2">&quot;tlist&quot;</span><span class="p">:</span> <span class="n">tlist</span><span class="p">,</span>
+        <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span>
+        <span class="s1">&#39;args_ctypes&#39;</span><span class="p">:</span> <span class="n">args_ctypes</span><span class="p">,</span>
+        <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span>
+        <span class="s1">&#39;compile_opt&#39;</span><span class="p">:</span> <span class="n">compile_opt</span><span class="p">,</span>
+        <span class="s1">&#39;function_style&#39;</span><span class="p">:</span> <span class="n">function_style</span><span class="p">,</span>
+        <span class="s1">&#39;boundary_conditions&#39;</span><span class="p">:</span> <span class="n">boundary_conditions</span>
+    <span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">type_</span> <span class="ow">in</span> <span class="n">coefficient_builders</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">type_</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">coefficient_builders</span><span class="p">[</span><span class="n">type_</span><span class="p">](</span><span class="n">base</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">FunctionCoefficient</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">style</span><span class="o">=</span><span class="n">function_style</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The coefficient function must return a number&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">op</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;coefficient format not understood&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">coeff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; return a Coefficient with is the norm: |c|^2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">NormCoefficient</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">conj</span><span class="p">(</span><span class="n">coeff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; return a Coefficient with is the conjugate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ConjCoefficient</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">const</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; return a Coefficient with a constant value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ConstantCoefficient</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="c1"># %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1"># %%%%%%%%%      Everything under this is for string compilation      %%%%%%%%%</span>
+<span class="c1"># %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="n">WARN_MISSING_MODULE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">CompilationOptions</span><span class="p">(</span><span class="n">QutipOptions</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compilation options:</span>
+
+<span class="sd">    use_cython: bool</span>
+<span class="sd">        Whether to compile strings as cython code or use python&#39;s ``exec``.</span>
+
+<span class="sd">    try_parse: bool [True]</span>
+<span class="sd">        Whether to try parsing the string for reuse and static typing.</span>
+
+<span class="sd">    static_types : bool [True]</span>
+<span class="sd">        Whether to use C types for constant and args.</span>
+
+<span class="sd">    accept_int : None, bool</span>
+<span class="sd">        Whether to use the type ``int`` for integer constants and args or</span>
+<span class="sd">        upgrade it to ``float`` or ``complex``.</span>
+<span class="sd">        If `None`, it will only use ``int`` when subscription is found in the</span>
+<span class="sd">        code.</span>
+
+<span class="sd">    accept_float : bool</span>
+<span class="sd">        Whether to use the type ``float`` or upgrade them to ``complex``.</span>
+
+<span class="sd">    recompile : bool</span>
+<span class="sd">        Do not use previously made files but build a new one.</span>
+
+<span class="sd">    compiler_flags : str</span>
+<span class="sd">        Flags to pass to the compiler, ex: &quot;-Wall -O3&quot;...</span>
+<span class="sd">        Flags not matching your comiler and OS may cause compilation to fail.</span>
+<span class="sd">        Use &quot;recompile=True&quot;, when trying to if the string pattern was</span>
+<span class="sd">        previously used.</span>
+
+<span class="sd">    link_flags : str</span>
+<span class="sd">        Libraries to link to pass to the compiler. They can not be used to add</span>
+<span class="sd">        function to the string coefficient.</span>
+
+<span class="sd">    extra_import : str</span>
+<span class="sd">        Cython code to add at the head of the file. Can be used to add extra</span>
+<span class="sd">        import or cimport code, ex:</span>
+<span class="sd">        extra_import=&quot;from scipy.linalg import det&quot;</span>
+<span class="sd">        extra_import=&quot;from qutip.core.data cimport CSR&quot;</span>
+
+<span class="sd">    clean_on_error : bool [True]</span>
+<span class="sd">        When writing a cython file that cannot be imported, erase it.</span>
+
+<span class="sd">    build_dir: str [None]</span>
+<span class="sd">        cythonize&#39;s build_dir.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_link_flags</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">_compiler_flags</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+        <span class="n">_compiler_flags</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;darwin&#39;</span><span class="p">:</span>
+        <span class="n">_compiler_flags</span> <span class="o">=</span> <span class="s1">&#39;-w -O3 -funroll-loops -mmacosx-version-min=10.9&#39;</span>
+        <span class="n">_link_flags</span> <span class="o">+=</span> <span class="s1">&#39;-mmacosx-version-min=10.9&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_compiler_flags</span> <span class="o">=</span> <span class="s1">&#39;-w -O3 -funroll-loops&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">cython</span>
+        <span class="kn">import</span> <span class="nn">filelock</span>
+        <span class="n">_use_cython</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">_use_cython</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">WARN_MISSING_MODULE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;use_cython&quot;</span><span class="p">:</span> <span class="n">_use_cython</span><span class="p">,</span>
+        <span class="s2">&quot;try_parse&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;static_types&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;accept_int&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;accept_float&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;recompile&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;compiler_flags&quot;</span><span class="p">:</span> <span class="n">_compiler_flags</span><span class="p">,</span>
+        <span class="s2">&quot;link_flags&quot;</span><span class="p">:</span> <span class="n">_link_flags</span><span class="p">,</span>
+        <span class="s2">&quot;extra_import&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;clean_on_error&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;build_dir&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_settings_name</span> <span class="o">=</span> <span class="s2">&quot;compile&quot;</span>
+
+
+<span class="c1"># Create the default instance in settings.</span>
+<span class="n">qset</span><span class="o">.</span><span class="n">compile</span> <span class="o">=</span> <span class="n">CompilationOptions</span><span class="p">()</span>
+
+
+<span class="c1"># Version number of the Coefficient</span>
+<span class="n">COEFF_VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.1&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">qset</span><span class="o">.</span><span class="n">tmproot</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;qutip_coeffs_</span><span class="si">{</span><span class="n">COEFF_VERSION</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">qset</span><span class="o">.</span><span class="n">coeffroot</span> <span class="o">=</span> <span class="n">root</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="n">qset</span><span class="o">.</span><span class="n">coeffroot</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">clean_compiled_coefficient</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove previouly compiled string Coefficient.</span>
+
+<span class="sd">    Parameter:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all: bool</span>
+<span class="sd">        If not `all` will remove only previous version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">glob</span>
+    <span class="kn">import</span> <span class="nn">shutil</span>
+    <span class="n">tmproot</span> <span class="o">=</span> <span class="n">qset</span><span class="o">.</span><span class="n">tmproot</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmproot</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;qutip_coeffs_</span><span class="si">{</span><span class="n">COEFF_VERSION</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmproot</span><span class="p">,</span> <span class="s1">&#39;qutip_coeffs_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">all</span> <span class="ow">or</span> <span class="n">folder</span> <span class="o">!=</span> <span class="n">root</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+    <span class="c1"># Recreate the empty folder.</span>
+    <span class="n">qset</span><span class="o">.</span><span class="n">coeffroot</span> <span class="o">=</span> <span class="n">qset</span><span class="o">.</span><span class="n">coeffroot</span>
+
+
+<span class="k">def</span> <span class="nf">proj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="o">+</span> <span class="mi">0</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="n">str_env</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;sin&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span>
+    <span class="s2">&quot;cos&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">,</span>
+    <span class="s2">&quot;tan&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">,</span>
+    <span class="s2">&quot;asin&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">,</span>
+    <span class="s2">&quot;acos&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">,</span>
+    <span class="s2">&quot;atan&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">,</span>
+    <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span>
+    <span class="s2">&quot;sinh&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sinh</span><span class="p">,</span>
+    <span class="s2">&quot;cosh&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cosh</span><span class="p">,</span>
+    <span class="s2">&quot;tanh&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span>
+    <span class="s2">&quot;asinh&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsinh</span><span class="p">,</span>
+    <span class="s2">&quot;acosh&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arccosh</span><span class="p">,</span>
+    <span class="s2">&quot;atanh&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arctanh</span><span class="p">,</span>
+    <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">,</span>
+    <span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+    <span class="s2">&quot;log10&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">,</span>
+    <span class="s2">&quot;erf&quot;</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">erf</span><span class="p">,</span>
+    <span class="s2">&quot;zerf&quot;</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">erf</span><span class="p">,</span>
+    <span class="s2">&quot;sqrt&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">,</span>
+    <span class="s2">&quot;real&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+    <span class="s2">&quot;imag&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span>
+    <span class="s2">&quot;conj&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">,</span>
+    <span class="s2">&quot;abs&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span>
+    <span class="s2">&quot;norm&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;arg&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">,</span>
+    <span class="s2">&quot;proj&quot;</span><span class="p">:</span> <span class="n">proj</span><span class="p">,</span>
+    <span class="s2">&quot;np&quot;</span><span class="p">:</span> <span class="n">np</span><span class="p">,</span>
+    <span class="s2">&quot;spe&quot;</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">coeff_from_str</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">args_ctypes</span><span class="p">,</span> <span class="n">compile_opt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Entry point for string based coefficients</span>
+<span class="sd">    - Test if the string is valid</span>
+<span class="sd">    - Parse: &quot;cos(a*t)&quot; and &quot;cos( w1 * t )&quot;</span>
+<span class="sd">        should be recognised as the same compiled object.</span>
+<span class="sd">    - Verify if already compiled and compile if not</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, a sanity check before thinking of compiling</span>
+    <span class="k">if</span> <span class="n">compile_opt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">compile_opt</span> <span class="o">=</span> <span class="n">qset</span><span class="o">.</span><span class="n">compile</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;extra_import&#39;</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="n">exec</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">str_env</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid string coefficient&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Do we compile?</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;use_cython&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">WARN_MISSING_MODULE</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Both `cython` and `filelock` are required for compilation of &quot;</span>
+                <span class="s2">&quot;string coefficents. Falling back on `eval`.&quot;</span><span class="p">)</span>
+            <span class="c1"># Only warns once.</span>
+            <span class="n">WARN_MISSING_MODULE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">StrFunctionCoefficient</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="c1"># Parsing tries to make the code in common pattern</span>
+    <span class="n">parsed</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">try_parse</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span>
+                                                  <span class="n">args_ctypes</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">)</span>
+    <span class="c1"># Once parsed, the code should be unique enough to get a filename</span>
+    <span class="n">hash_</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;qtcoeff_&quot;</span> <span class="o">+</span> <span class="n">hash_</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">30</span><span class="p">]</span>
+    <span class="c1"># See if it already exist and import it.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;recompile&#39;</span><span class="p">]:</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">try_import</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">parsed</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">coeff</span> <span class="ow">and</span> <span class="n">qset</span><span class="o">.</span><span class="n">coeff_write_ok</span><span class="p">:</span>
+        <span class="c1"># Previously compiled coefficient not available: create the cython code</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">make_cy_code</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span>
+                            <span class="n">raw</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="n">compile_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">coeff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># We don&#39;t use cython or compilation failed</span>
+        <span class="k">return</span> <span class="n">StrFunctionCoefficient</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+    <span class="n">const</span> <span class="o">=</span> <span class="p">[</span><span class="n">fromstr</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">constants</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">coeff</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">const</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+
+<span class="n">coefficient_builders</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff_from_str</span>
+
+
+<span class="k">def</span> <span class="nf">try_import</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">parsed_in</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Import the compiled coefficient if existing and check for</span>
+<span class="sd">    name collision.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+        <span class="c1"># Coefficient does not exist, to compile as file_name</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">parsed_code</span> <span class="o">==</span> <span class="n">parsed_in</span><span class="p">:</span>
+        <span class="c1"># Coefficient found!</span>
+        <span class="k">return</span> <span class="n">mod</span><span class="o">.</span><span class="n">StrCoefficient</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;string hash collision, change the string &quot;</span>
+                         <span class="s2">&quot;or clean files in qutip.settings.coeffroot&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">make_cy_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the code for the string coefficients.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cdef_cte</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">init_cte</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">copy_cte</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">ctype</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">constants</span><span class="p">):</span>
+        <span class="n">cdef_cte</span> <span class="o">+=</span> <span class="s2">&quot;        </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctype</span><span class="p">,</span> <span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span>
+        <span class="n">copy_cte</span> <span class="o">+=</span> <span class="s2">&quot;        out.</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">:],</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">init_cte</span> <span class="o">+=</span> <span class="s2">&quot;        </span><span class="si">{}</span><span class="s2"> = cte[</span><span class="si">{}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">cdef_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">init_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">init_arg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">replace_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">call_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">copy_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">ctype</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variables</span><span class="p">):</span>
+        <span class="n">cdef_var</span> <span class="o">+=</span> <span class="s2">&quot;        str key</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cdef_var</span> <span class="o">+=</span> <span class="s2">&quot;        </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctype</span><span class="p">,</span> <span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span>
+        <span class="n">copy_var</span> <span class="o">+=</span> <span class="s2">&quot;        out.key</span><span class="si">{}</span><span class="s2"> = self.key</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">copy_var</span> <span class="o">+=</span> <span class="s2">&quot;        out.</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">:],</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="n">init_var</span> <span class="o">+=</span> <span class="s2">&quot;        self.key</span><span class="si">{}</span><span class="s2"> = var[</span><span class="si">{}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">init_var</span> <span class="o">+=</span> <span class="s2">&quot;        self.key</span><span class="si">{}</span><span class="s2"> = &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+        <span class="n">init_arg</span> <span class="o">+=</span> <span class="s2">&quot;        </span><span class="si">{}</span><span class="s2"> = args[self.key</span><span class="si">{}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">replace_var</span> <span class="o">+=</span> <span class="s2">&quot;            if self.key</span><span class="si">{}</span><span class="s2"> in kwargs:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">replace_var</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;                out.</span><span class="si">{}</span><span class="s2">&quot;</span>
+                        <span class="s2">&quot; = kwargs[self.key</span><span class="si">{}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">:],</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="n">call_var</span> <span class="o">+=</span> <span class="s2">&quot;        cdef </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctype</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="n">code</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;#cython: language_level=3</span>
+<span class="s2"># This file is generated automatically by QuTiP.</span>
+
+<span class="s2">import numpy as np</span>
+<span class="s2">import scipy.special as spe</span>
+<span class="s2">from scipy.special cimport cython_special</span>
+<span class="s2">cimport cython</span>
+<span class="s2">from qutip.core.cy.coefficient cimport Coefficient</span>
+<span class="s2">from qutip.core.cy.math cimport erf, zerf</span>
+<span class="s2">from qutip.core.cy.complex_math cimport *</span>
+<span class="s2">from qutip.core.data cimport Data</span>
+<span class="s2">cdef double pi = 3.14159265358979323</span>
+<span class="si">{</span><span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;extra_import&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">parsed_code = &quot;</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="s2">@cython.auto_pickle(True)</span>
+<span class="s2">cdef class StrCoefficient(Coefficient):</span>
+<span class="s2">    </span><span class="se">\&quot;\&quot;\&quot;</span>
+<span class="s2">    String compiled as a :obj:`.Coefficient` using cython.</span>
+<span class="s2">    </span><span class="se">\&quot;\&quot;\&quot;</span>
+<span class="s2">    cdef:</span>
+<span class="s2">        str codeString</span>
+<span class="si">{</span><span class="n">cdef_cte</span><span class="si">}{</span><span class="n">cdef_var</span><span class="si">}</span>
+
+<span class="s2">    def __init__(self, base, var, cte, args):</span>
+<span class="s2">        self.codeString = base</span>
+<span class="si">{</span><span class="n">init_cte</span><span class="si">}{</span><span class="n">init_var</span><span class="si">}{</span><span class="n">init_arg</span><span class="si">}</span>
+
+<span class="s2">    cpdef Coefficient copy(self):</span>
+<span class="s2">        </span><span class="se">\&quot;\&quot;\&quot;</span><span class="s2">Return a copy of the :obj:`.Coefficient`.</span><span class="se">\&quot;\&quot;\&quot;</span>
+<span class="s2">        cdef StrCoefficient out = StrCoefficient.__new__(StrCoefficient)</span>
+<span class="s2">        out.codeString = self.codeString</span>
+<span class="si">{</span><span class="n">copy_cte</span><span class="si">}{</span><span class="n">copy_var</span><span class="si">}</span>
+<span class="s2">        return out</span>
+
+<span class="s2">    def replace_arguments(self, _args=None, **kwargs):</span>
+<span class="s2">        </span><span class="se">\&quot;\&quot;\&quot;</span>
+<span class="s2">        Return a :obj:`.Coefficient` with args changed for :obj:`.Coefficient`</span>
+<span class="s2">        built from &#39;str&#39; or a python function. Or a the :obj:`.Coefficient`</span>
+<span class="s2">        itself if the :obj:`.Coefficient` does not use arguments. New arguments</span>
+<span class="s2">        can be passed as a dict or as keywords.</span>
+
+<span class="s2">        Parameters</span>
+<span class="s2">        ----------</span>
+<span class="s2">        _args : dict</span>
+<span class="s2">            Dictionary of arguments to replace.</span>
+
+<span class="s2">        **kwargs</span>
+<span class="s2">            Arguments to replace.</span>
+<span class="s2">        </span><span class="se">\&quot;\&quot;\&quot;</span>
+<span class="s2">        cdef StrCoefficient out</span>
+
+<span class="s2">        if _args:</span>
+<span class="s2">            kwargs.update(_args)</span>
+<span class="s2">        if kwargs:</span>
+<span class="s2">            out = self.copy()</span>
+<span class="si">{</span><span class="n">replace_var</span><span class="si">}</span>
+<span class="s2">            return out</span>
+<span class="s2">        return self</span>
+
+<span class="s2">    @cython.initializedcheck(False)</span>
+<span class="s2">    @cython.cdivision(True)</span>
+<span class="s2">    cdef complex _call(self, double t) except *:</span>
+<span class="si">{</span><span class="n">call_var</span><span class="si">}</span><span class="s2">        return </span><span class="si">{</span><span class="n">code</span><span class="si">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">code</span>
+
+
+<span class="k">def</span> <span class="nf">compile_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">c_opt</span><span class="p">):</span>
+    <span class="n">pwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">qset</span><span class="o">.</span><span class="n">coeffroot</span><span class="p">)</span>
+    <span class="c1"># Files with the same name, but differents extension than the pyx file, are</span>
+    <span class="c1"># erased during cythonization process, breaking filelock.</span>
+    <span class="c1"># Adding a prefix make them safe to use.</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">filelock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="s2">&quot;compile_lock_&quot;</span> <span class="o">+</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;.lock&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">file_</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;.pyx&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">file_</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="n">file_</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">oldargs</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;setup.py&quot;</span><span class="p">,</span> <span class="s2">&quot;build_ext&quot;</span><span class="p">,</span> <span class="s2">&quot;--inplace&quot;</span><span class="p">]</span>
+            <span class="n">coeff_file</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span>
+                <span class="n">file_name</span><span class="p">,</span>
+                <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;.pyx&quot;</span><span class="p">],</span>
+                <span class="n">extra_compile_args</span><span class="o">=</span><span class="n">c_opt</span><span class="p">[</span><span class="s1">&#39;compiler_flags&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
+                <span class="n">extra_link_args</span><span class="o">=</span><span class="n">c_opt</span><span class="p">[</span><span class="s1">&#39;link_flags&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
+                <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">get_include</span><span class="p">()],</span>
+                <span class="n">language</span><span class="o">=</span><span class="s1">&#39;c++&#39;</span>
+            <span class="p">)</span>
+            <span class="n">ext_modules</span> <span class="o">=</span> <span class="n">cythonize</span><span class="p">(</span>
+                <span class="n">coeff_file</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">build_dir</span><span class="o">=</span><span class="n">c_opt</span><span class="p">[</span><span class="s1">&#39;build_dir&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">setup</span><span class="p">(</span><span class="n">ext_modules</span><span class="o">=</span><span class="n">ext_modules</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c_opt</span><span class="p">[</span><span class="s1">&#39;clean_on_error&#39;</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not compile&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="n">oldargs</span>
+    <span class="k">except</span> <span class="n">filelock</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="c1"># We wait for the lock to be released and then retry the import.</span>
+            <span class="k">pass</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">try_import</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">parsed</span><span class="p">)</span>
+
+
+<span class="c1"># %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1"># %%%%%%%%%        Everything under this is for parsing string        %%%%%%%%%</span>
+<span class="c1"># %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1"># Parsing here is extracting constants and args name to replace them with</span>
+<span class="c1"># attribute of the Coefficient so similar string like:</span>
+<span class="c1"># &quot;2.*cos(a*t)&quot;, &quot;5.2 * cos(w1 *t)&quot;, &quot;5 * cos(w3 * t)&quot;</span>
+<span class="c1"># are all reconized as the same compiled object and only compiled once.</span>
+<span class="c1"># Weakness:</span>
+<span class="c1">#   typing: &quot;1&quot; and &quot;1j&quot; or the type of args (&quot;w1&quot;) make different object</span>
+<span class="c1">#   complex: &quot;1+1j&quot; is seens as cte(double) + cte(complex)</span>
+<span class="c1">#   negative: &quot;-1&quot; is not seens as a constant but &quot;- constant&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># int and double can be seens as complex with flags in CompilationOptions</span>
+
+<span class="k">def</span> <span class="nf">fromstr</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a varibles in a string&quot;&quot;&quot;</span>
+    <span class="n">ls</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;out = &quot;</span> <span class="o">+</span> <span class="n">base</span><span class="p">,</span> <span class="p">{},</span> <span class="n">ls</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ls</span><span class="p">[</span><span class="s2">&quot;out&quot;</span><span class="p">]</span>
+
+
+<span class="n">typeCodes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Data&quot;</span><span class="p">:</span> <span class="s2">&quot;_datalayer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;complex&quot;</span><span class="p">:</span> <span class="s2">&quot;_cpl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;double&quot;</span><span class="p">:</span> <span class="s2">&quot;_dbl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;_int&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;_str&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;_obj&quot;</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">compileType</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Obtain the index of typeCodes that correspond to the value</span>
+<span class="sd">    4.5 -&gt; &#39;double&#39;...&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Data</span><span class="p">):</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;Data&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">):</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;double&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Complex</span><span class="p">):</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;complex&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;str&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span>
+    <span class="k">return</span> <span class="n">ctype</span>
+
+
+<span class="k">def</span> <span class="nf">find_type_from_str</span><span class="p">(</span><span class="n">chars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; &#39;1j&#39; -&gt; complex &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;out = &quot;</span> <span class="o">+</span> <span class="n">chars</span><span class="p">,</span> <span class="p">{},</span> <span class="n">lc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">compileType</span><span class="p">(</span><span class="n">lc</span><span class="p">[</span><span class="s2">&quot;out&quot;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">fix_type</span><span class="p">(</span><span class="n">ctype</span><span class="p">,</span> <span class="n">accept_int</span><span class="p">,</span> <span class="n">accept_float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int and double could be complex to limit the number of compiled object.</span>
+<span class="sd">    change the types is we choose not to support all.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ctype</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">accept_int</span><span class="p">:</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;double&quot;</span>
+    <span class="k">if</span> <span class="n">ctype</span> <span class="o">==</span> <span class="s2">&quot;double&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">accept_float</span><span class="p">:</span>
+        <span class="n">ctype</span> <span class="o">=</span> <span class="s2">&quot;complex&quot;</span>
+    <span class="k">return</span> <span class="n">ctype</span>
+
+
+<span class="k">def</span> <span class="nf">extract_constant</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look for floating and complex constants and replace them with variable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">code</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">contants</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">extract_cte_pattern</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">contants</span><span class="p">,</span>
+                               <span class="s2">&quot;[^0-9a-zA-Z_][0-9]*[.]?[0-9]+e[+-]?[0-9]*[j]?&quot;</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">extract_cte_pattern</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">contants</span><span class="p">,</span>
+                               <span class="s2">&quot;[^0-9a-zA-Z_][0-9]+[.]?[0-9]*e[+-]?[0-9]*[j]?&quot;</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">extract_cte_pattern</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">contants</span><span class="p">,</span>
+                               <span class="s2">&quot;[^0-9a-zA-Z_][0-9]+[.]?[0-9]*[j]?&quot;</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">extract_cte_pattern</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">contants</span><span class="p">,</span>
+                               <span class="s2">&quot;[^0-9a-zA-Z_][0-9]*[.]?[0-9]+[j]?&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">contants</span>
+
+
+<span class="k">def</span> <span class="nf">extract_cte_pattern</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;replace the constant following a pattern with variable&quot;&quot;&quot;</span>
+    <span class="n">const_strs</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cte</span> <span class="ow">in</span> <span class="n">const_strs</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot; _cte_temp</span><span class="si">{}</span><span class="s2">_ &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">constants</span><span class="p">))</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">cte</span><span class="p">,</span> <span class="n">cte</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">constants</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cte</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">find_type_from_str</span><span class="p">(</span><span class="n">cte</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+    <span class="k">return</span> <span class="n">code</span>
+
+
+<span class="k">def</span> <span class="nf">space_parts</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Force spacing: single space between element&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;(?&lt;=[^0-9a-zA-Z_])&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;(?=[^0-9a-zA-Z_])&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">code</span>
+
+
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read the code and rewrite it in a reutilisable form:</span>
+<span class="sd">    Ins:</span>
+<span class="sd">        &#39;2.*cos(a*t)&#39;, {&quot;a&quot;:5+1j}</span>
+<span class="sd">    Outs:</span>
+<span class="sd">        code = &#39;self._cte_dbl0 * cos ( self._arg_cpl0 * t )&#39;</span>
+<span class="sd">        variables = [(&#39;self._arg_cpl0&#39;, &#39;a&#39;, &#39;complex&#39;)]</span>
+<span class="sd">        ordered_constants = [(&#39;self._cte_dbl0&#39;, 2, &#39;double&#39;)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">code</span><span class="p">,</span> <span class="n">constants</span> <span class="o">=</span> <span class="n">extract_constant</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;[0-9a-zA-Z_]+&quot;</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">space_parts</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">constants_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">const</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">const</span> <span class="ow">in</span> <span class="n">constants</span><span class="p">]</span>
+    <span class="n">new_code</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ordered_constants</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">typeCounts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">accept_int</span> <span class="o">=</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;accept_int&#39;</span><span class="p">]</span>
+    <span class="n">accept_float</span> <span class="o">=</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;accept_float&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">accept_int</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># If there is a subscript: a[b] int are always accepted to be safe</span>
+        <span class="c1"># with TypeError</span>
+        <span class="n">accept_int</span> <span class="o">=</span> <span class="s2">&quot;SUBSCR&quot;</span> <span class="ow">in</span> <span class="n">dis</span><span class="o">.</span><span class="n">Bytecode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="o">.</span><span class="n">dis</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">code</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="c1"># syntax</span>
+            <span class="n">new_code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="c1"># find first if the variable is use more than once and reuse</span>
+            <span class="n">var_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">var_name</span> <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">variables</span>
+                        <span class="k">if</span> <span class="n">word</span> <span class="o">==</span> <span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">var_name</span><span class="p">:</span>
+                <span class="n">var_name</span> <span class="o">=</span> <span class="n">var_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ctype</span> <span class="o">=</span> <span class="n">compileType</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">word</span><span class="p">])</span>
+                <span class="n">ctype</span> <span class="o">=</span> <span class="n">fix_type</span><span class="p">(</span><span class="n">ctype</span><span class="p">,</span> <span class="n">accept_int</span><span class="p">,</span> <span class="n">accept_float</span><span class="p">)</span>
+                <span class="n">var_name</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;self._arg&quot;</span> <span class="o">+</span> <span class="n">typeCodes</span><span class="p">[</span><span class="n">ctype</span><span class="p">]</span> <span class="o">+</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">typeCounts</span><span class="p">[</span><span class="n">ctype</span><span class="p">]))</span>
+                <span class="n">typeCounts</span><span class="p">[</span><span class="n">ctype</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">variables</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">var_name</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="n">ctype</span><span class="p">))</span>
+            <span class="n">new_code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">constants_names</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">ctype</span> <span class="o">=</span> <span class="n">constants</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="n">ctype</span> <span class="o">=</span> <span class="n">fix_type</span><span class="p">(</span><span class="n">ctype</span><span class="p">,</span> <span class="n">accept_int</span><span class="p">,</span> <span class="n">accept_float</span><span class="p">)</span>
+            <span class="n">cte_name</span> <span class="o">=</span> <span class="s2">&quot;self._cte&quot;</span> <span class="o">+</span> <span class="n">typeCodes</span><span class="p">[</span><span class="n">ctype</span><span class="p">]</span> <span class="o">+</span>\
+                       <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ordered_constants</span><span class="p">))</span>
+            <span class="n">new_code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cte_name</span><span class="p">)</span>
+            <span class="n">ordered_constants</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cte_name</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">ctype</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Hopefully a buildin or known object</span>
+            <span class="n">new_code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_code</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">ordered_constants</span>
+
+
+<span class="k">def</span> <span class="nf">use_hinted_type</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">args_ctypes</span><span class="p">):</span>
+    <span class="n">variables_manually_typed</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variables</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">args_ctypes</span><span class="p">:</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="s2">&quot;self._custom_&quot;</span> <span class="o">+</span> <span class="n">args_ctypes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">)</span>
+            <span class="n">variables_manually_typed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">new_name</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">args_ctypes</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">variables_manually_typed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">type_</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">variables_manually_typed</span>
+
+
+<span class="k">def</span> <span class="nf">try_parse</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">args_ctypes</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Try to parse and verify that the result is still usable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;try_parse&#39;</span><span class="p">]:</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;self.&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">args</span>
+                     <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">code</span><span class="p">]</span>
+        <span class="n">code</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">use_hinted_type</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">args_ctypes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">True</span>
+    <span class="n">ncode</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">compile_opt</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;static_types&#39;</span><span class="p">]:</span>
+        <span class="c1"># Fallback to object</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">[(</span><span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+        <span class="n">constants</span> <span class="o">=</span> <span class="p">[(</span><span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">constants</span><span class="p">]</span>
+    <span class="n">ncode</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">use_hinted_type</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">ncode</span><span class="p">,</span> <span class="n">args_ctypes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;extra_import&#39;</span><span class="p">]</span>
+         <span class="ow">and</span> <span class="ow">not</span> <span class="n">compile_opt</span><span class="p">[</span><span class="s1">&#39;extra_import&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+        <span class="ow">or</span> <span class="n">test_parsed</span><span class="p">(</span><span class="n">ncode</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">ncode</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not find c types&quot;</span><span class="p">,</span> <span class="n">StringParsingWarning</span><span class="p">)</span>
+        <span class="n">remaped_variable</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ctype</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+            <span class="n">remaped_variable</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;self.&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">remaped_variable</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">test_parsed</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test if parsed code broke anything.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">class</span> <span class="nc">DummySelf</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="p">[</span><span class="nb">setattr</span><span class="p">(</span><span class="n">DummySelf</span><span class="p">,</span> <span class="n">cte</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">:],</span> <span class="n">fromstr</span><span class="p">(</span><span class="n">cte</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">for</span> <span class="n">cte</span> <span class="ow">in</span> <span class="n">constants</span><span class="p">]</span>
+    <span class="p">[</span><span class="nb">setattr</span><span class="p">(</span><span class="n">DummySelf</span><span class="p">,</span> <span class="n">var</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">:],</span> <span class="n">args</span><span class="p">[</span><span class="n">var</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+    <span class="n">loc_env</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">:</span> <span class="n">DummySelf</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">str_env</span><span class="p">,</span> <span class="n">loc_env</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

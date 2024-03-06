@@ -142,7 +142,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    propagator : :class:Propagator</span>
+<span class="sd">    propagator : :class:`.Propagator`</span>
 <span class="sd">        Propagator</span>
 <span class="sd">    c_ops : list</span>
 <span class="sd">        list of collapse operators for each waveguide; these are assumed to</span>
@@ -193,6 +193,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the dims of the ``temporal_basis_vector``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: Review n_emissions: change the number of dims but the equivalent</span>
+    <span class="c1"># does not exist in _temporal_basis_idx</span>
     <span class="n">num_col</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">waveguide_emission_indices</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n_emissions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">n_emissions</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
@@ -202,8 +204,7 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">num_col</span> <span class="o">*</span> <span class="n">n_time_bins</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_emissions</span>
 
 
-<div class="viewcode-block" id="temporal_basis_vector"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.scattering.temporal_basis_vector">[docs]</a><span class="k">def</span> <span class="nf">temporal_basis_vector</span><span class="p">(</span><span class="n">waveguide_emission_indices</span><span class="p">,</span> <span class="n">n_time_bins</span><span class="p">,</span>
-                          <span class="n">n_emissions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="temporal_basis_vector"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.scattering.temporal_basis_vector">[docs]</a><span class="k">def</span> <span class="nf">temporal_basis_vector</span><span class="p">(</span><span class="n">waveguide_emission_indices</span><span class="p">,</span> <span class="n">n_time_bins</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a temporal basis vector for emissions at specified time bins into</span>
 <span class="sd">    specified waveguides.</span>
@@ -218,14 +219,13 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    temporal_basis_vector : :class: qutip.Qobj</span>
+<span class="sd">    temporal_basis_vector : :class:`.Qobj`</span>
 <span class="sd">        A basis vector representing photon scattering at the specified indices.</span>
 <span class="sd">        If there are W waveguides, T times, and N photon emissions, then the</span>
 <span class="sd">        basis vector has dimensionality (W*T)^N.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">_temporal_basis_idx</span><span class="p">(</span><span class="n">waveguide_emission_indices</span><span class="p">,</span> <span class="n">n_time_bins</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="n">_temporal_basis_dims</span><span class="p">(</span><span class="n">waveguide_emission_indices</span><span class="p">,</span>
-                                <span class="n">n_time_bins</span><span class="p">,</span> <span class="n">n_emissions</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">_temporal_basis_dims</span><span class="p">(</span><span class="n">waveguide_emission_indices</span><span class="p">,</span> <span class="n">n_time_bins</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">basis</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span></div>
 
 
@@ -278,12 +278,12 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class: qutip.Qobj or list</span>
+<span class="sd">    H : :class:`.Qobj` or list</span>
 <span class="sd">        System-waveguide(s) Hamiltonian or effective Hamiltonian in Qobj or</span>
 <span class="sd">        list-callback format. If construct_effective_hamiltonian is not</span>
 <span class="sd">        specified, an effective Hamiltonian is constructed from `H` and</span>
 <span class="sd">        `c_ops`.</span>
-<span class="sd">    psi0 : :class: qutip.Qobj</span>
+<span class="sd">    psi0 : :class:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\\psi(t_0)`.</span>
 <span class="sd">    n_emissions : int</span>
@@ -295,10 +295,10 @@
 <span class="sd">    tlist : array_like</span>
 <span class="sd">        List of times for :math:`\\tau_i`. tlist should contain 0 and exceed</span>
 <span class="sd">        the pulse duration / temporal region of interest.</span>
-<span class="sd">    system_zero_state : :class: qutip.Qobj</span>
+<span class="sd">    system_zero_state : :class:`.Qobj`, optional</span>
 <span class="sd">        State representing zero excitations in the system. Defaults to</span>
 <span class="sd">        :math:`\\psi(t_0)`</span>
-<span class="sd">    construct_effective_hamiltonian : bool</span>
+<span class="sd">    construct_effective_hamiltonian : bool, default: True</span>
 <span class="sd">        Whether an effective Hamiltonian should be constructed from H and</span>
 <span class="sd">        c_ops:</span>
 <span class="sd">        :math:`H_{eff} = H - \\frac{i}{2} \\sum_n \\sigma_n^\\dagger \\sigma_n`</span>
@@ -306,7 +306,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    phi_n : :class: qutip.Qobj</span>
+<span class="sd">    phi_n : :class:`.Qobj`</span>
 <span class="sd">        The scattered bath state projected onto the temporal basis given by</span>
 <span class="sd">        tlist. If there are W waveguides, T times, and N photon emissions, then</span>
 <span class="sd">        the state is a tensor product state with dimensionality T^(W*N).</span>
@@ -330,12 +330,12 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class: qutip.Qobj or list</span>
+<span class="sd">    H : :class:`.Qobj` or list</span>
 <span class="sd">        System-waveguide(s) Hamiltonian or effective Hamiltonian in Qobj or</span>
 <span class="sd">        list-callback format. If construct_effective_hamiltonian is not</span>
 <span class="sd">        specified, an effective Hamiltonian is constructed from H and</span>
 <span class="sd">        `c_ops`.</span>
-<span class="sd">    psi0 : :class: qutip.Qobj</span>
+<span class="sd">    psi0 : :class:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\\psi(t_0)`.</span>
 <span class="sd">    n_emissions : int</span>
@@ -349,10 +349,10 @@
 <span class="sd">        List of times for :math:`\\tau_i`. tlist should contain 0 and exceed</span>
 <span class="sd">        the pulse duration / temporal region of interest; tlist need not be</span>
 <span class="sd">        linearly spaced.</span>
-<span class="sd">    system_zero_state : :class: qutip.Qobj</span>
+<span class="sd">    system_zero_state : :class:`.Qobj`, optional</span>
 <span class="sd">        State representing zero excitations in the system. Defaults to</span>
 <span class="sd">        `basis(systemDims, 0)`.</span>
-<span class="sd">    construct_effective_hamiltonian : bool</span>
+<span class="sd">    construct_effective_hamiltonian : bool, default: True</span>
 <span class="sd">        Whether an effective Hamiltonian should be constructed from H and</span>
 <span class="sd">        c_ops:</span>
 <span class="sd">        :math:`H_{eff} = H - \\frac{i}{2} \\sum_n \\sigma_n^\\dagger \\sigma_n`</span>
@@ -398,7 +398,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 
