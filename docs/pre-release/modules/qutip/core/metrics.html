@@ -98,13 +98,10 @@
            <span class="s1">&#39;hellinger_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;hilbert_dist&#39;</span><span class="p">,</span> <span class="s1">&#39;average_gate_fidelity&#39;</span><span class="p">,</span>
            <span class="s1">&#39;process_fidelity&#39;</span><span class="p">,</span> <span class="s1">&#39;unitarity&#39;</span><span class="p">,</span> <span class="s1">&#39;dnorm&#39;</span><span class="p">]</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">la</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
-<span class="kn">from</span> <span class="nn">.superop_reps</span> <span class="kn">import</span> <span class="p">(</span><span class="n">to_kraus</span><span class="p">,</span> <span class="n">to_choi</span><span class="p">,</span> <span class="n">_to_superpauli</span><span class="p">,</span> <span class="n">to_super</span><span class="p">,</span>
-                           <span class="n">kraus_to_choi</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.superop_reps</span> <span class="kn">import</span> <span class="n">to_choi</span><span class="p">,</span> <span class="n">_to_superpauli</span><span class="p">,</span> <span class="n">to_super</span><span class="p">,</span> <span class="n">kraus_to_choi</span>
 <span class="kn">from</span> <span class="nn">.superoperator</span> <span class="kn">import</span> <span class="n">operator_to_vector</span><span class="p">,</span> <span class="n">vector_to_operator</span>
 <span class="kn">from</span> <span class="nn">.operators</span> <span class="kn">import</span> <span class="n">qeye</span><span class="p">,</span> <span class="n">qeye_like</span>
 <span class="kn">from</span> <span class="nn">.states</span> <span class="kn">import</span> <span class="n">ket2dm</span>
@@ -120,7 +117,13 @@
 <div class="viewcode-block" id="fidelity"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.metrics.fidelity">[docs]</a><span class="k">def</span> <span class="nf">fidelity</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the fidelity (pseudo-metric) between two density matrices.</span>
-<span class="sd">    See: Nielsen &amp; Chuang, &quot;Quantum Computation and Quantum Information&quot;</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Uses the definition from Nielsen &amp; Chuang, &quot;Quantum Computation and Quantum</span>
+<span class="sd">    Information&quot;. It is the square root of the fidelity defined in</span>
+<span class="sd">    R. Jozsa, Journal of Modern Optics, 41:12, 2315 (1994), used in</span>
+<span class="sd">    :func:`qutip.core.metrics.process_fidelity`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -204,7 +207,7 @@
 <span class="sd">    to the identity quantum channel.</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`/list</span>
+<span class="sd">    oper : :class:`.Qobj`/list</span>
 <span class="sd">        A unitary operator, or a superoperator in supermatrix, Choi or</span>
 <span class="sd">        chi-matrix form, or a list of Kraus operators</span>
 <span class="sd">    Returns</span>
@@ -243,10 +246,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`/list</span>
+<span class="sd">    oper : :class:`.Qobj`/list</span>
 <span class="sd">        A unitary operator, or a superoperator in supermatrix, Choi or</span>
 <span class="sd">        chi-matrix form, or a list of Kraus operators</span>
-<span class="sd">    target : :class:`qutip.Qobj`/list</span>
+<span class="sd">    target : :class:`.Qobj`/list, optional</span>
 <span class="sd">        A unitary operator, or a superoperator in supermatrix, Choi or</span>
 <span class="sd">        chi-matrix form, or a list of Kraus operators</span>
 
@@ -260,8 +263,8 @@
 <span class="sd">    Since Qutip 5.0, this function computes the process fidelity as defined</span>
 <span class="sd">    for example in: A. Gilchrist, N.K. Langford, M.A. Nielsen,</span>
 <span class="sd">    Phys. Rev. A 71, 062310 (2005). Previously, it computed a function</span>
-<span class="sd">    that is now implemented in</span>
-<span class="sd">    :func:`control.fidcomp.FidCompUnitary.get_fidelity`.</span>
+<span class="sd">    that is now implemented as ``get_fidelity`` in qutip-qtrl.</span>
+
 <span class="sd">    The definition of state fidelity that the process fidelity is based on</span>
 <span class="sd">    is the one from R. Jozsa, Journal of Modern Optics, 41:12, 2315 (1994).</span>
 <span class="sd">    It is the square of the one implemented in</span>
@@ -285,7 +288,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">oper</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># oper is a list of Kraus operators</span>
             <span class="k">return</span> <span class="n">_process_fidelity_to_id</span><span class="p">([</span><span class="n">k</span> <span class="o">*</span> <span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">oper</span><span class="p">])</span>
         <span class="k">elif</span> <span class="n">oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">_process_fidelity_to_id</span><span class="p">(</span><span class="n">oper</span><span class="o">*</span><span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">_process_fidelity_to_id</span><span class="p">(</span><span class="n">oper</span> <span class="o">*</span> <span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
         <span class="k">elif</span> <span class="n">oper</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
             <span class="n">oper_super</span> <span class="o">=</span> <span class="n">to_super</span><span class="p">(</span><span class="n">oper</span><span class="p">)</span>
             <span class="n">target_dag_super</span> <span class="o">=</span> <span class="n">to_super</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
@@ -306,10 +309,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`/list</span>
+<span class="sd">    oper : :class:`.Qobj`/list</span>
 <span class="sd">        A unitary operator, or a superoperator in supermatrix, Choi or</span>
 <span class="sd">        chi-matrix form, or a list of Kraus operators</span>
-<span class="sd">    target : :class:`qutip.Qobj`</span>
+<span class="sd">    target : :class:`.Qobj`</span>
 <span class="sd">        A unitary operator</span>
 
 <span class="sd">    Returns</span>
@@ -349,9 +352,9 @@
 <span class="sd">        Density matrix or state vector.</span>
 <span class="sd">    B : qobj</span>
 <span class="sd">        Density matrix or state vector with same dimensions as A.</span>
-<span class="sd">    tol : float</span>
-<span class="sd">        Tolerance used by sparse eigensolver, if used. (0=Machine precision)</span>
-<span class="sd">    sparse : {False, True}</span>
+<span class="sd">    tol : float, default: 0</span>
+<span class="sd">        Tolerance used by sparse eigensolver, if used. (0 = Machine precision)</span>
+<span class="sd">    sparse : bool, default: False</span>
 <span class="sd">        Use sparse eigensolver.</span>
 
 <span class="sd">    Returns</span>
@@ -468,7 +471,8 @@
 <span class="sd">    Calculates the quantum Hellinger distance between two density matrices.</span>
 
 <span class="sd">    Formula:</span>
-<span class="sd">    hellinger_dist(A, B) = sqrt(2-2*Tr(sqrt(A)*sqrt(B)))</span>
+
+<span class="sd">        ``hellinger_dist(A, B) = sqrt(2 - 2 * tr(sqrt(A) * sqrt(B)))``</span>
 
 <span class="sd">    See: D. Spehner, F. Illuminati, M. Orszag, and W. Roga, &quot;Geometric</span>
 <span class="sd">    measures of quantum correlations with Bures and Hellinger distances&quot;</span>
@@ -476,13 +480,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : :class:`qutip.Qobj`</span>
+<span class="sd">    A : :class:`.Qobj`</span>
 <span class="sd">        Density matrix or state vector.</span>
-<span class="sd">    B : :class:`qutip.Qobj`</span>
+<span class="sd">    B : :class:`.Qobj`</span>
 <span class="sd">        Density matrix or state vector with same dimensions as A.</span>
-<span class="sd">    tol : float</span>
-<span class="sd">        Tolerance used by sparse eigensolver, if used. (0=Machine precision)</span>
-<span class="sd">    sparse : {False, True}</span>
+<span class="sd">    tol : float, default: 0</span>
+<span class="sd">        Tolerance used by sparse eigensolver, if used. (0 = Machine precision)</span>
+<span class="sd">    sparse : bool, default: False</span>
 <span class="sd">        Use sparse eigensolver.</span>
 
 <span class="sd">    Returns</span>
@@ -492,9 +496,10 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; x=fock_dm(5,3)</span>
-<span class="sd">    &gt;&gt;&gt; y=coherent_dm(5,1)</span>
-<span class="sd">    &gt;&gt;&gt; np.testing.assert_almost_equal(hellinger_dist(x,y), 1.3725145002591095)</span>
+<span class="sd">    &gt;&gt;&gt; x = fock_dm(5,3)</span>
+<span class="sd">    &gt;&gt;&gt; y = coherent_dm(5,1)</span>
+<span class="sd">    &gt;&gt;&gt; np.allclose(hellinger_dist(x, y), 1.3725145002591095)</span>
+<span class="sd">        True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="n">A</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
         <span class="n">sqrtmA</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
@@ -522,7 +527,7 @@
 <span class="sd">    Calculates the diamond norm of the quantum map q_oper, using</span>
 <span class="sd">    the simplified semidefinite program of [Wat13]_.</span>
 
-<span class="sd">    The diamond norm SDP is solved by using CVXPY_.</span>
+<span class="sd">    The diamond norm SDP is solved by using `CVXPY &lt;https://www.cvxpy.org/&gt;`_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -530,15 +535,15 @@
 <span class="sd">        Quantum map to take the diamond norm of.</span>
 <span class="sd">    B : Qobj or None</span>
 <span class="sd">        If provided, the diamond norm of :math:`A - B` is taken instead.</span>
-<span class="sd">    solver : str</span>
-<span class="sd">        Solver to use with CVXPY. One of &quot;CVXOPT&quot; (default) or &quot;SCS&quot;. The</span>
-<span class="sd">        latter tends to be significantly faster, but somewhat less accurate.</span>
-<span class="sd">    verbose : bool</span>
+<span class="sd">    solver : str {&quot;CVXOPT&quot;, &quot;SCS&quot;}, default: &quot;CVXOPT&quot;</span>
+<span class="sd">        Solver to use with CVXPY. &quot;SCS&quot; tends to be significantly faster, but</span>
+<span class="sd">        somewhat less accurate.</span>
+<span class="sd">    verbose : bool, default: False</span>
 <span class="sd">        If True, prints additional information about the solution.</span>
-<span class="sd">    force_solve : bool</span>
+<span class="sd">    force_solve : bool, default: False</span>
 <span class="sd">        If True, forces dnorm to solve the associated SDP, even if a special</span>
 <span class="sd">        case is known for the argument.</span>
-<span class="sd">    sparse : bool</span>
+<span class="sd">    sparse : bool, default: True</span>
 <span class="sd">        Whether to use sparse matrices in the convex optimisation problem.</span>
 <span class="sd">        Default True.</span>
 
@@ -552,7 +557,6 @@
 <span class="sd">    ImportError</span>
 <span class="sd">        If CVXPY cannot be imported.</span>
 
-<span class="sd">    .. _cvxpy: https://www.cvxpy.org/en/latest/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">cvxpy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;dnorm() requires CVXPY to be installed.&quot;</span><span class="p">)</span>
@@ -678,7 +682,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

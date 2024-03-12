@@ -225,8 +225,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The index of the label within the list of ADO labels.</span>
 
-<span class="sd">        Note</span>
-<span class="sd">        ----</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 <span class="sd">        This implementation of the ``.idx(...)`` method is just for</span>
 <span class="sd">        reference and documentation. To avoid the cost of a Python</span>
 <span class="sd">        function call, it is replaced with</span>
@@ -415,7 +415,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rho : :class:`~qutip.Qobj`</span>
+<span class="sd">    rho : :class:`.Qobj`</span>
 <span class="sd">        The current state of the system (i.e. the 0th component of the</span>
 <span class="sd">        hierarchy).</span>
 <span class="sd">    ados : :class:`HierarchyADOs`</span>
@@ -474,7 +474,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">store_ados</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;store_ados&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_ados</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">final_ado_state</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_final_ado_state</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ado_states</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">_e_op_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_op</span><span class="p">):</span>
@@ -496,9 +496,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ado_states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ado_state</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_store_final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">ado_state</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_state</span> <span class="o">=</span> <span class="n">ado_state</span><span class="o">.</span><span class="n">rho</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_final_state</span> <span class="o">=</span> <span class="n">ado_state</span><span class="o">.</span><span class="n">rho</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_ados</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">final_ado_state</span> <span class="o">=</span> <span class="n">ado_state</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_final_ado_state</span> <span class="o">=</span> <span class="n">ado_state</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">final_ado_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_ado_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_state</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ado_states</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ado_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="heomsolve"><a class="viewcode-back" href="../../../../apidoc/functions.html#qutip.solver.heom.heomsolve">[docs]</a><span class="k">def</span> <span class="nf">heomsolve</span><span class="p">(</span>
@@ -516,10 +524,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Possibly time-dependent system Liouvillian or Hamiltonian as a Qobj or</span>
-<span class="sd">        QobjEvo. list of [:class:`Qobj`, :class:`Coefficient`] or callable that</span>
-<span class="sd">        can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        QobjEvo. list of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable that</span>
+<span class="sd">        can be made into :obj:`.QobjEvo` are also accepted.</span>
 
 <span class="sd">    bath : Bath or list of Bath</span>
 <span class="sd">        A :obj:`Bath` containing the exponents of the expansion of the</span>
@@ -533,9 +541,9 @@
 <span class="sd">        The maximum depth of the heirarchy (i.e. the maximum number of bath</span>
 <span class="sd">        exponent &quot;excitations&quot; to retain).</span>
 
-<span class="sd">    state0 : :class:`~Qobj` or :class:`~HierarchyADOsState` or array-like</span>
-<span class="sd">        If ``rho0`` is a :class:`~Qobj` the it is the initial state</span>
-<span class="sd">        of the system (i.e. a :obj:`~Qobj` density matrix).</span>
+<span class="sd">    state0 : :obj:`.Qobj` or :class:`~HierarchyADOsState` or array-like</span>
+<span class="sd">        If ``rho0`` is a :obj:`.Qobj` the it is the initial state</span>
+<span class="sd">        of the system (i.e. a :obj:`.Qobj` density matrix).</span>
 
 <span class="sd">        If it is a :class:`~HierarchyADOsState` or array-like, then</span>
 <span class="sd">        ``rho0`` gives the initial state of all ADOs.</span>
@@ -554,8 +562,8 @@
 <span class="sd">        An ordered list of times at which to return the value of the state.</span>
 
 <span class="sd">    e_ops : Qobj / QobjEvo / callable / list / dict / None, optional</span>
-<span class="sd">        A list or dictionary of operators as :class:`~Qobj`,</span>
-<span class="sd">        :class:`~QobjEvo` and/or callable functions (they can be mixed) or</span>
+<span class="sd">        A list or dictionary of operators as :obj:`.Qobj`,</span>
+<span class="sd">        :obj:`.QobjEvo` and/or callable functions (they can be mixed) or</span>
 <span class="sd">        a single operator or callable function. For an operator ``op``, the</span>
 <span class="sd">        result will be computed using ``(state * op).tr()`` and the state</span>
 <span class="sd">        at each time ``t``. For callable functions, ``f``, the result is</span>
@@ -563,43 +571,43 @@
 <span class="sd">        ``expect`` and ``e_data`` attributes of the result (see the return</span>
 <span class="sd">        section below).</span>
 
-<span class="sd">    args : dict, optional {None}</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        Change the ``args`` of the RHS for the evolution.</span>
 
-<span class="sd">    options : dict, optional {None}</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Generic solver options.</span>
 
-<span class="sd">        - store_final_state : bool</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, None</span>
-<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
-<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - store_ados : bool {False, True}</span>
-<span class="sd">          Whether or not to store the HEOM ADOs.</span>
-<span class="sd">        - normalize_output : bool</span>
-<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
-<span class="sd">        - state_data_type: str {&#39;dense&#39;}</span>
-<span class="sd">          Name of the data type of the state used during the ODE evolution.</span>
-<span class="sd">          Use an empty string to keep the input state type. Many integrator can</span>
-<span class="sd">          only work with `Dense`.</span>
-<span class="sd">        - method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
-<span class="sd">          Which differential equation integration method to use.</span>
-<span class="sd">        - atol, rtol : float</span>
-<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
-<span class="sd">        - nsteps :</span>
-<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
-<span class="sd">          step.</span>
-<span class="sd">        - max_step : float, 0</span>
-<span class="sd">          Maximum lenght of one internal step. When using pulses, it should be</span>
-<span class="sd">          less than half the width of the thinnest pulse.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | store_ados : bool</span>
+<span class="sd">          | Whether or not to store the HEOM ADOs.</span>
+<span class="sd">        - | normalize_output : bool</span>
+<span class="sd">          | Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | state_data_type: str {&#39;dense&#39;, &#39;CSR&#39;, &#39;Dia&#39;, }</span>
+<span class="sd">          | Name of the data type of the state used during the ODE evolution.</span>
+<span class="sd">            Use an empty string to keep the input state type. Many integrator</span>
+<span class="sd">            can only work with `Dense`.</span>
+<span class="sd">        - | method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
+<span class="sd">          | Which differential equation integration method to use.</span>
+<span class="sd">        - | atol, rtol : float</span>
+<span class="sd">          | Absolute and relative tolerance of the ODE integrator.</span>
+<span class="sd">        - | nsteps : int</span>
+<span class="sd">          | Maximum number of (internally defined) steps allowed in one</span>
+<span class="sd">            ``tlist`` step.</span>
+<span class="sd">        - | max_step : float,</span>
+<span class="sd">          | Maximum lenght of one internal step. When using pulses, it should</span>
+<span class="sd">            be less than half the width of the thinnest pulse.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -626,7 +634,7 @@
 <span class="sd">          at tme ``t``. The keys are those given by ``e_ops`` if it was</span>
 <span class="sd">          a dict, otherwise they are the indexes of the supplied ``e_ops``.</span>
 
-<span class="sd">        See :class:`~HEOMResult` and :class:`~Result` for the complete</span>
+<span class="sd">        See :class:`~HEOMResult` and :class:`.Result` for the complete</span>
 <span class="sd">        list of attributes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
@@ -642,10 +650,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Possibly time-dependent system Liouvillian or Hamiltonian as a Qobj or</span>
-<span class="sd">        QobjEvo. list of [:class:`Qobj`, :class:`Coefficient`] or callable that</span>
-<span class="sd">        can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        QobjEvo. list of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable that</span>
+<span class="sd">        can be made into :obj:`.QobjEvo` are also accepted.</span>
 
 <span class="sd">    bath : Bath or list of Bath</span>
 <span class="sd">        A :obj:`Bath` containing the exponents of the expansion of the</span>
@@ -670,7 +678,7 @@
 <span class="sd">        The description of the hierarchy constructed from the given bath</span>
 <span class="sd">        and maximum depth.</span>
 
-<span class="sd">    rhs : :obj:`QobjEvo`</span>
+<span class="sd">    rhs : :obj:`.QobjEvo`</span>
 <span class="sd">        The right-hand side (RHS) of the hierarchy evolution ODE. Internally</span>
 <span class="sd">        the system and bath coupling operators are converted to</span>
 <span class="sd">        :class:`qutip.data.CSR` instances during construction of the RHS,</span>
@@ -678,7 +686,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;heomsolver&quot;</span>
-    <span class="n">resultclass</span> <span class="o">=</span> <span class="n">HEOMResult</span>
+    <span class="n">_resultclass</span> <span class="o">=</span> <span class="n">HEOMResult</span>
     <span class="n">_avail_integrators</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
@@ -936,7 +944,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Make the full RHS required by the solver. &quot;&quot;&quot;</span>
         <span class="n">rhs_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhs</span><span class="p">()</span>
         <span class="n">rhs_dims</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sup_shape</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ados</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sup_shape</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ados</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_sup_shape</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ados</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_sup_shape</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_ados</span><span class="p">]</span>
         <span class="p">]</span>
         <span class="n">h_identity</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_ados</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">)</span>
 
@@ -992,16 +1000,16 @@
 <span class="sd">            Specifies the the maximum number of iterative refinement steps that</span>
 <span class="sd">            the MKL PARDISO solver performs.</span>
 
-<span class="sd">            For a complete description, see iparm(8) in</span>
-<span class="sd">            http://cali2.unilim.fr/intel-xe/mkl/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm.</span>
+<span class="sd">            For a complete description, see iparm(7) in</span>
+<span class="sd">            https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2023-0/pardiso-iparm-parameter.html</span>
 
 <span class="sd">        mkl_weighted_matching : bool</span>
 <span class="sd">            MKL PARDISO can use a maximum weighted matching algorithm to</span>
 <span class="sd">            permute large elements close the diagonal. This strategy adds an</span>
 <span class="sd">            additional level of reliability to the factorization methods.</span>
 
-<span class="sd">            For a complete description, see iparm(13) in</span>
-<span class="sd">            http://cali2.unilim.fr/intel-xe/mkl/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm.</span>
+<span class="sd">            For a complete description, see iparm(12) in</span>
+<span class="sd">            https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2023-0/pardiso-iparm-parameter.html</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1011,7 +1019,7 @@
 <span class="sd">        steady_ados : :class:`HierarchyADOsState`</span>
 <span class="sd">            The steady state of the full ADO hierarchy. A particular ADO may be</span>
 <span class="sd">            extracted from the full state by calling</span>
-<span class="sd">            :meth:`HEOMSolver.extract`.</span>
+<span class="sd">            :meth:`extract`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L_sys</span><span class="o">.</span><span class="n">isconstant</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -1047,8 +1055,8 @@
             <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
             <span class="n">solution</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b_mat</span><span class="p">)</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">solution</span><span class="p">[:</span><span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">conj</span><span class="p">()),</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">solution</span><span class="p">[:</span><span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">adjoint</span><span class="p">()),</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="n">steady_state</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sys_dims</span><span class="p">)</span>
 
         <span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_ados</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
@@ -1062,9 +1070,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        state0 : :class:`~Qobj` or :class:`~HierarchyADOsState` or array-like</span>
-<span class="sd">            If ``rho0`` is a :class:`~Qobj` the it is the initial state</span>
-<span class="sd">            of the system (i.e. a :obj:`~Qobj` density matrix).</span>
+<span class="sd">        state0 : :obj:`.Qobj` or :class:`~HierarchyADOsState` or array-like</span>
+<span class="sd">            If ``rho0`` is a :obj:`.Qobj` the it is the initial state</span>
+<span class="sd">            of the system (i.e. a :obj:`.Qobj` density matrix).</span>
 
 <span class="sd">            If it is a :class:`~HierarchyADOsState` or array-like, then</span>
 <span class="sd">            ``rho0`` gives the initial state of all ADOs.</span>
@@ -1086,8 +1094,8 @@
 <span class="sd">            Change the ``args`` of the RHS for the evolution.</span>
 
 <span class="sd">        e_ops : Qobj / QobjEvo / callable / list / dict / None, optional</span>
-<span class="sd">            A list or dictionary of operators as :class:`~Qobj`,</span>
-<span class="sd">            :class:`~QobjEvo` and/or callable functions (they can be mixed) or</span>
+<span class="sd">            A list or dictionary of operators as :obj:`.Qobj`,</span>
+<span class="sd">            :obj:`.QobjEvo` and/or callable functions (they can be mixed) or</span>
 <span class="sd">            a single operator or callable function. For an operator ``op``, the</span>
 <span class="sd">            result will be computed using ``(state * op).tr()`` and the state</span>
 <span class="sd">            at each time ``t``. For callable functions, ``f``, the result is</span>
@@ -1120,7 +1128,7 @@
 <span class="sd">              at tme ``t``. The keys are those given by ``e_ops`` if it was</span>
 <span class="sd">              a dict, otherwise they are the indexes of the supplied ``e_ops``.</span>
 
-<span class="sd">            See :class:`~HEOMResult` and :class:`~Result` for the complete</span>
+<span class="sd">            See :class:`~HEOMResult` and :class:`.Result` for the complete</span>
 <span class="sd">            list of attributes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span></div>
@@ -1187,7 +1195,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        state0 : :class:`Qobj`</span>
+<span class="sd">        state0 : :obj:`.Qobj`</span>
 <span class="sd">            Initial state of the evolution. This may provide either just the</span>
 <span class="sd">            initial density matrix of the system, or the full set of ADOs</span>
 <span class="sd">            for the hierarchy. See the documentation for ``rho0`` in the</span>
@@ -1203,36 +1211,36 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Options for HEOMSolver:</span>
 
-<span class="sd">        store_final_state: bool, default=False</span>
+<span class="sd">        store_final_state: bool, default: False</span>
 <span class="sd">            Whether or not to store the final state of the evolution in the</span>
 <span class="sd">            result class.</span>
 
-<span class="sd">        store_states: bool, default=None</span>
+<span class="sd">        store_states: bool, default: None</span>
 <span class="sd">            Whether or not to store the state vectors or density matrices.</span>
 <span class="sd">            On `None` the states will be saved if no expectation operators are</span>
 <span class="sd">            given.</span>
 
-<span class="sd">        normalize_output: bool, default=False</span>
+<span class="sd">        normalize_output: bool, default: False</span>
 <span class="sd">            Normalize output state to hide ODE numerical errors.</span>
 
-<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default=&quot;text&quot;</span>
+<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default: &quot;text&quot;</span>
 <span class="sd">            How to present the solver progress.</span>
 <span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
 <span class="sd">            if not installed. Empty string or False will disable the bar.</span>
 
-<span class="sd">        progress_kwargs: dict, default={&quot;chunk_size&quot;: 10}</span>
+<span class="sd">        progress_kwargs: dict, default: {&quot;chunk_size&quot;: 10}</span>
 <span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
 <span class="sd">            ``chunk_size``.</span>
 
-<span class="sd">        method: str, default=&quot;adams&quot;</span>
+<span class="sd">        method: str, default: &quot;adams&quot;</span>
 <span class="sd">            Which ordinary differential equation integration method to use.</span>
 
-<span class="sd">        state_data_type: str, default=&quot;dense&quot;</span>
+<span class="sd">        state_data_type: str, default: &quot;dense&quot;</span>
 <span class="sd">            Name of the data type of the state used during the ODE evolution.</span>
 <span class="sd">            Use an empty string to keep the input state type. Many integrators</span>
 <span class="sd">            support only work with `Dense`.</span>
 
-<span class="sd">        store_ados : bool, default=False</span>
+<span class="sd">        store_ados : bool, default: False</span>
 <span class="sd">            Whether or not to store the HEOM ADOs. Only relevant when using</span>
 <span class="sd">            the HEOM solver.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1317,7 +1325,7 @@
 <span class="sd">        If set to None the default options will be used. Keyword only.</span>
 <span class="sd">        Default: None.</span>
 
-<span class="sd">    combine : bool, default True</span>
+<span class="sd">    combine : bool, default: True</span>
 <span class="sd">        Whether to combine exponents with the same frequency (and coupling</span>
 <span class="sd">        operator). See :meth:`BosonicBath.combine` for details.</span>
 <span class="sd">        Keyword only. Default: True.</span>
@@ -1420,7 +1428,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

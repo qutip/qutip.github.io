@@ -96,97 +96,100 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span>
-<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">Solver</span><span class="p">,</span> <span class="n">_solver_deprecation</span>
+<span class="kn">from</span> <span class="nn">._feedback</span> <span class="kn">import</span> <span class="n">_QobjFeedback</span><span class="p">,</span> <span class="n">_DataFeedback</span>
 
 
-<div class="viewcode-block" id="sesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.sesolve.sesolve">[docs]</a><span class="k">def</span> <span class="nf">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="sesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.sesolve.sesolve">[docs]</a><span class="k">def</span> <span class="nf">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Schrodinger equation evolution of a state vector or unitary matrix</span>
 <span class="sd">    for a given Hamiltonian.</span>
 
-<span class="sd">    Evolve the state vector (`psi0`) using a given</span>
-<span class="sd">    Hamiltonian (`H`), by integrating the set of ordinary differential</span>
+<span class="sd">    Evolve the state vector (``psi0``) using a given</span>
+<span class="sd">    Hamiltonian (``H``), by integrating the set of ordinary differential</span>
 <span class="sd">    equations that define the system. Alternatively evolve a unitary matrix in</span>
 <span class="sd">    solving the Schrodinger operator equation.</span>
 
 <span class="sd">    The output is either the state vector or unitary matrix at arbitrary points</span>
-<span class="sd">    in time (`tlist`), or the expectation values of the supplied operators</span>
-<span class="sd">    (`e_ops`). If e_ops is a callback function, it is invoked for each</span>
+<span class="sd">    in time (``tlist``), or the expectation values of the supplied operators</span>
+<span class="sd">    (``e_ops``). If e_ops is a callback function, it is invoked for each</span>
 <span class="sd">    time in `tlist` with time and the state as arguments, and the function</span>
 <span class="sd">    does not use any return values. e_ops cannot be used in conjunction</span>
 <span class="sd">    with solving the Schrodinger operator equation</span>
 
 <span class="sd">    **Time-dependent operators**</span>
 
-<span class="sd">    For time-dependent problems, `H` and `c_ops` can be a :class:`QobjEvo` or</span>
-<span class="sd">    object that can be interpreted as :class:`QobjEvo` such as a list of</span>
+<span class="sd">    For time-dependent problems, ``H`` and ``c_ops`` can be a :obj:`.QobjEvo`</span>
+<span class="sd">    or object that can be interpreted as :obj:`.QobjEvo` such as a list of</span>
 <span class="sd">    (Qobj, Coefficient) pairs or a function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format.</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">    psi0 : :class:`qutip.qobj`</span>
+<span class="sd">    psi0 : :obj:`.Qobj`</span>
 <span class="sd">        initial state vector (ket)</span>
 <span class="sd">        or initial unitary operator `psi0 = U`</span>
 
 <span class="sd">    tlist : *list* / *array*</span>
 <span class="sd">        list of times for :math:`t`.</span>
 
-<span class="sd">    e_ops : :class:`qutip.qobj`, callable, or list.</span>
+<span class="sd">    e_ops : :obj:`.Qobj`, callable, or list, optional</span>
 <span class="sd">        Single operator or list of operators for which to evaluate</span>
 <span class="sd">        expectation values or callable or list of callable.</span>
 <span class="sd">        Callable signature must be, `f(t: float, state: Qobj)`.</span>
-<span class="sd">        See :func:`expect` for more detail of operator expectation.</span>
+<span class="sd">        See :func:`~qutip.core.expect.expect` for more detail of operator</span>
+<span class="sd">        expectation.</span>
 
-<span class="sd">    args : None / *dictionary*</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        dictionary of parameters for time-dependent Hamiltonians</span>
 
-<span class="sd">    options : None / dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Dictionary of options for the solver.</span>
 
-<span class="sd">        - store_final_state : bool</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, None</span>
-<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
-<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - normalize_output : bool</span>
-<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
-<span class="sd">        - method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
-<span class="sd">          Which differential equation integration method to use.</span>
-<span class="sd">        - atol, rtol : float</span>
-<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
-<span class="sd">        - nsteps :</span>
-<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
-<span class="sd">          step.</span>
-<span class="sd">        - max_step : float, 0</span>
-<span class="sd">          Maximum lenght of one internal step. When using pulses, it should be</span>
-<span class="sd">          less than half the width of the thinnest pulse.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | normalize_output : bool</span>
+<span class="sd">          | Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
+<span class="sd">          | Which differential equation integration method to use.</span>
+<span class="sd">        - | atol, rtol : float</span>
+<span class="sd">          | Absolute and relative tolerance of the ODE integrator.</span>
+<span class="sd">        - | nsteps : int</span>
+<span class="sd">          | Maximum number of (internally defined) steps allowed in one ``tlist``</span>
+<span class="sd">            step.</span>
+<span class="sd">        - | max_step : float</span>
+<span class="sd">          | Maximum lenght of one internal step. When using pulses, it should be</span>
+<span class="sd">            less than half the width of the thinnest pulse.</span>
 
 <span class="sd">        Other options could be supported depending on the integration method,</span>
 <span class="sd">        see `Integrator &lt;./classes.html#classes-ode&gt;`_.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    result: :class:`qutip.Result`</span>
+<span class="sd">    result: :obj:`.Result`</span>
 
-<span class="sd">        An instance of the class :class:`qutip.Result`, which contains</span>
-<span class="sd">        a *list of array* `result.expect` of expectation values for the times</span>
-<span class="sd">        specified by `tlist`, and/or a *list* `result.states` of state vectors</span>
-<span class="sd">        or density matrices corresponding to the times in `tlist` [if `e_ops`</span>
-<span class="sd">        is an empty list of `store_states=True` in options].</span>
+<span class="sd">        An instance of the class :obj:`.Result`, which contains a *list of</span>
+<span class="sd">        array* ``result.expect`` of expectation values for the times specified</span>
+<span class="sd">        by ``tlist``, and/or a *list* ``result.states`` of state vectors or</span>
+<span class="sd">        density matrices corresponding to the times in ``tlist`` [if ``e_ops``</span>
+<span class="sd">        is an empty list of ``store_states=True`` in options].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">_solver_deprecation</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
     <span class="n">solver</span> <span class="o">=</span> <span class="n">SESolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span></div>
@@ -199,10 +202,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
 <span class="sd">    options : dict, optional</span>
 <span class="sd">        Options for the solver, see :obj:`SESolver.options` and</span>
@@ -216,7 +219,7 @@
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sesolve&quot;</span>
     <span class="n">_avail_integrators</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span>
         <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -247,35 +250,63 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Solver&#39;s options:</span>
 
-<span class="sd">        store_final_state: bool, default=False</span>
+<span class="sd">        store_final_state: bool, default: False</span>
 <span class="sd">            Whether or not to store the final state of the evolution in the</span>
 <span class="sd">            result class.</span>
 
-<span class="sd">        store_states: bool, default=None</span>
+<span class="sd">        store_states: bool, default: None</span>
 <span class="sd">            Whether or not to store the state vectors or density matrices.</span>
 <span class="sd">            On `None` the states will be saved if no expectation operators are</span>
 <span class="sd">            given.</span>
 
-<span class="sd">        normalize_output: bool, default=True</span>
+<span class="sd">        normalize_output: bool, default: True</span>
 <span class="sd">            Normalize output state to hide ODE numerical errors.</span>
 
-<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, {}</span>
+<span class="sd">        progress_bar: str {&quot;text&quot;, &quot;enhanced&quot;, &quot;tqdm&quot;, &quot;&quot;}, default: &quot;&quot;</span>
 <span class="sd">            How to present the solver progress.</span>
 <span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
 <span class="sd">            if not installed. Empty string or False will disable the bar.</span>
 
-<span class="sd">        progress_kwargs: dict, default={&quot;chunk_size&quot;: 10}</span>
+<span class="sd">        progress_kwargs: dict, default: {&quot;chunk_size&quot;: 10}</span>
 <span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
 <span class="sd">            ``chunk_size``.</span>
 
-<span class="sd">        method: str, default=&quot;adams&quot;</span>
+<span class="sd">        method: str, default: &quot;adams&quot;</span>
 <span class="sd">            Which ordinary differential equation integration method to use.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
 
     <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
-        <span class="n">Solver</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span></div>
+        <span class="n">Solver</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SESolver.StateFeedback"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.sesolve.SESolver.StateFeedback">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">StateFeedback</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        State of the evolution to be used in a time-dependent operator.</span>
+
+<span class="sd">        When used as an args:</span>
+
+<span class="sd">            ``QobjEvo([op, func], args={&quot;state&quot;: SESolver.StateFeedback()})``</span>
+
+<span class="sd">        The ``func`` will receive the ket as ``state`` during the evolution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        default : Qobj or qutip.core.data.Data, default : None</span>
+<span class="sd">            Initial value to be used at setup of the system.</span>
+
+<span class="sd">        prop : bool, default : False</span>
+<span class="sd">            Set to True when using sesolve for computing propagators.</span>
+
+<span class="sd">        raw_data : bool, default : False</span>
+<span class="sd">            If True, the raw matrix will be passed instead of a Qobj.</span>
+<span class="sd">            For density matrices, the matrices can be column stacked or square</span>
+<span class="sd">            depending on the integration method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">raw_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_DataFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_QobjFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -286,7 +317,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

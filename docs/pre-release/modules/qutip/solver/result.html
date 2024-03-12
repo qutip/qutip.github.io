@@ -88,11 +88,19 @@
              
   <h1>Source code for qutip.solver.result</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; Class for solve function results&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">,</span> <span class="n">expect</span><span class="p">,</span> <span class="n">isket</span><span class="p">,</span> <span class="n">ket2dm</span><span class="p">,</span> <span class="n">qzero</span><span class="p">,</span> <span class="n">qzero_like</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Result&quot;</span><span class="p">,</span> <span class="s2">&quot;MultiTrajResult&quot;</span><span class="p">,</span> <span class="s2">&quot;McResult&quot;</span><span class="p">,</span> <span class="s2">&quot;NmmcResult&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;McTrajectoryResult&quot;</span><span class="p">,</span> <span class="s2">&quot;McResultImprovedSampling&quot;</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">,</span> <span class="n">expect</span><span class="p">,</span> <span class="n">isket</span><span class="p">,</span> <span class="n">ket2dm</span><span class="p">,</span> <span class="n">qzero_like</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Result&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MultiTrajResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;McResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NmmcResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;McTrajectoryResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;McResultImprovedSampling&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <span class="k">class</span> <span class="nc">_QobjExpectEop</span><span class="p">:</span>
@@ -102,9 +110,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    op : :obj:`~Qobj`</span>
+<span class="sd">    op : :obj:`.Qobj`</span>
 <span class="sd">        The expectation value operator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">=</span> <span class="n">op</span>
 
@@ -135,6 +144,7 @@
 <span class="sd">    op : object</span>
 <span class="sd">        The original object used to define the e_op operation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">append</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">=</span> <span class="n">op</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">f</span>
@@ -159,6 +169,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Common method for all ``Result``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">solver</span>
         <span class="k">if</span> <span class="n">stats</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -168,10 +179,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_processors</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_processors_require_copy</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="c1"># make sure not to store a reference to the solver</span>
+        <span class="n">options_copy</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options_copy</span><span class="p">,</span> <span class="s2">&quot;_feedback&quot;</span><span class="p">):</span>
+            <span class="n">options_copy</span><span class="o">.</span><span class="n">_feedback</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options_copy</span>
 
     <span class="k">def</span> <span class="nf">_e_ops_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Convert the supplied e_ops to a dictionary of Eop instances. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the supplied e_ops to a dictionary of Eop instances.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">e_ops</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">e_ops</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e_ops</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -203,16 +218,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_processors_require_copy</span> <span class="o">|=</span> <span class="n">requires_copy</span>
 
 
-<div class="viewcode-block" id="Result"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.sesolve.Result">[docs]</a><span class="k">class</span> <span class="nc">Result</span><span class="p">(</span><span class="n">_BaseResult</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ResultOptions</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">store_states</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">store_final_state</span><span class="p">:</span> <span class="nb">bool</span>
+
+
+<div class="viewcode-block" id="Result"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.result.Result">[docs]</a><span class="k">class</span> <span class="nc">Result</span><span class="p">(</span><span class="n">_BaseResult</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for storing solver results.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    e_ops : :obj:`~Qobj`, :obj:`~QobjEvo`, function or list or dict of these</span>
+<span class="sd">    e_ops : :obj:`.Qobj`, :obj:`.QobjEvo`, function or list or dict of these</span>
 <span class="sd">        The ``e_ops`` parameter defines the set of values to record at</span>
-<span class="sd">        each time step ``t``. If an element is a :obj:`~Qobj` or</span>
-<span class="sd">        :obj:`~QobjEvo` the value recorded is the expectation value of that</span>
+<span class="sd">        each time step ``t``. If an element is a :obj:`.Qobj` or</span>
+<span class="sd">        :obj:`.QobjEvo` the value recorded is the expectation value of that</span>
 <span class="sd">        operator given the state at ``t``. If the element is a function, ``f``,</span>
 <span class="sd">        the value recorded is ``f(t, state)``.</span>
 
@@ -240,11 +260,11 @@
 <span class="sd">        A list of the times at which the expectation values and states were</span>
 <span class="sd">        recorded.</span>
 
-<span class="sd">    states : list of :obj:`~Qobj`</span>
+<span class="sd">    states : list of :obj:`.Qobj`</span>
 <span class="sd">        The state at each time ``t`` (if the recording of the state was</span>
 <span class="sd">        requested).</span>
 
-<span class="sd">    final_state : :obj:`~Qobj`:</span>
+<span class="sd">    final_state : :obj:`.Qobj`:</span>
 <span class="sd">        The final state (if the recording of the final state was requested).</span>
 
 <span class="sd">    expect : list of arrays of expectation values</span>
@@ -284,7 +304,18 @@
 <span class="sd">    options : dict</span>
 <span class="sd">        The options for this result class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+
+    <span class="n">options</span><span class="p">:</span> <span class="n">ResultOptions</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">e_ops</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">ResultOptions</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">)</span>
         <span class="n">raw_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_e_ops_to_dict</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">raw_ops</span><span class="p">}</span>
@@ -296,7 +327,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_state</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_final_state</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_post_init</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
@@ -328,33 +359,33 @@
 <span class="sd">        Sub-class ``.post_init()`` implementation may take additional keyword</span>
 <span class="sd">        arguments if required.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">store_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;store_states&#39;</span><span class="p">]</span>
-        <span class="n">store_final_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;store_final_state&#39;</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">store_states</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">store_states</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">store_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;store_states&quot;</span><span class="p">]</span>
+        <span class="n">store_states</span> <span class="o">=</span> <span class="n">store_states</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">store_states</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">store_states</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_store_state</span><span class="p">,</span> <span class="n">requires_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">store_states</span> <span class="ow">or</span> <span class="n">store_final_state</span><span class="p">:</span>
+        <span class="n">store_final_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;store_final_state&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">store_final_state</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">store_states</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_store_final_state</span><span class="p">,</span> <span class="n">requires_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_store_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Processor that stores a state in ``.states``. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Processor that stores a state in ``.states``.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_store_final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Processor that writes the state to ``.final_state``. &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_state</span> <span class="o">=</span> <span class="n">state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Processor that writes the state to ``._final_state``.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_final_state</span> <span class="o">=</span> <span class="n">state</span>
 
     <span class="k">def</span> <span class="nf">_pre_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a copy of the state. Sub-classes may override this to</span>
-<span class="sd">            copy a state in different manner or to skip making a copy</span>
-<span class="sd">            altogether if a copy is not necessary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of the state. Sub-classes may override this to</span>
+<span class="sd">        copy a state in different manner or to skip making a copy</span>
+<span class="sd">        altogether if a copy is not necessary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Result.add"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.sesolve.Result.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a state to the results for the time ``t`` of the evolution.</span>
 
@@ -369,17 +400,17 @@
 <span class="sd">        t : float</span>
 <span class="sd">            The time of the added state.</span>
 
-<span class="sd">        state : typically a :obj:`~Qobj`</span>
-<span class="sd">            The state a time ``t``. Usually this is a :obj:`~Qobj` with</span>
+<span class="sd">        state : typically a :obj:`.Qobj`</span>
+<span class="sd">            The state a time ``t``. Usually this is a :obj:`.Qobj` with</span>
 <span class="sd">            suitable dimensions, but it sub-classes of result might support</span>
 <span class="sd">            other forms of the state.</span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The expectation values, i.e. ``e_ops``, and states are recorded by</span>
+<span class="sd">        the state processors (see ``.add_processor``).</span>
 
-<span class="sd">           The expectation values, i.e. ``e_ops``, and states are recorded by</span>
-<span class="sd">           the state processors (see ``.add_processor``).</span>
-
-<span class="sd">           Additional processors may be added by sub-classes.</span>
+<span class="sd">        Additional processors may be added by sub-classes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
@@ -387,7 +418,7 @@
             <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_copy</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_processors</span><span class="p">:</span>
-            <span class="n">op</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></div>
+            <span class="n">op</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
@@ -396,10 +427,7 @@
         <span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  Solver stats:&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;  Time interval: [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">]&quot;</span>
@@ -417,19 +445,33 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_op</span><span class="p">)</span> <span class="k">for</span> <span class="n">e_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_op</span><span class="p">)</span> <span class="k">for</span> <span class="n">e_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_state</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<span class="k">class</span> <span class="nc">MultiTrajResult</span><span class="p">(</span><span class="n">_BaseResult</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MultiTrajResultOptions</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">store_states</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">store_final_state</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">keep_runs_results</span><span class="p">:</span> <span class="nb">bool</span>
+
+
+<div class="viewcode-block" id="MultiTrajResult"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.result.MultiTrajResult">[docs]</a><span class="k">class</span> <span class="nc">MultiTrajResult</span><span class="p">(</span><span class="n">_BaseResult</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for storing results for solver using multiple trajectories.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    e_ops : :obj:`~Qobj`, :obj:`~QobjEvo`, function or list or dict of these</span>
+<span class="sd">    e_ops : :obj:`.Qobj`, :obj:`.QobjEvo`, function or list or dict of these</span>
 <span class="sd">        The ``e_ops`` parameter defines the set of values to record at</span>
-<span class="sd">        each time step ``t``. If an element is a :obj:`~Qobj` or</span>
-<span class="sd">        :obj:`~QobjEvo` the value recorded is the expectation value of that</span>
+<span class="sd">        each time step ``t``. If an element is a :obj:`.Qobj` or</span>
+<span class="sd">        :obj:`.QobjEvo` the value recorded is the expectation value of that</span>
 <span class="sd">        operator given the state at ``t``. If the element is a function, ``f``,</span>
 <span class="sd">        the value recorded is ``f(t, state)``.</span>
 
@@ -452,25 +494,25 @@
 <span class="sd">    kw : dict</span>
 <span class="sd">        Additional parameters specific to a result sub-class.</span>
 
-<span class="sd">    Properties</span>
+<span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    times : list</span>
 <span class="sd">        A list of the times at which the expectation values and states were</span>
 <span class="sd">        recorded.</span>
 
-<span class="sd">    average_states : list of :obj:`~Qobj`</span>
+<span class="sd">    average_states : list of :obj:`.Qobj`</span>
 <span class="sd">        The state at each time ``t`` (if the recording of the state was</span>
 <span class="sd">        requested) averaged over all trajectories as a density matrix.</span>
 
-<span class="sd">    runs_states : list of list of :obj:`~Qobj`</span>
+<span class="sd">    runs_states : list of list of :obj:`.Qobj`</span>
 <span class="sd">        The state for each trajectory and each time ``t`` (if the recording of</span>
 <span class="sd">        the states and trajectories was requested)</span>
 
-<span class="sd">    final_state : :obj:`~Qobj:</span>
+<span class="sd">    final_state : :obj:`.Qobj`:</span>
 <span class="sd">        The final state (if the recording of the final state was requested)</span>
 <span class="sd">        averaged over all trajectories as a density matrix.</span>
 
-<span class="sd">    runs_final_state : list of :obj:`~Qobj`</span>
+<span class="sd">    runs_final_state : list of :obj:`.Qobj`</span>
 <span class="sd">        The final state for each trajectory (if the recording of the final</span>
 <span class="sd">        state and trajectories was requested).</span>
 
@@ -540,7 +582,18 @@
 <span class="sd">    options : :obj:`~SolverResultsOptions`</span>
 <span class="sd">        The options for this result class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+
+    <span class="n">options</span><span class="p">:</span> <span class="n">MultiTrajResultOptions</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">e_ops</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">MultiTrajResultOptions</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_e_ops_to_dict</span><span class="p">(</span><span class="n">e_ops</span><span class="p">)</span>
 
@@ -556,15 +609,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">average_e_data</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">std_e_data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runs_e_data</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_post_init</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_store_average_density_matricies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;store_states&quot;</span><span class="p">]</span>
+            <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;store_states&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span> <span class="o">==</span> <span class="p">{})</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;keep_runs_results&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_store_final_density_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;store_final_state&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_average_density_matricies</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;keep_runs_results&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;ket&quot;</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">state</span>
 
@@ -574,10 +641,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">times</span>
 
-        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">=</span> <span class="p">[</span><span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-                                <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">final_state</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_average_density_matricies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span>
+            <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">final_state</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_final_density_matrix</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">final_state</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="o">=</span> <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
 
@@ -592,13 +661,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">average_e_data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">k</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">avg_expect</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">avg_expect</span>
-            <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">avg_expect</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect</span><span class="p">)</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_e_data</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;keep_runs_results&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;keep_runs_results&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">runs_e_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_e_data</span>
 
     <span class="k">def</span> <span class="nf">_store_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span>
@@ -606,8 +672,7 @@
     <span class="k">def</span> <span class="nf">_reduce_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">accu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">accu</span><span class="p">,</span> <span class="n">state</span>
-            <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">accu</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
         <span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_reduce_final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
@@ -654,7 +719,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ntraj_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_ntraj</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
         <span class="k">if</span> <span class="n">ntraj_left</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ntraj reached&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;end_condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ntraj reached&quot;</span>
         <span class="k">return</span> <span class="n">ntraj_left</span>
 
     <span class="k">def</span> <span class="nf">_average_computer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -671,40 +736,36 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="n">avg</span><span class="p">,</span> <span class="n">avg2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_average_computer</span><span class="p">()</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-            <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span> <span class="o">*</span> <span class="n">mean</span>
-            <span class="k">for</span> <span class="n">mean</span><span class="p">,</span> <span class="p">(</span><span class="n">atol</span><span class="p">,</span> <span class="n">rtol</span><span class="p">)</span>
-            <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span><span class="p">)</span>
-        <span class="p">])</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span> <span class="o">*</span> <span class="n">mean</span>
+                <span class="k">for</span> <span class="n">mean</span><span class="p">,</span> <span class="p">(</span><span class="n">atol</span><span class="p">,</span> <span class="n">rtol</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">target_ntraj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">((</span><span class="n">avg2</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">target</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_estimated_ntraj</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">target_ntraj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_ntraj</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimated_ntraj</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;target tolerance reached&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;end_condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;target tolerance reached&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimated_ntraj</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
 
     <span class="k">def</span> <span class="nf">_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target_ntraj</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">store_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;store_states&#39;</span><span class="p">]</span>
-        <span class="n">store_final_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;store_final_state&#39;</span><span class="p">]</span>
-        <span class="n">store_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;keep_runs_results&#39;</span><span class="p">]</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_increment_traj</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">store_traj</span><span class="p">:</span>
+        <span class="n">store_trajectory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;keep_runs_results&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">store_trajectory</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_store_trajectory</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">store_states</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">store_states</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">store_states</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_average_density_matricies</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reduce_states</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">store_states</span> <span class="ow">or</span> <span class="n">store_final_state</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_final_density_matrix</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reduce_final_state</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_processor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reduce_expect</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_early_finish_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_end</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;end_condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
 
     <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory_info</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -721,8 +782,8 @@
 <span class="sd">            - trajectory : :class:`Result`</span>
 <span class="sd">              Run result for one evolution over the times.</span>
 
-<span class="sd">        Return</span>
-<span class="sd">        ------</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 <span class="sd">        remaing_traj : number</span>
 <span class="sd">            Return the number of trajectories still needed to reach the target</span>
 <span class="sd">            tolerance. If no tolerance is provided, return infinity.</span>
@@ -740,6 +801,7 @@
 <span class="sd">        Set the condition to stop the computing trajectories when the certain</span>
 <span class="sd">        condition are fullfilled.</span>
 <span class="sd">        Supported end condition for multi trajectories computation are:</span>
+
 <span class="sd">        - Reaching a number of trajectories.</span>
 <span class="sd">        - Error bar on the expectation values reach smaller than a given</span>
 <span class="sd">          tolerance.</span>
@@ -760,7 +822,7 @@
 <span class="sd">            Error estimation is done with jackknife resampling.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target_ntraj</span> <span class="o">=</span> <span class="n">ntraj</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;timeout&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;end_condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;timeout&quot;</span>
 
         <span class="k">if</span> <span class="n">target_tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_early_finish_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_end</span>
@@ -775,14 +837,16 @@
 
         <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_tol</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">targets</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">target_tol</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)]</span> <span class="o">*</span> <span class="n">num_e_ops</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">target_tol</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)]</span> <span class="o">*</span> <span class="n">num_e_ops</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">targets</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">num_e_ops</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">targets</span>
         <span class="k">elif</span> <span class="n">targets</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_e_ops</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_target_tols</span> <span class="o">=</span> <span class="n">targets</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;target_tol must be a number, a pair of (atol, &quot;</span>
-                             <span class="s2">&quot;rtol) or a list of (atol, rtol) for each e_ops&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;target_tol must be a number, a pair of (atol, &quot;</span>
+                <span class="s2">&quot;rtol) or a list of (atol, rtol) for each e_ops&quot;</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_early_finish_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_tolerance_end</span>
 
@@ -802,8 +866,18 @@
 <span class="sd">        States averages as density matrices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">final</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="k">for</span> <span class="n">final</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">states</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">states</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">trajectory</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reduce_states</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">final</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="k">for</span> <span class="n">final</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span>
+        <span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -828,6 +902,8 @@
 <span class="sd">        Last states of each trajectories averaged into a density matrix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
 
@@ -854,7 +930,11 @@
     <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_data</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
 
-    <span class="k">def</span> <span class="nf">steady_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">e_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_e_data</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_e_data</span>
+
+<div class="viewcode-block" id="MultiTrajResult.steady_state"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.result.MultiTrajResult.steady_state">[docs]</a>    <span class="k">def</span> <span class="nf">steady_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Average the states of the last ``N`` times of every runs as a density</span>
 <span class="sd">        matrix. Should converge to the steady state in the right circumstances.</span>
@@ -871,7 +951,7 @@
         <span class="k">if</span> <span class="n">states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="n">N</span><span class="p">:])</span> <span class="o">/</span> <span class="n">N</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
@@ -880,16 +960,13 @@
         <span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  Solver stats:&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;  Time interval: [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">]&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">)</span><span class="si">}</span><span class="s2"> steps)&quot;</span>
             <span class="p">)</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Number of e_ops: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Number of e_ops: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  States saved.&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -911,23 +988,35 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Shared `e_ops` is required to merge results&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">times</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Shared `times` are is required to merge results&quot;</span><span class="p">)</span>
-        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
-                             <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
+
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span>
+        <span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">trajectories</span><span class="p">:</span>
             <span class="n">new</span><span class="o">.</span><span class="n">trajectories</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">trajectories</span>
         <span class="n">new</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">num_trajectories</span>
         <span class="n">new</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span>
         <span class="n">new</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">seeds</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">new</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_states</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">_sum_states</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">state1</span> <span class="o">+</span> <span class="n">state2</span> <span class="k">for</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_states</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="p">):</span>
             <span class="n">new</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_final_states</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span>
+                <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_final_states</span>
             <span class="p">)</span>
         <span class="n">new</span><span class="o">.</span><span class="n">_target_tols</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -938,47 +1027,46 @@
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_ops</span><span class="p">):</span>
             <span class="n">new</span><span class="o">.</span><span class="n">_sum_expect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum_expect</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">new</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                                    <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="p">)</span>
 
             <span class="n">avg</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">_sum_expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">new</span><span class="o">.</span><span class="n">num_trajectories</span>
             <span class="n">avg2</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">_sum2_expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">new</span><span class="o">.</span><span class="n">num_trajectories</span>
 
             <span class="n">new</span><span class="o">.</span><span class="n">average_e_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
-            <span class="n">new</span><span class="o">.</span><span class="n">e_data</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">average_e_data</span>
-
             <span class="n">new</span><span class="o">.</span><span class="n">std_e_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
 
-            <span class="k">if</span> <span class="n">new</span><span class="o">.</span><span class="n">trajectories</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_e_data</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">runs_e_data</span><span class="p">:</span>
                 <span class="n">new</span><span class="o">.</span><span class="n">runs_e_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_e_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">runs_e_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-                <span class="n">new</span><span class="o">.</span><span class="n">e_data</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">runs_e_data</span>
 
         <span class="n">new</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;run time&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">other</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;run time&quot;</span><span class="p">]</span>
-        <span class="n">new</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Merged results&quot;</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;end_condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Merged results&quot;</span>
 
-        <span class="k">return</span> <span class="n">new</span>
+        <span class="k">return</span> <span class="n">new</span></div>
 
 
 <span class="k">class</span> <span class="nc">McTrajectoryResult</span><span class="p">(</span><span class="n">Result</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Result class used by the :class:`qutip.MCSolver` for single trajectories.</span>
+<span class="sd">    Result class used by the :class:`.MCSolver` for single trajectories.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">e_ops</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
-                         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">e_ops</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">McResult</span><span class="p">(</span><span class="n">MultiTrajResult</span><span class="p">):</span>
+<div class="viewcode-block" id="McResult"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.result.McResult">[docs]</a><span class="k">class</span> <span class="nc">McResult</span><span class="p">(</span><span class="n">MultiTrajResult</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for storing Monte-Carlo solver results.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    e_ops : :obj:`~Qobj`, :obj:`~QobjEvo`, function or list or dict of these</span>
+<span class="sd">    e_ops : :obj:`.Qobj`, :obj:`.QobjEvo`, function or list or dict of these</span>
 <span class="sd">        The ``e_ops`` parameter defines the set of values to record at</span>
-<span class="sd">        each time step ``t``. If an element is a :obj:`~Qobj` or</span>
-<span class="sd">        :obj:`~QobjEvo` the value recorded is the expectation value of that</span>
+<span class="sd">        each time step ``t``. If an element is a :obj:`.Qobj` or</span>
+<span class="sd">        :obj:`.QobjEvo` the value recorded is the expectation value of that</span>
 <span class="sd">        operator given the state at ``t``. If the element is a function, ``f``,</span>
 <span class="sd">        the value recorded is ``f(t, state)``.</span>
 
@@ -1000,12 +1088,13 @@
 <span class="sd">    kw : dict</span>
 <span class="sd">        Additional parameters specific to a result sub-class.</span>
 
-<span class="sd">    Properties</span>
+<span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    collapse : list</span>
 <span class="sd">        For each runs, a list of every collapse as a tuple of the time it</span>
 <span class="sd">        happened and the corresponding ``c_ops`` index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># Collapse are only produced by mcsolve.</span>
 
     <span class="k">def</span> <span class="nf">_add_collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
@@ -1025,7 +1114,7 @@
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span><span class="p">:</span>
             <span class="n">col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))</span>
-            <span class="n">col</span> <span class="o">=</span> <span class="p">([]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
@@ -1037,7 +1126,7 @@
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">col_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span><span class="p">:</span>
             <span class="n">col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">col_</span><span class="p">))</span>
-            <span class="n">col</span> <span class="o">=</span> <span class="p">([]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
@@ -1052,7 +1141,9 @@
             <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">which</span> <span class="ow">in</span> <span class="n">collapses</span><span class="p">:</span>
                 <span class="n">cols</span><span class="p">[</span><span class="n">which</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">mesurement</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tlist</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tlist</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+            <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">mesurement</span>
@@ -1068,11 +1159,13 @@
             <span class="n">cols</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span><span class="p">)]</span>
             <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">which</span> <span class="ow">in</span> <span class="n">collapses</span><span class="p">:</span>
                 <span class="n">cols</span><span class="p">[</span><span class="n">which</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-            <span class="n">measurements</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tlist</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span><span class="p">)</span>
-            <span class="p">])</span>
-        <span class="k">return</span> <span class="n">measurements</span>
+            <span class="n">measurements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tlist</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">measurements</span></div>
 
 
 <span class="k">class</span> <span class="nc">McResultImprovedSampling</span><span class="p">(</span><span class="n">McResult</span><span class="p">,</span> <span class="n">MultiTrajResult</span><span class="p">):</span>
@@ -1082,6 +1175,7 @@
 <span class="sd">    using the improved sampling algorithm, which samples the no-jump trajectory</span>
 <span class="sd">    first and then only samples jump trajectories afterwards.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">MultiTrajResult</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_no_jump</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1100,14 +1194,16 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">accu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">accu</span><span class="p">,</span> <span class="n">state</span>
-                <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">accu</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span>
+                <span class="p">)</span>
             <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">accu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">accu</span><span class="p">,</span> <span class="n">state</span>
-                <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">accu</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span>
+                <span class="p">)</span>
             <span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_reduce_final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
@@ -1124,13 +1220,15 @@
 
     <span class="k">def</span> <span class="nf">_add_first_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_add_first_traj</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_average_density_matricies</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span> <span class="o">=</span> <span class="p">[</span><span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-                                        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span> <span class="o">=</span> <span class="p">[</span><span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-                                     <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">final_state</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">states</span>
+            <span class="p">]</span>
+        <span class="k">if</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">final_state</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_final_density_matrix</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">final_state</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states_no_jump</span> <span class="o">=</span> <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
@@ -1147,10 +1245,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_no_jump</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">expect</span><span class="p">)</span> <span class="k">for</span> <span class="n">expect</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">expect</span>
         <span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_jump</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">expect</span><span class="p">)</span>
-                                 <span class="k">for</span> <span class="n">expect</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">expect</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_jump</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">expect</span><span class="p">)</span>
-                                  <span class="k">for</span> <span class="n">expect</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">expect</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_jump</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">expect</span><span class="p">)</span> <span class="k">for</span> <span class="n">expect</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">expect</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_jump</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">expect</span><span class="p">)</span> <span class="k">for</span> <span class="n">expect</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">expect</span>
+        <span class="p">]</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect</span>
 
@@ -1172,12 +1272,12 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">expect_traj</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">expect_traj</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
-                <span class="n">avg</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_no_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                       <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                       <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">avg2</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_no_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                        <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">avg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_no_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sum_expect_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">avg2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_no_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_expect_jump</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">average_e_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
 
@@ -1194,12 +1294,28 @@
 <span class="sd">        States averages as density matrices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">states</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">states</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">qzero_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dm</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">states</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">trajectory</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reduce_states</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_jump_prob</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">p</span> <span class="o">*</span> <span class="n">final_no_jump</span>
-                <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">final_jump</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">final_no_jump</span><span class="p">,</span> <span class="n">final_jump</span> <span class="ow">in</span>
-                <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">p</span> <span class="o">*</span> <span class="n">final_no_jump</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">final_jump</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">final_no_jump</span><span class="p">,</span> <span class="n">final_jump</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_no_jump</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_states_jump</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">average_final_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1207,11 +1323,11 @@
 <span class="sd">        Last states of each trajectory averaged into a density matrix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states_no_jump</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_states</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_jump_prob</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="n">p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states_no_jump</span>
-            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states_jump</span>
+        <span class="k">return</span> <span class="n">p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states_no_jump</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_final_states_jump</span><span class="p">)</span>
             <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="p">)</span>
 
@@ -1229,8 +1345,10 @@
             <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">which</span> <span class="ow">in</span> <span class="n">collapses</span><span class="p">:</span>
                 <span class="n">cols</span><span class="p">[</span><span class="n">which</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">mesurement</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_jump_prob</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tlist</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_jump_prob</span><span class="p">)</span>
+            <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tlist</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tlist</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">mesurement</span>
@@ -1238,7 +1356,7 @@
 
 <span class="k">class</span> <span class="nc">NmmcTrajectoryResult</span><span class="p">(</span><span class="n">McTrajectoryResult</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Result class used by the :class:`qutip.NonMarkovianMCSolver` for single</span>
+<span class="sd">    Result class used by the :class:`.NonMarkovianMCSolver` for single</span>
 <span class="sd">    trajectories. Additionally stores the trace of the state along the</span>
 <span class="sd">    trajectory.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1262,16 +1380,16 @@
     <span class="n">add</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">Result</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="vm">__doc__</span>
 
 
-<span class="k">class</span> <span class="nc">NmmcResult</span><span class="p">(</span><span class="n">McResult</span><span class="p">):</span>
+<div class="viewcode-block" id="NmmcResult"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.result.NmmcResult">[docs]</a><span class="k">class</span> <span class="nc">NmmcResult</span><span class="p">(</span><span class="n">McResult</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for storing the results of the non-Markovian Monte-Carlo solver.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    e_ops : :obj:`~Qobj`, :obj:`~QobjEvo`, function or list or dict of these</span>
+<span class="sd">    e_ops : :obj:`.Qobj`, :obj:`.QobjEvo`, function or list or dict of these</span>
 <span class="sd">        The ``e_ops`` parameter defines the set of values to record at</span>
-<span class="sd">        each time step ``t``. If an element is a :obj:`~Qobj` or</span>
-<span class="sd">        :obj:`~QobjEvo` the value recorded is the expectation value of that</span>
+<span class="sd">        each time step ``t``. If an element is a :obj:`.Qobj` or</span>
+<span class="sd">        :obj:`.QobjEvo` the value recorded is the expectation value of that</span>
 <span class="sd">        operator given the state at ``t``. If the element is a function, ``f``,</span>
 <span class="sd">        the value recorded is ``f(t, state)``.</span>
 
@@ -1293,7 +1411,7 @@
 <span class="sd">    kw : dict</span>
 <span class="sd">        Additional parameters specific to a result sub-class.</span>
 
-<span class="sd">    Properties</span>
+<span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    average_trace : list</span>
 <span class="sd">        The average trace (i.e., averaged over all trajectories) at each time.</span>
@@ -1325,15 +1443,15 @@
     <span class="k">def</span> <span class="nf">_add_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
         <span class="n">new_trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trace</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_trace</span> <span class="o">+=</span> <span class="n">new_trace</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_trace</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">new_trace</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_trace</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">new_trace</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 
         <span class="n">avg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum_trace</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
         <span class="n">avg2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sum2_trace</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_trajectories</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">average_trace</span> <span class="o">=</span> <span class="n">avg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">std_trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">std_trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;keep_runs_results&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;keep_runs_results&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">runs_trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trace</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -1342,7 +1460,7 @@
 <span class="sd">        Refers to ``average_trace`` or ``runs_trace``, depending on whether</span>
 <span class="sd">        ``keep_runs_results`` is set in the options.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_trace</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_trace</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs_trace</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_trace</span></div>
 </pre></div>
 
            </div>
@@ -1353,7 +1471,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

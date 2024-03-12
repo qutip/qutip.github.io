@@ -248,18 +248,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_default_color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;#CC6600&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span>
         <span class="c1"># List that stores the display colors for each vector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_color</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#: Width of Bloch vectors, default = 5</span>
+        <span class="c1"># Width of Bloch vectors, default = 5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_width</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="c1">#: Style of Bloch vectors, default = &#39;-\|&gt;&#39; (or &#39;simple&#39;)</span>
+        <span class="c1"># Style of Bloch vectors, default = &#39;-\|&gt;&#39; (or &#39;simple&#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_style</span> <span class="o">=</span> <span class="s1">&#39;-|&gt;&#39;</span>
-        <span class="c1">#: Sets the width of the vectors arrowhead</span>
+        <span class="c1"># Sets the width of the vectors arrowhead</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_mutation</span> <span class="o">=</span> <span class="mi">20</span>
 
         <span class="c1"># ---point options---</span>
         <span class="c1"># List of colors for Bloch point markers, default = [&#39;b&#39;,&#39;g&#39;,&#39;r&#39;,&#39;y&#39;]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_default_color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;#CC6600&#39;</span><span class="p">]</span>
+        <span class="c1"># Old variable used in V4 to customise the color of the points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># List that stores the display colors for each set of points</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inner_point_color</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># Size of point markers, default = 25</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">]</span>
         <span class="c1"># Shape of point markers, default = [&#39;o&#39;,&#39;^&#39;,&#39;d&#39;,&#39;s&#39;]</span>
@@ -397,7 +399,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_alpha</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vector_color</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lines</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_arcs</span> <span class="o">=</span> <span class="p">[]</span></div>
 
@@ -420,12 +422,12 @@
 <span class="sd">        alpha : float, default=1.</span>
 <span class="sd">            Transparency value for the vectors. Values between 0 and 1.</span>
 
-<span class="sd">        .. note::</span>
-
-<span class="sd">           When using ``meth=l`` in QuTiP 4.6, the line transparency defaulted</span>
-<span class="sd">           to ``0.75`` and there was no way to alter it.</span>
-<span class="sd">           When the ``alpha`` parameter was added in QuTiP 4.7, the default</span>
-<span class="sd">           became ``alpha=1.0`` for values of ``meth``.</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        When using ``meth=l`` in QuTiP 4.6, the line transparency defaulted</span>
+<span class="sd">        to ``0.75`` and there was no way to alter it.</span>
+<span class="sd">        When the ``alpha`` parameter was added in QuTiP 4.7, the default</span>
+<span class="sd">        became ``alpha=1.0`` for values of ``meth``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -449,14 +451,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">point_style</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_alpha</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inner_point_color</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Bloch.add_states"><a class="viewcode-back" href="../../apidoc/classes.html#qutip.bloch.Bloch.add_states">[docs]</a>    <span class="k">def</span> <span class="nf">add_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;vector&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a state vector Qobj to Bloch sphere.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        state : Qobj</span>
+<span class="sd">        state : :obj:`.Qobj`</span>
 <span class="sd">            Input state vector.</span>
 
 <span class="sd">        kind : {&#39;vector&#39;, &#39;point&#39;}</span>
@@ -539,7 +541,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        state_or_vector : Qobj/array/list/tuple</span>
+<span class="sd">        state_or_vector : :obj:`.Qobj`/array/list/tuple</span>
 <span class="sd">            Position for the annotaion.</span>
 <span class="sd">            Qobj of a qubit or a vector of 3 elements.</span>
 
@@ -578,11 +580,11 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        start : Qobj or array-like</span>
+<span class="sd">        start : :obj:`.Qobj` or array-like</span>
 <span class="sd">            Array with cartesian coordinates of the first point, or a state</span>
 <span class="sd">            vector or density matrix that can be mapped to a point on or</span>
 <span class="sd">            within the Bloch sphere.</span>
-<span class="sd">        end : Qobj or array-like</span>
+<span class="sd">        end : :obj:`.Qobj` or array-like</span>
 <span class="sd">            Array with cartesian coordinates of the second point, or a state</span>
 <span class="sd">            vector or density matrix that can be mapped to a point on or</span>
 <span class="sd">            within the Bloch sphere.</span>
@@ -652,11 +654,11 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        start : Qobj or array-like</span>
+<span class="sd">        start : :obj:`.Qobj` or array-like</span>
 <span class="sd">            Array with cartesian coordinates of the first point, or a state</span>
 <span class="sd">            vector or density matrix that can be mapped to a point on or</span>
 <span class="sd">            within the Bloch sphere.</span>
-<span class="sd">        end : Qobj or array-like</span>
+<span class="sd">        end : :obj:`.Qobj` or array-like</span>
 <span class="sd">            Array with cartesian coordinates of the second point, or a state</span>
 <span class="sd">            vector or density matrix that can be mapped to a point on or</span>
 <span class="sd">            within the Bloch sphere.</span>
@@ -881,28 +883,31 @@
             <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">):</span>
                 <span class="n">indperm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
-                <span class="n">points</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span class="n">indperm</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">indperm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_points</span><span class="p">)</span>
 
             <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_size</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_size</span><span class="p">))]</span>
             <span class="n">marker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_marker</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_marker</span><span class="p">))]</span>
             <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_style</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner_point_color</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner_point_color</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_color</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_style</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">]:</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_default_color</span><span class="p">[</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">point_default_color</span><span class="p">[</span>
                     <span class="n">k</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_default_color</span><span class="p">)</span>
-                <span class="p">]</span>
+                <span class="p">]]</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_style</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span>
                 <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_points</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_default_color</span><span class="p">))</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_default_color</span><span class="p">,</span> <span class="n">length</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">[</span><span class="n">indperm</span><span class="p">]</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_style</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
-                                  <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-                                  <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">indperm</span><span class="p">]),</span>
+                                  <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">indperm</span><span class="p">]),</span>
+                                  <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">indperm</span><span class="p">]),</span>
                                   <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
                                   <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span>
                                   <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
@@ -912,6 +917,7 @@
                                   <span class="p">)</span>
 
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_style</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;l&#39;</span><span class="p">:</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">[</span><span class="n">k</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">color</span><span class="p">)]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                                <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                                <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
@@ -969,7 +975,7 @@
 
 <span class="sd">        name : str</span>
 <span class="sd">            Name of saved image. Must include path and format as well.</span>
-<span class="sd">            i.e. &#39;/Users/Paul/Desktop/bloch.png&#39;</span>
+<span class="sd">            i.e. &#39;/Users/Me/Desktop/bloch.png&#39;</span>
 <span class="sd">            This overrides the &#39;format&#39; and &#39;dirc&#39; arguments.</span>
 <span class="sd">        format : str</span>
 <span class="sd">            Format of output image.</span>
@@ -1025,7 +1031,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

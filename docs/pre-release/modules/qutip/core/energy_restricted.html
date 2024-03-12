@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qutip.core.energy_restricted &mdash; QuTiP 5.0 Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-rendered-html.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/site.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            QuTiP: Quantum Toolbox in Python
+          </a>
+              <div class="version">
+                5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qutip.core.energy_restricted</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qutip.core.energy_restricted</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.dimensions</span> <span class="kn">import</span> <span class="n">Space</span>
+<span class="kn">from</span> <span class="nn">.states</span> <span class="kn">import</span> <span class="n">state_number_enumerate</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">qdiags</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">settings</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;enr_state_dictionaries&#39;</span><span class="p">,</span> <span class="s1">&#39;enr_fock&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;enr_thermal_dm&#39;</span><span class="p">,</span> <span class="s1">&#39;enr_destroy&#39;</span><span class="p">,</span> <span class="s1">&#39;enr_identity&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="enr_state_dictionaries"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.energy_restricted.enr_state_dictionaries">[docs]</a><span class="k">def</span> <span class="nf">enr_state_dictionaries</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the number of states, and lookup-dictionaries for translating</span>
+<span class="sd">    a state tuple to a state index, and vice versa, for a system with a given</span>
+<span class="sd">    number of components and maximum number of excitations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dims: list</span>
+<span class="sd">        A list with the number of states in each sub-system.</span>
+
+<span class="sd">    excitations : integer</span>
+<span class="sd">        The maximum numbers of dimension</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nstates, state2idx, idx2state: integer, dict, dict</span>
+<span class="sd">        The number of states `nstates`, a dictionary for looking up state</span>
+<span class="sd">        indices from a state tuple, and a dictionary for looking up state</span>
+<span class="sd">        state tuples from state indices. state2idx and idx2state are reverses</span>
+<span class="sd">        of each other, i.e., ``state2idx[idx2state[idx]] = idx`` and</span>
+<span class="sd">        ``idx2state[state2idx[state]] = state``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nstates</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">state2idx</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">idx2state</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">state_number_enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">):</span>
+        <span class="n">state2idx</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="n">nstates</span>
+        <span class="n">idx2state</span><span class="p">[</span><span class="n">nstates</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="n">nstates</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">nstates</span><span class="p">,</span> <span class="n">state2idx</span><span class="p">,</span> <span class="n">idx2state</span></div>
+
+
+<span class="k">class</span> <span class="nc">EnrSpace</span><span class="p">(</span><span class="n">Space</span><span class="p">):</span>
+    <span class="n">_stored_dims</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_excitations</span> <span class="o">=</span> <span class="n">excitations</span>
+        <span class="n">enr_dicts</span> <span class="o">=</span> <span class="n">enr_state_dictionaries</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state2idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx2state</span> <span class="o">=</span> <span class="n">enr_dicts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pure_dims</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span>
+            <span class="ow">or</span> <span class="p">(</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dims</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_excitations</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">n_excitations</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_excitations</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;EnrSpace(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_excitations</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dims2idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state2idx</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">dims</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">idx2dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx2state</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="enr_fock"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.energy_restricted.enr_fock">[docs]</a><span class="k">def</span> <span class="nf">enr_fock</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the Fock state representation in a excitation-number restricted</span>
+<span class="sd">    state space. The `dims` argument is a list of integers that define the</span>
+<span class="sd">    number of quantums states of each component of a composite quantum system,</span>
+<span class="sd">    and the `excitations` specifies the maximum number of excitations for</span>
+<span class="sd">    the basis states that are to be included in the state space. The `state`</span>
+<span class="sd">    argument is a tuple of integers that specifies the state (in the number</span>
+<span class="sd">    basis representation) for which to generate the Fock state representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dims : list</span>
+<span class="sd">        A list of the dimensions of each subsystem of a composite quantum</span>
+<span class="sd">        system.</span>
+
+<span class="sd">    excitations : integer</span>
+<span class="sd">        The maximum number of excitations that are to be included in the</span>
+<span class="sd">        state space.</span>
+
+<span class="sd">    state : list of integers</span>
+<span class="sd">        The state in the number basis representation.</span>
+
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">        accepted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ket : Qobj</span>
+<span class="sd">        A Qobj instance that represent a Fock state in the exication-number-</span>
+<span class="sd">        restricted state space defined by `dims` and `exciations`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dense</span>
+    <span class="n">nstates</span><span class="p">,</span> <span class="n">state2idx</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">enr_state_dictionaries</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">one_element</span><span class="p">[</span><span class="n">dtype</span><span class="p">](</span>
+            <span class="p">(</span><span class="n">nstates</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">state2idx</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">state</span><span class="p">)],</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="mi">1</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;state tuple &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot; is not in the restricted state space.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">EnrSpace</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">),</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">)],</span>
+                <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="enr_thermal_dm"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.energy_restricted.enr_thermal_dm">[docs]</a><span class="k">def</span> <span class="nf">enr_thermal_dm</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the density operator for a thermal state in the excitation-number-</span>
+<span class="sd">    restricted state space defined by the `dims` and `exciations` arguments.</span>
+<span class="sd">    See the documentation for enr_fock for a more detailed description of</span>
+<span class="sd">    these arguments. The temperature of each mode in dims is specified by</span>
+<span class="sd">    the average number of excitatons `n`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dims : list</span>
+<span class="sd">        A list of the dimensions of each subsystem of a composite quantum</span>
+<span class="sd">        system.</span>
+
+<span class="sd">    excitations : integer</span>
+<span class="sd">        The maximum number of excitations that are to be included in the</span>
+<span class="sd">        state space.</span>
+
+<span class="sd">    n : integer</span>
+<span class="sd">        The average number of exciations in the thermal state. `n` can be</span>
+<span class="sd">        a float (which then applies to each mode), or a list/array of the same</span>
+<span class="sd">        length as dims, in which each element corresponds specifies the</span>
+<span class="sd">        temperature of the corresponding mode.</span>
+
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">        accepted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dm : Qobj</span>
+<span class="sd">        Thermal state density matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">CSR</span>
+    <span class="n">nstates</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">idx2state</span> <span class="o">=</span> <span class="n">enr_state_dictionaries</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)</span>
+    <span class="n">enr_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">EnrSpace</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dims</span><span class="p">))</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="n">diags</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">((</span><span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+             <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">idx2state</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="n">diags</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diags</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">qdiags</span><span class="p">(</span><span class="n">diags</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">enr_dims</span><span class="p">,</span>
+                 <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nstates</span><span class="p">,</span> <span class="n">nstates</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">_isherm</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="enr_destroy"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.energy_restricted.enr_destroy">[docs]</a><span class="k">def</span> <span class="nf">enr_destroy</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate annilation operators for modes in a excitation-number-restricted</span>
+<span class="sd">    state space. For example, consider a system consisting of 4 modes, each</span>
+<span class="sd">    with 5 states. The total hilbert space size is 5**4 = 625. If we are</span>
+<span class="sd">    only interested in states that contain up to 2 excitations, we only need</span>
+<span class="sd">    to include states such as</span>
+
+<span class="sd">        (0, 0, 0, 0)</span>
+<span class="sd">        (0, 0, 0, 1)</span>
+<span class="sd">        (0, 0, 0, 2)</span>
+<span class="sd">        (0, 0, 1, 0)</span>
+<span class="sd">        (0, 0, 1, 1)</span>
+<span class="sd">        (0, 0, 2, 0)</span>
+<span class="sd">        ...</span>
+
+<span class="sd">    This function creates annihilation operators for the 4 modes that act</span>
+<span class="sd">    within this state space:</span>
+
+<span class="sd">        a1, a2, a3, a4 = enr_destroy([5, 5, 5, 5], excitations=2)</span>
+
+<span class="sd">    From this point onwards, the annihiltion operators a1, ..., a4 can be</span>
+<span class="sd">    used to setup a Hamiltonian, collapse operators and expectation-value</span>
+<span class="sd">    operators, etc., following the usual pattern.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dims : list</span>
+<span class="sd">        A list of the dimensions of each subsystem of a composite quantum</span>
+<span class="sd">        system.</span>
+
+<span class="sd">    excitations : integer</span>
+<span class="sd">        The maximum number of excitations that are to be included in the</span>
+<span class="sd">        state space.</span>
+
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">        accepted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a_ops : list of qobj</span>
+<span class="sd">        A list of annihilation operators for each mode in the composite</span>
+<span class="sd">        quantum system described by dims.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">CSR</span>
+    <span class="n">nstates</span><span class="p">,</span> <span class="n">state2idx</span><span class="p">,</span> <span class="n">idx2state</span> <span class="o">=</span> <span class="n">enr_state_dictionaries</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)</span>
+    <span class="n">enr_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">EnrSpace</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span>
+
+    <span class="n">a_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">lil_matrix</span><span class="p">((</span><span class="n">nstates</span><span class="p">,</span> <span class="n">nstates</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">n1</span><span class="p">,</span> <span class="n">state1</span> <span class="ow">in</span> <span class="n">idx2state</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state1</span><span class="p">):</span>
+            <span class="c1"># if s &gt; 0, the annihilation operator of mode idx has a non-zero</span>
+            <span class="c1"># entry with one less excitation in mode idx in the final state</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">state2</span> <span class="o">=</span> <span class="n">state1</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="n">state1</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">n2</span> <span class="o">=</span> <span class="n">state2idx</span><span class="p">[</span><span class="n">state2</span><span class="p">]</span>
+                <span class="n">a_ops</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">n2</span><span class="p">,</span> <span class="n">n1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">enr_dims</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">a_ops</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="enr_identity"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.energy_restricted.enr_identity">[docs]</a><span class="k">def</span> <span class="nf">enr_identity</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the identity operator for the excitation-number restricted</span>
+<span class="sd">    state space defined by the `dims` and `exciations` arguments. See the</span>
+<span class="sd">    docstring for enr_fock for a more detailed description of these arguments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dims : list</span>
+<span class="sd">        A list of the dimensions of each subsystem of a composite quantum</span>
+<span class="sd">        system.</span>
+
+<span class="sd">    excitations : integer</span>
+<span class="sd">        The maximum number of excitations that are to be included in the</span>
+<span class="sd">        state space.</span>
+
+<span class="sd">    dtype : type or str, optional</span>
+<span class="sd">        Storage representation. Any data-layer known to `qutip.data.to` is</span>
+<span class="sd">        accepted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    op : Qobj</span>
+<span class="sd">        A Qobj instance that represent the identity operator in the</span>
+<span class="sd">        exication-number-restricted state space defined by `dims` and</span>
+<span class="sd">        `exciations`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s2">&quot;default_dtype&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_data</span><span class="o">.</span><span class="n">Dia</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">EnrSpace</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">excitations</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">identity</span><span class="p">[</span><span class="n">dtype</span><span class="p">](</span><span class="n">dims</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims</span><span class="p">,</span> <span class="n">dims</span><span class="p">],</span>
+                <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">isunitary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

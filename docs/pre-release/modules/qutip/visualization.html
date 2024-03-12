@@ -101,7 +101,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">log2</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">log2</span><span class="p">,</span> <span class="n">sqrt</span>
 
 <span class="kn">from</span> <span class="nn">packaging.version</span> <span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">parse_version</span>
 
@@ -208,13 +208,13 @@
 <span class="sd">    wigner : a wigner transformation</span>
 <span class="sd">        The wigner transformation at `steps` different theta and phi.</span>
 
-<span class="sd">    reflections : bool, default=False</span>
+<span class="sd">    reflections : bool, default: False</span>
 <span class="sd">        If the reflections of the sphere should be plotted as well.</span>
 
 <span class="sd">    cmap : a matplotlib colormap instance, optional</span>
 <span class="sd">        Color map to use when plotting.</span>
 
-<span class="sd">    colorbar : bool, default=True</span>
+<span class="sd">    colorbar : bool, default: True</span>
 <span class="sd">        Whether (True) or not (False) a colorbar should be attached.</span>
 
 <span class="sd">    fig : a matplotlib Figure instance, optional</span>
@@ -385,7 +385,7 @@
 <span class="sd">    y_basis : list of strings, optional</span>
 <span class="sd">        list of y ticklabels to represent y basis of the input.</span>
 
-<span class="sd">    color_style : string, default=&quot;scaled&quot;</span>
+<span class="sd">    color_style : str, {&quot;scaled&quot;, &quot;threshold&quot;, &quot;phase&quot;}, default: &quot;scaled&quot;</span>
 
 <span class="sd">        Determines how colors are assigned to each square:</span>
 
@@ -399,14 +399,14 @@
 <span class="sd">        -  If set to ``&quot;phase&quot;``, each color is chosen according to</span>
 <span class="sd">           the angle of the corresponding matrix element.</span>
 
-<span class="sd">    label_top : bool, default=True</span>
+<span class="sd">    label_top : bool, default: True</span>
 <span class="sd">        If True, x ticklabels will be placed on top, otherwise</span>
 <span class="sd">        they will appear below the plot.</span>
 
 <span class="sd">    cmap : a matplotlib colormap instance, optional</span>
 <span class="sd">        Color map to use when plotting.</span>
 
-<span class="sd">    colorbar : bool, default=True</span>
+<span class="sd">    colorbar : bool, default: True</span>
 <span class="sd">        Whether (True) or not (False) a colorbar should be attached.</span>
 
 <span class="sd">    fig : a matplotlib Figure instance, optional</span>
@@ -429,16 +429,16 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import qutip</span>
-<span class="sd">    &gt;&gt;&gt;</span>
+
 <span class="sd">    &gt;&gt;&gt; dm = qutip.rand_dm(4)</span>
 <span class="sd">    &gt;&gt;&gt; fig, ax = qutip.hinton(dm)</span>
 <span class="sd">    &gt;&gt;&gt; fig.show()</span>
-<span class="sd">    &gt;&gt;&gt;</span>
+
 <span class="sd">    &gt;&gt;&gt; qutip.settings.colorblind_safe = True</span>
 <span class="sd">    &gt;&gt;&gt; fig, ax = qutip.hinton(dm, color_style=&quot;threshold&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; fig.show()</span>
 <span class="sd">    &gt;&gt;&gt; qutip.settings.colorblind_safe = False</span>
-<span class="sd">    &gt;&gt;&gt;</span>
+
 <span class="sd">    &gt;&gt;&gt; fig, ax = qutip.hinton(dm, color_style=&quot;phase&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; fig.show()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -591,7 +591,7 @@
 <span class="sd">    cmap : a matplotlib colormap instance, optional</span>
 <span class="sd">        Color map to use when plotting.</span>
 
-<span class="sd">    colorbar : bool, default=True</span>
+<span class="sd">    colorbar : bool, default: True</span>
 <span class="sd">        Whether (True) or not (False) a colorbar should be attached.</span>
 
 <span class="sd">    fig : a matplotlib Figure instance, optional</span>
@@ -780,7 +780,7 @@
 <span class="sd">    limits : list/array with two float numbers, optional</span>
 <span class="sd">        The z-axis limits [min, max]</span>
 
-<span class="sd">    bar_style : string, default=&quot;real&quot;</span>
+<span class="sd">    bar_style : str, {&quot;real&quot;, &quot;img&quot;, &quot;abs&quot;, &quot;phase&quot;}, default: &quot;real&quot;</span>
 
 <span class="sd">        -  If set to ``&quot;real&quot;`` (default), each bar is plotted</span>
 <span class="sd">           as the real part of the corresponding matrix element</span>
@@ -794,7 +794,7 @@
 <span class="sd">    color_limits : list/array with two float numbers, optional</span>
 <span class="sd">        The limits of colorbar [min, max]</span>
 
-<span class="sd">    color_style : string, default=&quot;real&quot;</span>
+<span class="sd">    color_style : str, {&quot;real&quot;, &quot;img&quot;, &quot;abs&quot;, &quot;phase&quot;}, default: &quot;real&quot;</span>
 <span class="sd">        Determines how colors are assigned to each square:</span>
 
 <span class="sd">        -  If set to ``&quot;real&quot;`` (default), each color is chosen</span>
@@ -809,7 +809,7 @@
 <span class="sd">    cmap : a matplotlib colormap instance, optional</span>
 <span class="sd">        Color map to use when plotting.</span>
 
-<span class="sd">    colorbar : bool, default=True</span>
+<span class="sd">    colorbar : bool, default: True</span>
 <span class="sd">        show colorbar</span>
 
 <span class="sd">    fig : a matplotlib Figure instance, optional</span>
@@ -826,40 +826,40 @@
 <span class="sd">        &#39;zticks&#39; : list of numbers, optional</span>
 <span class="sd">            A list of z-axis tick locations.</span>
 
-<span class="sd">        &#39;bars_spacing&#39; : float, default=0.1</span>
+<span class="sd">        &#39;bars_spacing&#39; : float, default: 0.1</span>
 <span class="sd">            spacing between bars.</span>
 
-<span class="sd">        &#39;bars_alpha&#39; : float, default=1.</span>
+<span class="sd">        &#39;bars_alpha&#39; : float, default: 1.</span>
 <span class="sd">            transparency of bars, should be in range 0 - 1</span>
 
-<span class="sd">        &#39;bars_lw&#39; : float, default=0.5</span>
+<span class="sd">        &#39;bars_lw&#39; : float, default: 0.5</span>
 <span class="sd">            linewidth of bars&#39; edges.</span>
 
-<span class="sd">        &#39;bars_edgecolor&#39; : color, default=&#39;k&#39;</span>
+<span class="sd">        &#39;bars_edgecolor&#39; : color, default: &#39;k&#39;</span>
 <span class="sd">            The colors of the bars&#39; edges.</span>
 <span class="sd">            Examples: &#39;k&#39;, (0.1, 0.2, 0.5) or &#39;#0f0f0f80&#39;.</span>
 
-<span class="sd">        &#39;shade&#39; : bool, default=True</span>
+<span class="sd">        &#39;shade&#39; : bool, default: True</span>
 <span class="sd">            Whether to shade the dark sides of the bars (True) or not (False).</span>
 <span class="sd">            The shading is relative to plot&#39;s source of light.</span>
 
-<span class="sd">        &#39;azim&#39; : float, default=-35</span>
+<span class="sd">        &#39;azim&#39; : float, default: -35</span>
 <span class="sd">            The azimuthal viewing angle.</span>
 
-<span class="sd">        &#39;elev&#39; : float, default=35</span>
+<span class="sd">        &#39;elev&#39; : float, default: 35</span>
 <span class="sd">            The elevation viewing angle.</span>
 
-<span class="sd">        &#39;stick&#39; : bool, default=False</span>
+<span class="sd">        &#39;stick&#39; : bool, default: False</span>
 <span class="sd">            Changes xlim and ylim in such a way that bars next to</span>
 <span class="sd">            XZ and YZ planes will stick to those planes.</span>
 <span class="sd">            This option has no effect if ``ax`` is passed as a parameter.</span>
 
-<span class="sd">        &#39;cbar_pad&#39; : float, default=0.04</span>
+<span class="sd">        &#39;cbar_pad&#39; : float, default: 0.04</span>
 <span class="sd">            The fraction of the original axes between the colorbar</span>
 <span class="sd">            and the new image axes.</span>
 <span class="sd">            (i.e. the padding between the 3D figure and the colorbar).</span>
 
-<span class="sd">        &#39;cbar_to_z&#39; : bool, default=False</span>
+<span class="sd">        &#39;cbar_to_z&#39; : bool, default: False</span>
 <span class="sd">            Whether to set the color of maximum and minimum z-values to the</span>
 <span class="sd">            maximum and minimum colors in the colorbar (True) or not (False).</span>
 
@@ -1066,7 +1066,7 @@
 <span class="sd">            A list of  yticklabels to the left of energy levels of the initial</span>
 <span class="sd">            Hamiltonian.</span>
 
-<span class="sd">        N : int, default=0</span>
+<span class="sd">        N : int, default: 0</span>
 <span class="sd">            The number of energy levels to plot</span>
 
 <span class="sd">        fig : a matplotlib Figure instance, optional</span>
@@ -1151,16 +1151,16 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rho : `qutip.Qobj`</span>
+<span class="sd">    rho : :obj:`.Qobj`</span>
 <span class="sd">        The density matrix (or ket) of the state to visualize.</span>
 
 <span class="sd">    fock_numbers : list of strings, optional</span>
 <span class="sd">        list of x ticklabels to represent fock numbers</span>
 
-<span class="sd">    color : color or list of colors, default=&quot;green&quot;</span>
+<span class="sd">    color : color or list of colors, default: &quot;green&quot;</span>
 <span class="sd">        The colors of the bar faces.</span>
 
-<span class="sd">    unit_y_range : bool, default=True</span>
+<span class="sd">    unit_y_range : bool, default: True</span>
 <span class="sd">        Set y-axis limits [0, 1] or not</span>
 
 <span class="sd">    fig : a matplotlib Figure instance, optional</span>
@@ -1215,16 +1215,16 @@
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">output</span></div>
 
 
-<div class="viewcode-block" id="plot_wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.visualization.plot_wigner">[docs]</a><span class="k">def</span> <span class="nf">plot_wigner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span>
-                <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.visualization.plot_wigner">[docs]</a><span class="k">def</span> <span class="nf">plot_wigner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">,</span>
+                <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot the the Wigner function for a density matrix (or ket) that describes</span>
 <span class="sd">    an oscillator mode.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rho : `qutip.Qobj`</span>
+<span class="sd">    rho : :obj:`.Qobj`</span>
 <span class="sd">        The density matrix (or ket) of the state to visualize.</span>
 
 <span class="sd">    xvec : array_like, optional</span>
@@ -1234,19 +1234,30 @@
 <span class="sd">        y-coordinates at which to calculate the Wigner function.  Does not</span>
 <span class="sd">        apply to the &#39;fft&#39; method.</span>
 
-<span class="sd">    method : string {&#39;clenshaw&#39;, &#39;iterative&#39;, &#39;laguerre&#39;, &#39;fft&#39;},</span>
-<span class="sd">        default=&#39;clenshaw&#39;</span>
+<span class="sd">    method : str {&#39;clenshaw&#39;, &#39;iterative&#39;, &#39;laguerre&#39;, &#39;fft&#39;}, default: &#39;clenshaw&#39;</span>
 <span class="sd">        The method used for calculating the wigner function. See the</span>
 <span class="sd">        documentation for qutip.wigner for details.</span>
 
-<span class="sd">    projection: string {&#39;2d&#39;, &#39;3d&#39;}, default=&#39;2d&#39;</span>
+<span class="sd">    projection: str {&#39;2d&#39;, &#39;3d&#39;}, default: &#39;2d&#39;</span>
 <span class="sd">        Specify whether the Wigner function is to be plotted as a</span>
 <span class="sd">        contour graph (&#39;2d&#39;) or surface plot (&#39;3d&#39;).</span>
+
+<span class="sd">    g : float</span>
+<span class="sd">        Scaling factor for `a = 0.5 * g * (x + iy)`, default `g = sqrt(2)`.</span>
+<span class="sd">        See the documentation for qutip.wigner for details.</span>
+
+<span class="sd">    sparse : bool {False, True}</span>
+<span class="sd">        Flag for sparse format.</span>
+<span class="sd">        See the documentation for qutip.wigner for details.</span>
+
+<span class="sd">    parfor : bool {False, True}</span>
+<span class="sd">        Flag for parallel calculation.</span>
+<span class="sd">        See the documentation for qutip.wigner for details.</span>
 
 <span class="sd">    cmap : a matplotlib cmap instance, optional</span>
 <span class="sd">        The colormap.</span>
 
-<span class="sd">    colorbar : bool, default=False</span>
+<span class="sd">    colorbar : bool, default: False</span>
 <span class="sd">        Whether (True) or not (False) a colorbar should be attached to the</span>
 <span class="sd">        Wigner function graph.</span>
 
@@ -1283,7 +1294,10 @@
         <span class="k">if</span> <span class="n">isket</span><span class="p">(</span><span class="n">rho</span><span class="p">):</span>
             <span class="n">rho</span> <span class="o">=</span> <span class="n">ket2dm</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
 
-        <span class="n">W0</span> <span class="o">=</span> <span class="n">wigner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">W0</span> <span class="o">=</span> <span class="n">wigner</span><span class="p">(</span>
+            <span class="n">rho</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">g</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="n">parfor</span>
+        <span class="p">)</span>
 
         <span class="n">W</span><span class="p">,</span> <span class="n">yvec</span> <span class="o">=</span> <span class="n">W0</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">W0</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">W0</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
         <span class="n">Ws</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
@@ -1298,8 +1312,11 @@
     <span class="n">artist_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">W</span> <span class="ow">in</span> <span class="n">Ws</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">projection</span> <span class="o">==</span> <span class="s1">&#39;2d&#39;</span><span class="p">:</span>
-            <span class="n">cf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
-                             <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span><span class="o">.</span><span class="n">collections</span>
+            <span class="k">if</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">parse_version</span><span class="p">(</span><span class="s1">&#39;3.8&#39;</span><span class="p">):</span>
+                <span class="n">cf</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+                                 <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span><span class="o">.</span><span class="n">collections</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">)</span>
             <span class="n">cf</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -1332,9 +1349,10 @@
 <span class="sd">    Visualize the results (expectation values) for an evolution solver.</span>
 <span class="sd">    `results` is assumed to be an instance of Result, or a list of Result</span>
 <span class="sd">    instances.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    results : (list of) :class:`qutip.solver.Result`</span>
+<span class="sd">    results : (list of) :class:`.Result`</span>
 <span class="sd">        List of results objects returned by any of the QuTiP evolution solvers.</span>
 
 <span class="sd">    ylabels : list of strings, optional</span>
@@ -1398,7 +1416,7 @@
 <span class="sd">    PHI : matrix</span>
 <span class="sd">        Meshgrid matrix for the phi coordinate. Its range is between 0 and 2*pi</span>
 
-<span class="sd">    projection: string {&#39;2d&#39;, &#39;3d&#39;}, default=&#39;2d&#39;</span>
+<span class="sd">    projection: str {&#39;2d&#39;, &#39;3d&#39;}, default: &#39;2d&#39;</span>
 <span class="sd">        Specify whether the spin distribution function is to be plotted as a 2D</span>
 <span class="sd">        projection where the surface of the unit sphere is mapped on</span>
 <span class="sd">        the unit disk (&#39;2d&#39;) or surface plot (&#39;3d&#39;).</span>
@@ -1406,7 +1424,7 @@
 <span class="sd">    cmap : a matplotlib cmap instance, optional</span>
 <span class="sd">        The colormap.</span>
 
-<span class="sd">    colorbar : bool, default=False</span>
+<span class="sd">    colorbar : bool, default: False</span>
 <span class="sd">        Whether (True) or not (False) a colorbar should be attached to the</span>
 <span class="sd">        Wigner function graph.</span>
 
@@ -1505,7 +1523,7 @@
 <span class="sd">    X : array</span>
 <span class="sd">        Array (of any dimension) of complex numbers.</span>
 
-<span class="sd">    theme : &#39;light&#39; or &#39;dark&#39;, default=&#39;light&#39;</span>
+<span class="sd">    theme : str {&#39;light&#39;, &#39;dark&#39;}, default: &#39;light&#39;</span>
 <span class="sd">        Set coloring theme for mapping complex values into colors.</span>
 
 <span class="sd">    rmax : float, optional</span>
@@ -1676,22 +1694,22 @@
 <span class="sd">    ket : Qobj</span>
 <span class="sd">        Pure state for plotting.</span>
 
-<span class="sd">    theme : &#39;light&#39; or &#39;dark&#39;, default=&#39;light&#39;</span>
+<span class="sd">    theme : str {&#39;light&#39;, &#39;dark&#39;}, default: &#39;light&#39;</span>
 <span class="sd">        Set coloring theme for mapping complex values into colors.</span>
 <span class="sd">        See: complex_array_to_rgb.</span>
 
-<span class="sd">    how : &#39;pairs&#39;, &#39;pairs_skewed&#39; or &#39;before_after&#39;, default=&#39;pairs&#39;</span>
+<span class="sd">    how : str {&#39;pairs&#39;, &#39;pairs_skewed&#39; or &#39;before_after&#39;}, default: &#39;pairs&#39;</span>
 <span class="sd">        Type of Qubism plotting.  Options:</span>
 
 <span class="sd">        - &#39;pairs&#39; - typical coordinates,</span>
 <span class="sd">        - &#39;pairs_skewed&#39; - for ferromagnetic/antriferromagnetic plots,</span>
 <span class="sd">        - &#39;before_after&#39; - related to Schmidt plot (see also: plot_schmidt).</span>
 
-<span class="sd">    grid_iteration : int, default=1</span>
+<span class="sd">    grid_iteration : int, default: 1</span>
 <span class="sd">        Helper lines to be drawn on plot.</span>
 <span class="sd">        Show tiles for 2*grid_iteration particles vs all others.</span>
 
-<span class="sd">    legend_iteration : int or &#39;grid_iteration&#39; or &#39;all&#39;, default=0</span>
+<span class="sd">    legend_iteration : int or &#39;grid_iteration&#39; or &#39;all&#39;, default: 0</span>
 <span class="sd">        Show labels for first ``2*legend_iteration`` particles.  Option</span>
 <span class="sd">        &#39;grid_iteration&#39; sets the same number of particles as for</span>
 <span class="sd">        grid_iteration.  Option &#39;all&#39; makes label for all particles.  Typically</span>
@@ -1860,7 +1878,7 @@
 <span class="sd">    ket : Qobj</span>
 <span class="sd">        Pure state for plotting.</span>
 
-<span class="sd">    theme : &#39;light&#39; or &#39;dark&#39;, default=&#39;light&#39;</span>
+<span class="sd">    theme : str {&#39;light&#39;, &#39;dark&#39;}, default: &#39;light&#39;</span>
 <span class="sd">        Set coloring theme for mapping complex values into colors.</span>
 <span class="sd">        See: complex_array_to_rgb.</span>
 
@@ -1868,7 +1886,7 @@
 <span class="sd">        Plot for a number of first particles versus the rest.</span>
 <span class="sd">        If not given, it is (number of particles + 1) // 2.</span>
 
-<span class="sd">    labels_iteration : int or pair of ints, default=(3,2)</span>
+<span class="sd">    labels_iteration : int or pair of ints, default: (3, 2)</span>
 <span class="sd">        Number of particles to be shown as tick labels,</span>
 <span class="sd">        for first (vertical) and last (horizontal) particles, respectively.</span>
 
@@ -1967,7 +1985,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

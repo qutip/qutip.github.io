@@ -101,12 +101,13 @@
 <span class="kn">from</span> <span class="nn">..core.blochredfield</span> <span class="kn">import</span> <span class="n">bloch_redfield_tensor</span><span class="p">,</span> <span class="n">SpectraCoefficient</span>
 <span class="kn">from</span> <span class="nn">..core.cy.coefficient</span> <span class="kn">import</span> <span class="n">InterCoefficient</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
-<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">Solver</span><span class="p">,</span> <span class="n">_solver_deprecation</span>
 <span class="kn">from</span> <span class="nn">.options</span> <span class="kn">import</span> <span class="n">_SolverOptions</span>
+<span class="kn">from</span> <span class="nn">._feedback</span> <span class="kn">import</span> <span class="n">_QobjFeedback</span><span class="p">,</span> <span class="n">_DataFeedback</span>
 
 
-<div class="viewcode-block" id="brmesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.brmesolve.brmesolve">[docs]</a><span class="k">def</span> <span class="nf">brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[],</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">[],</span>
-              <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">sec_cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="brmesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.brmesolve.brmesolve">[docs]</a><span class="k">def</span> <span class="nf">brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">a_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">(),</span>
+              <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sec_cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solves for the dynamics of a system using the Bloch-Redfield master</span>
 <span class="sd">    equation, given an input Hamiltonian, Hermitian bath-coupling terms and</span>
@@ -115,10 +116,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Possibly time-dependent system Liouvillian or Hamiltonian as a Qobj or</span>
-<span class="sd">        QobjEvo. list of [:class:`Qobj`, :class:`Coefficient`] or callable that</span>
-<span class="sd">        can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        QobjEvo. list of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable that</span>
+<span class="sd">        can be made into :obj:`.QobjEvo` are also accepted.</span>
 
 <span class="sd">    psi0: Qobj</span>
 <span class="sd">        Initial density matrix or state vector (ket).</span>
@@ -130,10 +131,10 @@
 <span class="sd">        Nested list of system operators that couple to the environment,</span>
 <span class="sd">        and the corresponding bath spectra.</span>
 
-<span class="sd">        a_op : :class:`qutip.Qobj`, :class:`qutip.QobjEvo`</span>
+<span class="sd">        a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">            The operator coupling to the environment. Must be hermitian.</span>
 
-<span class="sd">        spectra : :class:`Coefficient`, str, func</span>
+<span class="sd">        spectra : :obj:`.Coefficient`, str, func</span>
 <span class="sd">            The corresponding bath spectral responce.</span>
 <span class="sd">            Can be a `Coefficient` using an &#39;w&#39; args, a function of the</span>
 <span class="sd">            frequence or a string. Coefficient build from a numpy array are</span>
@@ -141,7 +142,7 @@
 <span class="sd">            expected to be of the signature ``f(w)`` or ``f(t, w, **args)``.</span>
 
 <span class="sd">            The spectra function can depend on ``t`` if the corresponding</span>
-<span class="sd">            ``a_op`` is a :class:`QobjEvo`.</span>
+<span class="sd">            ``a_op`` is a :obj:`.QobjEvo`.</span>
 
 <span class="sd">        Example:</span>
 
@@ -155,82 +156,77 @@
 <span class="sd">            ]</span>
 
 <span class="sd">        .. note:</span>
-<span class="sd">            ``Cubic_Spline`` has been replaced by :class:`Coefficient`:</span>
+<span class="sd">            ``Cubic_Spline`` has been replaced by :obj:`.Coefficient`:</span>
 <span class="sd">                ``spline = qutip.coefficient(array, tlist=times)``</span>
 
 <span class="sd">            Whether the ``a_ops`` is time dependent is decided by the type of</span>
-<span class="sd">            the operator: :class:`Qobj` vs :class:`QobjEvo` instead of the type</span>
+<span class="sd">            the operator: :obj:`.Qobj` vs :obj:`.QobjEvo` instead of the type</span>
 <span class="sd">            of the spectra.</span>
 
-<span class="sd">    e_ops : list of :class:`Qobj` / callback function</span>
+<span class="sd">    e_ops : list of :obj:`.Qobj` / callback function, optional</span>
 <span class="sd">        Single operator or list of operators for which to evaluate</span>
 <span class="sd">        expectation values or callable or list of callable.</span>
 <span class="sd">        Callable signature must be, `f(t: float, state: Qobj)`.</span>
 <span class="sd">        See :func:`expect` for more detail of operator expectation</span>
 
-<span class="sd">    c_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    c_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format), optional</span>
 <span class="sd">        List of collapse operators.</span>
 
-<span class="sd">    args : dict</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        Dictionary of parameters for time-dependent Hamiltonians and</span>
 <span class="sd">        collapse operators. The key ``w`` is reserved for the spectra function.</span>
 
-<span class="sd">    sec_cutoff : float {0.1}</span>
+<span class="sd">    sec_cutoff : float, default: 0.1</span>
 <span class="sd">        Cutoff for secular approximation. Use ``-1`` if secular approximation</span>
 <span class="sd">        is not used when evaluating bath-coupling terms.</span>
 
-<span class="sd">    options : None / dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Dictionary of options for the solver.</span>
 
-<span class="sd">        - store_final_state : bool</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, None</span>
-<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
-<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - normalize_output : bool</span>
-<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
-<span class="sd">        - tensor_type : str [&#39;sparse&#39;, &#39;dense&#39;, &#39;data&#39;]</span>
-<span class="sd">          Which data type to use when computing the brtensor.</span>
-<span class="sd">          With a cutoff &#39;sparse&#39; is usually the most efficient.</span>
-<span class="sd">        - sparse_eigensolver : bool {False}</span>
-<span class="sd">          Whether to use the sparse eigensolver</span>
-<span class="sd">        - method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
-<span class="sd">          Which differential equation integration method to use.</span>
-<span class="sd">        - atol, rtol : float</span>
-<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
-<span class="sd">        - nsteps :</span>
-<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
-<span class="sd">          step.</span>
-<span class="sd">        - max_step : float, 0</span>
-<span class="sd">          Maximum lenght of one internal step. When using pulses, it should be</span>
-<span class="sd">          less than half the width of the thinnest pulse.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | normalize_output : bool</span>
+<span class="sd">          | Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | tensor_type : str [&#39;sparse&#39;, &#39;dense&#39;, &#39;data&#39;]</span>
+<span class="sd">          | Which data type to use when computing the brtensor.</span>
+<span class="sd">            With a cutoff &#39;sparse&#39; is usually the most efficient.</span>
+<span class="sd">        - | sparse_eigensolver : bool {False}</span>
+<span class="sd">            Whether to use the sparse eigensolver</span>
+<span class="sd">        - | method : str [&quot;adams&quot;, &quot;bdf&quot;, &quot;lsoda&quot;, &quot;dop853&quot;, &quot;vern9&quot;, etc.]</span>
+<span class="sd">            Which differential equation integration method to use.</span>
+<span class="sd">        - | atol, rtol : float</span>
+<span class="sd">          | Absolute and relative tolerance of the ODE integrator.</span>
+<span class="sd">        - | nsteps : int</span>
+<span class="sd">          | Maximum number of (internally defined) steps allowed in one</span>
+<span class="sd">            ``tlist`` step.</span>
+<span class="sd">        - | max_step : float, 0</span>
+<span class="sd">          | Maximum lenght of one internal step. When using pulses, it should</span>
+<span class="sd">            be less than half the width of the thinnest pulse.</span>
 
 <span class="sd">        Other options could be supported depending on the integration method,</span>
 <span class="sd">        see `Integrator &lt;./classes.html#classes-ode&gt;`_.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    result: :class:`qutip.solver.Result`</span>
+<span class="sd">    result: :obj:`.Result`</span>
 
-<span class="sd">        An instance of the class :class:`qutip.solver.Result`, which contains</span>
+<span class="sd">        An instance of the class :obj:`qutip.solver.Result`, which contains</span>
 <span class="sd">        either an array of expectation values, for operators given in e_ops,</span>
-<span class="sd">        or a list of states for the times specified by `tlist`.</span>
-
-<span class="sd">    .. note:</span>
-<span class="sd">        The option ``operator_data_type`` is used to determine in which format</span>
-<span class="sd">        the bloch redfield tensor is computed. Use &#39;csr&#39; for sparse and &#39;dense&#39;</span>
-<span class="sd">        for dense array. With &#39;data&#39;, it will try to use the same data type as</span>
-<span class="sd">        the ``a_ops``, but it is usually less efficient than manually choosing</span>
-<span class="sd">        it.</span>
+<span class="sd">        or a list of states for the times specified by ``tlist``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">_solver_deprecation</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="s2">&quot;br&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
 
     <span class="n">c_ops</span> <span class="o">=</span> <span class="n">c_ops</span> <span class="k">if</span> <span class="n">c_ops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
@@ -270,22 +266,22 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Possibly time-dependent system Liouvillian or Hamiltonian as a Qobj or</span>
-<span class="sd">        QobjEvo. list of [:class:`Qobj`, :class:`Coefficient`] or callable that</span>
-<span class="sd">        can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        QobjEvo. list of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable that</span>
+<span class="sd">        can be made into :obj:`.QobjEvo` are also accepted.</span>
 
 <span class="sd">    a_ops : list of (a_op, spectra)</span>
 <span class="sd">        Nested list of system operators that couple to the environment,</span>
 <span class="sd">        and the corresponding bath spectra.</span>
 
-<span class="sd">        a_op : :class:`qutip.Qobj`, :class:`qutip.QobjEvo`</span>
+<span class="sd">        a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">            The operator coupling to the environment. Must be hermitian.</span>
 
-<span class="sd">        spectra : :class:`Coefficient`</span>
+<span class="sd">        spectra : :obj:`.Coefficient`</span>
 <span class="sd">            The corresponding bath spectra. As a `Coefficient` using an &#39;w&#39;</span>
-<span class="sd">            args. Can depend on ``t`` only if a_op is a :class:`qutip.QobjEvo`.</span>
-<span class="sd">            :class:`SpectraCoefficient` can be used to conver a coefficient</span>
+<span class="sd">            args. Can depend on ``t`` only if a_op is a :obj:`.QobjEvo`.</span>
+<span class="sd">            :obj:`SpectraCoefficient` can be used to conver a coefficient</span>
 <span class="sd">            depending on ``t`` to one depending on ``w``.</span>
 
 <span class="sd">        Example:</span>
@@ -299,7 +295,7 @@
 <span class="sd">                (c+c.dag(), SpectraCoefficient(coefficient(array, tlist=ws))),</span>
 <span class="sd">            ]</span>
 
-<span class="sd">    c_ops : list of :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    c_ops : list of :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Single collapse operator, or list of collapse operators, or a list</span>
 <span class="sd">        of Lindblad dissipator. None is equivalent to an empty list.</span>
 
@@ -311,14 +307,14 @@
 <span class="sd">        Cutoff for secular approximation. Use ``-1`` if secular approximation</span>
 <span class="sd">        is not used when evaluating bath-coupling terms.</span>
 
-<span class="sd">    attributes</span>
+<span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    stats: dict</span>
 <span class="sd">        Diverse diagnostic statistics of the evolution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;brmesolve&quot;</span>
     <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span>
         <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -366,6 +362,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_integrator</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_metadata</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">_register_feedback</span><span class="p">({},</span> <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
 
     <span class="k">def</span> <span class="nf">_initialize_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -395,35 +392,35 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Options for bloch redfield solver:</span>
 
-<span class="sd">        store_final_state: bool, default=False</span>
+<span class="sd">        store_final_state: bool, default: False</span>
 <span class="sd">            Whether or not to store the final state of the evolution in the</span>
 <span class="sd">            result class.</span>
 
-<span class="sd">        store_states: bool, default=None</span>
+<span class="sd">        store_states: bool, default: None</span>
 <span class="sd">            Whether or not to store the state vectors or density matrices.</span>
 <span class="sd">            On `None` the states will be saved if no expectation operators are</span>
 <span class="sd">            given.</span>
 
-<span class="sd">        normalize_output: bool, default=False</span>
+<span class="sd">        normalize_output: bool, default: False</span>
 <span class="sd">            Normalize output state to hide ODE numerical errors.</span>
 
-<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default=&quot;text&quot;</span>
+<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default: &quot;&quot;</span>
 <span class="sd">            How to present the solver progress.</span>
 <span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error if</span>
 <span class="sd">            not installed. Empty string or False will disable the bar.</span>
 
-<span class="sd">        progress_kwargs: dict, default={&quot;chunk_size&quot;:10}</span>
+<span class="sd">        progress_kwargs: dict, default: {&quot;chunk_size&quot;:10}</span>
 <span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
 <span class="sd">            ``chunk_size``.</span>
 
-<span class="sd">        tensor_type: str [&#39;sparse&#39;, &#39;dense&#39;, &#39;data&#39;], default=&quot;sparse&quot;</span>
+<span class="sd">        tensor_type: str [&#39;sparse&#39;, &#39;dense&#39;, &#39;data&#39;], default: &quot;sparse&quot;</span>
 <span class="sd">            Which data type to use when computing the brtensor.</span>
 <span class="sd">            With a cutoff &#39;sparse&#39; is usually the most efficient.</span>
 
-<span class="sd">        sparse_eigensolver: bool, default=False</span>
+<span class="sd">        sparse_eigensolver: bool, default: False</span>
 <span class="sd">            Whether to use the sparse eigensolver</span>
 
-<span class="sd">        method: str, default=&quot;adams&quot;</span>
+<span class="sd">        method: str, default: &quot;adams&quot;</span>
 <span class="sd">            Which ODE integrator methods are supported.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
@@ -448,7 +445,37 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="o">*</span><span class="n">state</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">hard</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">hard</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BRSolver.StateFeedback"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.brmesolve.BRSolver.StateFeedback">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">StateFeedback</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        State of the evolution to be used in a time-dependent operator.</span>
+
+<span class="sd">        When used as an args:</span>
+
+<span class="sd">            ``QobjEvo([op, func], args={&quot;state&quot;: BRMESolver.StateFeedback()})``</span>
+
+<span class="sd">        The ``func`` will receive the density matrix as ``state`` during the</span>
+<span class="sd">        evolution.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The state will not be in the lab basis, but in the evolution basis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        default : Qobj or qutip.core.data.Data, default : None</span>
+<span class="sd">            Initial value to be used at setup of the system.</span>
+
+<span class="sd">        raw_data : bool, default : False</span>
+<span class="sd">            If True, the raw matrix will be passed instead of a Qobj.</span>
+<span class="sd">            For density matrices, the matrices can be column stacked or square</span>
+<span class="sd">            depending on the integration method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">raw_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_DataFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_QobjFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -459,7 +486,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

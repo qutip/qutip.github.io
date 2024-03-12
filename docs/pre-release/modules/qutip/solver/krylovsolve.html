@@ -114,14 +114,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format.</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">    psi0 : :class:`qutip.qobj`</span>
-<span class="sd">        initial state vector (ket)</span>
-<span class="sd">        or initial unitary operator `psi0 = U`</span>
+<span class="sd">    psi0 : :class:`.Qobj`</span>
+<span class="sd">        Initial state vector (ket)</span>
 
 <span class="sd">    tlist : *list* / *array*</span>
 <span class="sd">        list of times for :math:`t`.</span>
@@ -130,58 +129,59 @@
 <span class="sd">        Dimension of Krylov approximation subspaces used for the time</span>
 <span class="sd">        evolution approximation.</span>
 
-<span class="sd">    e_ops : :class:`qutip.qobj`, callable, or list.</span>
+<span class="sd">    e_ops : :class:`.Qobj`, callable, or list, optional</span>
 <span class="sd">        Single operator or list of operators for which to evaluate</span>
 <span class="sd">        expectation values or callable or list of callable.</span>
 <span class="sd">        Callable signature must be, `f(t: float, state: Qobj)`.</span>
-<span class="sd">        See :func:`expect` for more detail of operator expectation.</span>
+<span class="sd">        See :func:`~qutip.core.expect.expect` for more detail of operator</span>
+<span class="sd">        expectation.</span>
 
-<span class="sd">    args : None / *dictionary*</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        dictionary of parameters for time-dependent Hamiltonians</span>
 
-<span class="sd">    options : None / dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Dictionary of options for the solver.</span>
 
-<span class="sd">        - store_final_state : bool, [False]</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, [None]</span>
-<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
-<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - normalize_output : bool, [True]</span>
-<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, [&quot;text&quot;]</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict, [{&quot;chunk_size&quot;: 10}]</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
-<span class="sd">        - atol: float [1e-7]</span>
-<span class="sd">          Absolute and relative tolerance of the ODE integrator.</span>
-<span class="sd">        - nsteps : int [100]</span>
-<span class="sd">          Maximum number of (internally defined) steps allowed in one ``tlist``</span>
-<span class="sd">          step.</span>
-<span class="sd">        - min_step, max_step : float, [1e-5, 1e5]</span>
-<span class="sd">          Miniumum and maximum lenght of one internal step.</span>
-<span class="sd">        - always_compute_step: bool [False]</span>
-<span class="sd">          If True, the step lenght is computed each time a new Krylov</span>
-<span class="sd">          subspace is computed. Otherwise it is computed only once when</span>
-<span class="sd">          creating the integrator.</span>
-<span class="sd">        - sub_system_tol: float, [1e-7]</span>
-<span class="sd">          Tolerance to detect an happy breakdown. An happy breakdown happens</span>
-<span class="sd">          when the initial ket is in a subspace of the Hamiltonian smaller</span>
-<span class="sd">          than ``krylov_dim``.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | normalize_output : bool</span>
+<span class="sd">          | Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | atol: float</span>
+<span class="sd">          | Absolute tolerance of the ODE integrator.</span>
+<span class="sd">        - | nsteps : int</span>
+<span class="sd">          | Maximum number of (internally defined) steps allowed in one</span>
+<span class="sd">            ``tlist`` step.</span>
+<span class="sd">        - | min_step, max_step : float</span>
+<span class="sd">          | Miniumum and maximum lenght of one internal step.</span>
+<span class="sd">        - | always_compute_step: bool</span>
+<span class="sd">          | If True, the step lenght is computed each time a new Krylov</span>
+<span class="sd">            subspace is computed. Otherwise it is computed only once when</span>
+<span class="sd">            creating the integrator.</span>
+<span class="sd">        - | sub_system_tol: float</span>
+<span class="sd">          | Tolerance to detect an happy breakdown. An happy breakdown happens</span>
+<span class="sd">            when the initial ket is in a subspace of the Hamiltonian smaller</span>
+<span class="sd">            than ``krylov_dim``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    result: :class:`qutip.Result`</span>
+<span class="sd">    result: :class:`.Result`</span>
 
-<span class="sd">        An instance of the class :class:`qutip.Result`, which contains</span>
-<span class="sd">        a *list of array* `result.expect` of expectation values for the times</span>
-<span class="sd">        specified by `tlist`, and/or a *list* `result.states` of state vectors</span>
-<span class="sd">        or density matrices corresponding to the times in `tlist` [if `e_ops`</span>
-<span class="sd">        is an empty list of `store_states=True` in options].</span>
+<span class="sd">        An instance of the class :class:`.Result`, which contains</span>
+<span class="sd">        a *list of array* ``result.expect`` of expectation values for the times</span>
+<span class="sd">        specified by ``tlist``, and/or a *list* ``result.states`` of state</span>
+<span class="sd">        vectors or density matrices corresponding to the times in ``tlist`` [if</span>
+<span class="sd">        ``e_ops`` is an empty list of ``store_states=True`` in options].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
     <span class="n">options</span> <span class="o">=</span> <span class="n">options</span> <span class="ow">or</span> <span class="p">{}</span>
@@ -199,7 +199,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

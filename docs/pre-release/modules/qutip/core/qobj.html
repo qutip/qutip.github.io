@@ -107,29 +107,9 @@
 <span class="kn">from</span> <span class="nn">..settings</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">_data</span>
 <span class="kn">from</span> <span class="nn">.dimensions</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">type_from_dims</span><span class="p">,</span> <span class="n">enumerate_flat</span><span class="p">,</span> <span class="n">collapse_dims_super</span><span class="p">,</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">unflatten</span><span class="p">,</span>
+    <span class="n">enumerate_flat</span><span class="p">,</span> <span class="n">collapse_dims_super</span><span class="p">,</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">unflatten</span><span class="p">,</span> <span class="n">Dimensions</span>
 <span class="p">)</span>
 
-
-<span class="n">_ADJOINT_TYPE_LOOKUP</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;oper&#39;</span><span class="p">:</span> <span class="s1">&#39;oper&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;super&#39;</span><span class="p">:</span> <span class="s1">&#39;super&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ket&#39;</span><span class="p">:</span> <span class="s1">&#39;bra&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;bra&#39;</span><span class="p">:</span> <span class="s1">&#39;ket&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;operator-ket&#39;</span><span class="p">:</span> <span class="s1">&#39;operator-bra&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;operator-bra&#39;</span><span class="p">:</span> <span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="n">_MATMUL_TYPE_LOOKUP</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;ket&#39;</span><span class="p">):</span> <span class="s1">&#39;ket&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;oper&#39;</span><span class="p">):</span> <span class="s1">&#39;oper&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;ket&#39;</span><span class="p">,</span> <span class="s1">&#39;bra&#39;</span><span class="p">):</span> <span class="s1">&#39;oper&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;bra&#39;</span><span class="p">,</span> <span class="s1">&#39;oper&#39;</span><span class="p">):</span> <span class="s1">&#39;bra&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;super&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span> <span class="s1">&#39;super&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;super&#39;</span><span class="p">,</span> <span class="s1">&#39;operator-ket&#39;</span><span class="p">):</span> <span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;operator-bra&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span> <span class="s1">&#39;operator-bra&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span> <span class="s1">&#39;operator-bra&#39;</span><span class="p">):</span> <span class="s1">&#39;super&#39;</span><span class="p">,</span>
-<span class="p">}</span>
 
 <span class="n">_NORM_FUNCTION_LOOKUP</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;tr&#39;</span><span class="p">:</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">trace</span><span class="p">,</span>
@@ -149,27 +129,33 @@
 
 
 <span class="k">def</span> <span class="nf">isbra</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;bra&#39;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bra&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">isket</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;ket&#39;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ket&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">isoper</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">isoperbra</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;operator-bra&#39;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;operator-bra&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">isoperket</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;operator-ket&#39;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;operator-ket&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">issuper</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span>
+    <span class="kn">from</span> <span class="nn">.cy.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">))</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;super&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">isherm</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -184,43 +170,27 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">_dims</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;incompatible dimensions &quot;</span>
+                    <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span>
-        <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">issquare</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
             <span class="n">other</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale</span><span class="p">,</span>
                                         <span class="n">dtype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)),</span>
-                         <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                         <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                         <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                         <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                          <span class="n">isherm</span><span class="o">=</span><span class="p">(</span><span class="n">scale</span><span class="o">.</span><span class="n">imag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span>
                          <span class="n">isunitary</span><span class="o">=</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">]),</span>
                          <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">other</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">NotImplemented</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;incompatible dimensions &quot;</span>
-                <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">type</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;incompatible types &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">type</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">superrep</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;incompatible superoperator representations&quot;</span>
-                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">superrep</span>
-            <span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
     <span class="k">return</span> <span class="n">out</span>
 
 
@@ -266,12 +236,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    inpt: array_like</span>
+<span class="sd">    inpt: array_like, data object or :obj:`.Qobj`</span>
 <span class="sd">        Data for vector/matrix representation of the quantum object.</span>
 <span class="sd">    dims: list</span>
 <span class="sd">        Dimensions of object used for tensor products.</span>
-<span class="sd">    type: {&#39;bra&#39;, &#39;ket&#39;, &#39;oper&#39;, &#39;operator-ket&#39;, &#39;operator-bra&#39;, &#39;super&#39;}</span>
-<span class="sd">        The type of quantum object to be represented.</span>
 <span class="sd">    shape: list</span>
 <span class="sd">        Shape of underlying data structure (matrix shape).</span>
 <span class="sd">    copy: bool</span>
@@ -281,8 +249,12 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : array_like</span>
-<span class="sd">        Sparse matrix characterizing the quantum object.</span>
+<span class="sd">    data : object</span>
+<span class="sd">        The data object storing the vector / matrix representation of the</span>
+<span class="sd">        `Qobj`.</span>
+<span class="sd">    dtype : type</span>
+<span class="sd">        The data-layer type used for storing the data. The possible types are</span>
+<span class="sd">        described in `Qobj.to &lt;./classes.html#qutip.core.qobj.Qobj.to&gt;`__.</span>
 <span class="sd">    dims : list</span>
 <span class="sd">        List of dimensions keeping track of the tensor structure.</span>
 <span class="sd">    shape : list</span>
@@ -292,7 +264,8 @@
 <span class="sd">        &#39;operator-bra&#39;, or &#39;super&#39;.</span>
 <span class="sd">    superrep : str</span>
 <span class="sd">        Representation used if `type` is &#39;super&#39;. One of &#39;super&#39;</span>
-<span class="sd">        (Liouville form) or &#39;choi&#39; (Choi matrix with tr = dimension).</span>
+<span class="sd">        (Liouville form), &#39;choi&#39; (Choi matrix with tr = dimension),</span>
+<span class="sd">        or &#39;chi&#39; (chi-matrix representation).</span>
 <span class="sd">    isherm : bool</span>
 <span class="sd">        Indicates if quantum object represents Hermitian operator.</span>
 <span class="sd">    isunitary : bool</span>
@@ -330,10 +303,16 @@
 <span class="sd">        Create copy of Qobj</span>
 <span class="sd">    conj()</span>
 <span class="sd">        Conjugate of quantum object.</span>
+<span class="sd">    contract()</span>
+<span class="sd">        Contract subspaces of the tensor structure which are 1D.</span>
 <span class="sd">    cosm()</span>
 <span class="sd">        Cosine of quantum object.</span>
 <span class="sd">    dag()</span>
 <span class="sd">        Adjoint (dagger) of quantum object.</span>
+<span class="sd">    data_as(format, copy)</span>
+<span class="sd">        Vector / matrix representation of quantum object.</span>
+<span class="sd">    diag()</span>
+<span class="sd">        Diagonal elements of quantum object.</span>
 <span class="sd">    dnorm()</span>
 <span class="sd">        Diamond norm of quantum operator.</span>
 <span class="sd">    dual_chan()</span>
@@ -351,10 +330,14 @@
 <span class="sd">        object.</span>
 <span class="sd">    inv()</span>
 <span class="sd">        Return a Qobj corresponding to the matrix inverse of the operator.</span>
+<span class="sd">    logm()</span>
+<span class="sd">        Matrix logarithm of quantum operator.</span>
 <span class="sd">    matrix_element(bra, ket)</span>
 <span class="sd">        Returns the matrix element of operator between `bra` and `ket` vectors.</span>
 <span class="sd">    norm(norm=&#39;tr&#39;, sparse=False, tol=0, maxiter=100000)</span>
 <span class="sd">        Returns norm of a ket or an operator.</span>
+<span class="sd">    overlap(other)</span>
+<span class="sd">        Overlap between two state vectors or two operators.</span>
 <span class="sd">    permute(order)</span>
 <span class="sd">        Returns composite qobj with indices reordered.</span>
 <span class="sd">    proj()</span>
@@ -362,6 +345,8 @@
 <span class="sd">    ptrace(sel)</span>
 <span class="sd">        Returns quantum object for selected dimensions after performing</span>
 <span class="sd">        partial trace.</span>
+<span class="sd">    purity()</span>
+<span class="sd">        Calculates the purity of a quantum object.</span>
 <span class="sd">    sinm()</span>
 <span class="sd">        Sine of quantum object.</span>
 <span class="sd">    sqrtm()</span>
@@ -386,65 +371,80 @@
 
     <span class="k">def</span> <span class="nf">_initialize_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">copy</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span> <span class="ow">or</span> <span class="p">[[</span><span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">copy</span> <span class="k">else</span> <span class="n">arg</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">dims</span> <span class="ow">or</span> <span class="p">[[</span><span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span> <span class="ow">or</span> <span class="n">arg</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">copy</span> <span class="k">else</span> <span class="n">arg</span><span class="o">.</span><span class="n">data</span>
-        <span class="k">elif</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span> <span class="ow">or</span> <span class="p">[[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="nb">complex</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">dims</span> <span class="ow">or</span> <span class="n">arg</span><span class="o">.</span><span class="n">_dims</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isherm</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isunitary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isunitary</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span> <span class="ow">or</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span>
+                <span class="n">dims</span> <span class="ow">or</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Provided dimensions do not match the data: &#39;</span> <span class="o">+</span>
+                             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">superrep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isunitary</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_data</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span> <span class="ow">or</span> <span class="n">type_from_dims</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="o">=</span> <span class="n">isherm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span> <span class="o">=</span> <span class="n">isunitary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_data</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span> <span class="ow">and</span> <span class="n">type_from_dims</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;oper&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-                    <span class="s2">&quot;cannot build superoperator from nonsquare data of shape &quot;</span><span class="p">,</span>
-                    <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
-                <span class="p">]))</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="k">if</span> <span class="n">root</span> <span class="o">*</span> <span class="n">root</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-                    <span class="s2">&quot;cannot build superoperator from nonsquare subspaces &quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;of size &quot;</span><span class="p">,</span>
-                    <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-                <span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">root</span><span class="p">]]</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;super&#39;</span><span class="p">,</span> <span class="s1">&#39;operator-ket&#39;</span><span class="p">,</span> <span class="s1">&#39;operator-bra&#39;</span><span class="p">]:</span>
-            <span class="n">superrep</span> <span class="o">=</span> <span class="n">superrep</span> <span class="ow">or</span> <span class="s1">&#39;super&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="n">superrep</span>
+        <span class="k">if</span> <span class="n">superrep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">=</span> <span class="n">superrep</span>
 
 <div class="viewcode-block" id="Qobj.copy"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create identical copy&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span>
                     <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dims</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+
+    <span class="nd">@dims</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">Dimensions</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dims</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Provided dimensions do not match the data: &#39;</span> <span class="o">+</span>
+                             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dims</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">=</span> <span class="n">dims</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">superrep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">superrep</span>
+
+    <span class="nd">@superrep</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">superrep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rep</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">replace_superrep</span><span class="p">(</span><span class="n">super_rep</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
 
     <span class="nd">@data</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Qobj data must be a data-layer format.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Provided data do not match the dimensions: &#39;</span> <span class="o">+</span>
+                             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
 
 <div class="viewcode-block" id="Qobj.to"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.to">[docs]</a>    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">):</span>
@@ -453,11 +453,12 @@
 <span class="sd">        storage representation.</span>
 
 <span class="sd">        The different storage representations available are the &quot;data-layer</span>
-<span class="sd">        types&quot; which are known to `qutip.data.to`.  By default, these are</span>
-<span class="sd">        `qutip.data.Dense` and `qutip.data.CSR`, which respectively construct a</span>
-<span class="sd">        dense matrix store and a compressed sparse row one.  Certain algorithms</span>
-<span class="sd">        and operations may be faster or more accurate when using a more</span>
-<span class="sd">        appropriate data store.</span>
+<span class="sd">        types&quot; which are known to :obj:`qutip.core.data.to`.  By default, these</span>
+<span class="sd">        are :class:`~qutip.core.data.CSR`, :class:`~qutip.core.data.Dense` and</span>
+<span class="sd">        :class:`~qutip.core.data.Dia`, which respectively construct a</span>
+<span class="sd">        compressed sparse row matrix, diagonal matrix and a dense one.  Certain</span>
+<span class="sd">        algorithms and operations may be faster or more accurate when using a</span>
+<span class="sd">        more appropriate data store.</span>
 
 <span class="sd">        If the data store is already in the format requested, the function</span>
 <span class="sd">        returns `self`.  Otherwise, it returns a copy of itself with the data</span>
@@ -466,25 +467,23 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        data_type : type</span>
-<span class="sd">            The data-layer type that the data of this `Qobj` should be</span>
+<span class="sd">            The data-layer type that the data of this :class:`Qobj` should be</span>
 <span class="sd">            converted to.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Qobj</span>
-<span class="sd">            A new `Qobj` if a type conversion took place with the data stored</span>
-<span class="sd">            in the requested format, or `self` if not.</span>
+<span class="sd">            A new :class:`Qobj` if a type conversion took place with the data</span>
+<span class="sd">            stored in the requested format, or `self` if not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">converter</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">to</span><span class="p">[</span><span class="n">data_type</span><span class="p">]</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown conversion type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_type</span><span class="p">))</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">data_type</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">data_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">converter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -493,12 +492,9 @@
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">isherm</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
-                    <span class="n">isherm</span><span class="o">=</span><span class="n">isherm</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
+                    <span class="n">isherm</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -508,12 +504,9 @@
     <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">isherm</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
-                    <span class="n">isherm</span><span class="o">=</span><span class="n">isherm</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
+                    <span class="n">isherm</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -548,9 +541,7 @@
             <span class="n">isunitary</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="n">isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="n">isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -566,48 +557,23 @@
                 <span class="n">other</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">NotImplemented</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-                <span class="s2">&quot;incompatible dimensions &quot;</span><span class="p">,</span>
-                <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">),</span>
-                <span class="s2">&quot; and &quot;</span><span class="p">,</span>
-                <span class="nb">repr</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">),</span>
-            <span class="p">]))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">superrep</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">superrep</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-                <span class="s2">&quot;incompatible superoperator representations &quot;</span><span class="p">,</span>
-                <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">),</span>
-                <span class="s2">&quot; and &quot;</span><span class="p">,</span>
-                <span class="nb">repr</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">superrep</span><span class="p">),</span>
-            <span class="p">]))</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isbra</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">isket</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isoperbra</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">isoperket</span><span class="p">)</span>
-        <span class="p">):</span>
-            <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">new_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">@</span> <span class="n">other</span><span class="o">.</span><span class="n">_dims</span>
+        <span class="k">if</span> <span class="n">new_dims</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;scalar&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">type_</span> <span class="o">=</span> <span class="n">_MATMUL_TYPE_LOOKUP</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">type</span><span class="p">)]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;incompatible matmul types &quot;</span>
-                <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="n">type_</span><span class="p">,</span>
-                    <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
-                    <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span>
+            <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
+            <span class="n">dims</span><span class="o">=</span><span class="n">new_dims</span><span class="p">,</span>
+            <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
+            <span class="n">copy</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">other</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">neg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -631,7 +597,7 @@
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Qobj</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">_dims</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">iszero</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
                             <span class="n">tol</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">])</span>
@@ -639,16 +605,14 @@
     <span class="k">def</span> <span class="fm">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># calculates powers of Qobj</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="ow">or</span> <span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span>
             <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -656,7 +620,7 @@
     <span class="k">def</span> <span class="nf">_str_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
             <span class="s2">&quot;Quantum object: dims=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">),</span>
-            <span class="s2">&quot;shape=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+            <span class="s2">&quot;shape=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
             <span class="s2">&quot;type=&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">),</span>
         <span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;super&#39;</span><span class="p">):</span>
@@ -684,7 +648,7 @@
         <span class="c1"># so we simply return the informal __str__ representation instead.)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="Qobj.__call__"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Acts this Qobj on another Qobj either by left-multiplication,</span>
 <span class="sd">        or by vectorization and devectorization, as</span>
@@ -698,7 +662,7 @@
             <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
                 <span class="n">other</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">vector_to_operator</span><span class="p">(</span><span class="bp">self</span> <span class="o">@</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__matmul__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__matmul__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># defines what happens when Qobj object gets pickled</span>
@@ -733,10 +697,10 @@
             <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">cols</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_cols</span> <span class="o">-</span> <span class="n">half_length</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">))</span>
         <span class="c1"># Make the data array.</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\begin{equation*}\left(\begin</span><span class="si">{array}</span><span class="s1">{*</span><span class="si">{11}</span><span class="s1">c}&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$$\left(\begin</span><span class="si">{array}{cc}</span><span class="s1">&#39;</span>
         <span class="n">data</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_latex_row</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_array</span><span class="p">())</span>
                            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">+=</span> <span class="sa">r</span><span class="s1">&#39;\end</span><span class="si">{array}</span><span class="s1">\right)\end{equation*}&#39;</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="sa">r</span><span class="s1">&#39;\end</span><span class="si">{array}</span><span class="s1">\right)$$&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str_header</span><span class="p">()</span> <span class="o">+</span> <span class="n">data</span>
 
     <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -751,9 +715,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="n">_ADJOINT_TYPE_LOOKUP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">],</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="n">Dimensions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -761,9 +723,7 @@
 <div class="viewcode-block" id="Qobj.conj"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.conj">[docs]</a>    <span class="k">def</span> <span class="nf">conj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the element-wise conjugation of the quantum object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -777,9 +737,7 @@
 <span class="sd">            Transpose of input operator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="n">_ADJOINT_TYPE_LOOKUP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">],</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="n">Dimensions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -837,28 +795,27 @@
                     <span class="s2">&quot;vector norm must be in &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">_NORM_ALLOWED_VECTOR</span><span class="p">)</span>
                 <span class="p">)</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="k">return</span> <span class="n">_NORM_FUNCTION_LOOKUP</span><span class="p">[</span><span class="n">norm</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">_NORM_FUNCTION_LOOKUP</span><span class="p">[</span><span class="n">norm</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.proj"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.proj">[docs]</a>    <span class="k">def</span> <span class="nf">proj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Form the projector from a given ket or bra vector.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        Q : :class:`qutip.Qobj`</span>
+<span class="sd">        Q : :class:`.Qobj`</span>
 <span class="sd">            Input bra or ket vector</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        P : :class:`qutip.Qobj`</span>
+<span class="sd">        P : :class:`.Qobj`</span>
 <span class="sd">            Projection operator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">isbra</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;projection is only defined for bras and kets&quot;</span><span class="p">)</span>
-        <span class="n">dims</span> <span class="o">=</span> <span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isket</span>
-                <span class="k">else</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isket</span>
+                <span class="k">else</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
                     <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -892,8 +849,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;super&quot;</span><span class="p">,</span> <span class="s2">&quot;operator-ket&quot;</span><span class="p">,</span> <span class="s2">&quot;operator-bra&quot;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;purity is only defined for states.&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isket</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">isbra</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">))</span><span class="o">.</span><span class="n">real</span></div>
+            <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">))</span><span class="o">.</span><span class="n">real</span></div>
 
 <div class="viewcode-block" id="Qobj.full"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.full">[docs]</a>    <span class="k">def</span> <span class="nf">full</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dense array from quantum object.</span>
@@ -931,7 +888,7 @@
 <span class="sd">        data : numpy.ndarray, scipy.sparse.matrix_csr, etc.</span>
 <span class="sd">            Matrix in the type of the underlying libraries.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.diag"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.diag">[docs]</a>    <span class="k">def</span> <span class="nf">diag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Diagonal elements of quantum object.</span>
@@ -963,7 +920,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Exponentiated quantum operator.</span>
 
 <span class="sd">        Raises</span>
@@ -971,12 +928,10 @@
 <span class="sd">        TypeError</span>
 <span class="sd">            Quantum operator is not square.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">issquare</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expm is only valid for square operators&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">expm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -987,7 +942,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Logarithm of the quantum operator.</span>
 
 <span class="sd">        Raises</span>
@@ -995,12 +950,10 @@
 <span class="sd">        TypeError</span>
 <span class="sd">            Quantum operator is not square.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">issquare</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expm is only valid for square operators&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">logm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -1030,7 +983,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Matrix square root of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1043,7 +996,7 @@
 <span class="sd">        The sparse eigensolver is much slower than the dense version.</span>
 <span class="sd">        Use sparse only if memory requirements demand it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;sqrt only valid on square matrices&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">CSR</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sparse</span><span class="p">:</span>
             <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">eigs_csr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
@@ -1055,16 +1008,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">eigs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span>
 
-        <span class="n">numevals</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">evals</span><span class="p">)</span>
         <span class="n">dV</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">evals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)],</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isherm</span><span class="p">:</span>
             <span class="n">spDv</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dV</span><span class="p">,</span> <span class="n">evecs</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">spDv</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dV</span><span class="p">,</span> <span class="n">_data</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">evecs</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">evecs</span><span class="p">,</span> <span class="n">spDv</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.cosm"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.cosm">[docs]</a>    <span class="k">def</span> <span class="nf">cosm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1074,7 +1024,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Matrix cosine of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1087,7 +1037,7 @@
 <span class="sd">        Uses the Q.expm() method.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;invalid operand for matrix cosine&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">())</span></div>
 
@@ -1098,7 +1048,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Matrix sine of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1110,7 +1060,7 @@
 <span class="sd">        -----</span>
 <span class="sd">        Uses the Q.expm() method.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;invalid operand for matrix sine&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span> <span class="o">-</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">expm</span><span class="p">())</span></div>
 
@@ -1121,7 +1071,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Matrix inverse of operator.</span>
 
 <span class="sd">        Raises</span>
@@ -1137,9 +1087,7 @@
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
 
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
+                    <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.unit"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.unit">[docs]</a>    <span class="k">def</span> <span class="nf">unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1158,7 +1106,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        obj : :class:`qutip.Qobj`</span>
+<span class="sd">        obj : :class:`.Qobj`</span>
 <span class="sd">            Normalized quantum object.  Will be the `self` object if in place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1208,7 +1156,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Quantum object representing partial trace with selected components</span>
 <span class="sd">            remaining.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1236,8 +1184,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;partial trace is not defined on non-square maps&quot;</span><span class="p">)</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">new_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">new_dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">dims</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sel</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">2</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">new_dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">new_dims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">dims</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sel</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">sel</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">new_dims</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isoperket</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">operator_to_vector</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isoperbra</span><span class="p">:</span>
@@ -1293,33 +1241,47 @@
         <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
             <span class="k">return</span> <span class="bp">self</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.permute"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.permute">[docs]</a>    <span class="k">def</span> <span class="nf">permute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Permute the tensor structure of a quantum object.  For example,</span>
-<span class="sd">        ``qutip.tensor(x, y).permute([1, 0])``</span>
+
+<span class="sd">            ``qutip.tensor(x, y).permute([1, 0])``</span>
+
 <span class="sd">        will give the same result as</span>
-<span class="sd">        ``qutip.tensor(y, x)``</span>
+
+<span class="sd">            ``qutip.tensor(y, x)``</span>
+
 <span class="sd">        and</span>
-<span class="sd">        ``qutip.tensor(a, b, c).permute([1, 2, 0])``</span>
+
+<span class="sd">            ``qutip.tensor(a, b, c).permute([1, 2, 0])``</span>
+
 <span class="sd">        will be the same as</span>
-<span class="sd">        ``qutip.tensor(b, c, a)``</span>
+
+<span class="sd">            ``qutip.tensor(b, c, a)``</span>
 
 <span class="sd">        For regular objects (bras, kets and operators) we expect ``order`` to</span>
 <span class="sd">        be a flat list of integers, which specifies the new order of the tensor</span>
 <span class="sd">        product.</span>
 
 <span class="sd">        For superoperators, we expect ``order`` to be something like</span>
-<span class="sd">        ``[[0, 2], [1, 3]]``</span>
+
+<span class="sd">            ``[[0, 2], [1, 3]]``</span>
+
 <span class="sd">        which tells us to permute according to [0, 2, 1, 3], and then group</span>
 <span class="sd">        indices according to the length of each sublist.  As another example,</span>
 <span class="sd">        permuting a superoperator with dimensions of</span>
-<span class="sd">        ``[[[1, 2, 3], [1, 2, 3]], [[1, 2, 3], [1, 2, 3]]]``</span>
+
+<span class="sd">            ``[[[1, 2, 3], [1, 2, 3]], [[1, 2, 3], [1, 2, 3]]]``</span>
+
 <span class="sd">        by an ``order``</span>
-<span class="sd">        ``[[0, 3], [1, 4], [2, 5]]``</span>
+
+<span class="sd">            ``[[0, 3], [1, 4], [2, 5]]``</span>
+
 <span class="sd">        should give a new object with dimensions</span>
-<span class="sd">        ``[[[1, 1], [2, 2], [3, 3]], [[1, 1], [2, 2], [3, 3]]]``.</span>
+
+<span class="sd">            ``[[[1, 1], [2, 2], [3, 3]], [[1, 1], [2, 2], [3, 3]]]``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1328,7 +1290,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        P : :class:`qutip.Qobj`</span>
+<span class="sd">        P : :class:`.Qobj`</span>
 <span class="sd">            Permuted quantum object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;bra&#39;</span><span class="p">,</span> <span class="s1">&#39;ket&#39;</span><span class="p">,</span> <span class="s1">&#39;oper&#39;</span><span class="p">):</span>
@@ -1339,13 +1301,12 @@
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">isket</span><span class="p">:</span>
                 <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_structure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;undefined for non-square operators&quot;</span><span class="p">)</span>
                 <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_structure</span><span class="p">,</span> <span class="n">new_structure</span><span class="p">]</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">permute</span><span class="o">.</span><span class="n">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                         <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
-                        <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
                         <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                         <span class="n">isunitary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">,</span>
                         <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1361,13 +1322,12 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">isoperket</span><span class="p">:</span>
             <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_structure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;undefined for non-square operators&quot;</span><span class="p">)</span>
             <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_structure</span><span class="p">,</span> <span class="n">new_structure</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">permute</span><span class="o">.</span><span class="n">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">flat_structure</span><span class="p">,</span> <span class="n">flat_order</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                     <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
                     <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -1383,7 +1343,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Quantum object with small elements removed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">atol</span> <span class="o">=</span> <span class="n">atol</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">core</span><span class="p">[</span><span class="s1">&#39;auto_tidyup_atol&#39;</span><span class="p">]</span>
@@ -1405,7 +1365,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            Operator in new basis.</span>
 
 <span class="sd">        Notes</span>
@@ -1443,7 +1403,6 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">S</span><span class="o">.</span><span class="n">adjoint</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                     <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
                     <span class="n">isherm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_isherm</span><span class="p">,</span>
                     <span class="n">superrep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
                     <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
@@ -1455,7 +1414,6 @@
 <span class="sd">        of this instance, then renormalizing to obtain a valid density</span>
 <span class="sd">        operator.</span>
 
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        method : str</span>
@@ -1466,7 +1424,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        oper : :class:`qutip.Qobj`</span>
+<span class="sd">        oper : :class:`.Qobj`</span>
 <span class="sd">            A valid density operator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isherm</span><span class="p">:</span>
@@ -1504,11 +1462,7 @@
                                      <span class="n">_data</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
                                      <span class="n">value</span><span class="p">)</span>
         <span class="n">out_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">_data</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">out_data</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span>
-                    <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
-                    <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">,</span> <span class="n">isherm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qobj.matrix_element"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.core.qobj.Qobj.matrix_element">[docs]</a>    <span class="k">def</span> <span class="nf">matrix_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bra</span><span class="p">,</span> <span class="n">ket</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculates a matrix element.</span>
@@ -1518,10 +1472,10 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        bra : :class:`qutip.Qobj`</span>
+<span class="sd">        bra : :class:`.Qobj`</span>
 <span class="sd">            Quantum object of type &#39;bra&#39; or &#39;ket&#39;</span>
 
-<span class="sd">        ket : :class:`qutip.Qobj`</span>
+<span class="sd">        ket : :class:`.Qobj`</span>
 <span class="sd">            Quantum object of type &#39;ket&#39;.</span>
 
 <span class="sd">        Returns</span>
@@ -1555,7 +1509,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        other : :class:`qutip.Qobj`</span>
+<span class="sd">        other : :class:`.Qobj`</span>
 <span class="sd">            Quantum object for a state vector of type &#39;ket&#39;, &#39;bra&#39; or density</span>
 <span class="sd">            matrix.</span>
 
@@ -1657,12 +1611,10 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span><span class="p">:</span>
             <span class="n">new_dims</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-            <span class="n">new_type</span> <span class="o">=</span> <span class="s1">&#39;operator-ket&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">new_dims</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-            <span class="n">new_type</span> <span class="o">=</span> <span class="s1">&#39;ket&#39;</span>
         <span class="n">ekets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">evecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-        <span class="n">ekets</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">new_dims</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">new_type</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ekets</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Qobj</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">new_dims</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">vec</span> <span class="ow">in</span> <span class="n">_data</span><span class="o">.</span><span class="n">split_columns</span><span class="p">(</span><span class="n">evecs</span><span class="p">,</span> <span class="kc">False</span><span class="p">)]</span>
         <span class="n">norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ket</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="k">for</span> <span class="n">ket</span> <span class="ow">in</span> <span class="n">ekets</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">phase_fix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1742,7 +1694,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        eigval : float</span>
 <span class="sd">            Eigenvalue for the ground state of quantum operator.</span>
-<span class="sd">        eigvec : :class:`qutip.Qobj`</span>
+<span class="sd">        eigvec : :class:`.Qobj`</span>
 <span class="sd">            Eigenket for the ground state of quantum operator.</span>
 
 <span class="sd">        Notes</span>
@@ -1768,7 +1720,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        B : :class:`qutip.Qobj` or None</span>
+<span class="sd">        B : :class:`.Qobj` or None</span>
 <span class="sd">            If B is not None, the diamond distance d(A, B) = dnorm(A - B)</span>
 <span class="sd">            between this operator and B is returned instead of the diamond norm.</span>
 
@@ -1826,7 +1778,6 @@
                 <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">super_index</span><span class="p">]):</span>
             <span class="n">qobj</span> <span class="o">=</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">qobj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
                         <span class="n">dims</span><span class="o">=</span><span class="n">collapse_dims_super</span><span class="p">(</span><span class="n">qobj</span><span class="o">.</span><span class="n">dims</span><span class="p">),</span>
-                        <span class="nb">type</span><span class="o">=</span><span class="n">qobj</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
                         <span class="n">superrep</span><span class="o">=</span><span class="n">qobj</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
                         <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># We use the condition from John Watrous&#39; lecture notes,</span>
@@ -1875,14 +1826,39 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isunitary</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the shape of the Qobj data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="n">isbra</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">isbra</span><span class="p">)</span>
-    <span class="n">isket</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">isket</span><span class="p">)</span>
-    <span class="n">isoper</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">isoper</span><span class="p">)</span>
-    <span class="n">issuper</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">issuper</span><span class="p">)</span>
-    <span class="n">isoperbra</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">isoperbra</span><span class="p">)</span>
-    <span class="n">isoperket</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">isoperket</span><span class="p">)</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isoper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates if the Qobj represents an operator.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;oper&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isbra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates if the Qobj represents a bra state.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bra&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates if the Qobj represents a ket state.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ket&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">issuper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates if the Qobj represents a superoperator.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;super&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isoperket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates if the Qobj represents a operator-ket state.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;operator-ket&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">isoperbra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates if the Qobj represents a operator-bra state.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;operator-bra&#39;</span></div>
 
 
 <div class="viewcode-block" id="ptrace"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.core.qobj.ptrace">[docs]</a><span class="k">def</span> <span class="nf">ptrace</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">sel</span><span class="p">):</span>
@@ -1891,14 +1867,14 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Q : :class:`qutip.Qobj`</span>
+<span class="sd">    Q : :class:`.Qobj`</span>
 <span class="sd">        Composite quantum object.</span>
 <span class="sd">    sel : int/list</span>
 <span class="sd">        An ``int`` or ``list`` of components to keep after partial trace.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`</span>
+<span class="sd">    oper : :class:`.Qobj`</span>
 <span class="sd">        Quantum object representing partial trace with selected components</span>
 <span class="sd">        remaining.</span>
 
@@ -1928,7 +1904,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

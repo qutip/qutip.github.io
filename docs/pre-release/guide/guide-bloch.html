@@ -29,7 +29,7 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="next" title="Visualization of quantum states and processes" href="guide-visualization.html" />
-    <link rel="prev" title="Quantum Optimal Control" href="guide-control.html" /> 
+    <link rel="prev" title="Two-time correlation functions" href="guide-correlation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -66,17 +66,13 @@
 <li class="toctree-l2"><a class="reference internal" href="guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-piqs.html">Permutational Invariance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-correlation.html">Two-time correlation functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Plotting on the Bloch Sphere</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-bloch-and-bloch3d-classes">The Bloch and Bloch3d Classes</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#differences-between-bloch-and-bloch3d">Differences Between Bloch and Bloch3d</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#the-bloch-class">The Bloch Class</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#configuring-the-bloch-sphere">Configuring the Bloch sphere</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bloch-class-options">Bloch Class Options</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#bloch3d-class-options">Bloch3d Class Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#animating-with-the-bloch-sphere">Animating with the Bloch sphere</a><ul>
@@ -86,11 +82,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="guide-visualization.html">Visualization of quantum states and processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide-parfor.html">Parallel computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-settings.html">Modifying Internal QuTiP Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide-measurement.html">Measurement of Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide-control.html">Quantum Optimal Control</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../gallery/build/index.html">Gallery</a></li>
@@ -130,34 +126,21 @@
 <span id="bloch"></span><h1>Plotting on the Bloch Sphere<a class="headerlink" href="#plotting-on-the-bloch-sphere" title="Permalink to this heading"></a></h1>
 <section id="introduction">
 <span id="bloch-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
-<p>When studying the dynamics of a two-level system, it is often convenient to visualize the state of the system by plotting the state-vector or density matrix on the Bloch sphere.  In QuTiP, we have created two different classes to allow for easy creation and manipulation of data sets, both vectors and data points, on the Bloch sphere.  The <a class="reference internal" href="../apidoc/classes.html#qutip.bloch.Bloch" title="qutip.bloch.Bloch"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.bloch.Bloch</span></code></a> class, uses Matplotlib to render the Bloch sphere, where as <a class="reference internal" href="../apidoc/classes.html#qutip.bloch3d.Bloch3d" title="qutip.bloch3d.Bloch3d"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.bloch3d.Bloch3d</span></code></a> uses the Mayavi rendering engine to generate a more faithful 3D reconstruction of the Bloch sphere.</p>
+<p>When studying the dynamics of a two-level system, it is often convenient to visualize the state of the system by plotting the state-vector or density matrix on the Bloch sphere.  In QuTiP, there is a class to allow for easy creation and manipulation of data sets, both vectors and data points, on the Bloch sphere.</p>
 </section>
-<section id="the-bloch-and-bloch3d-classes">
-<span id="bloch-class"></span><h2>The Bloch and Bloch3d Classes<a class="headerlink" href="#the-bloch-and-bloch3d-classes" title="Permalink to this heading"></a></h2>
+<section id="the-bloch-class">
+<span id="bloch-class"></span><h2>The Bloch Class<a class="headerlink" href="#the-bloch-class" title="Permalink to this heading"></a></h2>
 <p>In QuTiP, creating a Bloch sphere is accomplished by calling either:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch</span><span class="p">()</span>
 </pre></div>
 </div>
-<figure class="align-default">
-<img alt="../images/guide-bloch-1.png" class="plot-directive" src="../images/guide-bloch-1.png" />
-</figure>
-<p>which will load an instance of the <a class="reference internal" href="../apidoc/classes.html#qutip.bloch.Bloch" title="qutip.bloch.Bloch"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.bloch.Bloch</span></code></a> class, or using</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b3d</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch3d</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>that loads the <a class="reference internal" href="../apidoc/classes.html#qutip.bloch3d.Bloch3d" title="qutip.bloch3d.Bloch3d"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.bloch3d.Bloch3d</span></code></a> version.  Before getting into the details of these objects, we can simply plot the blank Bloch sphere associated with these instances via:</p>
+<p>which will load an instance of the <a class="reference internal" href="../apidoc/classes.html#qutip.bloch.Bloch" title="qutip.bloch.Bloch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bloch</span></code></a> class.
+Before getting into the details of these objects, we can simply plot the blank Bloch sphere associated with these instances via:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">.</span><span class="n">make_sphere</span><span class="p">()</span>
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="../images/guide-bloch-2_00.png" class="plot-directive" src="../images/guide-bloch-2_00.png" />
-</figure>
-<figure class="align-default">
-<img alt="../images/guide-bloch-2_01.png" class="plot-directive" src="../images/guide-bloch-2_01.png" />
-</figure>
-<p>or</p>
-<figure class="align-center align-default" id="image-blank3d">
-<a class="reference internal image-reference" href="../images/bloch3d-blank.png"><img alt="../images/bloch3d-blank.png" src="../images/bloch3d-blank.png" style="width: 3.5in;" /></a>
+<img alt="../images/guide-bloch-2.png" class="plot-directive" src="../images/guide-bloch-2.png" />
 </figure>
 <p>In addition to the <code class="docutils literal notranslate"><span class="pre">show</span></code> command, see the API documentation for <a class="reference internal" href="../apidoc/classes.html#qutip.bloch.Bloch" title="qutip.bloch.Bloch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bloch</span></code></a> for a full list of other available functions.
 As an example, we can add a single data point:</p>
@@ -204,10 +187,7 @@ In total, the code for constructing our Bloch sphere with one vector, one state,
 <figure class="align-default">
 <img alt="../images/guide-bloch-6.png" class="plot-directive" src="../images/guide-bloch-6.png" />
 </figure>
-<p>where we have removed the extra <code class="docutils literal notranslate"><span class="pre">show()</span></code> commands.  Replacing <code class="docutils literal notranslate"><span class="pre">b=Bloch()</span></code> with <code class="docutils literal notranslate"><span class="pre">b=Bloch3d()</span></code> in the above code generates the following 3D Bloch sphere.</p>
-<figure class="align-center align-default" id="image-bloch3ddata">
-<a class="reference internal image-reference" href="../images/bloch3d+data.png"><img alt="../images/bloch3d%2Bdata.png" src="../images/bloch3d%2Bdata.png" style="width: 3.5in;" /></a>
-</figure>
+<p>where we have removed the extra <code class="docutils literal notranslate"><span class="pre">show()</span></code> commands.</p>
 <p>We can also plot multiple points, vectors, and states at the same time by passing list or arrays instead of individual elements.  Before giving an example, we can use the <cite>clear()</cite> command to remove the current data from our Bloch sphere instead of creating a new instance:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">b</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
@@ -292,21 +272,7 @@ In total, the code for constructing our Bloch sphere with one vector, one state,
 <figure class="align-default">
 <img alt="../images/guide-bloch-13.png" class="plot-directive" src="../images/guide-bloch-13.png" />
 </figure>
-<p>Again, the same plot can be generated using the <a class="reference internal" href="../apidoc/classes.html#qutip.bloch3d.Bloch3d" title="qutip.bloch3d.Bloch3d"><code class="xref py py-class docutils literal notranslate"><span class="pre">qutip.bloch3d.Bloch3d</span></code></a> class by replacing <code class="docutils literal notranslate"><span class="pre">Bloch</span></code> with <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code>:</p>
-<figure class="align-center align-default">
-<a class="reference internal image-reference" href="../images/bloch3d+points.png"><img alt="../images/bloch3d%2Bpoints.png" src="../images/bloch3d%2Bpoints.png" style="width: 3.5in;" /></a>
-</figure>
 <p>A more slick way of using this ‘multi’ color feature is also given in the example, where we set the color of the markers as a function of time.</p>
-<section id="differences-between-bloch-and-bloch3d">
-<h3>Differences Between Bloch and Bloch3d<a class="headerlink" href="#differences-between-bloch-and-bloch3d" title="Permalink to this heading"></a></h3>
-<p>While in general the <code class="docutils literal notranslate"><span class="pre">Bloch</span></code> and <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code> classes are interchangeable, there are some important differences to consider when choosing between them.</p>
-<ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">Bloch</span></code> class uses Matplotlib to generate figures.  As such, the data plotted on the sphere is in reality just a 2D object.  In contrast the <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code> class uses the 3D rendering engine from VTK via mayavi to generate the sphere and the included data.  In this sense the <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code> class is much more advanced, as objects are rendered in 3D leading to a higher quality figure.</p></li>
-<li><p>Only the <code class="docutils literal notranslate"><span class="pre">Bloch</span></code> class can be embedded in a Matplotlib figure window.  Thus if you want to combine a Bloch sphere with another figure generated in QuTiP, you can not use <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code>.  Of course you can always post-process your figures using other software to get the desired result.</p></li>
-<li><p>Due to limitations in the rendering engine, the <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code> class does not support LaTeX for text.  Again, you can get around this by post-processing.</p></li>
-<li><p>The user customizable attributes for the <code class="docutils literal notranslate"><span class="pre">Bloch</span></code> and <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code> classes are not identical.  Therefore, if you change the properties of one of the classes, these changes will cause an exception if the class is switched.</p></li>
-</ul>
-</section>
 </section>
 <section id="configuring-the-bloch-sphere">
 <span id="bloch-config"></span><h2>Configuring the Bloch sphere<a class="headerlink" href="#configuring-the-bloch-sphere" title="Permalink to this heading"></a></h2>
@@ -412,114 +378,6 @@ same size when plotted)</p></td>
 <tr class="row-odd"><td><p>b.zlpos</p></td>
 <td><p>Position of z-axis labels</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">[1.2,</span> <span class="pre">-1.2]</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="bloch3d-class-options">
-<h3>Bloch3d Class Options<a class="headerlink" href="#bloch3d-class-options" title="Permalink to this heading"></a></h3>
-<p>The Bloch3d sphere is also customizable.  Note however that the attributes for the <code class="docutils literal notranslate"><span class="pre">Bloch3d</span></code> class are not in one-to-one
-correspondence to those of the <code class="docutils literal notranslate"><span class="pre">Bloch</span></code> class due to the different underlying rendering engines. Assuming <code class="docutils literal notranslate"><span class="pre">b=Bloch3d()</span></code>:</p>
-<table class="table-striped docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>Function</p></th>
-<th class="head"><p>Default Setting</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>b.fig</p></td>
-<td><p>User supplied Mayavi Figure instance. Set by <code class="docutils literal notranslate"><span class="pre">fig</span></code>
-keyword arg.</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.font_color</p></td>
-<td><p>Color of fonts</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">'black'</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>b.font_scale</p></td>
-<td><p>Scale of fonts</p></td>
-<td><p>0.08</p></td>
-</tr>
-<tr class="row-odd"><td><p>b.frame</p></td>
-<td><p>Draw wireframe for sphere?</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>b.frame_alpha</p></td>
-<td><p>Transparency of wireframe</p></td>
-<td><p>0.05</p></td>
-</tr>
-<tr class="row-odd"><td><p>b.frame_color</p></td>
-<td><p>Color of wireframe</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">'gray'</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>b.frame_num</p></td>
-<td><p>Number of wireframe elements to draw</p></td>
-<td><p>8</p></td>
-</tr>
-<tr class="row-odd"><td><p>b.frame_radius</p></td>
-<td><p>Radius of wireframe lines</p></td>
-<td><p>0.005</p></td>
-</tr>
-<tr class="row-even"><td><p>b.point_color</p></td>
-<td><p>List of colors for Bloch point markers to cycle through</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">['r',</span> <span class="pre">'g',</span> <span class="pre">'b',</span> <span class="pre">'y']</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.point_mode</p></td>
-<td><p>Type of point markers to draw</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">'sphere'</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>b.point_size</p></td>
-<td><p>Size of points</p></td>
-<td><p>0.075</p></td>
-</tr>
-<tr class="row-odd"><td><p>b.sphere_alpha</p></td>
-<td><p>Transparency of Bloch sphere</p></td>
-<td><p>0.1</p></td>
-</tr>
-<tr class="row-even"><td><p>b.sphere_color</p></td>
-<td><p>Color of Bloch sphere</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">'#808080'</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.size</p></td>
-<td><p>Sets size of figure window</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[500,</span> <span class="pre">500]</span></code> (500x500 pixels)</p></td>
-</tr>
-<tr class="row-even"><td><p>b.vector_color</p></td>
-<td><p>List of colors for Bloch vectors to cycle through</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">['r',</span> <span class="pre">'g',</span> <span class="pre">'b',</span> <span class="pre">'y']</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.vector_width</p></td>
-<td><p>Width of Bloch vectors</p></td>
-<td><p>3</p></td>
-</tr>
-<tr class="row-even"><td><p>b.view</p></td>
-<td><p>Azimuthal and Elevation viewing angles</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[45,</span> <span class="pre">65]</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.xlabel</p></td>
-<td><p>Labels for x-axis</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">['|x&gt;',</span> <span class="pre">'']</span></code> +x and -x</p></td>
-</tr>
-<tr class="row-even"><td><p>b.xlpos</p></td>
-<td><p>Position of x-axis labels</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[1.07,</span> <span class="pre">-1.07]</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.ylabel</p></td>
-<td><p>Labels for y-axis</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">['$y$',</span> <span class="pre">'']</span></code> +y and -y</p></td>
-</tr>
-<tr class="row-even"><td><p>b.ylpos</p></td>
-<td><p>Position of y-axis labels</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[1.07,</span> <span class="pre">-1.07]</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>b.zlabel</p></td>
-<td><p>Labels for z-axis</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">['|0&gt;',</span> <span class="pre">'|1&gt;']</span></code> +z and -z</p></td>
-</tr>
-<tr class="row-even"><td><p>b.zlpos</p></td>
-<td><p>Position of z-axis labels</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[1.07,</span> <span class="pre">-1.07]</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -663,7 +521,7 @@ If using macports just do: <code class="docutils literal notranslate"><span clas
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="guide-control.html" class="btn btn-neutral float-left" title="Quantum Optimal Control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide-correlation.html" class="btn btn-neutral float-left" title="Two-time correlation functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="guide-visualization.html" class="btn btn-neutral float-right" title="Visualization of quantum states and processes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -671,7 +529,7 @@ If using macports just do: <code class="docutils literal notranslate"><span clas
 
   <div role="contentinfo">
     <p>&#169; <a href="../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

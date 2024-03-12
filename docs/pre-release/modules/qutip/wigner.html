@@ -250,7 +250,7 @@
     <span class="k">return</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span>
 
 
-<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+<div class="viewcode-block" id="wigner"><a class="viewcode-back" href="../../apidoc/functions.html#qutip.wigner">[docs]</a><span class="k">def</span> <span class="nf">wigner</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">xvec</span><span class="p">,</span> <span class="n">yvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;clenshaw&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
            <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">parfor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wigner function for a state vector or density matrix at points</span>
 <span class="sd">    `xvec + i * yvec`.</span>
@@ -268,13 +268,13 @@
 <span class="sd">        y-coordinates at which to calculate the Wigner function.  Does not</span>
 <span class="sd">        apply to the &#39;fft&#39; method.</span>
 
-<span class="sd">    g : float</span>
+<span class="sd">    g : float, default: sqrt(2)</span>
 <span class="sd">        Scaling factor for `a = 0.5 * g * (x + iy)`, default `g = sqrt(2)`.</span>
 <span class="sd">        The value of `g` is related to the value of `hbar` in the commutation</span>
 <span class="sd">        relation `[x, y] = i * hbar` via `hbar=2/g^2` giving the default</span>
 <span class="sd">        value `hbar=1`.</span>
 
-<span class="sd">    method : string {&#39;clenshaw&#39;, &#39;iterative&#39;, &#39;laguerre&#39;, &#39;fft&#39;}</span>
+<span class="sd">    method : string {&#39;clenshaw&#39;, &#39;iterative&#39;, &#39;laguerre&#39;, &#39;fft&#39;}, default: &#39;clenshaw&#39;</span>
 <span class="sd">        Select method &#39;clenshaw&#39; &#39;iterative&#39;, &#39;laguerre&#39;, or &#39;fft&#39;, where &#39;clenshaw&#39;</span>
 <span class="sd">        and &#39;iterative&#39; use an iterative method to evaluate the Wigner functions for density</span>
 <span class="sd">        matrices :math:`|m&gt;&lt;n|`, while &#39;laguerre&#39; uses the Laguerre polynomials</span>
@@ -286,12 +286,12 @@
 <span class="sd">        dealing with density matrices that have a large number of excitations</span>
 <span class="sd">        (&gt;~50). &#39;clenshaw&#39; is a fast and numerically stable method.</span>
 
-<span class="sd">    sparse : bool {False, True}</span>
+<span class="sd">    sparse : bool, optional</span>
 <span class="sd">        Tells the default solver whether or not to keep the input density</span>
 <span class="sd">        matrix in sparse format.  As the dimensions of the density matrix</span>
 <span class="sd">        grow, setthing this flag can result in increased performance.</span>
 
-<span class="sd">    parfor : bool {False, True}</span>
+<span class="sd">    parfor : bool, optional</span>
 <span class="sd">        Flag for calculating the Laguerre polynomial based Wigner function</span>
 <span class="sd">        method=&#39;laguerre&#39; in parallel using the parfor function.</span>
 
@@ -746,13 +746,13 @@
 <span class="sd">    xvec, yvec : array_like</span>
 <span class="sd">        x- and y-coordinates at which to calculate the Husimi-Q function.</span>
 
-<span class="sd">    g : float, default sqrt(2)</span>
+<span class="sd">    g : float, default: sqrt(2)</span>
 <span class="sd">        Scaling factor for ``a = 0.5 * g * (x + iy)``.  The value of `g` is</span>
 <span class="sd">        related to the value of `hbar` in the commutation relation</span>
 <span class="sd">        :math:`[x,\,y] = i\hbar` via :math:`\hbar=2/g^2`, so the default</span>
 <span class="sd">        corresponds to :math:`\hbar=1`.</span>
 
-<span class="sd">    memory : real, default 1024</span>
+<span class="sd">    memory : real, default: 1024</span>
 <span class="sd">        Size in MB that may be used internally as workspace.  This class will</span>
 <span class="sd">        raise ``MemoryError`` if subsequently passed a state of sufficiently</span>
 <span class="sd">        large dimension that this bound would be exceeded.  In those cases, use</span>
@@ -776,7 +776,7 @@
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    :obj:`.qfunc` :</span>
-<span class="sd">        a single function version, which will involve computing several</span>
+<span class="sd">        A single function version, which will involve computing several</span>
 <span class="sd">        quantities multiple times in order to use less memory.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -880,13 +880,13 @@
 <span class="sd">    xvec, yvec : array_like</span>
 <span class="sd">        x- and y-coordinates at which to calculate the Husimi-Q function.</span>
 
-<span class="sd">    g : float, default sqrt(2)</span>
+<span class="sd">    g : float, default: sqrt(2)</span>
 <span class="sd">        Scaling factor for ``a = 0.5 * g * (x + iy)``.  The value of `g` is</span>
 <span class="sd">        related to the value of :math:`\hbar` in the commutation relation</span>
 <span class="sd">        :math:`[x,\,y] = i\hbar` via :math:`\hbar=2/g^2`, so the default</span>
 <span class="sd">        corresponds to :math:`\hbar=1`.</span>
 
-<span class="sd">    precompute_memory : real, default 1024</span>
+<span class="sd">    precompute_memory : real, default: 1024</span>
 <span class="sd">        Size in MB that may be used during calculations as working space when</span>
 <span class="sd">        dealing with density-matrix inputs.  This is ignored for state-vector</span>
 <span class="sd">        inputs.  The bound is not quite exact due to other, order-of-magnitude</span>
@@ -1100,7 +1100,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

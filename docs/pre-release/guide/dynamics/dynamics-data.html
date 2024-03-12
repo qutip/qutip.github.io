@@ -74,23 +74,25 @@
 <li class="toctree-l3"><a class="reference internal" href="dynamics-krylov.html">Krylov Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-stochastic.html">Stochastic Solver</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-time.html">Solving Problems with Time-dependent Hamiltonians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-class.html">Solver Class Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-bloch-redfield.html">Bloch-Redfield master equation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-floquet.html">Floquet Formalism</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dynamics-piqs.html">Permutational Invariance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-nmmonte.html">Monte Carlo for Non-Markovian Dynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dynamics-options.html">Setting Options for the Dynamics Solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamics-propagator.html">Computing propagators</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-piqs.html">Permutational Invariance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
@@ -131,9 +133,12 @@
 <span id="solver-result"></span><h1>Dynamics Simulation Results<a class="headerlink" href="#dynamics-simulation-results" title="Permalink to this heading"></a></h1>
 <section id="the-solver-result-class">
 <span id="solver-result-class"></span><h2>The solver.Result Class<a class="headerlink" href="#the-solver-result-class" title="Permalink to this heading"></a></h2>
-<p>Before embarking on simulating the dynamics of quantum systems, we will first look at the data structure used for returning the simulation results.
-This object is a <code class="xref py py-func docutils literal notranslate"><span class="pre">qutip.Result</span></code> class that stores all the crucial data needed for analyzing and plotting the results of a simulation.
-A generic <code class="docutils literal notranslate"><span class="pre">Result</span></code> object <code class="docutils literal notranslate"><span class="pre">result</span></code> contains the following properties for storing simulation data:</p>
+<p>Before embarking on simulating the dynamics of quantum systems, we will first
+look at the data structure used for returning the simulation results. This
+object is a <a class="reference internal" href="../../apidoc/classes.html#qutip.solver.result.Result" title="qutip.solver.result.Result"><code class="xref py py-func docutils literal notranslate"><span class="pre">Result</span></code></a> class that stores all the
+crucial data needed for analyzing and plotting the results of a simulation.
+A generic <code class="docutils literal notranslate"><span class="pre">Result</span></code> object <code class="docutils literal notranslate"><span class="pre">result</span></code> contains the following properties for
+storing simulation data:</p>
 <table class="table-striped docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Property</p></th>
@@ -161,17 +166,18 @@ if requested.</p></td>
 <td><p>State vector or density matrix at the last time of the evolution.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">result.stats</span></code></p></td>
-<td><p>Various statistics about the evolution including the integration
-method used, number of collapse operators etc.</p></td>
+<td><p>Various statistics about the evolution.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="accessing-result-data">
 <span id="odedata-access"></span><h2>Accessing Result Data<a class="headerlink" href="#accessing-result-data" title="Permalink to this heading"></a></h2>
-<p>To understand how to access the data in a Result object we will use an example as a guide, although we do not worry about the simulation details at this stage.
-Like all solvers, the Master Equation solver used in this example returns an Result object, here called simply <code class="docutils literal notranslate"><span class="pre">result</span></code>.
-To see what is contained inside <code class="docutils literal notranslate"><span class="pre">result</span></code> we can use the print function:</p>
+<p>To understand how to access the data in a Result object we will use an example
+as a guide, although we do not worry about the simulation details at this stage.
+Like all solvers, the Master Equation solver used in this example returns an
+Result object, here called simply <code class="docutils literal notranslate"><span class="pre">result</span></code>. To see what is contained inside
+<code class="docutils literal notranslate"><span class="pre">result</span></code> we can use the print function:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="go">&lt;Result</span>
 <span class="go">  Solver: mesolve</span>
@@ -188,25 +194,27 @@ To see what is contained inside <code class="docutils literal notranslate"><span
 <span class="go">&gt;</span>
 </pre></div>
 </div>
-<p>The first line tells us that this data object was generated from the Master Equation solver <code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code>.
-Next we have the statistics including the ODE solver used, setup time, number of collpases.
-Then the integration interval is described, followed with the number of expectation value computed.
-Finally, it says whether the states are stored.</p>
+<p>The first line tells us that this data object was generated from the Master
+Equation solver <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.mesolve.mesolve" title="qutip.solver.mesolve.mesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">mesolve</span></code></a>. Next we have the statistics including the ODE
+solver used, setup time, number of collpases. Then the integration interval is
+described, followed with the number of expectation value computed. Finally, it
+says whether the states are stored.</p>
 <p>Now we have all the information needed to analyze the simulation results.
 To access the data for the two expectation values one can do:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">expt0</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">expt1</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Recall that Python uses C-style indexing that begins with zero (i.e., [0] =&gt; 1st collapse operator data).
+<p>Recall that Python uses C-style indexing that begins with zero (i.e.,
+[0] =&gt; 1st collapse operator data).
 Alternatively, expectation values can be obtained as a dictionary:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">e_ops</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sx&quot;</span><span class="p">:</span> <span class="n">sigmax</span><span class="p">(),</span> <span class="s2">&quot;sy&quot;</span><span class="p">:</span> <span class="n">sigmay</span><span class="p">(),</span> <span class="s2">&quot;sz&quot;</span><span class="p">:</span> <span class="n">sigmaz</span><span class="p">()}</span>
 <span class="o">...</span>
 <span class="n">expt_sx</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">e_data</span><span class="p">[</span><span class="s2">&quot;sx&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>When <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> is a list, <code class="docutils literal notranslate"><span class="pre">e_data</span></code> ca be used with the list index.
-Together with the array of times at which these expectation values are calculated:</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> is a list, <code class="docutils literal notranslate"><span class="pre">e_data</span></code> ca be used with the list index. Together
+with the array of times at which these expectation values are calculated:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">times</span>
 </pre></div>
 </div>
@@ -216,12 +224,18 @@ Together with the array of times at which these expectation values are calculate
 <span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>State vectors, or density matrices, are accessed in a similar manner, although typically one does not need an index (i.e [0]) since there is only one list for each of these components.
-Some other solver can have other output, <code class="xref py py-func docutils literal notranslate"><span class="pre">heomsolve</span></code>’s results can have <code class="docutils literal notranslate"><span class="pre">ado_states</span></code> output if the options <code class="docutils literal notranslate"><span class="pre">store_ados</span></code> is set, similarly, <code class="xref py py-func docutils literal notranslate"><span class="pre">fmesolve</span></code> can return <cite>floquet_states</cite>.</p>
+<p>State vectors, or density matrices, are accessed in a similar manner, although
+typically one does not need an index (i.e [0]) since there is only one list for
+each of these components. Some other solver can have other output,
+<a class="reference internal" href="../../apidoc/functions.html#qutip.solver.heom.heomsolve" title="qutip.solver.heom.heomsolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">heomsolve</span></code></a>’s results can have <code class="docutils literal notranslate"><span class="pre">ado_states</span></code> output if the options
+<code class="docutils literal notranslate"><span class="pre">store_ados</span></code> is set, similarly, <a class="reference internal" href="../../apidoc/functions.html#qutip.solver.floquet.fmmesolve" title="qutip.solver.floquet.fmmesolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmmesolve</span></code></a> can return
+<code class="docutils literal notranslate"><span class="pre">floquet_states</span></code>.</p>
 </section>
 <section id="multiple-trajectories-solver-results">
 <h2>Multiple Trajectories Solver Results<a class="headerlink" href="#multiple-trajectories-solver-results" title="Permalink to this heading"></a></h2>
-<p>Solver which compute multiple trajectories such as the Monte Carlo Equations Solvers or the Stochastics Solvers result will differ depending on whether the trajectories are flags to be saved.
+<p>Solver which compute multiple trajectories such as the Monte Carlo Equations
+Solvers or the Stochastics Solvers result will differ depending on whether the
+trajectories are flags to be saved.
 For example:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mcsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;keep_runs_results&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
@@ -232,10 +246,12 @@ For example:</p>
 <span class="go">(1, 25, 11)</span>
 </pre></div>
 </div>
-<p>When the runs are not saved, the expectation values and states are averaged over all trajectories, while a list over the runs are given when they are stored.
-For a fix output format, <code class="docutils literal notranslate"><span class="pre">average_expect</span></code> return the average, while <code class="docutils literal notranslate"><span class="pre">runs_states</span></code> return the list over trajectories.
-The <code class="docutils literal notranslate"><span class="pre">runs_</span></code> output will return <code class="docutils literal notranslate"><span class="pre">None</span></code> when the trajectories are not saved.
-Standard derivation of the expectation values is also available:</p>
+<p>When the runs are not saved, the expectation values and states are averaged
+over all trajectories, while a list over the runs are given when they are stored.
+For a fix output format, <code class="docutils literal notranslate"><span class="pre">average_expect</span></code> return the average, while
+<code class="docutils literal notranslate"><span class="pre">runs_states</span></code> return the list over trajectories.  The <code class="docutils literal notranslate"><span class="pre">runs_</span></code> output will
+return <code class="docutils literal notranslate"><span class="pre">None</span></code> when the trajectories are not saved. Standard derivation of the
+expectation values is also available:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Reduced result</p></th>
@@ -270,10 +286,25 @@ Standard derivation of the expectation values is also available:</p>
 </tr>
 </tbody>
 </table>
-<p>Multiple trajectories results also keep the trajectories seeds to allows recomputing the results.</p>
+<p>Multiple trajectories results also keep the trajectories <code class="docutils literal notranslate"><span class="pre">seeds</span></code> to allows
+recomputing the results.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">seeds</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">seeds</span>
 </pre></div>
 </div>
+<p>One last feature specific to multi-trajectories results is the addition operation
+that can be used to merge sets of trajectories.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run1</span> <span class="o">=</span> <span class="n">smesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">run1</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span>
+<span class="go">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run2</span> <span class="o">=</span> <span class="n">smesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">N</span><span class="p">)],</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">run2</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span>
+<span class="go">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merged</span> <span class="o">=</span> <span class="n">run1</span> <span class="o">+</span> <span class="n">run2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">num_trajectories</span><span class="p">)</span>
+<span class="go">50</span>
+</pre></div>
+</div>
+<p>This allows one to improve statistics while keeping previous computations.</p>
 </section>
 </section>
 
@@ -289,7 +320,7 @@ Standard derivation of the expectation values is also available:</p>
 
   <div role="contentinfo">
     <p>&#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

@@ -116,8 +116,8 @@
 
 
 <div class="viewcode-block" id="correlation_2op_1t"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.correlation.correlation_2op_1t">[docs]</a><span class="k">def</span> <span class="nf">correlation_2op_1t</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">b_op</span><span class="p">,</span>
-                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
-                       <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the two-operator one-time correlation function:</span>
 <span class="sd">    :math:`\left&lt;A(\tau)B(0)\right&gt;`</span>
@@ -127,9 +127,9 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        System Hamiltonian, may be time-dependent for solver choice of `me`.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`. If &#39;state0&#39; is &#39;None&#39;, then the steady state will</span>
 <span class="sd">        be used as the initial state. The &#39;steady-state&#39; is only implemented</span>
@@ -137,25 +137,26 @@
 <span class="sd">    taulist : array_like</span>
 <span class="sd">        List of times for :math:`\tau`. taulist must be positive and contain</span>
 <span class="sd">        the element `0`.</span>
-<span class="sd">    c_ops : list of {:class:`Qobj`, :class:`QobjEvo`}</span>
+<span class="sd">    c_ops : list of {:obj:`.Qobj`, :obj:`.QobjEvo`}</span>
 <span class="sd">        List of collapse operators</span>
-<span class="sd">    a_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator A.</span>
-<span class="sd">    b_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    b_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator B.</span>
-<span class="sd">    reverse : bool {False}</span>
-<span class="sd">        If `True`, calculate :math:`\left&lt;A(t)B(t+\tau)\right&gt;` instead of</span>
+<span class="sd">    reverse : bool, default: False</span>
+<span class="sd">        If ``True``, calculate :math:`\left&lt;A(t)B(t+\tau)\right&gt;` instead of</span>
 <span class="sd">        :math:`\left&lt;A(t+\tau)B(t)\right&gt;`.</span>
-<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}</span>
-<span class="sd">        Choice of solver, `me` for master-equation, and `es` for exponential</span>
-<span class="sd">        series. `es` is equivalent to `me` with ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}, default: &#39;me&#39;</span>
+<span class="sd">        Choice of solver, ``me`` for master-equation, and ``es`` for</span>
+<span class="sd">        exponential series. ``es`` is equivalent to `me` with</span>
+<span class="sd">        ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
 <span class="sd">    options : dict, optional</span>
-<span class="sd">        Options for the solver. Only used with `me` solver.</span>
+<span class="sd">        Options for the solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    corr_vec : ndarray</span>
-<span class="sd">        An array of correlation values for the times specified by `taulist`.</span>
+<span class="sd">        An array of correlation values for the times specified by ``taulist``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -180,8 +181,8 @@
 
 
 <div class="viewcode-block" id="correlation_2op_2t"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.correlation.correlation_2op_2t">[docs]</a><span class="k">def</span> <span class="nf">correlation_2op_2t</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">b_op</span><span class="p">,</span>
-                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
-                       <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the two-operator two-time correlation function:</span>
 <span class="sd">    :math:`\left&lt;A(t+\tau)B(t)\right&gt;`</span>
@@ -190,9 +191,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        System Hamiltonian, may be time-dependent for solver choice of `me`.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`. If &#39;state0&#39; is &#39;None&#39;, then the steady state will</span>
 <span class="sd">        be used as the initial state. The &#39;steady-state&#39; is only implemented</span>
@@ -205,26 +206,27 @@
 <span class="sd">    taulist : array_like</span>
 <span class="sd">        List of times for :math:`\tau`. taulist must be positive and contain</span>
 <span class="sd">        the element `0`.</span>
-<span class="sd">    c_ops : list of {:class:`Qobj`, :class:`QobjEvo`}</span>
+<span class="sd">    c_ops : list of {:obj:`.Qobj`, :obj:`.QobjEvo`}</span>
 <span class="sd">        List of collapse operators</span>
-<span class="sd">    a_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator A.</span>
-<span class="sd">    b_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    b_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator B.</span>
-<span class="sd">    reverse : bool {False}</span>
-<span class="sd">        If `True`, calculate :math:`\left&lt;A(t)B(t+\tau)\right&gt;` instead of</span>
+<span class="sd">    reverse : bool, default: False</span>
+<span class="sd">        If ``True``, calculate :math:`\left&lt;A(t)B(t+\tau)\right&gt;` instead of</span>
 <span class="sd">        :math:`\left&lt;A(t+\tau)B(t)\right&gt;`.</span>
-<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}</span>
-<span class="sd">        Choice of solver, `me` for master-equation, and `es` for exponential</span>
-<span class="sd">        series. `es` is equivalent to `me` with ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}, default: &#39;me&#39;</span>
+<span class="sd">        Choice of solver, ``me`` for master-equation, and ``es`` for</span>
+<span class="sd">        exponential series. ``es`` is equivalent to `me` with</span>
+<span class="sd">        ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
 <span class="sd">    options : dict, optional</span>
-<span class="sd">        Options for the solver. Only used with `me` solver.</span>
+<span class="sd">        Options for the solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    corr_mat : ndarray</span>
 <span class="sd">        An 2-dimensional array (matrix) of correlation values for the times</span>
-<span class="sd">        specified by `tlist` (first index) and `taulist` (second index).</span>
+<span class="sd">        specified by ``tlist`` (first index) and ``taulist`` (second index).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -251,8 +253,7 @@
 
 
 <div class="viewcode-block" id="correlation_3op_1t"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.correlation.correlation_3op_1t">[docs]</a><span class="k">def</span> <span class="nf">correlation_3op_1t</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">b_op</span><span class="p">,</span> <span class="n">c_op</span><span class="p">,</span>
-                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
-                       <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the three-operator two-time correlation function:</span>
 <span class="sd">    :math:`\left&lt;A(0)B(\tau)C(0)\right&gt;` along one time axis using the</span>
@@ -264,9 +265,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
-<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of `me`.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
+<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of ``me``.</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`. If &#39;state0&#39; is &#39;None&#39;, then the steady state will</span>
 <span class="sd">        be used as the initial state. The &#39;steady-state&#39; is only implemented</span>
@@ -274,24 +275,25 @@
 <span class="sd">    taulist : array_like</span>
 <span class="sd">        List of times for :math:`\tau`. taulist must be positive and contain</span>
 <span class="sd">        the element `0`.</span>
-<span class="sd">    c_ops : list of {:class:`Qobj`, :class:`QobjEvo`}</span>
+<span class="sd">    c_ops : list of {:obj:`.Qobj`, :obj:`.QobjEvo`}</span>
 <span class="sd">        List of collapse operators</span>
-<span class="sd">    a_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator A.</span>
-<span class="sd">    b_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    b_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator B.</span>
-<span class="sd">    c_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    c_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator C.</span>
-<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}</span>
-<span class="sd">        Choice of solver, `me` for master-equation, and `es` for exponential</span>
-<span class="sd">        series. `es` is equivalent to `me` with ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}, default: &#39;me&#39;</span>
+<span class="sd">        Choice of solver, ``me`` for master-equation, and ``es`` for</span>
+<span class="sd">        exponential series. ``es`` is equivalent to `me` with</span>
+<span class="sd">        ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
 <span class="sd">    options : dict, optional</span>
-<span class="sd">        Options for the solver. Only used with `me` solver.</span>
+<span class="sd">        Options for the solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    corr_vec : array</span>
-<span class="sd">        An array of correlation values for the times specified by `taulist`.</span>
+<span class="sd">        An array of correlation values for the times specified by ``taulist``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -310,8 +312,7 @@
 
 
 <div class="viewcode-block" id="correlation_3op_2t"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.correlation.correlation_3op_2t">[docs]</a><span class="k">def</span> <span class="nf">correlation_3op_2t</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">b_op</span><span class="p">,</span> <span class="n">c_op</span><span class="p">,</span>
-                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
-                       <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the three-operator two-time correlation function:</span>
 <span class="sd">    :math:`\left&lt;A(t)B(t+\tau)C(t)\right&gt;` along two time axes using the</span>
@@ -323,9 +324,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
-<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of `me`.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
+<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of ``me``.</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`. If &#39;state0&#39; is &#39;None&#39;, then the steady state will</span>
 <span class="sd">        be used as the initial state. The &#39;steady-state&#39; is only implemented</span>
@@ -338,25 +339,26 @@
 <span class="sd">    taulist : array_like</span>
 <span class="sd">        List of times for :math:`\tau`. taulist must be positive and contain</span>
 <span class="sd">        the element `0`.</span>
-<span class="sd">    c_ops : list of {:class:`Qobj`, :class:`QobjEvo`}</span>
+<span class="sd">    c_ops : list of {:obj:`.Qobj`, :obj:`.QobjEvo`}</span>
 <span class="sd">        List of collapse operators</span>
-<span class="sd">    a_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator A.</span>
-<span class="sd">    b_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    b_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator B.</span>
-<span class="sd">    c_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    c_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator C.</span>
-<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}</span>
-<span class="sd">        Choice of solver, `me` for master-equation, and `es` for exponential</span>
-<span class="sd">        series. `es` is equivalent to `me` with ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}, default: &#39;me&#39;</span>
+<span class="sd">        Choice of solver, ``me`` for master-equation, and ``es`` for</span>
+<span class="sd">        exponential series. ``es`` is equivalent to `me` with</span>
+<span class="sd">        ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
 <span class="sd">    options : dict, optional</span>
-<span class="sd">        Options for the solver. Only used with `me` solver.</span>
+<span class="sd">        Options for the solver. Only used with ``me`` solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    corr_mat : array</span>
 <span class="sd">        An 2-dimensional array (matrix) of correlation values for the times</span>
-<span class="sd">        specified by `tlist` (first index) and `taulist` (second index).</span>
+<span class="sd">        specified by ``tlist`` (first index) and ``taulist`` (second index).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -382,7 +384,7 @@
 <span class="c1"># high level correlation</span>
 
 <div class="viewcode-block" id="coherence_function_g1"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.correlation.coherence_function_g1">[docs]</a><span class="k">def</span> <span class="nf">coherence_function_g1</span><span class="p">(</span>
-    <span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">options</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the normalized first-order quantum coherence function:</span>
@@ -399,9 +401,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
-<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of `me`.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
+<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of ``me``.</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`. If &#39;state0&#39; is &#39;None&#39;, then the steady state will</span>
 <span class="sd">        be used as the initial state. The &#39;steady-state&#39; is only implemented</span>
@@ -409,15 +411,18 @@
 <span class="sd">    taulist : array_like</span>
 <span class="sd">        List of times for :math:`\tau`. taulist must be positive and contain</span>
 <span class="sd">        the element `0`.</span>
-<span class="sd">    c_ops : list of {:class:`Qobj`, :class:`QobjEvo`}</span>
+<span class="sd">    c_ops : list of {:obj:`.Qobj`, :obj:`.QobjEvo`}</span>
 <span class="sd">        List of collapse operators</span>
-<span class="sd">    a_op : :class:`Qobj`, :class:`QobjEvo`</span>
+<span class="sd">    a_op : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
 <span class="sd">        Operator A.</span>
-<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}</span>
-<span class="sd">        Choice of solver, `me` for master-equation, and `es` for exponential</span>
-<span class="sd">        series. `es` is equivalent to `me` with ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}, default: &#39;me&#39;</span>
+<span class="sd">        Choice of solver, ``me`` for master-equation, and ``es`` for</span>
+<span class="sd">        exponential series. ``es`` is equivalent to `me` with</span>
+<span class="sd">        ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    args : dict, optional</span>
+<span class="sd">        dictionary of parameters for time-dependent Hamiltonians</span>
 <span class="sd">    options : dict, optional</span>
-<span class="sd">        Options for the solver. Only used with `me` solver.</span>
+<span class="sd">        Options for the solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -442,7 +447,7 @@
 
 
 <div class="viewcode-block" id="coherence_function_g2"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.correlation.coherence_function_g2">[docs]</a><span class="k">def</span> <span class="nf">coherence_function_g2</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">taulist</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">a_op</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span>
-                          <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+                          <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the normalized second-order quantum coherence function:</span>
 
@@ -458,9 +463,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`</span>
-<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of `me`.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`</span>
+<span class="sd">        System Hamiltonian, may be time-dependent for solver choice of ``me``.</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`. If &#39;state0&#39; is &#39;None&#39;, then the steady state will</span>
 <span class="sd">        be used as the initial state. The &#39;steady-state&#39; is only implemented</span>
@@ -470,16 +475,17 @@
 <span class="sd">        the element `0`.</span>
 <span class="sd">    c_ops : list</span>
 <span class="sd">        List of collapse operators, may be time-dependent for solver choice of</span>
-<span class="sd">        `me`.</span>
-<span class="sd">    a_op : :class:`Qobj`</span>
+<span class="sd">        ``me``.</span>
+<span class="sd">    a_op : :obj:`.Qobj`</span>
 <span class="sd">        Operator A.</span>
-<span class="sd">    args : dict</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        Dictionary of arguments to be passed to solver.</span>
-<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}</span>
-<span class="sd">        Choice of solver, `me` for master-equation, and `es` for exponential</span>
-<span class="sd">        series. `es` is equivalent to `me` with ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
+<span class="sd">    solver : str {&#39;me&#39;, &#39;es&#39;}, default: &#39;me&#39;</span>
+<span class="sd">        Choice of solver, ``me`` for master-equation, and ``es`` for</span>
+<span class="sd">        exponential series. ``es`` is equivalent to ``me`` with</span>
+<span class="sd">        ``options={&quot;method&quot;: &quot;diag&quot;}``.</span>
 <span class="sd">    options : dict, optional</span>
-<span class="sd">        Options for the solver. Only used with `me` solver.</span>
+<span class="sd">        Options for the solver.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -523,16 +529,16 @@
 
 <span class="sd">        :math:`\left&lt;A(t)B(t+\tau)C(t)\right&gt;`.</span>
 
-<span class="sd">    from a open system :class:`Solver`.</span>
+<span class="sd">    from a open system :class:`.Solver`.</span>
 
 <span class="sd">    Note: it is not possible to calculate a physically meaningful correlation</span>
 <span class="sd">    where :math:`\tau&lt;0`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    solver : :class:`MESolver`, :class:`BRSolver`</span>
+<span class="sd">    solver : :class:`.MESolver`, :class:`.BRSolver`</span>
 <span class="sd">        Qutip solver for an open system.</span>
-<span class="sd">    state0 : :class:`Qobj`</span>
+<span class="sd">    state0 : :obj:`.Qobj`</span>
 <span class="sd">        Initial state density matrix :math:`\rho(t_0)` or state vector</span>
 <span class="sd">        :math:`\psi(t_0)`.</span>
 <span class="sd">    tlist : array_like</span>
@@ -541,7 +547,7 @@
 <span class="sd">    taulist : array_like</span>
 <span class="sd">        List of times for :math:`\tau`. taulist must be positive and contain</span>
 <span class="sd">        the element `0`.</span>
-<span class="sd">    A, B, C: :class:`Qobj`, :class:`QobjEvo`, optional, default=None</span>
+<span class="sd">    A, B, C : :class:`.Qobj`, :class:`.QobjEvo`, optional, default=None</span>
 <span class="sd">        Operators ``A``, ``B``, ``C`` from the equation ``&lt;A(t)B(t+\tau)C(t)&gt;``</span>
 <span class="sd">        in the Schrodinger picture. They do not need to be all provided. For</span>
 <span class="sd">        exemple, if ``A`` is not provided, ``&lt;B(t+\tau)C(t)&gt;`` is computed.</span>
@@ -550,8 +556,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    corr_mat : array</span>
 <span class="sd">        An 2-dimensional array (matrix) of correlation values for the times</span>
-<span class="sd">        specified by `tlist` (first index) and `taulist` (second index). If</span>
-<span class="sd">        `tlist` is `None`, then a 1-dimensional array of correlation values</span>
+<span class="sd">        specified by ``tlist`` (first index) and `taulist` (second index). If</span>
+<span class="sd">        ``tlist`` is ``None``, then a 1-dimensional array of correlation values</span>
 <span class="sd">        is returned instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">taulist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">taulist</span><span class="p">)</span>
@@ -616,7 +622,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

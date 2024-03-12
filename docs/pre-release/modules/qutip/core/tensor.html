@@ -172,26 +172,25 @@
             <span class="s2">&quot;In tensor products of superroperators,&quot;</span><span class="p">,</span>
             <span class="s2">&quot; all must have the same representation&quot;</span>
         <span class="p">]))</span>
-    <span class="nb">type</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span>
+
     <span class="n">isherm</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_isherm</span>
     <span class="n">isunitary</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_isunitary</span>
     <span class="n">out_data</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
-    <span class="n">dims_l</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">dims_r</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">dims_l</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">dims_r</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
     <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
         <span class="n">out_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="c1"># If both _are_ Hermitian and/or unitary, then so is the output, but if</span>
         <span class="c1"># both _aren&#39;t_, then output still can be.</span>
         <span class="n">isherm</span> <span class="o">=</span> <span class="p">(</span><span class="n">isherm</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isherm</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
         <span class="n">isunitary</span> <span class="o">=</span> <span class="p">(</span><span class="n">isunitary</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">_isunitary</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">:</span>
-            <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">dims_l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">dims_r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
     <span class="k">return</span> <span class="n">Qobj</span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span>
                 <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="n">dims_l</span><span class="p">,</span> <span class="n">dims_r</span><span class="p">],</span>
-                <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span>
                 <span class="n">isherm</span><span class="o">=</span><span class="n">isherm</span><span class="p">,</span>
                 <span class="n">isunitary</span><span class="o">=</span><span class="n">isunitary</span><span class="p">,</span>
-                <span class="n">superrep</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">superrep</span><span class="p">,</span>
                 <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
@@ -380,6 +379,8 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    qobj: Qobj</span>
+<span class="sd">        Operator to contract subspaces on.</span>
 
 <span class="sd">    pairs : tuple</span>
 <span class="sd">        One or more tuples ``(i, j)`` indicating that the</span>
@@ -437,7 +438,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`</span>
+<span class="sd">    oper : :class:`.Qobj`</span>
 <span class="sd">        The quantum object to be checked.</span>
 <span class="sd">    dims : list, optional</span>
 <span class="sd">        A list of integer for the dimension of each composite system.</span>
@@ -468,8 +469,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    targets : int or list of int</span>
 <span class="sd">        The indices of subspace that are acted on.</span>
-<span class="sd">    oper : :class:`qutip.Qobj`, optional</span>
-<span class="sd">        An operator, the type of the :class:`qutip.Qobj`</span>
+<span class="sd">    oper : :class:`.Qobj`, optional</span>
+<span class="sd">        An operator, the type of the :class:`.Qobj`</span>
 <span class="sd">        has to be an operator</span>
 <span class="sd">        and the dimension matches the tensored qubit Hilbert space</span>
 <span class="sd">        e.g. dims = ``[[2, 2, 2], [2, 2, 2]]``</span>
@@ -514,7 +515,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    oper : :class:`qutip.Qobj`</span>
+<span class="sd">    oper : :class:`.Qobj`</span>
 <span class="sd">        An operator that act on the subsystem, has to be an operator and the</span>
 <span class="sd">        dimension matches the tensored dims Hilbert space</span>
 <span class="sd">        e.g. oper.dims = ``[[2, 3], [2, 3]]``</span>
@@ -526,7 +527,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    expanded_oper : :class:`qutip.Qobj`</span>
+<span class="sd">    expanded_oper : :class:`.Qobj`</span>
 <span class="sd">        The expanded operator acting on a system with desired dimension.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">.operators</span> <span class="kn">import</span> <span class="n">identity</span>
@@ -559,7 +560,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 

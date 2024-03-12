@@ -89,13 +89,14 @@
   <h1>Source code for qutip.solver.stochastic</h1><div class="highlight"><pre>
 <span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;smesolve&quot;</span><span class="p">,</span> <span class="s2">&quot;SMESolver&quot;</span><span class="p">,</span> <span class="s2">&quot;ssesolve&quot;</span><span class="p">,</span> <span class="s2">&quot;SSESolver&quot;</span><span class="p">]</span>
 
-<span class="kn">from</span> <span class="nn">.sode.ssystem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.sode.ssystem</span> <span class="kn">import</span> <span class="n">StochasticOpenSystem</span><span class="p">,</span> <span class="n">StochasticClosedSystem</span>
 <span class="kn">from</span> <span class="nn">.result</span> <span class="kn">import</span> <span class="n">MultiTrajResult</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">ExpectOp</span>
 <span class="kn">from</span> <span class="nn">.multitraj</span> <span class="kn">import</span> <span class="n">MultiTrajSolver</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span><span class="p">,</span> <span class="n">liouvillian</span><span class="p">,</span> <span class="n">lindblad_dissipator</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">Qobj</span><span class="p">,</span> <span class="n">QobjEvo</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">.solver_base</span> <span class="kn">import</span> <span class="n">_solver_deprecation</span>
+<span class="kn">from</span> <span class="nn">._feedback</span> <span class="kn">import</span> <span class="n">_QobjFeedback</span><span class="p">,</span> <span class="n">_DataFeedback</span><span class="p">,</span> <span class="n">_WeinerFeedback</span>
 
 
 <span class="k">class</span> <span class="nc">StochasticTrajResult</span><span class="p">(</span><span class="n">Result</span><span class="p">):</span>
@@ -287,6 +288,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">issuper</span> <span class="o">=</span> <span class="n">issuper</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">heterodyne</span> <span class="o">=</span> <span class="n">heterodyne</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_noise_key</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">heterodyne</span><span class="p">:</span>
             <span class="n">sc_ops</span> <span class="o">=</span> <span class="p">[]</span>
@@ -308,52 +310,70 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">StochasticClosedSystem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span><span class="p">:</span>
+            <span class="n">c_op</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sc_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
+            <span class="n">sc_op</span><span class="o">.</span><span class="n">arguments</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_register_feedback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">_register_feedback</span><span class="p">({</span><span class="s2">&quot;wiener_process&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">},</span> <span class="s2">&quot;stochatic solver&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span><span class="p">:</span>
+            <span class="n">c_op</span><span class="o">.</span><span class="n">_register_feedback</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;WeinerFeedback&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">},</span> <span class="s2">&quot;stochatic solver&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">sc_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sc_ops</span><span class="p">:</span>
+            <span class="n">sc_op</span><span class="o">.</span><span class="n">_register_feedback</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;WeinerFeedback&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">},</span> <span class="s2">&quot;stochatic solver&quot;</span>
+            <span class="p">)</span>
+
 
 <div class="viewcode-block" id="smesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.stochastic.smesolve">[docs]</a><span class="k">def</span> <span class="nf">smesolve</span><span class="p">(</span>
     <span class="n">H</span><span class="p">,</span> <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">sc_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">heterodyne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
     <span class="n">e_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">seeds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">seeds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solve stochastic master equation.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format.</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">    rho0 : :class:`qutip.Qobj`</span>
+<span class="sd">    rho0 : :class:`.Qobj`</span>
 <span class="sd">        Initial density matrix or state vector (ket).</span>
 
 <span class="sd">    tlist : *list* / *array*</span>
 <span class="sd">        List of times for :math:`t`.</span>
 
-<span class="sd">    c_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    c_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format), optional</span>
 <span class="sd">        Deterministic collapse operator which will contribute with a standard</span>
 <span class="sd">        Lindblad type of dissipation.</span>
 
-<span class="sd">    sc_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    sc_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format)</span>
 <span class="sd">        List of stochastic collapse operators.</span>
 
-<span class="sd">    e_ops : : :class:`qutip.qobj`, callable, or list.</span>
+<span class="sd">    e_ops : : :class:`.qobj`, callable, or list, optional</span>
 <span class="sd">        Single operator or list of operators for which to evaluate</span>
 <span class="sd">        expectation values or callable or list of callable.</span>
 <span class="sd">        Callable signature must be, `f(t: float, state: Qobj)`.</span>
-<span class="sd">        See :func:`expect` for more detail of operator expectation.</span>
+<span class="sd">        See :func:`.expect` for more detail of operator expectation.</span>
 
-<span class="sd">    args : None / *dictionary*</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        Dictionary of parameters for time-dependent Hamiltonians and</span>
 <span class="sd">        collapse operators.</span>
 
-<span class="sd">    ntraj : int [500]</span>
+<span class="sd">    ntraj : int, default: 500</span>
 <span class="sd">        Number of trajectories to compute.</span>
 
-<span class="sd">    heterodyne : bool [False]</span>
+<span class="sd">    heterodyne : bool, default: False</span>
 <span class="sd">        Whether to use heterodyne or homodyne detection.</span>
 
-<span class="sd">    seeds : int, SeedSequence, list, [optional]</span>
+<span class="sd">    seeds : int, SeedSequence, list, optional</span>
 <span class="sd">        Seed for the random number generator. It can be a single seed used to</span>
 <span class="sd">        spawn seeds for each trajectory or a list of seeds, one for each</span>
 <span class="sd">        trajectory. Seeds are saved in the result and they can be reused with::</span>
@@ -371,59 +391,61 @@
 <span class="sd">        relative tolerance, in that order. Lastly, it can be a list of pairs of</span>
 <span class="sd">        ``(atol, rtol)`` for each e_ops.</span>
 
-<span class="sd">    timeout : float [optional]</span>
+<span class="sd">    timeout : float, optional</span>
 <span class="sd">        Maximum time for the evolution in second. When reached, no more</span>
 <span class="sd">        trajectories will be computed. Overwrite the option of the same name.</span>
 
-<span class="sd">    options : None / dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Dictionary of options for the solver.</span>
 
-<span class="sd">        - store_final_state : bool, [False]</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, None, [None]</span>
-<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
-<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - store_measurement: bool, [False]</span>
-<span class="sd">          Whether to store the measurement and wiener process for each</span>
-<span class="sd">          trajectories.</span>
-<span class="sd">        - keep_runs_results : bool, [False]</span>
-<span class="sd">          Whether to store results from all trajectories or just store the</span>
-<span class="sd">          averages.</span>
-<span class="sd">        - normalize_output : bool, [False]</span>
-<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, [&quot;text&quot;]</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict, [{&quot;chunk_size&quot;: 10}]</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
-<span class="sd">        - method : str, [&quot;rouchon&quot;]</span>
-<span class="sd">          Which stochastic differential equation integration method to use.</span>
-<span class="sd">          Main ones are {&quot;euler&quot;, &quot;rouchon&quot;, &quot;platen&quot;, &quot;taylor1.5_imp&quot;}</span>
-<span class="sd">        - map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;}, [&quot;serial&quot;]</span>
-<span class="sd">          How to run the trajectories. &quot;parallel&quot; uses concurent module to run</span>
-<span class="sd">          in parallel while &quot;loky&quot; use the module of the same name to do so.</span>
-<span class="sd">        - job_timeout : NoneType, int, [None]</span>
-<span class="sd">          Maximum time to compute one trajectory.</span>
-<span class="sd">        - num_cpus : NoneType, int, [None]</span>
-<span class="sd">          Number of cpus to use when running in parallel. ``None`` detect the</span>
-<span class="sd">          number of available cpus.</span>
-<span class="sd">        - dt : float [0.001 ~ 0.0001]</span>
-<span class="sd">          The finite steps lenght for the Stochastic integration method.</span>
-<span class="sd">          Default change depending on the integrator.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | store_measurement: bool</span>
+<span class="sd">          | Whether to store the measurement and wiener process for each</span>
+<span class="sd">            trajectories.</span>
+<span class="sd">        - | keep_runs_results : bool</span>
+<span class="sd">          | Whether to store results from all trajectories or just store the</span>
+<span class="sd">            averages.</span>
+<span class="sd">        - | normalize_output : bool</span>
+<span class="sd">          | Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | method : str</span>
+<span class="sd">          | Which stochastic differential equation integration method to use.</span>
+<span class="sd">            Main ones are {&quot;euler&quot;, &quot;rouchon&quot;, &quot;platen&quot;, &quot;taylor1.5_imp&quot;}</span>
+<span class="sd">        - | map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;, &quot;mpi&quot;}</span>
+<span class="sd">          | How to run the trajectories. &quot;parallel&quot; uses the multiprocessing</span>
+<span class="sd">            module to run in parallel while &quot;loky&quot; and &quot;mpi&quot; use the &quot;loky&quot; and</span>
+<span class="sd">            &quot;mpi4py&quot; modules to do so.</span>
+<span class="sd">        - | num_cpus : NoneType, int</span>
+<span class="sd">          | Number of cpus to use when running in parallel. ``None`` detect the</span>
+<span class="sd">            number of available cpus.</span>
+<span class="sd">        - | dt : float</span>
+<span class="sd">          | The finite steps lenght for the Stochastic integration method.</span>
+<span class="sd">            Default change depending on the integrator.</span>
 
-<span class="sd">        Other options could be supported depending on the integration method,</span>
-<span class="sd">        see `SIntegrator &lt;./classes.html#classes-sode&gt;`_.</span>
+<span class="sd">        Additional options are listed under</span>
+<span class="sd">        `options &lt;./classes.html#qutip.solver.stochastic.SMESolver.options&gt;`__.</span>
+<span class="sd">        More options may be available depending on the selected</span>
+<span class="sd">        differential equation integration method, see</span>
+<span class="sd">        `SIntegrator &lt;./classes.html#classes-sode&gt;`_.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    output: :class:`qutip.solver.Result`</span>
-
-<span class="sd">        An instance of the class :class:`qutip.solver.Result`.</span>
+<span class="sd">    output: :class:`.Result`</span>
+<span class="sd">        An instance of the class :class:`.Result`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">_solver_deprecation</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="s2">&quot;stoc&quot;</span><span class="p">)</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
     <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">c_ops</span><span class="p">]</span>
     <span class="n">sc_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">sc_ops</span><span class="p">]</span>
@@ -432,51 +454,51 @@
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">sol</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>
-        <span class="n">seed</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="n">seeds</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ssesolve"><a class="viewcode-back" href="../../../apidoc/functions.html#qutip.solver.stochastic.ssesolve">[docs]</a><span class="k">def</span> <span class="nf">ssesolve</span><span class="p">(</span>
     <span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">sc_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">heterodyne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
     <span class="n">e_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">ntraj</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">seeds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">seeds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solve stochastic Schrodinger equation.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format.</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">    psi0 : :class:`qutip.Qobj`</span>
+<span class="sd">    psi0 : :class:`.Qobj`</span>
 <span class="sd">        Initial state vector (ket).</span>
 
 <span class="sd">    tlist : *list* / *array*</span>
 <span class="sd">        List of times for :math:`t`.</span>
 
-<span class="sd">    sc_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    sc_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format)</span>
 <span class="sd">        List of stochastic collapse operators.</span>
 
-<span class="sd">    e_ops : :class:`qutip.qobj`, callable, or list.</span>
+<span class="sd">    e_ops : :class:`.qobj`, callable, or list, optional</span>
 <span class="sd">        Single operator or list of operators for which to evaluate</span>
 <span class="sd">        expectation values or callable or list of callable.</span>
 <span class="sd">        Callable signature must be, `f(t: float, state: Qobj)`.</span>
 <span class="sd">        See :func:`expect` for more detail of operator expectation.</span>
 
-<span class="sd">    args : None / *dictionary*</span>
+<span class="sd">    args : dict, optional</span>
 <span class="sd">        Dictionary of parameters for time-dependent Hamiltonians and</span>
 <span class="sd">        collapse operators.</span>
 
-<span class="sd">    ntraj : int [500]</span>
+<span class="sd">    ntraj : int, default: 500</span>
 <span class="sd">        Number of trajectories to compute.</span>
 
-<span class="sd">    heterodyne : bool [False]</span>
+<span class="sd">    heterodyne : bool, default: False</span>
 <span class="sd">        Whether to use heterodyne or homodyne detection.</span>
 
-<span class="sd">    seeds : int, SeedSequence, list, [optional]</span>
+<span class="sd">    seeds : int, SeedSequence, list, optional</span>
 <span class="sd">        Seed for the random number generator. It can be a single seed used to</span>
 <span class="sd">        spawn seeds for each trajectory or a list of seeds, one for each</span>
 <span class="sd">        trajectory. Seeds are saved in the result and they can be reused with::</span>
@@ -492,64 +514,67 @@
 <span class="sd">        relative tolerance, in that order. Lastly, it can be a list of pairs of</span>
 <span class="sd">        (atol, rtol) for each e_ops.</span>
 
-<span class="sd">    timeout : float [optional]</span>
+<span class="sd">    timeout : float, optional</span>
 <span class="sd">        Maximum time for the evolution in second. When reached, no more</span>
 <span class="sd">        trajectories will be computed. Overwrite the option of the same name.</span>
 
-<span class="sd">    options : None / dict</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Dictionary of options for the solver.</span>
 
-<span class="sd">        - store_final_state : bool, [False]</span>
-<span class="sd">          Whether or not to store the final state of the evolution in the</span>
-<span class="sd">          result class.</span>
-<span class="sd">        - store_states : bool, None, [None]</span>
-<span class="sd">          Whether or not to store the state vectors or density matrices.</span>
-<span class="sd">          On `None` the states will be saved if no expectation operators are</span>
-<span class="sd">          given.</span>
-<span class="sd">        - store_measurement: bool, [False]</span>
-<span class="sd">          Whether to store the measurement and wiener process, or brownian</span>
-<span class="sd">          noise for each trajectories.</span>
-<span class="sd">        - keep_runs_results : bool, [False]</span>
-<span class="sd">          Whether to store results from all trajectories or just store the</span>
-<span class="sd">          averages.</span>
-<span class="sd">        - normalize_output : bool, [False]</span>
-<span class="sd">          Normalize output state to hide ODE numerical errors.</span>
-<span class="sd">        - progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, [&quot;text&quot;]</span>
-<span class="sd">          How to present the solver progress.</span>
-<span class="sd">          &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
-<span class="sd">          if not installed. Empty string or False will disable the bar.</span>
-<span class="sd">        - progress_kwargs : dict, [{&quot;chunk_size&quot;: 10}]</span>
-<span class="sd">          kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
-<span class="sd">        - method : str, [&quot;rouchon&quot;]</span>
-<span class="sd">          Which stochastic differential equation integration method to use.</span>
-<span class="sd">          Main ones are {&quot;euler&quot;, &quot;rouchon&quot;, &quot;platen&quot;, &quot;taylor1.5_imp&quot;}</span>
-<span class="sd">        - map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;}, [&quot;serial&quot;]</span>
-<span class="sd">          How to run the trajectories. &quot;parallel&quot; uses concurent module to run</span>
-<span class="sd">          in parallel while &quot;loky&quot; use the module of the same name to do so.</span>
-<span class="sd">        - job_timeout : NoneType, int, [None]</span>
-<span class="sd">          Maximum time to compute one trajectory.</span>
-<span class="sd">        - num_cpus : NoneType, int, [None]</span>
-<span class="sd">          Number of cpus to use when running in parallel. ``None`` detect the</span>
-<span class="sd">          number of available cpus.</span>
-<span class="sd">        - dt : float [0.001 ~ 0.0001]</span>
-<span class="sd">          The finite steps lenght for the Stochastic integration method.</span>
-<span class="sd">          Default change depending on the integrator.</span>
+<span class="sd">        - | store_final_state : bool</span>
+<span class="sd">          | Whether or not to store the final state of the evolution in the</span>
+<span class="sd">            result class.</span>
+<span class="sd">        - | store_states : bool, None</span>
+<span class="sd">          | Whether or not to store the state vectors or density matrices.</span>
+<span class="sd">            On `None` the states will be saved if no expectation operators are</span>
+<span class="sd">            given.</span>
+<span class="sd">        - | store_measurement: bool</span>
+<span class="sd">            Whether to store the measurement and wiener process, or brownian</span>
+<span class="sd">            noise for each trajectories.</span>
+<span class="sd">        - | keep_runs_results : bool</span>
+<span class="sd">          | Whether to store results from all trajectories or just store the</span>
+<span class="sd">            averages.</span>
+<span class="sd">        - | normalize_output : bool</span>
+<span class="sd">          | Normalize output state to hide ODE numerical errors.</span>
+<span class="sd">        - | progress_bar : str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}</span>
+<span class="sd">          | How to present the solver progress.</span>
+<span class="sd">            &#39;tqdm&#39; uses the python module of the same name and raise an error</span>
+<span class="sd">            if not installed. Empty string or False will disable the bar.</span>
+<span class="sd">        - | progress_kwargs : dict</span>
+<span class="sd">          | kwargs to pass to the progress_bar. Qutip&#39;s bars use `chunk_size`.</span>
+<span class="sd">        - | method : str</span>
+<span class="sd">          | Which stochastic differential equation integration method to use.</span>
+<span class="sd">            Main ones are {&quot;euler&quot;, &quot;rouchon&quot;, &quot;platen&quot;, &quot;taylor1.5_imp&quot;}</span>
+<span class="sd">        - | map : str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;, &quot;mpi&quot;}</span>
+<span class="sd">          | How to run the trajectories. &quot;parallel&quot; uses the multiprocessing</span>
+<span class="sd">            module to run in parallel while &quot;loky&quot; and &quot;mpi&quot; use the &quot;loky&quot; and</span>
+<span class="sd">            &quot;mpi4py&quot; modules to do so.</span>
+<span class="sd">        - | num_cpus : NoneType, int</span>
+<span class="sd">          | Number of cpus to use when running in parallel. ``None`` detect the</span>
+<span class="sd">            number of available cpus.</span>
+<span class="sd">        - | dt : float</span>
+<span class="sd">          | The finite steps lenght for the Stochastic integration method.</span>
+<span class="sd">            Default change depending on the integrator.</span>
 
-<span class="sd">        Other options could be supported depending on the integration method,</span>
-<span class="sd">        see `SIntegrator &lt;./classes.html#classes-sode&gt;`_.</span>
+<span class="sd">        Additional options are listed under</span>
+<span class="sd">        `options &lt;./classes.html#qutip.solver.stochastic.SSESolver.options&gt;`__.</span>
+<span class="sd">        More options may be available depending on the selected</span>
+<span class="sd">        differential equation integration method, see</span>
+<span class="sd">        `SIntegrator &lt;./classes.html#classes-sode&gt;`_.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    output: :class:`qutip.solver.Result`</span>
-<span class="sd">        An instance of the class :class:`qutip.solver.Result`.</span>
+<span class="sd">    output: :class:`.Result`</span>
+<span class="sd">        An instance of the class :class:`.Result`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">_solver_deprecation</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="s2">&quot;stoc&quot;</span><span class="p">)</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">QobjEvo</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span>
     <span class="n">sc_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">QobjEvo</span><span class="p">(</span><span class="n">c_op</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">tlist</span><span class="o">=</span><span class="n">tlist</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="n">sc_ops</span><span class="p">]</span>
     <span class="n">sol</span> <span class="o">=</span> <span class="n">SSESolver</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">sc_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">heterodyne</span><span class="o">=</span><span class="n">heterodyne</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sol</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">ntraj</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span>
-        <span class="n">seed</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="n">seeds</span><span class="o">=</span><span class="n">seeds</span><span class="p">,</span> <span class="n">target_tol</span><span class="o">=</span><span class="n">target_tol</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -559,22 +584,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;StochasticSolver&quot;</span>
-    <span class="n">resultclass</span> <span class="o">=</span> <span class="n">StochasticResult</span>
+    <span class="n">_resultclass</span> <span class="o">=</span> <span class="n">StochasticResult</span>
     <span class="n">_avail_integrators</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">system</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_open</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">solver_options</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;progress_bar&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
         <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
         <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;keep_runs_results&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;taylor1.5&quot;</span><span class="p">,</span>
         <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;job_timeout&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;mpi_options&quot;</span><span class="p">:</span> <span class="p">{},</span>
         <span class="s2">&quot;num_cpus&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;bitgenerator&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;platen&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">sc_ops</span><span class="p">,</span> <span class="n">heterodyne</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="p">(),</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -584,7 +610,13 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;c_ops are not supported by ssesolve.&quot;</span><span class="p">)</span>
 
         <span class="n">rhs</span> <span class="o">=</span> <span class="n">_StochasticRHS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_open</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">sc_ops</span><span class="p">,</span> <span class="n">c_ops</span><span class="p">,</span> <span class="n">heterodyne</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rhs</span> <span class="o">=</span> <span class="n">rhs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">=</span> <span class="n">rhs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed_sequence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">SeedSequence</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_integrator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_stats</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">heterodyne</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_m_ops</span> <span class="o">=</span> <span class="p">[]</span>
@@ -708,49 +740,55 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Options for stochastic solver:</span>
 
-<span class="sd">        store_final_state: bool, default=False</span>
+<span class="sd">        store_final_state: bool, default: False</span>
 <span class="sd">            Whether or not to store the final state of the evolution in the</span>
 <span class="sd">            result class.</span>
 
-<span class="sd">        store_states: bool, default=None</span>
+<span class="sd">        store_states: None, bool, default: None</span>
 <span class="sd">            Whether or not to store the state vectors or density matrices.</span>
 <span class="sd">            On `None` the states will be saved if no expectation operators are</span>
 <span class="sd">            given.</span>
 
-<span class="sd">        store_measurement: bool, [False]</span>
+<span class="sd">        store_measurement: bool, default: False</span>
 <span class="sd">            Whether to store the measurement for each trajectories.</span>
 <span class="sd">            Storing measurements will also store the wiener process, or</span>
 <span class="sd">            brownian noise for each trajectories.</span>
 
-<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default=&quot;text&quot;</span>
+<span class="sd">        progress_bar: str {&#39;text&#39;, &#39;enhanced&#39;, &#39;tqdm&#39;, &#39;&#39;}, default: &quot;text&quot;</span>
 <span class="sd">            How to present the solver progress. &#39;tqdm&#39; uses the python module</span>
 <span class="sd">            of the same name and raise an error if not installed. Empty string</span>
 <span class="sd">            or False will disable the bar.</span>
 
-<span class="sd">        progress_kwargs: dict, default={&quot;chunk_size&quot;:10}</span>
+<span class="sd">        progress_kwargs: dict, default: {&quot;chunk_size&quot;:10}</span>
 <span class="sd">            Arguments to pass to the progress_bar. Qutip&#39;s bars use</span>
 <span class="sd">            ``chunk_size``.</span>
 
-<span class="sd">        keep_runs_results: bool</span>
+<span class="sd">        keep_runs_results: bool, default: False</span>
 <span class="sd">          Whether to store results from all trajectories or just store the</span>
 <span class="sd">          averages.</span>
 
-<span class="sd">        method: str, default=&quot;rouchon&quot;</span>
-<span class="sd">            Which ODE integrator methods are supported.</span>
+<span class="sd">        normalize_output: bool</span>
+<span class="sd">            Normalize output state to hide ODE numerical errors.</span>
 
-<span class="sd">        map: str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;}, default=&quot;serial&quot;</span>
-<span class="sd">            How to run the trajectories. &quot;parallel&quot; uses concurent module to</span>
-<span class="sd">            run in parallel while &quot;loky&quot; use the module of the same name to do</span>
-<span class="sd">            so.</span>
+<span class="sd">        method: str, default: &quot;platen&quot;</span>
+<span class="sd">            Which differential equation integration method to use.</span>
 
-<span class="sd">        job_timeout: None, int, default=None</span>
-<span class="sd">            Maximum time to compute one trajectory.</span>
+<span class="sd">        map: str {&quot;serial&quot;, &quot;parallel&quot;, &quot;loky&quot;, &quot;mpi&quot;}, default: &quot;serial&quot;</span>
+<span class="sd">            How to run the trajectories. &quot;parallel&quot; uses the multiprocessing</span>
+<span class="sd">            module to run in parallel while &quot;loky&quot; and &quot;mpi&quot; use the &quot;loky&quot; and</span>
+<span class="sd">            &quot;mpi4py&quot; modules to do so.</span>
 
-<span class="sd">        num_cpus: None, int, default=None</span>
+<span class="sd">        mpi_options: dict, default: {}</span>
+<span class="sd">            Only applies if map is &quot;mpi&quot;. This dictionary will be passed as</span>
+<span class="sd">            keyword arguments to the `mpi4py.futures.MPIPoolExecutor`</span>
+<span class="sd">            constructor. Note that the `max_workers` argument is provided</span>
+<span class="sd">            separately through the `num_cpus` option.</span>
+
+<span class="sd">        num_cpus: None, int, default: None</span>
 <span class="sd">            Number of cpus to use when running in parallel. ``None`` detect the</span>
 <span class="sd">            number of available cpus.</span>
 
-<span class="sd">        bitgenerator: {None, &quot;MT19937&quot;, &quot;PCG64DXSM&quot;, ...}, default=None</span>
+<span class="sd">        bitgenerator: {None, &quot;MT19937&quot;, &quot;PCG64DXSM&quot;, ...}, default: None</span>
 <span class="sd">            Which of numpy.random&#39;s bitgenerator to use. With ``None``, your</span>
 <span class="sd">            numpy version&#39;s default is used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -760,6 +798,66 @@
     <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">):</span>
         <span class="n">MultiTrajSolver</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_options</span><span class="p">)</span>
 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">WeinerFeedback</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Weiner function of the trajectory argument for time dependent systems.</span>
+
+<span class="sd">        When used as an args:</span>
+
+<span class="sd">            ``QobjEvo([op, func], args={&quot;W&quot;: SMESolver.WeinerFeedback()})``</span>
+
+<span class="sd">        The ``func`` will receive a function as ``W`` that return an array of</span>
+<span class="sd">        wiener processes values at ``t``. The wiener process for the i-th</span>
+<span class="sd">        sc_ops is the i-th element for homodyne detection and the (2i, 2i+1)</span>
+<span class="sd">        pairs of process in heterodyne detection. The process is a step</span>
+<span class="sd">        function with step of length ``options[&quot;dt&quot;]``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            WeinerFeedback can&#39;t be added to a running solver when updating</span>
+<span class="sd">            arguments between steps: ``solver.step(..., args={})``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        default : callable, optional</span>
+<span class="sd">            Default function used outside the solver.</span>
+<span class="sd">            When not passed, a function returning ``np.array([0])`` is used.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_WeinerFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">StateFeedback</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw_data</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        State of the evolution to be used in a time-dependent operator.</span>
+
+<span class="sd">        When used as an args:</span>
+
+<span class="sd">            ``QobjEvo([op, func], args={&quot;state&quot;: SMESolver.StateFeedback()})``</span>
+
+<span class="sd">        The ``func`` will receive the density matrix as ``state`` during the</span>
+<span class="sd">        evolution.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Not supported by the ``rouchon`` mehtod.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        default : Qobj or qutip.core.data.Data, default : None</span>
+<span class="sd">            Initial value to be used at setup of the system.</span>
+
+<span class="sd">        raw_data : bool, default : False</span>
+<span class="sd">            If True, the raw matrix will be passed instead of a Qobj.</span>
+<span class="sd">            For density matrices, the matrices can be column stacked or square</span>
+<span class="sd">            depending on the integration method.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">raw_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_DataFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_open</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_QobjFeedback</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_open</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="SMESolver"><a class="viewcode-back" href="../../../apidoc/classes.html#qutip.solver.stochastic.SMESolver">[docs]</a><span class="k">class</span> <span class="nc">SMESolver</span><span class="p">(</span><span class="n">StochasticSolver</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -767,18 +865,18 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format.</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">    sc_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    sc_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format)</span>
 <span class="sd">        List of stochastic collapse operators.</span>
 
-<span class="sd">    heterodyne : bool, [False]</span>
+<span class="sd">    heterodyne : bool, default: False</span>
 <span class="sd">        Whether to use heterodyne or homodyne detection.</span>
 
-<span class="sd">    options : dict, [optional]</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Options for the solver, see :obj:`SMESolver.options` and</span>
 <span class="sd">        `SIntegrator &lt;./classes.html#classes-sode&gt;`_ for a list of all options.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -790,14 +888,14 @@
         <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
         <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;keep_runs_results&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;taylor1.5&quot;</span><span class="p">,</span>
         <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;job_timeout&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;mpi_options&quot;</span><span class="p">:</span> <span class="p">{},</span>
         <span class="s2">&quot;num_cpus&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;bitgenerator&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;platen&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 
@@ -807,22 +905,22 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    H : :class:`Qobj`, :class:`QobjEvo`, :class:`QobjEvo` compatible format.</span>
+<span class="sd">    H : :obj:`.Qobj`, :obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format.</span>
 <span class="sd">        System Hamiltonian as a Qobj or QobjEvo for time-dependent</span>
-<span class="sd">        Hamiltonians. List of [:class:`Qobj`, :class:`Coefficient`] or callable</span>
-<span class="sd">        that can be made into :class:`QobjEvo` are also accepted.</span>
+<span class="sd">        Hamiltonians. List of [:obj:`.Qobj`, :obj:`.Coefficient`] or callable</span>
+<span class="sd">        that can be made into :obj:`.QobjEvo` are also accepted.</span>
 
-<span class="sd">    c_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    c_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format)</span>
 <span class="sd">        Deterministic collapse operator which will contribute with a standard</span>
 <span class="sd">        Lindblad type of dissipation.</span>
 
-<span class="sd">    sc_ops : list of (:class:`QobjEvo`, :class:`QobjEvo` compatible format)</span>
+<span class="sd">    sc_ops : list of (:obj:`.QobjEvo`, :obj:`.QobjEvo` compatible format)</span>
 <span class="sd">        List of stochastic collapse operators.</span>
 
-<span class="sd">    heterodyne : bool, [False]</span>
+<span class="sd">    heterodyne : bool, default: False</span>
 <span class="sd">        Whether to use heterodyne or homodyne detection.</span>
 
-<span class="sd">    options : dict, [optional]</span>
+<span class="sd">    options : dict, optional</span>
 <span class="sd">        Options for the solver, see :obj:`SSESolver.options` and</span>
 <span class="sd">        `SIntegrator &lt;./classes.html#classes-sode&gt;`_ for a list of all options.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -834,14 +932,14 @@
         <span class="s2">&quot;progress_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
         <span class="s2">&quot;store_final_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;store_states&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;keep_runs_results&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;normalize_output&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;platen&quot;</span><span class="p">,</span>
         <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;job_timeout&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;mpi_options&quot;</span><span class="p">:</span> <span class="p">{},</span>
         <span class="s2">&quot;num_cpus&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;bitgenerator&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;platen&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;store_measurement&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span></div>
 </pre></div>
 
@@ -853,7 +951,7 @@
 
   <div role="contentinfo">
     <p>&#169; <a href="../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
-      <span class="lastupdated">Last updated on Sep 07, 2023.
+      <span class="lastupdated">Last updated on Mar 05, 2024.
       </span></p>
   </div>
 
