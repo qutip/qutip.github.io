@@ -1,79 +1,40 @@
 ---
 title: QuTiP Documentation
 ---
-{% include header.html %}
-{% include navbar.html %}
 
+# Users guide
 
-<div class="row">
-<div class="col-md-12">
-<h1>Users guide</h1>
-</div>
-</div>
+## Latest releases
 
-<div class="row">
-<div class="col-md-12">
-<h2>Latest release</h2>
-</div>
-</div>
-
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.7</h3>
-</div>
-</div>
+### Version 5.0.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
-<img src="images/online.png" />
-<a href="docs/latest/index.html">Online HTML documentation</a>
+<img src="images/rtd.png" />
+<a href="https://qutip.readthedocs.io/en/qutip-5.0.x/">Read the Docs</a>
 </div>
 <div class="col-md-3 col-md-offset-1">
 <img src="images/pdf.png" />
-<a onclick="javascript:_gaq.push(['_trackEvent','download','qutip-doc','qutip-doc-4.7.pdf']); void(0);" href="downloads/4.7.5/qutip-doc-4.7.pdf">PDF documentation</a>
+<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-5.0.x/">PDF documentation</a>
 </div>
+</div>
+
+### Version 4.7
+
+<div class="row">
 <div class="col-md-3 col-md-offset-1">
 <img src="images/rtd.png" />
-<a href="https://qutip.readthedocs.io/en/latest/">Read the Docs</a>
-</div>
-</div>
-
-
-<div class="row">
-<div class="col-md-12">
-<h2>Pre-release</h2>
-</div>
-</div>
-
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 5.0.0a2</h3>
-</div>
-</div>
-
-<div class="row">
-<div class="col-md-3 col-md-offset-1">
-<img src="images/online.png" />
-<a href="docs/pre-release/index.html">Online HTML documentation</a>
+<a href="https://qutip.readthedocs.io/en/qutip-4.7.x/">Read the Docs</a>
 </div>
 <div class="col-md-3 col-md-offset-1">
-<img src="images/rtd.png" />
-<a href="https://qutip.readthedocs.io/en/master/">Read the Docs</a>
+<img src="images/pdf.png" />
+<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-4.7.x/">PDF documentation</a>
 </div>
 </div>
 
+## Previous releases
 
-<div class="row">
-<div class="col-md-12">
-<h2>Previous releases</h2>
-</div>
-</div>
-
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.6</h3>
-</div>
-</div>
+### Version 4.6
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -86,11 +47,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.5</h3>
-</div>
-</div>
+### Version 4.5
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -103,11 +60,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.4</h3>
-</div>
-</div>
+### Version 4.4
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -120,11 +73,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.3</h3>
-</div>
-</div>
+### Version 4.3
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -137,11 +86,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.2</h3>
-</div>
-</div>
+### Version 4.2
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -154,11 +99,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.1.0</h3>
-</div>
-</div>
+### Version 4.1.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -172,11 +113,7 @@ title: QuTiP Documentation
 </div>
 
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 4.0.2</h3>
-</div>
-</div>
+### Version 4.0.2
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -189,11 +126,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 3.1.0</h3>
-</div>
-</div>
+### Version 3.1.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -206,11 +139,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 3.0.1</h3>
-</div>
-</div>
+### Version 3.0.1
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -224,11 +153,7 @@ title: QuTiP Documentation
 </div>
 
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 3.0.0</h3>
-</div>
-</div>
+### Version 3.0.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -242,11 +167,7 @@ title: QuTiP Documentation
 </div>
 
 
-<div class="row">
-<div class="col-md-12 col-md-offset-1">
-<h3>Version 2.2.0</h3>
-</div>
-</div>
+### Version 2.2.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -256,19 +177,6 @@ title: QuTiP Documentation
 </div>
 
 
-<div class="row">
-<div class="col-md-12">
-<h2>Development documentation</h2>
-</div>
-</div>
+## Development documentation
 
-<br />
-<div class="row">
-<div class="col-md-12">
-<p>
 The documentation for the development version of QuTiP is available at the <a href="https://github.com/qutip/qutip-doc">qutip-doc</a> github repository.
-</p>
-</div>
-</div>
-
-{% include footer.html %}
