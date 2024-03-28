@@ -1,17 +1,12 @@
 ---
 title: QuTiP Features
 ---
-{% include header.html %}
-{% include navbar.html %}
 
-<div style="margin-bottom:20px" class="row">
-<div class="col-md-12">
-<h1>Features</h1><br>
-</div>
-</div>
+# Features
 
+<br>
 
-<div class="row" style="margin-bottom:20px">
+<div class="row">
    <div class="col-md-4">
        <img style="margin-bottom:10px" class="img-responsive img-center" src="images/py_logo.png"/>
        <div class="caption">
@@ -37,13 +32,11 @@ title: QuTiP Features
         </p>
         </div>
    </div>
-       
 </div> 
 
+<br>
 
-
-<div class="row" style="margin-bottom:20px">
-   
+<div class="row">  
    <div class="col-md-4">
        <img style="margin-bottom:10px" class="img-responsive img-center" src="images/choices.png"/>
        <div class="caption">
@@ -67,13 +60,12 @@ title: QuTiP Features
             Can't express your time-dependence analytically, or need to construct a function from a data set?  No problem.  QuTiP allows for passing interpolating functions as time-dependent arguments to the evolution solvers.  Even better, these interpolating functions can be runtime compiled into C++, and support both real and complex data.
         </p>
         </div>
-   </div>
-       
+   </div>    
 </div> 
 
+<br>
 
 <div class="row">
-   
    <div class="col-md-4">
        <img style="margin-bottom:10px" class="img-responsive img-center" src="images/visual.png"/>
        <div class="caption">
@@ -99,10 +91,4 @@ title: QuTiP Features
         </p>
         </div>
    </div>
-       
-</div> 
-
-
-
-
-{% include footer.html %}
+</div>

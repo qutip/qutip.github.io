@@ -1,26 +1,14 @@
 ---
 title: QuTiP Contributors
 ---
-{% include header.html %}
-{% include navbar.html %}
 
-<div class="row">
-<div class="col-md-12">
-<h1>QuTiP Contributors</h1><br>
-</div>
-</div>
+# QuTiP Contributors
 
-<div class="row">
-<div class="col-md-10">
-<p>
 The development of QuTiP is a community based effort with several developers contributing, or helping to add, many new features to the growing list of QuTiP functions:
-</p>
-</div>
-</div>
+
+## Original Developers
 
 <div class="row">
-<div class="col-sm-12">
-<h3>Original Developers</h3>
     <div class="col-sm-3">
         <img src="images/paul2.jpg" class="img-polaroid">
         <h4>Paul Nation</h4>
@@ -33,18 +21,15 @@ The development of QuTiP is a community based effort with several developers con
         <h5>Tokyo, Japan</h5>
         <h6>Library designer and main contributor</h6>
     </div>
-
-</div>
 </div>
 
-<h2> Project Governance</h2>
-The governance process and model for the QuTiP Project can be found <a href='https://github.com/qutip/governance'>here</a>. It contains a <a href='https://github.com/qutip/governance/blob/main/governance.md'>charter document</a>.
+## Project Governance
 
+The governance process and model for the QuTiP Project can be found [here](https://github.com/qutip/governance). It contains a [charter document](https://github.com/qutip/governance/blob/main/governance.md).
 
+### Admin Team
 
 <div class="row">
-<div class="col-sm-12">
-<h3> Admin Team</h3>
     <div class="col-sm-3">
         <img src="images/alex.jpg" class="img-polaroid">
         <h4>Alex Pitchford</h4>
@@ -57,10 +42,6 @@ The governance process and model for the QuTiP Project can be found <a href='htt
         <h5>Université de Sherbrooke</h5>
         <h6>Main focus: Stochastic solvers, code optimization.</h6>
     </div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
     <div class="col-sm-3">
         <img src="images/nathan.jpg" class="img-polaroid">
         <h4>Nathan Shammah</h4>
@@ -74,9 +55,7 @@ The governance process and model for the QuTiP Project can be found <a href='htt
         <h6>Main focus: Machine learning, Non-Markovian dynamics.</h6>
     </div>
 </div>
-</div>
 <div class="row">
-<div class="col-sm-12">
     <div class="col-sm-3">
         <img src="images/neill.jpg" class="img-polaroid">
         <h4>Neill Lambert</h4>
@@ -89,10 +68,6 @@ The governance process and model for the QuTiP Project can be found <a href='htt
         <h5>Forschungszentrum Juelich</h5>
         <h6>Main focus: Quantum control, Quantum device simulation.</h6>
     </div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
     <div class="col-sm-3">
         <img src="images/jake.jpg" class="img-polaroid">
         <h4>Jake Lishman</h4>
@@ -106,9 +81,7 @@ The governance process and model for the QuTiP Project can be found <a href='htt
         <h6>Main focus: Quantum control, machine learning, general maintenance.</h6>
     </div>
 </div>
-</div>
 <div class="row">
-<div class="col-sm-12">
     <div class="col-sm-3">
         <img src="images/asier.jpg" class="img-polaroid">
         <h4>Asier Galicia</h4>
@@ -122,59 +95,43 @@ The governance process and model for the QuTiP Project can be found <a href='htt
         <h6>Main focus: Quantum control, non-Markovian solvers, MPI.</h6>
     </div>
 </div>
-</div>
 
+### Board Members
 
 <div class="row">
-<div class="col-sm-12">
-<h3>Board Members</h3>
     <div class="col-sm-3">
         <img src="images/anton-frisk-kockum.jpeg" class="img-polaroid">
         <h4>Anton Frisk Kockum</h4>
         <h5>Chalmers University of Technology</h5>
     </div>
-<br>
-<br>
     <div class="col-sm-3">
         <img src="images/daniel-burgarth.jpeg" class="img-polaroid">
         <h4>Daniel Burgarth</h4>
         <h5>Macquarie University</h5>
     </div>
-<br>
-<br>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
     <div class="col-sm-3">
         <img src="images/franco.jpg" class="img-polaroid">
         <h4>Franco Nori</h4>
         <h5>RIKEN / University of Michigan</h5>
     </div>
-<br>
-<br>
     <div class="col-sm-3">
         <img src="images/rob.jpg" class="img-polaroid">
         <h4>Rob Johansson</h4>
         <h5>Rakuten</h5>
     </div>
-<br>
-<br>
-</div>
 </div>
 <div class="row">
-<div class="col-sm-12">
     <div class="col-sm-3">
         <img src="images/will-zeng.jpeg" class="img-polaroid">
         <h4>Will Zeng</h4>
         <h5>Unitary Fund</h5>
     </div>
 </div>
-</div>
+
+
+### Core Contributors
 
 <div class="row">
-<div class="col-sm-12">
-<h3>Core Contributors</h3>
     <div class="col-sm-3">
         <img src="images/arne.jpg" class="img-polaroid">
         <h4>Arne Grimsmo</h4>
@@ -186,12 +143,11 @@ The governance process and model for the QuTiP Project can be found <a href='htt
         <h5>University of Sydney</h5>
     </div>
 </div>
-</div>
 
+
+### Additional Developers
 
 <div class="row">
-<div class="col-sm-12">
-<h3>Additional Developers</h3>
     <div class="col-sm-4">
         <ul>
         <li>Denis Vasilyev (Leibniz)</li>
@@ -210,8 +166,5 @@ The governance process and model for the QuTiP Project can be found <a href='htt
          </ul>
     </div>
 </div>
-</div>
 
-For a complete and up-to-date list of contributors, check out the Github pages (<a href="https://github.com/qutip/qutip/graphs/contributors" >code</a>, <a href="https://github.com/qutip/qutip-notebooks/graphs/contributors">notebooks</a>).
-
-{% include footer.html %}
+For a complete and up-to-date list of contributors, check out the Github pages ([code](https://github.com/qutip/qutip/graphs/contributors), [https://github.com/qutip/qutip-notebooks/graphs/contributors](notebooks)).
