@@ -19,7 +19,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-### Version 4.7
+### Version 4.7.5
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -34,7 +34,20 @@ title: QuTiP Documentation
 
 ## Previous releases
 
-### Version 4.6
+### Version 4.7.5 (archived)
+
+<div class="row">
+<div class="col-md-3 col-md-offset-1">
+<img src="images/online.png" />
+<a href="docs/4.7/index.html">Online HTML documentation</a>
+</div>
+<div class="col-md-3 col-md-offset-1">
+<img src="images/pdf.png" />
+<a onclick="javascript:_gaq.push(['_trackEvent','download','qutip-doc','qutip-doc-4.7.pdf']); void(0);" href="downloads/4.7.5/qutip-doc-4.7.pdf">PDF documentation</a>
+</div>
+</div>
+
+### Version 4.6.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -47,7 +60,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-### Version 4.5
+### Version 4.5.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -60,7 +73,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-### Version 4.4
+### Version 4.4.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -73,7 +86,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-### Version 4.3
+### Version 4.3.1
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -86,7 +99,7 @@ title: QuTiP Documentation
 </div>
 </div>
 
-### Version 4.2
+### Version 4.2.0
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
