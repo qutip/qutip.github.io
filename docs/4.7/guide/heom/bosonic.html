@@ -1,0 +1,586 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Bosonic Environments &mdash; QuTiP 4.7 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"Macros": {"bra": ["\\left\\langle{#1}\\right\\rvert", 1], "ket": ["\\left\\lvert{#1}\\right\\rangle", 1], "tr": "\\operatorname{tr}"}}})</script>
+    
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="next" title="Fermionic Environments" href="fermionic.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">Users Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide-overview.html">Guide Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-basics.html">Basic Operations on Quantum Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-states.html">Manipulating States and Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-tensor.html">Using Tensor Products and Partial Traces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-dynamics.html">Time Evolution and Quantum System Dynamics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide-heom.html">Hierarchical Equations of Motion</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Bosonic Environments</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#describing-the-system-and-bath">Describing the system and bath</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#system-and-bath-dynamics">System and bath dynamics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#steady-state">Steady-state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#matsubara-terminator">Matsubara Terminator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#matsubara-expansion-coefficients">Matsubara expansion coefficients</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multiple-baths">Multiple baths</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fermionic.html">Fermionic Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="history.html">Previous implementations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-steady.html">Solving for Steady-State Solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-correlation.html">Two-time correlation functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-control.html">Quantum Optimal Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-bloch.html">Plotting on the Bloch Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-visualization.html">Visualization of quantum states and processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-parfor.html">Parallel computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-saving.html">Saving QuTiP Objects and Data Sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-random.html">Generating Random Quantum States &amp; Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-settings.html">Modifying Internal QuTiP Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-qip.html">Quantum Information Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide-measurement.html">Measurement of Quantum Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../guide.html">Users Guide</a> &raquo;</li>
+        
+          <li><a href="../guide-heom.html">Hierarchical Equations of Motion</a> &raquo;</li>
+        
+      <li>Bosonic Environments</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bosonic-environments">
+<h1>Bosonic Environments<a class="headerlink" href="#bosonic-environments" title="Permalink to this headline">¶</a></h1>
+<p>In this section we consider a simple two-level system coupled to a
+Drude-Lorentz bosonic bath. The system Hamiltonian, <span class="math notranslate nohighlight">\(H_{sys}\)</span>, and the bath
+spectral density, <span class="math notranslate nohighlight">\(J_D\)</span>, are</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H_{sys} &amp;= \frac{\epsilon \sigma_z}{2} + \frac{\Delta \sigma_x}{2}\\J_D &amp;= \frac{2\lambda \gamma \omega}{(\gamma^2 + \omega^2)},\end{aligned}\end{align} \]</div>
+<p>We will demonstrate how to describe the bath using two different expansions
+of the spectral density correlation function (Matsubara’s expansion and
+a Padé expansion), how to evolve the system in time, and how to calculate
+the steady state.</p>
+<p>First we will do this in the simplest way, using the built-in implementations of
+the two bath expansions, <a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> and
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzPadeBath" title="qutip.nonmarkov.heom.DrudeLorentzPadeBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzPadeBath</span></code></a>. We will do this both with a
+truncated expansion and show how to include an approximation to all of the
+remaining terms in the bath expansion.</p>
+<p>Afterwards, we will show how to calculate the bath expansion coefficients and to
+use those coefficients to construct your own bath description so that you can
+implement your own bosonic baths.</p>
+<p>Finally, we will demonstrate how to simulate a system coupled to multiple
+independent baths, as occurs, for example, in certain photosynthesis processes.</p>
+<p>A notebook containing a complete example similar to this one implemented in
+BoFiN can be found in
+<a class="reference external" href="https://github.com/tehruhn/bofin/blob/main/examples/example-1a-Spin-bath-model-basic.ipynb">example notebook 1a</a>.</p>
+<div class="section" id="describing-the-system-and-bath">
+<h2>Describing the system and bath<a class="headerlink" href="#describing-the-system-and-bath" title="Permalink to this headline">¶</a></h2>
+<p>First, let us construct the system Hamiltonian, <span class="math notranslate nohighlight">\(H_{sys}\)</span>, and the initial
+system state, <code class="docutils literal notranslate"><span class="pre">rho0</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">basis</span><span class="p">,</span> <span class="n">sigmax</span><span class="p">,</span> <span class="n">sigmaz</span>
+
+<span class="c1"># The system Hamiltonian:</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># energy of the 2-level system</span>
+<span class="n">Del</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># tunnelling term</span>
+<span class="n">H_sys</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">sigmaz</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Del</span> <span class="o">*</span> <span class="n">sigmax</span><span class="p">()</span>
+
+<span class="c1"># Initial state of the system:</span>
+<span class="n">rho0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now let us describe the bath properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bath properties:</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># cut off frequency</span>
+<span class="n">lam</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># coupling strength</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># temperature</span>
+
+<span class="c1"># System-bath coupling operator:</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="n">sigmaz</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma\)</span> (<code class="docutils literal notranslate"><span class="pre">gamma</span></code>), <span class="math notranslate nohighlight">\(\lambda\)</span> (<code class="docutils literal notranslate"><span class="pre">lam</span></code>) and <span class="math notranslate nohighlight">\(T\)</span> are
+the parameters of a Drude-Lorentz bath, and <code class="docutils literal notranslate"><span class="pre">Q</span></code> is the coupling operator
+between the system and the bath.</p>
+<p>We may the pass these parameters to either
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> or
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzPadeBath" title="qutip.nonmarkov.heom.DrudeLorentzPadeBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzPadeBath</span></code></a> to construct an expansion of
+the bath correlations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.nonmarkov.heom</span> <span class="kn">import</span> <span class="n">DrudeLorentzBath</span>
+<span class="kn">from</span> <span class="nn">qutip.nonmarkov.heom</span> <span class="kn">import</span> <span class="n">DrudeLorentzPadeBath</span>
+
+<span class="c1"># Number of expansion terms to retain:</span>
+<span class="n">Nk</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1"># Matsubara expansion:</span>
+<span class="n">bath</span> <span class="o">=</span> <span class="n">DrudeLorentzBath</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Nk</span><span class="p">)</span>
+
+<span class="c1"># Padé expansion:</span>
+<span class="n">bath</span> <span class="o">=</span> <span class="n">DrudeLorentzPadeBath</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Nk</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">Nk</span></code> is the number of terms to retain within the expansion of the
+bath.</p>
+</div>
+<div class="section" id="system-and-bath-dynamics">
+<span id="heom-bosonic-system-and-bath-dynamics"></span><h2>System and bath dynamics<a class="headerlink" href="#system-and-bath-dynamics" title="Permalink to this headline">¶</a></h2>
+<p>Now we are ready to construct a solver:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.nonmarkov.heom</span> <span class="kn">import</span> <span class="n">HEOMSolver</span>
+<span class="kn">from</span> <span class="nn">qutip</span> <span class="kn">import</span> <span class="n">Options</span>
+
+<span class="n">max_depth</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># maximum hierarchy depth to retain</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15_000</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">HEOMSolver</span><span class="p">(</span><span class="n">H_sys</span><span class="p">,</span> <span class="n">bath</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and to calculate the system evolution as a function of time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>  <span class="c1"># times to evaluate the system state at</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> parameter determines how many levels of the hierarchy to
+retain. As a first approximation hierarchy depth may be thought of as similar
+to the order of Feynman Diagrams (both classify terms by increasing number
+of interactions).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">result</span></code> is a standard QuTiP results object with the attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">times</span></code>: the times at which the state was evaluated (i.e. <code class="docutils literal notranslate"><span class="pre">tlist</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">states</span></code>: the system states at each time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expect</span></code>: the values of each <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> at each time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ado_states</span></code>: see below (an instance of
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.HierarchyADOsState" title="qutip.nonmarkov.heom.HierarchyADOsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">HierarchyADOsState</span></code></a>)</p></li>
+</ul>
+<p>If <code class="docutils literal notranslate"><span class="pre">ado_return=True</span></code> is passed to <code class="docutils literal notranslate"><span class="pre">.run(...)</span></code> the full set of auxilliary
+density operators (ADOs) that make up the hierarchy at each time will be
+returned as <code class="docutils literal notranslate"><span class="pre">.ado_states</span></code>. We will describe how to use these to determine
+other properties, such as system-bath currents, later in the fermionic guide
+(see <a class="reference internal" href="fermionic.html#heom-determining-currents"><span class="std std-ref">Determining currents</span></a>).</p>
+<p>If one has a full set of ADOs from a previous call of <code class="docutils literal notranslate"><span class="pre">.run(...)</span></code> you may
+supply it as the initial state of the solver by calling
+<code class="docutils literal notranslate"><span class="pre">.run(result.ado_states[-1],</span> <span class="pre">tlist,</span> <span class="pre">ado_init=True)</span></code>.</p>
+<p>As with other QuTiP solvers, if expectation operators or functions are supplied
+using <code class="docutils literal notranslate"><span class="pre">.run(...,</span> <span class="pre">e_ops=[...])</span></code> the expectation values are available in
+<code class="docutils literal notranslate"><span class="pre">result.expect</span></code>.</p>
+<p>Below we run the solver again, but use <code class="docutils literal notranslate"><span class="pre">e_ops</span></code> to store the expectation
+values of the population of the system states and the coherence:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the operators that measure the populations of the two</span>
+<span class="c1"># system states:</span>
+<span class="n">P11p</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="n">P22p</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+
+<span class="c1"># Define the operator that measures the 0, 1 element of density matrix</span>
+<span class="c1"># (corresonding to coherence):</span>
+<span class="n">P12p</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+
+<span class="c1"># Run the solver:</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;11&quot;</span><span class="p">:</span> <span class="n">P11p</span><span class="p">,</span> <span class="s2">&quot;22&quot;</span><span class="p">:</span> <span class="n">P22p</span><span class="p">,</span> <span class="s2">&quot;12&quot;</span><span class="p">:</span> <span class="n">P12p</span><span class="p">})</span>
+
+<span class="c1"># Plot the results:</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="s2">&quot;11&quot;</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;P11&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="s2">&quot;12&quot;</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;P12&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../../images/bosonic-5.png" src="../../images/bosonic-5.png" />
+</div>
+</div>
+<div class="section" id="steady-state">
+<h2>Steady-state<a class="headerlink" href="#steady-state" title="Permalink to this headline">¶</a></h2>
+<p>Using the same solver, we can also determine the steady state of the
+combined system and bath using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">steady_state</span><span class="p">,</span> <span class="n">steady_ados</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">steady_state</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">steady_state</span></code> is the steady state of the system and <code class="docutils literal notranslate"><span class="pre">steady_ados</span></code>
+if the steady state of the full hierarchy. The ADO states are
+described more fully in <a class="reference internal" href="fermionic.html#heom-determining-currents"><span class="std std-ref">Determining currents</span></a> and
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.HierarchyADOsState" title="qutip.nonmarkov.heom.HierarchyADOsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">HierarchyADOsState</span></code></a>.</p>
+</div>
+<div class="section" id="matsubara-terminator">
+<h2>Matsubara Terminator<a class="headerlink" href="#matsubara-terminator" title="Permalink to this headline">¶</a></h2>
+<p>When constructing the Drude-Lorentz bath we have truncated the expansion at
+<code class="docutils literal notranslate"><span class="pre">Nk</span> <span class="pre">=</span> <span class="pre">2</span></code> terms and ignore the remaining terms.</p>
+<p>However, since the coupling to these higher order terms is comparatively weak,
+we may consider the interaction with them to be Markovian, and construct an
+additional Lindbladian term that captures their interaction with the system and
+the lower order terms in the expansion.</p>
+<p>This additional term is called the <code class="docutils literal notranslate"><span class="pre">terminator</span></code> because it terminates the
+expansion.</p>
+<p>The <a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> and
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzPadeBath" title="qutip.nonmarkov.heom.DrudeLorentzPadeBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzPadeBath</span></code></a> both provide a means of
+calculating the terminator for a given expansion:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Matsubara expansion:</span>
+<span class="n">bath</span> <span class="o">=</span> <span class="n">DrudeLorentzBath</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Nk</span><span class="p">)</span>
+
+<span class="c1"># Padé expansion:</span>
+<span class="n">bath</span> <span class="o">=</span> <span class="n">DrudeLorentzPadeBath</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Nk</span><span class="p">)</span>
+
+<span class="c1"># Add terminator to the system Liouvillian:</span>
+<span class="n">delta</span><span class="p">,</span> <span class="n">terminator</span> <span class="o">=</span> <span class="n">bath</span><span class="o">.</span><span class="n">terminator</span><span class="p">()</span>
+<span class="n">HL</span> <span class="o">=</span> <span class="n">liouvillian</span><span class="p">(</span><span class="n">H_sys</span><span class="p">)</span> <span class="o">+</span> <span class="n">terminator</span>
+
+<span class="c1"># Construct solver:</span>
+<span class="n">solver</span> <span class="o">=</span> <span class="n">HEOMSolver</span><span class="p">(</span><span class="n">HL</span><span class="p">,</span> <span class="n">bath</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This captures the Markovian effect of the remaining terms in the expansion
+without having to fully model many more terms.</p>
+<p>The value <code class="docutils literal notranslate"><span class="pre">delta</span></code> is an approximation to the strength of the effect of
+the remaining terms in the expansion (i.e. how strongly the terminator is
+coupled to the rest of the system).</p>
+</div>
+<div class="section" id="matsubara-expansion-coefficients">
+<h2>Matsubara expansion coefficients<a class="headerlink" href="#matsubara-expansion-coefficients" title="Permalink to this headline">¶</a></h2>
+<p>So far we have relied on the built-in
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.DrudeLorentzBath" title="qutip.nonmarkov.heom.DrudeLorentzBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrudeLorentzBath</span></code></a> to construct the Drude-Lorentz
+bath expansion for us. Now we will calculate the coefficients ourselves and
+construct a <a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.BosonicBath" title="qutip.nonmarkov.heom.BosonicBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">BosonicBath</span></code></a> directly. A similar
+procedure can be used to apply <a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> to any
+bosonic bath for which we can calculate the expansion coefficients.</p>
+<p>The real and imaginary parts of the correlation function, <span class="math notranslate nohighlight">\(C(t)\)</span>, for the
+bosonic bath is expanded in an expontential series:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}C(t) &amp;= C_{real}(t) + i C_{imag}(t)\\C_{real}(t) &amp;= \sum_{k=0}^{\infty} c_{k,real} e^{- \nu_{k,real} t}\\C_{imag}(t) &amp;= \sum_{k=0}^{\infty} c_{k,imag} e^{- \nu_{k,imag} t}\end{aligned}\end{align} \]</div>
+<p>In the specific case of Matsubara expansion for the Drude-Lorentz bath, the
+coefficients of this expansion are, for the real part, <span class="math notranslate nohighlight">\(C_{real}(t)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\nu_{k,real} &amp;= \begin{cases}
+    \gamma                &amp; k = 0\\
+    {2 \pi k} / {\beta }  &amp; k \geq 1\\
+\end{cases}\end{split}\\\begin{split}c_{k,real} &amp;= \begin{cases}
+    \lambda \gamma [\cot(\beta \gamma / 2) - i]             &amp; k = 0\\
+    \frac{4 \lambda \gamma \nu_k }{ (\nu_k^2 - \gamma^2)\beta}    &amp; k \geq 1\\
+\end{cases}\end{split}\end{aligned}\end{align} \]</div>
+<p>and the imaginary part, <span class="math notranslate nohighlight">\(C_{imag}(t)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\nu_{k,imag} &amp;= \begin{cases}
+    \gamma                &amp; k = 0\\
+    0                     &amp; k \geq 1\\
+\end{cases}\end{split}\\\begin{split}c_{k,imag} &amp;= \begin{cases}
+    - \lambda \gamma      &amp; k = 0\\
+    0                     &amp; k \geq 1\\
+\end{cases}\end{split}\end{aligned}\end{align} \]</div>
+<p>And now the same numbers calculated in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convenience functions and parameters:</span>
+
+<span class="k">def</span> <span class="nf">cot</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">beta</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">T</span>
+
+<span class="c1"># Number of expansion terms to calculate:</span>
+<span class="n">Nk</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1"># C_real expansion terms:</span>
+<span class="n">ck_real</span> <span class="o">=</span> <span class="p">[</span><span class="n">lam</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">T</span><span class="p">))]</span>
+<span class="n">ck_real</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+    <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">T</span> <span class="o">/</span>
+        <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">gamma</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="n">vk_real</span> <span class="o">=</span> <span class="p">[</span><span class="n">gamma</span><span class="p">]</span>
+<span class="n">vk_real</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">T</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+
+<span class="c1"># C_imag expansion terms (this is the full expansion):</span>
+<span class="n">ck_imag</span> <span class="o">=</span> <span class="p">[</span><span class="n">lam</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)]</span>
+<span class="n">vk_imag</span> <span class="o">=</span> <span class="p">[</span><span class="n">gamma</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>After all that, constructing the bath is very straight forward:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qutip.nonmarkov.heom</span> <span class="kn">import</span> <span class="n">BosonicBath</span>
+
+<span class="n">bath</span> <span class="o">=</span> <span class="n">BosonicBath</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">ck_real</span><span class="p">,</span> <span class="n">vk_real</span><span class="p">,</span> <span class="n">ck_imag</span><span class="p">,</span> <span class="n">vk_imag</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And we’re done!</p>
+<p>The <a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.BosonicBath" title="qutip.nonmarkov.heom.BosonicBath"><code class="xref py py-class docutils literal notranslate"><span class="pre">BosonicBath</span></code></a> can be used with the
+<a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> in exactly the same way as the baths
+we constructed previously using the built-in Drude-Lorentz bath expansions.</p>
+</div>
+<div class="section" id="multiple-baths">
+<h2>Multiple baths<a class="headerlink" href="#multiple-baths" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../../apidoc/classes.html#qutip.nonmarkov.heom.HEOMSolver" title="qutip.nonmarkov.heom.HEOMSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">HEOMSolver</span></code></a> supports having a system interact
+with multiple environments. All that is needed is to supply a list of baths
+instead of a single bath.</p>
+<p>In the example below we calculate the evolution of a small system where
+each basis state of the system interacts with a separate bath. Such
+an arrangement can model, for example, the Fenna–Matthews–Olson (FMO)
+pigment-protein complex which plays an important role in photosynthesis (
+for a full FMO example see the notebook
+<a class="reference external" href="https://github.com/tehruhn/bofin/blob/main/examples/example-2-FMO-example.ipynb">https://github.com/tehruhn/bofin/blob/main/examples/example-2-FMO-example.ipynb</a>
+).</p>
+<p>For each bath expansion, we also include the terminator in the system
+Liouvillian.</p>
+<p>At the end, we plot the populations of the system states as a function of
+time, and show the long-time beating of quantum state coherence that
+occurs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The size of the system:</span>
+<span class="n">N_sys</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="k">def</span> <span class="nf">proj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A helper function for creating an interaction operator. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">basis</span><span class="p">(</span><span class="n">N_sys</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="n">N_sys</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+
+<span class="c1"># Construct one bath for each system state:</span>
+<span class="n">baths</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_sys</span><span class="p">):</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">baths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrudeLorentzBath</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Nk</span><span class="p">))</span>
+
+<span class="c1"># Construct the system Liouvillian from the system Hamiltonian and</span>
+<span class="c1"># bath expansion terminators:</span>
+<span class="n">H_sys</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">proj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_sys</span><span class="p">))</span>
+<span class="n">H_sys</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span>
+  <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">Del</span> <span class="o">*</span> <span class="n">proj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_sys</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_sys</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span>
+<span class="p">)</span>
+<span class="n">HL</span> <span class="o">=</span> <span class="n">liouvillian</span><span class="p">(</span><span class="n">H_sys</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bath</span><span class="o">.</span><span class="n">terminator</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">bath</span> <span class="ow">in</span> <span class="n">baths</span><span class="p">)</span>
+
+<span class="c1"># Construct the solver (pass a list of baths):</span>
+<span class="n">solver</span> <span class="o">=</span> <span class="n">HEOMSolver</span><span class="p">(</span><span class="n">HL</span><span class="p">,</span> <span class="n">baths</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="c1"># Run the solver:</span>
+<span class="n">rho0</span> <span class="o">=</span> <span class="n">basis</span><span class="p">(</span><span class="n">N_sys</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">basis</span><span class="p">(</span><span class="n">N_sys</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">e_ops</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">proj</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_sys</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">rho0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span>
+
+<span class="c1"># Plot populations:</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Population&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../../images/bosonic-10.png" src="../../images/bosonic-10.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="fermionic.html" class="btn btn-neutral float-right" title="Fermionic Environments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Jan 29, 2024.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

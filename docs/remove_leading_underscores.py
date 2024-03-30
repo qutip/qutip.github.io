@@ -1,5 +1,9 @@
 import os, shutil
 
+raise RuntimeError(
+    "This documentation folder is deprecated. Please do not add more documentation here."
+) 
+
 curr_vers_dir = 'latest'
 
 dirs = {'_static' : 'static', '_modules' : 'modules',

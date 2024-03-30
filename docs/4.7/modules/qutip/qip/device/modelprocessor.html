@@ -1,0 +1,402 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qutip.qip.device.modelprocessor &mdash; QuTiP 4.7 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/site.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../../copyright.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> QuTiP: Quantum Toolbox in Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../frontmatter.html">Frontmatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gallery/build/index.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/development.html">Development Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QuTiP: Quantum Toolbox in Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qutip.qip.device.modelprocessor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qutip.qip.device.modelprocessor</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qutip.qobj</span> <span class="kn">import</span> <span class="n">Qobj</span>
+<span class="kn">from</span> <span class="nn">qutip.qobjevo</span> <span class="kn">import</span> <span class="n">QobjEvo</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.operations.gates</span> <span class="kn">import</span> <span class="n">globalphase</span>
+<span class="kn">from</span> <span class="nn">qutip.tensor</span> <span class="kn">import</span> <span class="n">tensor</span>
+<span class="kn">from</span> <span class="nn">qutip.mesolve</span> <span class="kn">import</span> <span class="n">mesolve</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip.qip.device.processor</span> <span class="kn">import</span> <span class="n">Processor</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ModelProcessor&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ModelProcessor"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.ModelProcessor">[docs]</a><span class="k">class</span> <span class="nc">ModelProcessor</span><span class="p">(</span><span class="n">Processor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The base class for a circuit processor simulating a physical device,</span>
+<span class="sd">    e.g cavityQED, spinchain.</span>
+<span class="sd">    The available Hamiltonian of the system is predefined.</span>
+<span class="sd">    The processor can simulate the evolution under the given</span>
+<span class="sd">    control pulses either numerically or analytically.</span>
+<span class="sd">    It cannot be used alone, please refer to the sub-classes.</span>
+<span class="sd">    (Only additional attributes are documented here, for others please</span>
+<span class="sd">    refer to the parent class :class:`.Processor`)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N: int</span>
+<span class="sd">        The number of component systems.</span>
+
+<span class="sd">    correct_global_phase: boolean, optional</span>
+<span class="sd">        If true, the analytical solution will track the global phase. It</span>
+<span class="sd">        has no effect on the numerical solution.</span>
+
+<span class="sd">    t1: list or float</span>
+<span class="sd">        Characterize the decoherence of amplitude damping for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    t2: list of float</span>
+<span class="sd">        Characterize the decoherence of dephasing for</span>
+<span class="sd">        each qubit. A list of size `N` or a float for all qubits.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params: dict</span>
+<span class="sd">        A Python dictionary contains the name and the value of the parameters</span>
+<span class="sd">        in the physical realization, such as laser frequency, detuning etc.</span>
+
+<span class="sd">    correct_global_phase: float</span>
+<span class="sd">        Save the global phase, the analytical solution</span>
+<span class="sd">        will track the global phase.</span>
+<span class="sd">        It has no effect on the numerical solution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">correct_global_phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ModelProcessor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">t2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correct_global_phase</span> <span class="o">=</span> <span class="n">correct_global_phase</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_phase</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="ModelProcessor.to_array"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.ModelProcessor.to_array">[docs]</a>    <span class="k">def</span> <span class="nf">to_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transfer a parameter to an array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">params</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModelProcessor.set_up_params"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.ModelProcessor.set_up_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the parameters in the attribute `params` and check the validity.</span>
+<span class="sd">        (Defined in subclasses)</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        All parameters will be multiplied by 2*pi for simplicity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Parameters should be defined in subclass.&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span>
+
+    <span class="nd">@params</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">par</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">par</span>
+
+<div class="viewcode-block" id="ModelProcessor.run_state"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.ModelProcessor.run_state">[docs]</a>    <span class="k">def</span> <span class="nf">run_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">states</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If `analytical` is False, use :func:`qutip.mesolve` to</span>
+<span class="sd">        calculate the time of the state evolution</span>
+<span class="sd">        and return the result. Other arguments of mesolve can be</span>
+<span class="sd">        given as keyword arguments.</span>
+<span class="sd">        If `analytical` is True, calculate the propagator</span>
+<span class="sd">        with matrix exponentiation and return a list of matrices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        init_state: Qobj</span>
+<span class="sd">            Initial density matrix or state vector (ket).</span>
+
+<span class="sd">        analytical: boolean</span>
+<span class="sd">            If True, calculate the evolution with matrices exponentiation.</span>
+
+<span class="sd">        qc: :class:`.QubitCircuit`, optional</span>
+<span class="sd">            A quantum circuit. If given, it first calls the ``load_circuit``</span>
+<span class="sd">            and then calculate the evolution.</span>
+
+<span class="sd">        states: :class:`qutip.Qobj`, optional</span>
+<span class="sd">         Old API, same as init_state.</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">           Keyword arguments for the qutip solver.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        evo_result: :class:`qutip.solver.Result`</span>
+<span class="sd">            If ``analytical`` is False,  an instance of the class</span>
+<span class="sd">            :class:`qutip.solver.Result` will be returned.</span>
+
+<span class="sd">            If ``analytical`` is True, a list of matrices representation</span>
+<span class="sd">            is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ModelProcessor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_state</span><span class="p">(</span>
+            <span class="n">init_state</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span> <span class="n">analytical</span><span class="o">=</span><span class="n">analytical</span><span class="p">,</span>
+            <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModelProcessor.get_ops_and_u"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.ModelProcessor.get_ops_and_u">[docs]</a>    <span class="k">def</span> <span class="nf">get_ops_and_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the labels for each Hamiltonian.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ctrls: list</span>
+<span class="sd">            The list of Hamiltonians</span>
+<span class="sd">        coeffs: array_like</span>
+<span class="sd">            The transposed pulse matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_coeffs</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModelProcessor.pulse_matrix"><a class="viewcode-back" href="../../../../apidoc/classes.html#qutip.qip.device.ModelProcessor.pulse_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">pulse_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the pulse matrix for the desired physical system.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        t, u, labels:</span>
+<span class="sd">            Returns the total time and label for every operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrls</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_coeffs</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># FIXME This might becomes a problem if new tlist other than</span>
+        <span class="c1"># int the default pulses are added.</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_tlist</span><span class="p">()</span>
+        <span class="n">dt_list</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">tlist</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t_tot</span> <span class="o">=</span> <span class="n">tlist</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num_step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">t_tot</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">t_tot</span><span class="p">,</span> <span class="n">num_step</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ctrls</span><span class="p">),</span> <span class="n">num_step</span><span class="p">))</span>
+
+        <span class="n">t_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dt_list</span><span class="p">)):</span>
+            <span class="n">t_idx_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">dt_list</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
+            <span class="n">mm</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ctrls</span><span class="p">)):</span>
+                <span class="n">u</span><span class="p">[</span><span class="n">mm</span><span class="p">,</span> <span class="n">t_start</span><span class="p">:(</span><span class="n">t_start</span> <span class="o">+</span> <span class="n">t_idx_len</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">t_idx_len</span><span class="p">)</span> <span class="o">*</span>
+                                                        <span class="n">coeffs</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">])</span>
+                <span class="n">mm</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">t_start</span> <span class="o">+=</span> <span class="n">t_idx_len</span>
+
+        <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_operators_labels</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; <a href="../../../../copyright.html">Copyright</a> 2011 to 2021 inclusive, QuTiP developers and contributors.
+      <span class="lastupdated">
+        Last updated on Jan 29, 2024.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
