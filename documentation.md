@@ -11,11 +11,11 @@ title: QuTiP Documentation
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
 <img src="images/rtd.png" />
-<a href="https://qutip.readthedocs.io/en/qutip-5.0.x/">Read the Docs</a>
+<a href="https://qutip.readthedocs.io/en/latest/">Read the Docs</a>
 </div>
 <div class="col-md-3 col-md-offset-1">
 <img src="images/pdf.png" />
-<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-5.0.x/">PDF documentation</a>
+<a href="https://readthedocs.org/projects/qutip/downloads/pdf/latest/">PDF documentation</a>
 </div>
 </div>
 
