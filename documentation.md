@@ -6,7 +6,7 @@ title: QuTiP Documentation
 
 ## Latest releases
 
-### Version 5.1.0
+### Version 5.1.1
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
