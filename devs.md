@@ -1,104 +1,93 @@
 ---
 title: QuTiP Contributors
+layout: new_default
 ---
 
 # QuTiP Contributors
 
-The development of QuTiP is a community based effort with several developers contributing, or helping to add, many new features to the growing list of QuTiP functions:
+The development of QuTiP is a community based effort with several  developers contributing, or helping to add, many new features to the growing list of QuTiP functions.
+The governance process and model for the QuTiP project can be found [here](https://github.com/qutip/governance).
+It also contains a [charter document](https://github.com/qutip/governance/blob/main/governance.md).
+
+<div class="banner">
+    <p>Do you want to contribute to QuTiP? Learn how on our
+    <a href="https://github.com/qutip" target="about:blank">Git Hub page</a>
+    or consider <a href="" target="about:blank">donating.</a></p>
+</div>
 
 ## Original Developers
 
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/paul2.jpg" class="img-polaroid">
-        <h4>Paul Nation</h4>
-        <h5>IBM Q</h5>
-        <h6>Library designer and main contributor</h6>
+        <h3>Paul Nation</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">IBM Q</p>
+        <p>Library designer and main contributor</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/rob.jpg" class="img-polaroid">
-        <h4>Robert Johansson</h4>
-        <h5>Tokyo, Japan</h5>
-        <h6>Library designer and main contributor</h6>
+        <h3>Robert Johansson</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Tokyo, Japan</p>
+        <p>Library designer and main contributor</p>
     </div>
 </div>
 
-## Project Governance
-
-The governance process and model for the QuTiP Project can be found [here](https://github.com/qutip/governance). It contains a [charter document](https://github.com/qutip/governance/blob/main/governance.md).
-
-### Admin Team
+## Admin Team
 
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/alex.jpg" class="img-polaroid">
-        <h4>Alex Pitchford</h4>
-        <h5>Aberystwyth University</h5>
-        <h6>Main focus: Quantum optimal control, solvers.</h6>
+        <h3>Alex Pitchford</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Aberystwyth University</p>
+        <p>Main focus: Quantum optimal control, solvers</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/eric.jpg" class="img-polaroid">
-        <h4>Eric Giguère</h4>
-        <h5>Université de Sherbrooke</h5>
-        <h6>Main focus: Stochastic solvers, code optimization.</h6>
+        <h3>Eric Giguère</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Université de Sherbrooke</p>
+        <p>Main focus: Stochastic solvers, code optimization</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/nathan.jpg" class="img-polaroid">
-        <h4>Nathan Shammah</h4>
-        <h5>RIKEN</h5>
-        <h6>Main focus: Symmetrical models, education and outreach.</h6>
+        <h3>Nathan Shammah</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
+        <p>Main focus: Symmetrical models, education and outreach</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/shahnawaz.jpg" class="img-polaroid">
-        <h4>Shahnawaz Ahmed</h4>
-        <h5>Chalmers</h5>
-        <h6>Main focus: Machine learning, Non-Markovian dynamics.</h6>
+        <h3>Shahnawaz Ahmed</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Chalmers</p>
+        <p>Main focus: Machine learning, Non-Markovian dynamics</p>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/neill.jpg" class="img-polaroid">
-        <h4>Neill Lambert</h4>
-        <h5>RIKEN</h5>
-        <h6>Main focus: Non-Markovian dynamics, counting statistics.</h6>
+        <h3>Neill Lambert</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
+        <p>Main focus: Non-Markovian dynamics, counting statistics</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/boxi.jpg" class="img-polaroid">
-        <h4>Boxi Li</h4>
-        <h5>Forschungszentrum Juelich</h5>
-        <h6>Main focus: Quantum control, Quantum device simulation.</h6>
+        <h3>Boxi Li</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Forschungszentrum Juelich</p>
+        <p>Main focus: Quantum control, Quantum device simulation</p>
     </div>
-    <div class="col-sm-3">
-        <img src="images/jake.jpg" class="img-polaroid">
-        <h4>Jake Lishman</h4>
-        <h5>Imperial College London</h5>
-        <h6>Main focus: Core data model and linear algebra.</h6>
-    </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/simon.jpg" class="img-polaroid">
-        <h4>Simon Cross</h4>
-        <h5>RIKEN</h5>
-        <h6>Main focus: Quantum control, machine learning, general maintenance.</h6>
+        <h3>Simon Cross</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
+        <p>Main focus: Quantum control, machine learning, general maintenance</p>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/asier.jpg" class="img-polaroid">
-        <h4>Asier Galicia</h4>
-        <h5>Forschungszentrum Juelich</h5>
-        <h6>Main focus: Core data model and backends.</h6>
+        <h3>Asier Galicia</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Forschungszentrum Juelich</p>
+        <p>Main focus: Core data model and backends</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
         <img src="images/paul.jpg" class="img-polaroid">
-        <h4>Paul Menczel</h4>
-        <h5>RIKEN</h5>
-        <h6>Main focus: Quantum control, non-Markovian solvers, MPI.</h6>
-    </div>
-    <div class="col-sm-3">
-        <img src="images/patrick.jpg" class="img-polaroid">
-        <h4>Patrick Hopf</h4>
-        <h5>Technical University of Munich</h5>
-        <h6>Main focus: Quantum control.</h6>
+        <h3>Paul Menczel</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
+        <p>Main focus: Quantum control, non-Markovian solvers, MPI</p>
     </div>
     <div class="col-sm-3">
         <img src="images/yite.jpg" class="img-polaroid">
@@ -116,75 +105,63 @@ The governance process and model for the QuTiP Project can be found [here](https
     </div>
 </div>
 
-### Board Members
+## Board Members
 
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/anton-frisk-kockum.jpeg" class="img-polaroid">
-        <h4>Anton Frisk Kockum</h4>
-        <h5>Chalmers University of Technology</h5>
+        <h3>Anton Frisk Kockum</h3>
+        <p style="font-weight: bold">Chalmers University of Technology</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/daniel-burgarth.jpeg" class="img-polaroid">
-        <h4>Daniel Burgarth</h4>
-        <h5>Macquarie University</h5>
+        <h3>Daniel Burgarth</h3>
+        <p style="font-weight: bold">Macquarie University</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/franco.jpg" class="img-polaroid">
-        <h4>Franco Nori</h4>
-        <h5>RIKEN / University of Michigan</h5>
+        <h3>Franco Nori</h3>
+        <p style="font-weight: bold">RIKEN / University of Michigan</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/rob.jpg" class="img-polaroid">
-        <h4>Rob Johansson</h4>
-        <h5>Rakuten</h5>
+        <h3>Rob Johansson</h3>
+        <p style="font-weight: bold">Rakuten</p>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/will-zeng.jpeg" class="img-polaroid">
-        <h4>Will Zeng</h4>
-        <h5>Unitary Fund</h5>
+        <h3>Will Zeng</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Unitary Fund</p>
     </div>
 </div>
 
 
-### Core Contributors
+## Past Members
 
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/arne.jpg" class="img-polaroid">
-        <h4>Arne Grimsmo</h4>
-        <h5>Université de Sherbrooke</h5>
+        <h3>Arne Grimsmo</h3>
+        <p style="font-weight: bold">Université de Sherbrooke</p>
     </div>
-    <div class="col-sm-3">
+    <div class="col-lg-3 col-md-4 col-sm-6">
         <img src="images/chris.jpg" class="img-polaroid">
-        <h4>Chris Grenade</h4>
-        <h5>University of Sydney</h5>
+        <h3>Chris Grenade</h3>
+        <p style="font-weight: bold">University of Sydney</p>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
+        <img src="images/jake.jpg" class="img-polaroid">
+        <h3>Jake Lishman</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Imperial College London</p>
+        <p>Main focus: Core data model and linear algebra</p>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
+        <img src="images/patrick.jpg" class="img-polaroid">
+        <h3>Patrick Hopf</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">Technical University of Munich</p>
+        <p>Main focus: Quantum control</p>
     </div>
 </div>
 
 
-### Additional Developers
-
-<div class="row">
-    <div class="col-sm-4">
-        <ul>
-        <li>Denis Vasilyev (Leibniz)</li>
-        <li>Kevin Fischer (Stanford)</li>
-        <li>Anubhav Vardhan (New Dehli, India)</li>
-         <li>Markus Baden (Zurich, Switzerland)</li>
-        </ul>
-    </div>
-    <div class="col-sm-4">
-         <ul>
-         <li>Jonathan Zoller (Ulm University)</li>
-         <li>Ben Criger (RWTH Aachen)</li>
-         <li>Ben Bartlett (Stanford)</li>
-         <li>Piotr Migdał (Warsaw, Poland)</li>
-
-         </ul>
-    </div>
-</div>
-
-For a complete and up-to-date list of contributors, check out the Github pages ([code](https://github.com/qutip/qutip/graphs/contributors), [https://github.com/qutip/qutip-notebooks/graphs/contributors](notebooks)).
+For a complete and up-to-date list of contributors, check out [the Git Hub pages](https://github.com/qutip).
