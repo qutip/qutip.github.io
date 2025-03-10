@@ -9,6 +9,8 @@ The development of QuTiP is a community based effort with several  developers co
 The governance process and model for the QuTiP project can be found [here](https://github.com/qutip/governance).
 It also contains a [charter document](https://github.com/qutip/governance/blob/main/governance.md).
 
+For the detailled list of all our contributors, check out [the Git Hub pages](https://github.com/qutip).
+
 <div class="banner">
     <p>Do you want to contribute to QuTiP? Learn how on our
     <a href="https://github.com/qutip" target="about:blank">Git Hub page</a>
@@ -89,6 +91,12 @@ It also contains a [charter document](https://github.com/qutip/governance/blob/m
         <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
         <p>Main focus: Quantum control, non-Markovian solvers, MPI</p>
     </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-10">
+        <img src="images/yite.png" class="img-polaroid">
+        <h3>Yi-Te Huang</h3>
+        <p style="font-weight: bold; margin-bottom: 0;">NCKU</p>
+        <p>Main focus: Quantum Toolbox Julia, non-Markovian dynamics</p>
+    </div>
 </div>
 
 ## Board Members
@@ -148,6 +156,3 @@ It also contains a [charter document](https://github.com/qutip/governance/blob/m
         <p>Main focus: Quantum control</p>
     </div>
 </div>
-
-
-For a complete and up-to-date list of contributors, check out [the Git Hub pages](https://github.com/qutip).
