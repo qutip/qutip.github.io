@@ -3,7 +3,7 @@ title: QuTiP Contributors
 layout: new_default
 ---
 
-<div class="container-xxl">
+<div class="container-xxl px-3">
     <h1>QuTiP Contributors</h1>
     <p>
         The development of QuTiP is a community based effort with several  developers contributing, or helping to add, many new features to the growing list of QuTiP functions.
@@ -15,7 +15,7 @@ layout: new_default
     </p>
 </div>
 
-<div class="container-xxl">
+<div class="container-xxl px-3">
     <div class="banner">
         <p>Do you want to contribute to QuTiP? Learn how on our
         <a href="https://github.com/qutip" target="about:blank">Git Hub page</a>
@@ -23,7 +23,7 @@ layout: new_default
     </div>
 </div>
 
-<div class="container-xxl">
+<div class="container-xxl px-3">
     <h2>Original Developers</h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
@@ -42,7 +42,7 @@ layout: new_default
 </div>
 
 
-<div class="container-xxl">
+<div class="container-xxl px-3">
     <h2>Admin Team</h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
@@ -115,7 +115,7 @@ layout: new_default
 </div>
 
 
-<div class="container-xxl">
+<div class="container-xxl px-3">
     <h2>Board Members</h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
@@ -146,7 +146,7 @@ layout: new_default
     </div>
 </div>
 
-<div class="container-xxl">
+<div class="container-xxl px-3">
     <h2>Past Members</h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
