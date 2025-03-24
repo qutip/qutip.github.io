@@ -69,10 +69,12 @@ layout: new_default
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
             <h5>Complex Systems Easily Explained</h5>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-            <div class="mx-auto mx-md-0">
+            <a href="https://qutip.org/qutip-virtual-lab/" class="mx-auto mx-md-0">
                 <span class="badge primary">Enter QuTiP Virtual Lab</span>
-            </div>
+            </a>
         </div>
         <img class="col-md-6 col-s-12 m-auto image" src="images/qutip-virtual-lab.png">
     </div>
 </div>
+
+{% include new_donate.html %}
