@@ -77,4 +77,34 @@ layout: new_default
     </div>
 </div>
 
+<div class="container-fluid px-0 my-center-section my-bg-secondary">
+    <div class="container-xxl pb-3">
+        <h2>Hand-Crafted Lectures using QuTiP</h2>
+        <p>These lecture-style notebooks focus on particular quantum mechanics topics and their numerical analysis using QuTiP.</p>
+        <ul class="list-group list-group-flush lecture-list">
+            {% for lecture in site.data.lectures.visible %}
+                <li class="list-group-item notebook-list-item">
+                    <a href="{{ lecture.url }}" class="d-flex justify-content-between align-items-center">
+                        <span>{{ lecture.title }}</span>
+                        <span class="angle">&#8250;</span>
+                    </a>
+                </li>
+            {% endfor %}
+            <div class="collapse list-group-flush" id="more-items">
+                {% for lecture in site.data.lectures.hidden %}
+                    <li class="list-group-item notebook-list-item">
+                        <a href="{{ lecture.url }}" class="d-flex justify-content-between align-items-center">
+                            <span>{{ lecture.title }}</span>
+                            <span class="angle">&#8250;</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </div>
+        </ul>
+        <button class="my-3 btn-show-more" type="button" data-bs-toggle="collapse" data-bs-target="#more-items" aria-expanded="false" aria-controls="more-items" id="show-more-btn">
+            Show More
+        </button>
+    </div>
+</div>
+
 {% include new_donate.html %}
