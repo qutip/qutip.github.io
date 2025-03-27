@@ -3,28 +3,35 @@ title: QuTiP Contributors
 layout: new_default
 ---
 
-<div class="container-xxl px-3">
-    <h1>QuTiP Contributors</h1>
-    <p>
-        The development of QuTiP is a community based effort with several  developers contributing, or helping to add, many new features to the growing list of QuTiP functions.
-        The governance process and model for the QuTiP project can be found <a href="https://github.com/qutip/governance">here</a>.
-        It also contains a <a href="https://github.com/qutip/governance/blob/main/governance.md">charter document</a>.
-    </p>
-    <p>
-        For the detailled list of all our contributors, check out <a href="https://github.com/qutip">the Git Hub pages</a>.
-    </p>
-</div>
+# QuTiP Contributors
+
+The development of QuTiP is a community based effort with several  developers contributing, or helping to add, many new features to the growing list of QuTiP functions.
+The governance process and model for the QuTiP project can be found [here](https://github.com/qutip/governance).
+It also contains a [charter document](https://github.com/qutip/governance/blob/main/governance.md).
+
+For the detailled list of all our contributors, check out [our Git Hub repositories](https://github.com/qutip).
+
 
 <div class="container-xxl px-3">
     <div class="banner">
-        <p>Do you want to contribute to QuTiP? Learn how on our
-        <a href="https://github.com/qutip" target="about:blank">Git Hub page</a>
-        or consider <a href="" target="about:blank">donating.</a></p>
+        <p>
+            Do you want to contribute to QuTiP? Learn how on
+            <a href="https://github.com/qutip" target="about:blank">
+                Git Hub
+            </a>
+            or consider 
+            <a href="" target="about:blank">
+                donating.
+            </a>
+        </p>
     </div>
 </div>
 
+
 <div class="container-xxl px-3">
-    <h2>Original Developers</h2>
+    <h2>
+        Original Developers
+    </h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
             <img src="images/paul2.jpg" class="img-polaroid">
@@ -43,7 +50,9 @@ layout: new_default
 
 
 <div class="container-xxl px-3">
-    <h2>Admin Team</h2>
+    <h2>
+        Admin Team
+    </h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
             <img src="images/alex.jpg" class="img-polaroid">
@@ -116,7 +125,9 @@ layout: new_default
 
 
 <div class="container-xxl px-3">
-    <h2>Board Members</h2>
+    <h2>
+        Board Members
+    </h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
             <img src="images/anton-frisk-kockum.jpeg" class="img-polaroid">
@@ -146,8 +157,11 @@ layout: new_default
     </div>
 </div>
 
+
 <div class="container-xxl px-3">
-    <h2>Past Members</h2>
+    <h2>
+        Past Members
+    </h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
             <img src="images/arne.jpg" class="img-polaroid">
