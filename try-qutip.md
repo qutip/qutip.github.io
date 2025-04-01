@@ -27,9 +27,23 @@ caveats and a description of how it was built below.
 
 Contents:
 
+ - What's installed
  - Caveats
  - Contributing
  - How the try-qutip site is built
+
+
+## What's installed
+
+Currently installed packages include:
+
+ - qutip (5.1.1)
+ - qutip-qip (0.4.0)
+ - qutip-qtrl (0.1.5)
+ - numpy (2.2.4)
+ - scipy (1.14.1)
+ - matplotlib (3.10.1)
+ - python (3.13.1)
 
 
 ## Caveats
@@ -43,8 +57,11 @@ Most QuTiP features already work. These are the known limitations:
    internal storage and might be lost if, for example, the browser cache
    is cleared. If you do create notebooks you'd like to keep, please
    use the download button to save them.</em>
-  - Notebooks are slow to start, but performance is not too bad after that.
-  - Having to select the XPython kernel all the time is not ideal.
+ - Notebooks are slow to start, but performance is not too bad after that.
+ - Having to select the XPython kernel all the time is not ideal.
+
+Specific known issues are listed in [try-qutip's GitHub issues](https://github.com/qutip/try-qutip/issues/).
+Further issues and bugs may be reported there.
 
 
 ## Contributing
