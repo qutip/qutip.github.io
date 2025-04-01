@@ -17,11 +17,64 @@ The recommended way to install QuTiP is with conda or pip, see the
 
 ## Latest releases
 
+### Verion 5.1.1 - 15 January 2025
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.1.1.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.1.1.tar.gz">v5.1.1.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.1.0.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.1.1.zip">v5.1.1.zip</a>
+
+
+### Version 4.7.6 - 5 April 2024
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-4.7.6.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v4.7.6.tar.gz">v4.7.6.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-4.7.6.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v4.7.6.zip">v4.7.6.zip</a>
+
+
+## Recent minor releases
+
+### Verion 5.1.0 - 19 December 2024
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.1.0.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.1.0.tar.gz">v5.1.0.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.1.0.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.1.0.zip">v5.1.0.zip</a>
+
+### Verion 5.0.4 - 3 September 2024
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.4.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.4.tar.gz">v5.0.4.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.4.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.4.zip">v5.0.4.zip</a>
+
+### Verion 5.0.3 - 28 June 2024
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.3.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.3.tar.gz">v5.0.3.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.3.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.3.zip">v5.0.3.zip</a>
+
+### Verion 5.0.2 - 17 May 2024
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.2.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.2.tar.gz">v5.0.2.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.2.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.2.zip">v5.0.2.zip</a>
+
+### Verion 5.0.1 - 3 April 2024
+
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.1.tar.gz']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.1.tar.gz">v5.0.1.tar.gz</a>
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.1.zip']); void(0);"
+      href="https://github.com/qutip/qutip/archive/v5.0.1.zip">v5.0.1.zip</a>
+
 ### Verion 5.0.0 - 28 March 2024
 
  - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.0.tar.gz']); void(0);"
       href="https://github.com/qutip/qutip/archive/v5.0.0.tar.gz">v5.0.0.tar.gz</a>
- - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-4.7.5.zip']); void(0);"
+ - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-5.0.0.zip']); void(0);"
       href="https://github.com/qutip/qutip/archive/v5.0.0.zip">v5.0.0.zip</a>
 
 
@@ -32,8 +85,6 @@ The recommended way to install QuTiP is with conda or pip, see the
  - <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip','qutip-4.7.5.zip']); void(0);"
       href="https://github.com/qutip/qutip/archive/v4.7.5.zip">v4.7.5.zip</a>
 
-
-## Recent minor releases
 
 ### Version 4.7.4 - 18 January 2024
 

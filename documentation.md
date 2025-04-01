@@ -6,20 +6,20 @@ title: QuTiP Documentation
 
 ## Latest releases
 
-### Version 5.0.0
+### Version 5.1.1
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
 <img src="images/rtd.png" />
-<a href="https://qutip.readthedocs.io/en/qutip-5.0.x/">Read the Docs</a>
+<a href="https://qutip.readthedocs.io/en/qutip-5.1.x/">Read the Docs</a>
 </div>
 <div class="col-md-3 col-md-offset-1">
 <img src="images/pdf.png" />
-<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-5.0.x/">PDF documentation</a>
+<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-5.1.x/">PDF documentation</a>
 </div>
 </div>
 
-### Version 4.7.5
+### Version 4.7.6
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -33,6 +33,19 @@ title: QuTiP Documentation
 </div>
 
 ## Previous releases
+
+### Version 5.0.4
+
+<div class="row">
+<div class="col-md-3 col-md-offset-1">
+<img src="images/rtd.png" />
+<a href="https://qutip.readthedocs.io/en/qutip-5.0.x/">Read the Docs</a>
+</div>
+<div class="col-md-3 col-md-offset-1">
+<img src="images/pdf.png" />
+<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-5.0.x/">PDF documentation</a>
+</div>
+</div>
 
 ### Version 4.7.5 (archived)
 

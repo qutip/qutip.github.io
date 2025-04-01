@@ -94,6 +94,12 @@ The governance process and model for the QuTiP Project can be found [here](https
         <h5>RIKEN</h5>
         <h6>Main focus: Quantum control, non-Markovian solvers, MPI.</h6>
     </div>
+    <div class="col-sm-3">
+        <img src="images/patrick.jpg" class="img-polaroid">
+        <h4>Patrick Hopf</h4>
+        <h5>Technical University of Munich</h5>
+        <h6>Main focus: Quantum control.</h6>
+    </div>
 </div>
 
 ### Board Members
