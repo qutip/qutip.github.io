@@ -110,3 +110,6 @@ With the help of Wolf and Martin from QuantStack, we created a
 [QuTiP package on emscripten-forge](https://beta.mamba.pm/channels/emscripten-forge/packages/qutip).
 The recipe for building the package can be found in the
 [emscripten-forge/recipes](https://github.com/emscripten-forge/recipes) repository.
+
+An additional big thank you to Thorsten Beier from QuantStack for fixing
+numerous small niggles and thus allowing QuTiP 5 to deployed to try-qutip.
