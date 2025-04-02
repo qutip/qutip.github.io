@@ -68,7 +68,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
         <p class="px-3">
             QuTiP is optimized for performance, completely open-source and tested by thousands of users.
         </p>
-        <div class="features row row-cols-md-3 row-cols-sm-2 row-cols-1">
+        <div class="features row mx-0 row-cols-md-3 row-cols-sm-2 row-cols-1">
             <div class="card col">
                 <img class="card-img-top" src="images/py_logo.png">
                 <div class="card-body">
