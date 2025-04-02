@@ -50,9 +50,9 @@ Currently installed packages include:
 
 Most QuTiP features already work. These are the known limitations:
 
- - A recent version of Firefox or Chrome is required.</li>
- - QobjEvo objects cannot currently be usefully compiled.</li>
- - Cython is not yet availabe.</li>
+ - A recent version of Firefox or Chrome is required.
+ - QobjEvo objects cannot currently be usefully compiled.
+ - Cython is not yet available.
  - You can save notebooks but, they are <em>stored in your web browser's
    internal storage and might be lost if, for example, the browser cache
    is cleared. If you do create notebooks you'd like to keep, please
