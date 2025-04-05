@@ -21,9 +21,11 @@ XPython kernel (there is only one option) and then the notebook will open.
 The first imports will be slightly slow, but after that the performance
 should be similar to that of running QuTiP locally.
 
+<div class="alert alert-warning" role="alert">
 Running QuTiP this way relies on a complex set of underlying layers of
-software that are still maturing. You can read about some of the minor
+software that are still maturing. You can read about some of the
 caveats and a description of how it was built below.
+</div>
 
 Contents:
 
@@ -51,14 +53,13 @@ Currently installed packages include:
 Most QuTiP features already work. These are the known limitations:
 
  - A recent version of Firefox or Chrome is required.
- - QobjEvo objects cannot currently be usefully compiled.
- - Cython is not yet available.
+ - Cython is not yet available so QobjEvo objects cannot currently
+   be usefully compiled.
  - You can save notebooks but, they are <em>stored in your web browser's
    internal storage and might be lost if, for example, the browser cache
    is cleared. If you do create notebooks you'd like to keep, please
    use the download button to save them.</em>
  - Notebooks are slow to start, but performance is not too bad after that.
- - Having to select the XPython kernel all the time is not ideal.
 
 Specific known issues are listed in [try-qutip's GitHub issues](https://github.com/qutip/try-qutip/issues/).
 Further issues and bugs may be reported there.
@@ -101,10 +102,10 @@ that one needs a suitable compiler, in this case,
 [Emscripten](https://emscripten.org).
 
 Lastly, we need to compile QuTiP itself. The amazing team at
-[QuantStac](https://quantstack.net/) are building
+[QuantStack](https://quantstack.net/) are building
 [emscripten-forge](https://beta.mamba.pm/channels/emscripten-forge/packages/?tab=packages)
-which is like [conda-forge](https://conda-forge.org/) but for building packages for
-WebAssembly.
+which is like [conda-forge](https://conda-forge.org/) but for building packages
+for WebAssembly.
 
 With the help of Wolf and Martin from QuantStack, we created a
 [QuTiP package on emscripten-forge](https://beta.mamba.pm/channels/emscripten-forge/packages/qutip).
