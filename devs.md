@@ -104,7 +104,7 @@ The governance process and model for the QuTiP Project can be found [here](https
         <img src="images/yite.jpg" class="img-polaroid">
         <h4>Yi-Te Huang</h4>
         <h5>NCKU, Taiwan</h5>
-        <h6>Main focus: Quantum Toolbox Julia, non-Markovian dynamics</h6>
+        <h6>Main focus: Julia lang., non-Markovian dynamics</h6>
     </div>
 </div>
 <div class="row">
@@ -112,7 +112,7 @@ The governance process and model for the QuTiP Project can be found [here](https
         <img src="images/alberto.jpg" class="img-polaroid">
         <h4>Alberto Mercurio</h4>
         <h5>EPFL, Switzerland</h5>
-        <h6>Main focus: Quantum Toolbox Julia, quantum optomechanics</h6>
+        <h6>Main focus: Julia lang., quantum optomechanics</h6>
     </div>
 </div>
 
