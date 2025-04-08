@@ -100,6 +100,20 @@ The governance process and model for the QuTiP Project can be found [here](https
         <h5>Technical University of Munich</h5>
         <h6>Main focus: Quantum control.</h6>
     </div>
+    <div class="col-sm-3">
+        <img src="images/yite.jpg" class="img-polaroid">
+        <h4>Yi-Te Huang</h4>
+        <h5>NCKU, Taiwan</h5>
+        <h6>Main focus: Julia lang., non-Markovian dynamics</h6>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <img src="images/alberto.jpg" class="img-polaroid">
+        <h4>Alberto Mercurio</h4>
+        <h5>EPFL, Switzerland</h5>
+        <h6>Main focus: Julia lang., quantum optomechanics</h6>
+    </div>
 </div>
 
 ### Board Members
