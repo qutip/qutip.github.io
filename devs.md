@@ -112,13 +112,13 @@ For the detailled list of all our contributors, check out [our Git Hub repositor
             <img src="images/yite.jpg" class="img-polaroid">
             <h3>Yi-Te Huang</h3>
             <p style="font-weight: bold; margin-bottom: 0;">NCKU, Taiwan</p>
-            <p>Main focus: Quantum Toolbox Julia, non-Markovian dynamics</p>
+            <p>Main focus: Julia lang., non-Markovian dynamics</p>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
             <img src="images/alberto.jpg" class="img-polaroid">
             <h3>Alberto Mercurio</h3>
             <p style="font-weight: bold; margin-bottom: 0;">EPFL, Switzerland</p>
-            <p>Main focus: Quantum Toolbox Julia, quantum optomechanics</p>
+            <p>Main focus: Julia lang., quantum optomechanics</p>
         </div>
     </div>
 </div>
