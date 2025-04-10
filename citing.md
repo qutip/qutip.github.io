@@ -1,5 +1,6 @@
 ---
 title: QuTiP Citing
+layout: new_default
 ---
 
 # Citing QuTiP

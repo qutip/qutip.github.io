@@ -1,5 +1,6 @@
 ---
 title: Trying QuTiP in the Browser
+layout: new_default
 ---
 
 # Trying QuTiP in the Browser
