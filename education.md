@@ -1,6 +1,5 @@
 ---
 title: QuTiP in Education
-layout: new_default
 ---
 
 # For Educators
@@ -97,4 +96,4 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     </div>
 </div>
 
-{% include new_donate.html %}
+{% include donate.html %}

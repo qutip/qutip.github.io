@@ -1,6 +1,6 @@
 ---
 title: QuTiP Contributors
-layout: new_default
+layout: default
 ---
 
 # QuTiP Contributors
@@ -188,4 +188,4 @@ For the detailled list of all our contributors, check out [our Git Hub repositor
     </div>
 </div>
 
-{% include new_supp_org.html %}
+{% include supp_org.html %}

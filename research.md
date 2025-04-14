@@ -1,6 +1,5 @@
 ---
 title: QuTiP in Research
-layout: new_default
 ---
 
 # For Researchers
@@ -138,5 +137,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     </div>
 </div>
 
-{% include new_supp_org.html %}
-{% include new_donate.html %}
+{% include supp_org.html %}
+{% include donate.html %}
