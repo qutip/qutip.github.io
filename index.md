@@ -1,0 +1,154 @@
+---
+title: Quantum Toolbox in Python
+---
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="banner" style="margin-top: 0;">
+                    <p id="cite"></p>
+                </div>
+            </div>
+        </div>
+
+<!-- <div class="col-md-12">
+<div class="alert alert-success">
+<p id="job"></p>
+</div>
+</div>-->
+
+
+<script>
+    var lng = navigator.language;
+    var txt;
+    if (lng.indexOf("zh") !== -1)
+    {
+        txt = "感谢您使用QuTiP。如果您在论文中使用了QuTiP，请您记得引用本篇论文。";
+    }
+    else if (lng.indexOf("ja") !== -1)
+    {
+        txt = "QuTiPのご利用ありがとうございます。 このソフトウェアを使っている出版物に、QuTiPの論文を引用するのを忘れないでください。";
+    }
+    else
+    {
+        txt = "We hope you enjoy using QuTiP.  Please help us make QuTiP better by citing it in your publications.";
+    }
+    document.getElementById("cite").innerHTML = txt;
+</script>
+
+
+<!-- <script>
+    var txt;
+    {
+        txt = "A Technical Staff position for QuTiP is available, check it out under the <a href='jobs.html'>jobs</a> page.";
+    }
+    document.getElementById("job").innerHTML = txt;
+</script> -->
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            QuTiP is open-source software for simulating the dynamics of open quantum systems.  The QuTiP library depends on the excellent <a href='https://www.numpy.org'>Numpy</a>, <a href='https://www.scipy.org'>Scipy</a>, and <a href='https://cython.org'>Cython</a> numerical packages. In addition, graphical output is provided by <a href='https://matplotlib.org'>Matplotlib</a>.  QuTiP aims to provide user-friendly and efficient numerical simulations of a wide variety of Hamiltonians, including those with arbitrary time-dependence, commonly found in a wide range of physics applications such as quantum optics, trapped ions, superconducting circuits, and quantum nanomechanical resonators. QuTiP is freely available for use and/or modification on all major platforms such as Linux, Mac OSX, and Windows<sup>*</sup>. Being free of any licensing fees, QuTiP is ideal for exploring quantum mechanics and dynamics in the classroom.
+        </p>
+        <p style='font-size:10px'><sup>*</sup>QuTiP is developed on Unix platforms only, and some features may not be available under Windows.</p>
+    </div>
+</div>
+
+<div class="row" style='margin-top:20px'>
+    <div class="col-md-6">
+        <img src="images/corp_users.png">
+    </div>
+    <div class="col-md-5">
+        <p>
+            From the classroom to the corporate office, QuTiP is used around the world to advance research in quantum optics, quantum information, quantum open systems, optomechanics, and many related fields.  QuTiP is in use at nearly every single research university around the globe, government-funded research labs, and is relied upon by every major corporation focused on developing a quantum computer.
+        </p>
+    </div>
+</div>
+
+
+
+<div class="row" style='margin-top:20px'>
+    <div class="col-md-5">
+        <p style='margin-top:20px'>
+            QuTiP is already being used at a variety of institutions around the globe, and has been downloaded more than a million times since its initial release.  Need
+            help in simulating a tricky problem? Our large community of users are gracious enough to take a moment of their time and help in tackling even the most esoteric of issues.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <center><h4>Distribution of the 39,420 Unique Visitors in 2020</h4></center>
+        <div id='container1' style='margin-top:10px; position: relative;height: 250px;width: 400px;'></div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 id="supporting-organizations">Supporting Organizations</h2>
+        <p>
+            Developers from <a href="https://dml.riken.jp/" target="about:blank">Nori's Lab</a>,
+            <a href="https://www.physique.usherbrooke.ca/blais/" target="about:blank">Blais' Lab</a> and
+            <a href="https://qfort.ncku.edu.tw/peoples/9" target="about:blank">Yueh-Nan Chen's group</a> have been actively contributing to QuTiP.
+        </p>
+        <div class="col-md-6">
+            <a href="https://dml.riken.jp" target="about:blank"><img src="images/riken-logo.png" style='max-height:100px'></a>
+        </div>
+        <div class="col-md-6">
+            <a href="https://www.usherbrooke.ca/iq/en/" target="about:blank"><img src="images/inst_quant_sher.png"></a>
+        </div>
+        <div class="col-md-6">
+            <a href="https://qfort.ncku.edu.tw/" target="about:blank"><img src="images/qfort.png" style="margin: 1rem 0;"></a>
+        </div>
+        <div class="col-md-6">
+            <a href="https://www.ncku.edu.tw/" target="about:blank"><img src="images/ncku.png" style='max-height:100px'></a>
+        </div>
+    </div>
+</div>
+<br>
+<p>QuTiP is currently supported by these organizations:</p>
+<div class="row">
+    <div class="col-md-4">
+        <a href="https://www.jst.go.jp/moonshot/en/index.html"><img src="images/moonshot-program-jst.png"></a>
+    </div>
+</div>
+
+<br>
+<div class="row">
+    <p>QuTiP is proud to be affiliated to:</p>
+    <div class="col-md-5">
+        <a href="https://numfocus.org/"><img src="images/numfocus.png"></a>
+    </div>
+    <div class="col-md-5">
+        <a href="https://unitary.fund/"><img src="images/unitaryfund.png"></a>
+    </div>
+</div>
+
+<br>
+<div class="row">
+    <p>The development of QuTiP was partially supported by the following organizations:</p>
+    <div class="col-md-4">
+        <a href="https://www.aber.ac.uk/en/about-us/faculties/business-physical-sciences/"><img src="images/aber_uni.png"></a>
+    </div>
+    <div class="col-md-3">
+        <a href="https://physics.korea.ac.kr/"><img src="images/korea-logo.png"></a>
+    </div>
+    <div class="col-md-3">
+        <a href="https://www.jsps.go.jp/english/"><img src="images/jsps.jpg"></a>
+    </div>
+    <div class="col-md-4">
+        <a href="https://www.jst.go.jp/kisoken/presto/en/"><img src="images/presto.jpg"></a>
+    </div>
+</div>
+
+<br>
+<div class="row">
+    <p>We also thank Google for their support through the Google Summer of Code program.</p>
+</div>
+
+</div> <!-- col-md-9 main content div -->
+
+{% include old_sidebar.html %}
+
+</div> <!-- main row div -->
