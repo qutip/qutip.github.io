@@ -1,21 +1,14 @@
 ---
 title: QuTiP News
 ---
-{% include old_header.html %}
-{% include old_navbar.html %}
 
-<div class="row">
-<div class="col-md-12">
-<h1 style="margin-bottom:20px">QuTiP News</h1>
-</div>
-</div>
-<br>
+# QuTiP News
 
 <hr>
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>Mar 7, 2023</p>
+        <p>Mar 7, 2023</p>
         <h4>QuTiP 2022 Annual Report
 </h4>
     </div>
@@ -27,7 +20,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>Feb 6, 2023</p>
+        <p>Feb 6, 2023</p>
         <h4>Google Summer of Code 2023 is coming!
 </h4>
     </div>
@@ -41,7 +34,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>December 12, 2022</p>
+        <p>December 12, 2022</p>
         <h4>QuTiP 4.7.1 Released
 </h4>
     </div>
@@ -55,7 +48,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>November 23, 2022</p>
+        <p>November 23, 2022</p>
         <h4>New QuTiP Tutorials and Benchmarks Pages Added to the Website
 </h4>
     </div>
@@ -68,7 +61,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>November 16, 2022</p>
+        <p>November 16, 2022</p>
         <h4>QuTiP Reaches 1 Milion Downloads
 </h4>
     </div>
@@ -83,7 +76,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>November 7, 2022</p>
+        <p>November 7, 2022</p>
         <h4>QuTiP highlighted in the 2022 Quantum Open Source Software Survey
 </h4>
     </div>
@@ -95,7 +88,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>October 26, 2022</p>
+        <p>October 26, 2022</p>
         <h4>2022 QuTiP Student Presentations (GSoC Projects)
 </h4>
     </div>
@@ -109,7 +102,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>September 6, 2022</p>
+        <p>September 6, 2022</p>
         <h4>QuTiP Workshop at Quantum Africa Summer School in Kigali, Rwanda
 </h4>
     </div>
@@ -122,7 +115,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>July 1, 2022</p>
+        <p>July 1, 2022</p>
         <h4>QuTiP 2022 Google Summer of Code Projects Announced
 </h4>
     </div>
@@ -137,7 +130,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>April 15, 2022</p>
+        <p>April 15, 2022</p>
         <h4>QuTiP 2022 Google Summer of Code Proposals Due!
 </h4>
     </div>
@@ -151,7 +144,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>April 13, 2022</p>
+        <p>April 13, 2022</p>
         <h4>QuTiP 4.7 Released
 </h4>
     </div>
@@ -165,7 +158,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>April 11, 2022</p>
+        <p>April 11, 2022</p>
         <h4>QuTiP 2021 Annual Report
 </h4>
     </div>
@@ -177,7 +170,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>June 7, 2021</p>
+        <p>June 7, 2021</p>
         <h4>2021 Google Summer of Code Project Updates
 </h4>
     </div>
@@ -191,7 +184,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>March 18, 2021</p>
+        <p>March 18, 2021</p>
         <h4>Technical Staff Position for QuTiP Available at RIKEN</h4>
     </div>
 <div class="col-md-4" style='margin-top: 25px'>
@@ -202,7 +195,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>March 15, 2021</p>
+        <p>March 15, 2021</p>
         <h4>QuTiP applies to Google Summer of Code 2021 under the NumFOCUS organization.
 </h4>
     </div>
@@ -216,7 +209,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>June 22, 2020</p>
+        <p>June 22, 2020</p>
         <h4>2020 Google Summer of Code Project Updates
 </h4>
     </div>
@@ -230,7 +223,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>April 6, 2020</p>
+        <p>April 6, 2020</p>
         <h4>Unitary Fund supports QuTiP development through remote mentorships.
 </h4>
     </div>
@@ -243,7 +236,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>March 16, 2020</p>
+        <p>March 16, 2020</p>
         <h4>Student applications open for Google Summer of Code 2020.
 </h4>
     </div>
@@ -256,7 +249,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>December 12, 2019</p>
+        <p>December 12, 2019</p>
         <h4>Krotov is a new quantum optimal control library built on top of QuTiP.
 </h4>
     </div>
@@ -269,7 +262,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>November 31, 2019</p>
+        <p>November 31, 2019</p>
         <h4>QuTiP is listed as an available project in Kharagpur Winter of Code for Indian Institute of Technology students</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -280,7 +273,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>September 11, 2019</p>
+        <p>September 11, 2019</p>
         <h4>QuTiP features for quantum information science are presented in a talk at IQIS 2019 in Milan, Italy</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -291,7 +284,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>September 3-4, 2019</p>
+        <p>September 3-4, 2019</p>
         <h4>QuTiP joins the European open-source community of scientist using Python at EuroScipy 2019 in Bilbao, Spain</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -303,7 +296,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>July 23, 2019</p>
+        <p>July 23, 2019</p>
         <h4>Two students working on QuTiP projects for Google Summer of Code</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -315,7 +308,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>July 3, 2019</p>
+        <p>July 3, 2019</p>
         <h4>QuTiP 4.4.0 is released. Available with conda and pip.</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -326,7 +319,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>June 25, 2019</p>
+        <p>June 25, 2019</p>
         <h4>An interactive course on QuTiP and open source for physicists is taught at ICTP Trieste, Italy</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -337,7 +330,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>March 19, 2019</p>
+        <p>March 19, 2019</p>
         <h4>QuTiP Poster Presented at the Coherent Network Computing Conference in Atsugi, Japan</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -349,7 +342,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>March 1, 2019</p>
+        <p>March 1, 2019</p>
         <h4>QuTiP Participates to Google Summer of Code 2019 trough NumFOCUS</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -361,7 +354,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>February 21, 2019</p>
+        <p>February 21, 2019</p>
         <h4>First QuTiP Developers Workshop Held at RIKEN on February 19-21, 2019</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -372,7 +365,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>Feruary 2, 2019</p>
+        <p>Feruary 2, 2019</p>
         <h4>QuTiP is Presented at FOSDEM 2019 in Bruxelles, Belgium</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -384,7 +377,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>January 26, 2019</p>
+        <p>January 26, 2019</p>
         <h4>QuTiP is Presented in an Invited Talk at the RIKEN Berkeley Workshop on Quantum Information Science</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -396,7 +389,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>January 9, 2019</p>
+        <p>January 9, 2019</p>
         <h4>QuTiP is Featured on Nature's Physics Blog</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -407,7 +400,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>November 19, 2018</p>
+        <p>November 19, 2018</p>
         <h4>QuTiP Featured in a Talk at PyData 2018 in Warsaw, Poland</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -419,7 +412,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>August 31, 2018</p>
+        <p>August 31, 2018</p>
         <h4>QuTiP is Presented at a European Meeting of Researchers Using Python, Trento, Italy </h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -430,7 +423,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>June 3, 2018</p>
+        <p>June 3, 2018</p>
         <h4>QuTiP Featured at the ImPACT School on Interdisciplinary Quantum Physics and Computer Science, Toyama, Japan</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -441,7 +434,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>April 26, 2018</p>
+        <p>April 26, 2018</p>
         <h4>QuTiP Joins NumFOCUS as Affiliated Project</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -452,7 +445,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>October 12, 2017</p>
+        <p>October 12, 2017</p>
         <h4>QuTiP Used in Back-to-back Articles in this Week's Science Magazine</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -464,7 +457,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-7">
-    <p style='margin-bottom: -10px'>September 23, 2017</p>
+    <p>September 23, 2017</p>
     <h4>Interview with the QuTiP Developers - PODCAST.__INIT__</h4></div>
 <div class="col-md-5" style='margin-top: 25px'>
     <script class="podigee-podcast-player" src="//cdn.podigee.com/podcast-player/javascripts/podigee-podcast-player.js" data-configuration="https://www.podcastinit.com/?podigee_player=374"></script>
@@ -475,7 +468,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>June 13, 2017</p>
+    <p>June 13, 2017</p>
     <h4>QuTiP Reaches 300 Journal Paper Benchmark</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="https://qutip.org/users.html#200"><p>qutip.org</p></a></div>
 </div>
@@ -484,7 +477,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
-        <p style='margin-bottom: -10px'>March 27, 2017</p>
+        <p>March 27, 2017</p>
         <h4>QuTiP Used to Simulate Perfect Quantum State Transfer Over Noisy Transmission Lines</h4>
     </div>
     <div class="col-md-4" style='margin-top: 25px'>
@@ -496,7 +489,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>March 13, 2017</p>
+    <p>March 13, 2017</p>
     <h4>Quantum Algorithm Programmed with QuTiP Classifies 9,500 Handwritten Numbers</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="https://www.ibm.com/blogs/research/2017/03/quantum-algorithm-classifies-9500-handwritten-numbers/ "><p>IBM Research</p></a></div>
 </div>
@@ -504,7 +497,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>March 9, 2017</p>
+    <p>March 9, 2017</p>
     <h4>QuTiP Mentioned in The Economist Technology Quarterly on Quantum Technologies</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="https://www.economist.com/technology-quarterly/2017-03-09/quantum-devices"><p>The Economist</p></a></div>
 </div>
@@ -512,7 +505,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>March 7, 2017</p>
+    <p>March 7, 2017</p>
     <h4>QuTiP Now an Essential Qualification to Work at US National Labs</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="news/llnl_advert.pdf"><p>LLNL</p></a></div>
 </div>
@@ -521,7 +514,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>December 1, 2016</p>
+    <p>December 1, 2016</p>
     <h4>QuTiP Highlighted in UK Quantum Technology Program's "Commercial Prospects for Quantum Computing"</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="news/Commercial_Prospects_for_Quantum_Computing_Dec_2016.pdf"><p>PDF</p></a></div>
 </div>
@@ -530,7 +523,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>August 2, 2016</p>
+    <p>August 2, 2016</p>
     <h4>QuTiP Reaches 200 Journal Paper Benchmark</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="https://qutip.org/users.html#200"><p>qutip.org</p></a></div>
 </div>
@@ -538,7 +531,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>May 3, 2015</p>
+    <p>May 3, 2015</p>
     <h4>QuTiP Reaches 100 Journal Paper Benchmark</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="https://qutip.org/users.html#100"><p>qutip.org</p></a></div>
 </div>
@@ -547,10 +540,7 @@ title: QuTiP News
 
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-8">
-    <p style='margin-bottom: -10px'>February 4, 2015</p>
+    <p>February 4, 2015</p>
     <h4>QuTiP Highlighted in Nature's `Programming: Pick up Python'</h4></div>
 <div class="col-md-4" style='margin-top: 25px'><a href="https://dx.doi.org/10.1038/518125a"><p>Nature</p></a></div>
 </div>
-<hr>
-
-{% include old_footer.html %}
