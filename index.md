@@ -1,6 +1,9 @@
 ---
 title: Quantum Toolbox in Python
+layout: homepage
 ---
+
+{% include hero.html %}
 
 <div class="row">
     <div class="col-md-9">
@@ -24,15 +27,15 @@ title: Quantum Toolbox in Python
     var txt;
     if (lng.indexOf("zh") !== -1)
     {
-        txt = "感谢您使用QuTiP。如果您在论文中使用了QuTiP，请您记得引用本篇论文。";
+        txt = "感谢您使用QuTiP。如果您在论文中使用了QuTiP，<a href=\"/citing\">请您记得引用本篇论文。</a>";
     }
     else if (lng.indexOf("ja") !== -1)
     {
-        txt = "QuTiPのご利用ありがとうございます。 このソフトウェアを使っている出版物に、QuTiPの論文を引用するのを忘れないでください。";
+        txt = "QuTiPのご利用ありがとうございます。 このソフトウェアを使っている出版物に、QuTiPの論文を<a href=\"/citing\">引用する</a>のを忘れないでください。";
     }
     else
     {
-        txt = "We hope you enjoy using QuTiP.  Please help us make QuTiP better by citing it in your publications.";
+        txt = "We hope you enjoy using QuTiP.  Please help us make QuTiP better by <a href=\"/citing\">citing</a> it in your publications.";
     }
     document.getElementById("cite").innerHTML = txt;
 </script>
