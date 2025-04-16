@@ -9,7 +9,7 @@ The development of QuTiP is a community based effort with several  developers co
 The governance process and model for the QuTiP project can be found [here](https://github.com/qutip/governance).
 It also contains a [charter document](https://github.com/qutip/governance/blob/main/governance.md).
 
-For the detailled list of all our contributors, check out [our Git Hub repositories](https://github.com/qutip).
+For the detailled list of all our contributors, check out [our GitHub repositories](https://github.com/qutip).
 
 
 <div class="container-xxl px-3">
@@ -17,7 +17,7 @@ For the detailled list of all our contributors, check out [our Git Hub repositor
         <p>
             Do you want to contribute to QuTiP? Learn how on
             <a href="https://github.com/qutip" target="about:blank">
-                Git Hub
+                GitHub
             </a>
             or consider 
             <a href="" target="about:blank">
