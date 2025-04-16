@@ -1,16 +1,11 @@
 ---
 title: QuTiP Users
 ---
-{% include old_header.html %}
-{% include old_navbar.html %}
 
-<div class="row" style="margin-bottom:10px">
-<div class="col-md-12">
-<h2>Papers Using QuTiP</h2>
-<h4>Found QuTiP useful for your own work?  Please consider helping out by donating an example notebook highlighting how QuTiP was used in your publication.
-</h4>
-</div>
-</div>
+# Papers Using QuTiP
+
+Found QuTiP useful for your own work?  Please consider helping out by donating an example notebook highlighting how QuTiP was used in your publication.
+
 <div class="row hidden-sm hidden-xs" style="margin-bottom:10px">
 <div class="col-md-6"><h3>Paper</h3></div>
 <div class="col-md-4"><h3>Journal</h3></div>
@@ -1878,8 +1873,4 @@ title: QuTiP Users
 <div class="row" style='margin-bottom: 15px'>
 <div class="col-md-6">1. <b>Dereli</b> et al., "Two-Frequency Jahn-Teller Systems in Circuit QED", </div>
 <div class="col-md-4"><a href="https://link.aps.org/doi/10.1103/PhysRevA.85.053841">Phys. Rev. A <b>85</b> 053841 (2012).</a></div>
-</div>  
-
-
-
-{% include old_footer.html %}
+</div>
