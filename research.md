@@ -4,7 +4,10 @@ title: QuTiP in Research
 
 # For Researchers
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+QuTiP is a robust open-source Python framework for simulating quantum systems.
+It is widely adopted in the fields of quantum optics, open quantum system dynamics, and quantum information science.
+With a focus on efficiency, an intuitive API, and rich visualization tools, QuTiP enables rapid prototyping and testing of complex physical models.
+Backed by a strong community all over the world, extensive documentation and tutorials, QuTiP has established itself at the forefront of quantum physics research.
 
 <div class="container-xxl px-3">
     <div class="banner">
@@ -24,21 +27,28 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
             3700+ citations
         </h2>
         <p>
-            Check out some selected papers that are making use of QuTiP.
+            Check out some selected papers and how they are making use of QuTiP.<br>
+            If you enjoy using QuTiP in your research, let us know! <a href="https://github.com/qutip/qutip-notebooks?tab=readme-ov-file#contribute">Send us a Juptyer Notebook</a> of your work to feature on this page.<br>
+            Or check out previous submissions <a href="https://github.com/qutip/qutip-notebooks/tree/master/examples">here</a>.
         </p>
         <ul class="list-group list-group-flush lecture-list">
-            {% for paper in site.data.citations %}
+            {% assign papers = site.data.citations | where: "visible", true %}
+            {% for p in papers %}
                 <li class="list-group-item notebook-list-item">
-                    <a href="{{ paper.url }}" class="lecture-link">
+                    {% if p.notebook %}
+                    <a href="{{ p.notebook }}" target="about:blank" class="lecture-link">
+                    {% else %}
+                    <a href="{{ p.doi }}" target="about:blank" class="lecture-link">
+                    {% endif %}
                         <div>
                             <p class="fw-bold">
-                                {{ paper.title }}
+                                {{ p.title }}
                             </p>
                             <p class="d-inline my-color-secondary">
-                                {{ paper.authors }},
+                                {{ p.authors }},
                             </p>
                             <p class="fst-italic d-inline my-color-secondary">
-                                {{ paper.journal }} ({{ paper.year }})
+                                {{ p.journal }} ({{ p.year }})
                             </p>
                         </div>
                         <p class="angle">&#8250;</p>

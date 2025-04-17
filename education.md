@@ -4,7 +4,11 @@ title: QuTiP in Education
 
 # For Educators
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+QuTiP is a user-friendly Python library for learning and teaching quantum mechanics through simulations.
+It’s ideal for exploring topics like quantum dynamics, quantum information and quantum computing.
+Its visualization tools help students see how quantum systems evolve over time and understand the effects such as entanglement or decoherence.
+Being open-source and part of the broader Python ecosystem, it integrates well with tools like NumPy and Matplotlib.
+Educators around the world use QuTiP to create interactive examples, while students gain hands-on experience with real quantum physical models.
 
 <div class="container-fluid px-0 my-center-section my-bg-secondary">
     <div class="container-xxl px-0 pb-3">
@@ -15,16 +19,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
             QuTiP is used by educators around the world, teaching the scientists of tomorrow.
         </p>
         <div class="slick-carousel education-carousel">
-            {% for course in site.data.university_courses %}
-            {% if course.visible %}
+            {% assign courses = site.data.university_courses | where: "visible", true %}
+            {% for c in courses %}
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ course.institute }}</h5>
-                        <p class="card-text">{{ course.course }}</p>
-                        <a href="{{ course.link }}" class="card-link">Check it out!</a>
+                        <h5 class="card-title">{{ c.institute }}</h5>
+                        <p class="card-text">{{ c.course }}</p>
+                        <a href="{{ c.link }}" class="card-link">Check it out!</a>
                     </div>
                 </div>
-            {% endif %}
             {% endfor %}
         </div>
     </div>
@@ -41,13 +44,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
                 QuTiP Right From the Browser
             </h5>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
+                A simple visual tool that allows tuning and coupling of Qubits.
+                Time evolutions and expectation values are automatically calculated and are ready for presentation.
             </p>
             <h5>
                 Complex Systems Easily Explained
             </h5>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
+                Even though quantum systems can get complicated on paper, QuTiP Virtual Lab presents a simple picture that reminds of an experimental setup.
             </p>
             <div>
                 <a href="https://qutip.org/qutip-virtual-lab/" class="mx-auto mx-md-0">
