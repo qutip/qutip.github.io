@@ -54,10 +54,8 @@ Educators around the world use QuTiP to create interactive examples, while stude
                 Even though quantum systems can get complicated on paper, QuTiP Virtual Lab presents a simple picture that reminds of an experimental setup.
             </p>
             <div>
-                <a href="https://qutip.org/qutip-virtual-lab/" class="mx-auto mx-md-0">
-                    <span class="badge primary">
-                        Enter QuTiP Virtual Lab
-                    </span>
+                <a href="https://qutip.org/qutip-virtual-lab/" class="mx-auto mx-md-0 btn btn-primary">
+                    Enter QuTiP Virtual Lab
                 </a>
             </div>
         </div>

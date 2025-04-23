@@ -56,15 +56,11 @@ Backed by a strong community all over the world, extensive documentation and tut
                 </li>
             {% endfor %}
         </ul>
-        <a href="https://scholar.google.com/scholar?cites=6461191495870975489" target="about:blank" class="m-3 d-inline-block">
-            <span class="badge secondary">
-                More (QuTiP v4)
-            </span>
+        <a href="https://scholar.google.com/scholar?cites=6461191495870975489" target="about:blank" class="m-1 d-inline-block btn btn-outline-primary">
+            More (QuTiP v4)
         </a>
-        <a href="https://scholar.google.com/scholar?cites=11575350638666079574" target="about:blank" class="m-3 d-inline-block">
-            <span class="badge primary">
-                More (QuTiP v5)
-            </span>
+        <a href="https://scholar.google.com/scholar?cites=11575350638666079574" target="about:blank" class="m-1 d-inline-block btn btn-primary">
+            More (QuTiP v5)
         </a>
     </div>
 </div>
