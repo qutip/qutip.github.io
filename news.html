@@ -1,10 +1,29 @@
 ---
+layout: default
 title: QuTiP News
 ---
 
-# QuTiP News
+<h1>QuTiP News</h1>
 
 <hr>
+
+{% for p in site.posts %}
+    <div id="{{ p.slug }}" class="row" style='margin-bottom: 15px'>
+        <div class="col-md-8">
+            <p>{{ p.date | date_to_string: "ordinal", "US" }}</p>
+            <h4>{{ p.title }}</h4>
+            {% if p.readmore %}
+                <a href="{{ p.url }}"><p>Read More</p></a>
+            {% endif %}
+        </div>
+        <div class="col-md-4" style='margin-top: 25px'>
+            <div class="post-links">
+                {{ p.excerpt }}
+            </div>
+        </div>
+    </div>
+<hr>
+{% endfor %}
 
 <div class="row" style='margin-bottom: 15px'>
     <div class="col-md-8">
