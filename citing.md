@@ -8,8 +8,16 @@ QuTiP is developed by [many physicists](devs.html) in their spare time.
 As with anyone in academics,
 their life and death is determined entirely by citations and paper count.
 Therefore, if you find QuTiP useful, please consider citing this project.
+This will also help us secure future funding supporting the development of this
+software.
+
+If you do use QuTiP in a publication, please take a few minutes and let us know
+by posting on the [QuTiP message board](https://groups.google.com/group/qutip).
+We would love to hear how QuTiP is being used as a research tool.
 
 ## Quantum Toolbox in Python
+
+**QuTiP - Main Package**
 
 * N. Lambert, E. Giguère, P. Menczel, B. Li, P. Hopf, G. Suárez, M. Gali, J. Lishman, R. Gadhvi, R. Agarwal, A. Galicia, N. Shammah, P. Nation, J. R. Johansson, S. Ahmed, S. Cross, A. Pitchford, F. Nori: "QuTiP 5: The Quantum Toolbox in Python.", (2024).
 [[PDF](https://arxiv.org/pdf/2412.04705)]
@@ -29,7 +37,9 @@ Therefore, if you find QuTiP useful, please consider citing this project.
 [[arXiv](https://arxiv.org/abs/2105.09902)]
 <br><a href="/assets/qutip1-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
-## QuTiP - Quantum Information Processing
+---
+
+**QIP - Quantum Information Processing**
 
 * B. Li, S. Ahmed, S. Saraogi, N. Lambert, F. Nori, A. Pitchford, N. Shammah: "Pulse-level noisy quantum circuits with QuTiP.", (2022).
 [[PDF](https://dml.riken.jp/wp-content/uploads/Quantum_6_630_24_Jan_2022.pdf)]
@@ -37,7 +47,9 @@ Therefore, if you find QuTiP useful, please consider citing this project.
 [[arXiv](https://arxiv.org/abs/2105.09902)]
 <br><a href="/assets/qutip-qip-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
-## QuTiP - HEOM
+---
+
+**HEOM**
 
 * N. Lambert, T. Raheja, S. Cross, P. Menczel, S. Ahmed, A. Pitchford, D. Burgarth, F. Nori: "QuTiP-BoFiN: A bosonic and fermionic numerical hierarchical-equations-of-motion library with applications in light-harvesting, quantum control, and single-molecule electronics.", Phys. Rev. Research **5**, 013181 (2023).
 [[PDF](https://dml.riken.jp/wp-content/uploads/PhysRevResearch_5_013181_15_Mar_2023.pdf)]
@@ -45,7 +57,9 @@ Therefore, if you find QuTiP useful, please consider citing this project.
 [[arXiv](https://arxiv.org/abs/2010.10806)]
 <br><a href="/assets/qutip-bofin-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
-## QuantumToolbox.jl: Julia Framework
+## Quantum Toolbox in Julia
+
+**QuantumToolbox.jl**
 
 * A. Mercurio, Y. Huang, L. Cai, Y. Chen, V. Savona, F. Nori: "QuantumToolbox.jl: An efficient Julia framework for simulating open quantum systems.", (2025).
 [[PDF](https://arxiv.org/pdf/2504.21440)]
@@ -53,10 +67,13 @@ Therefore, if you find QuTiP useful, please consider citing this project.
 [[arXiv](https://arxiv.org/abs/2504.21440)]
 <br><a href="/assets/qutip-julia-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
+---
 
-This will also help us secure future funding supporting the development of this software.
+**HierarchicalEOM.jl**
 
-If you do use QuTiP in a publication, please take a few minutes and let us know
-by posting on the [QuTiP message board](https://groups.google.com/group/qutip).
+* Y. Huang, P. Kuo, N. Lambert, M. Cirio, S. Cross, S. Yang, F. Nori, Y. Chen "An efficient Julia framework for hierarchical equations of motion in open quantum systems.", Commun Phys **6**, 313 (2023).
+[[PDF](https://rdcu.be/dqJ0g)]
+[[Link](https://doi.org/10.1038/s42005-023-01427-2)]
+[[arXiv](https://arxiv.org/abs/2306.07522)]
+<br><a href="/assets/qutip-heomjl-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
-We would love to hear how QuTiP is being used as a research tool.
