@@ -15,7 +15,8 @@ A few things to keep in mind:
 - Make sure the file name is in `YYYY-MM-DD-filename.md` format, where `filename` can be of your choosing but unique.
 - The `title` attribute at the top of the page will be the main header of the post and shown on the overview page.
 - The first paragraph of your post will be shown on the overview page. It is advisable to put important links or a short and catchy introduction there.
-- Using the `readmore` attribute, you can decide if your post should get its own page (set to `readmore: True`) or not (`readmore: False`). See the difference of [this](/news/#new-website) and [this](/news/#qutip5-release) post.
+- Using the `readmore` attribute, you can decide if your post should get its own page (set to `readmore: True`) or not (`readmore: False`).
+See the difference of [this](https://qutip.org/news#new-website) and [this](https://qutip.org/news#qutip5-release) post.
 - Assets like images are managed in the `assets` (*not* `images`) folder.
 
 Testing locally
