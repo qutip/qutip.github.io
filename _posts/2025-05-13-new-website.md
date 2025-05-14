@@ -9,7 +9,7 @@ readmore: True
 
 Hello everybody,
 
-as some of you may have already seen, the QuTiP website has acquired a new look. With the new design, mobile browsing got more enjoyable and the accessibility of important material such as documentation and tutorials was greatly improved. We also put an emphasis on the ever growing QuTiP family that includes Quantum Toolbox in Julia and all the other QuTiP packages.
+As some of you may have already seen, the QuTiP website has acquired a new look. With the new design, mobile browsing got more enjoyable and the accessibility of important material such as documentation and tutorials was greatly improved. We also put an emphasis on the ever growing QuTiP family that includes Quantum Toolbox in Julia and all the other QuTiP packages.
 
 We aim to further improve the online experience step by step over the next months, so please check it out and let us know what you think!
 
