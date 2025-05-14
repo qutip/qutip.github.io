@@ -71,7 +71,7 @@ We would love to hear how QuTiP is being used as a research tool.
 
 **HierarchicalEOM.jl**
 
-* Y.-T. Huang, P.-C. Kuo, N. Lambert, M. Cirio, S. Cross, S.-L. Yang, F. Nori, Y.-N. Chen "An efficient Julia framework for hierarchical equations of motion in open quantum systems.", Commun. Phys. **6**, 313 (2023).
+* Y.-T. Huang, P.-C. Kuo, N. Lambert, M. Cirio, S. Cross, S.-L. Yang, F. Nori, Y.-N. Chen: "An efficient Julia framework for hierarchical equations of motion in open quantum systems.", Commun. Phys. **6**, 313 (2023).
 [[PDF](https://rdcu.be/dqJ0g)]
 [[Link](https://doi.org/10.1038/s42005-023-01427-2)]
 [[arXiv](https://arxiv.org/abs/2306.07522)]
