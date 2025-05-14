@@ -65,7 +65,7 @@ We would love to hear how QuTiP is being used as a research tool.
 [[PDF](https://arxiv.org/pdf/2504.21440)]
 [[Link](https://doi.org/10.48550/arXiv.2504.21440)]
 [[arXiv](https://arxiv.org/abs/2504.21440)]
-<br><a href="/assets/qutip-julia-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
+<br><a href="/assets/qutij-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
 ---
 
@@ -75,5 +75,5 @@ We would love to hear how QuTiP is being used as a research tool.
 [[PDF](https://rdcu.be/dqJ0g)]
 [[Link](https://doi.org/10.1038/s42005-023-01427-2)]
 [[arXiv](https://arxiv.org/abs/2306.07522)]
-<br><a href="/assets/qutip-heomjl-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
+<br><a href="/assets/qutij-heom-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
