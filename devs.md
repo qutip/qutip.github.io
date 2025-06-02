@@ -1,6 +1,5 @@
 ---
 title: QuTiP Contributors
-layout: default
 ---
 
 # QuTiP Contributors
