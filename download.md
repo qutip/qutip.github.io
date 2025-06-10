@@ -1,19 +1,19 @@
 ---
-title: QuTiP Features
+title: QuTiP Releases
 ---
-
-<div class="row">
-<div class="col-md-12">
-<div class="alert alert-danger">
-QuTiP has been developed over seven years by volunteers working in their spare time.  If you find QuTiP useful, please consider taking a minute of your own time and <a href='citing.html'>citing it</a> in your publications.
-</div>
-</div>
-</div>
 
 # Download
 
 The recommended way to install QuTiP is with conda or pip, see the
 [documentation](https://qutip.org/docs/latest/installation.html) for details.
+
+<div class="row">
+     <div class="col-md-12">
+          <div class="banner" style="margin-top: 0;">
+          <p id="cite">This page has been archived! For the latest updates please refer to the release info on our <a href="https://github.com/qutip/qutip/releases">GitHub Page</a></p>.
+          </div>
+     </div>
+</div>
 
 ## Latest releases
 

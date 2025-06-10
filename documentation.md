@@ -4,6 +4,9 @@ title: QuTiP Documentation
 
 # Users guide
 
+Here you can find direct links to all our documentation for new and old versions of QuTiP.
+If you are interested in contributing to QuTiP, check out the <a href="https://qutip.readthedocs.io/en/stable/development/contributing.html">contribution section in our documentation</a>.
+
 ## Latest releases
 
 ### Version 5.1.1
@@ -201,8 +204,3 @@ title: QuTiP Documentation
 <a onclick="javascript:_gaq.push(['_trackEvent','download','qutip-doc','qutip-2.2.0-DOC.pdf']); void(0);" href="downloads/2.2.0/QuTiP-2.2.0-DOC.pdf">PDF documentation</a>
 </div>
 </div>
-
-
-## Development documentation
-
-The documentation for the development version of QuTiP is available at the <a href="https://github.com/qutip/qutip-doc">qutip-doc</a> github repository.
