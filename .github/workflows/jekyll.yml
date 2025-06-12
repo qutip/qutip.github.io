@@ -2,8 +2,7 @@ name: Deploy Website using Jekyll
 
 on:
   push:
-    branches: ["master"]
-
+  pull_request:
   workflow_dispatch:
   
 permissions:
@@ -39,6 +38,7 @@ jobs:
 
   # Deployment job
   deploy:
+    if: ${{ github.repository == 'qutip/qutip.github.io' && github.ref == 'refs/heads/master' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
