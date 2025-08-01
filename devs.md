@@ -53,7 +53,7 @@ For the detailled list of all our contributors, check out [our GitHub repositori
     </h2>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
-            <img src="images/franco.jpg"" class="img-polaroid">
+            <img src="images/franco.jpg" class="img-polaroid">
             <h3>Franco Nori</h3>
             <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
         </div>
