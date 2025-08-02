@@ -122,7 +122,7 @@ For the detailled list of all our contributors, check out [our GitHub repositori
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
             <img src="images/yite.jpg" class="img-polaroid">
             <h3>Yi-Te Huang</h3>
-            <p style="font-weight: bold; margin-bottom: 0;">NCKU, Taiwan</p>
+            <p style="font-weight: bold; margin-bottom: 0;">QFort, National Cheng Kung University, Taiwan</p>
             <p>Main focus: Julia lang., non-Markovian dynamics</p>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
