@@ -34,7 +34,7 @@ For the detailled list of all our contributors, check out [our GitHub repositori
         <div class="col-lg-3 col-md-4 col-sm-6">
             <img src="images/franco.jpg" class="img-polaroid">
             <h3>Franco Nori</h3>
-            <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
+            <p style="font-weight: bold; margin-bottom: 0;">RIKEN / University of Michigan</p>
         </div>
     </div>
 </div>
@@ -94,7 +94,7 @@ For the detailled list of all our contributors, check out [our GitHub repositori
             <img src="images/neill.jpg" class="img-polaroid">
             <h3>Neill Lambert</h3>
             <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
-            <p>Main focus: Non-Markovian dynamics, counting statistics</p>
+            <p>Main focus: Non-Markovian dynamics, HEOM, open quantum systems</p>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
             <img src="images/boxi.jpg" class="img-polaroid">
@@ -124,13 +124,13 @@ For the detailled list of all our contributors, check out [our GitHub repositori
             <img src="images/yite.jpg" class="img-polaroid">
             <h3>Yi-Te Huang</h3>
             <p style="font-weight: bold; margin-bottom: 0;">QFort, National Cheng Kung University, Taiwan</p>
-            <p>Main focus: Julia lang., non-Markovian dynamics</p>
+            <p>Main focus: Julia, non-Markovian dynamics</p>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-10">
             <img src="images/alberto.jpg" class="img-polaroid">
             <h3>Alberto Mercurio</h3>
             <p style="font-weight: bold; margin-bottom: 0;">EPFL, Switzerland</p>
-            <p>Main focus: Julia lang., quantum optomechanics</p>
+            <p>Main focus: Julia, quantum optomechanics</p>
         </div>
     </div>
 </div>
