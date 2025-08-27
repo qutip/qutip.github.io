@@ -9,7 +9,7 @@ If you are interested in contributing to QuTiP, check out the <a href="https://q
 
 ## Latest releases
 
-### Version 5.2.0
+### Version 5.2.1
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
@@ -36,6 +36,19 @@ If you are interested in contributing to QuTiP, check out the <a href="https://q
 </div>
 
 ## Previous releases
+
+### Version 5.1.1
+
+<div class="row">
+<div class="col-md-3 col-md-offset-1">
+<img src="images/rtd.png" />
+<a href="https://qutip.readthedocs.io/en/qutip-5.1.x/">Read the Docs</a>
+</div>
+<div class="col-md-3 col-md-offset-1">
+<img src="images/pdf.png" />
+<a href="https://readthedocs.org/projects/qutip/downloads/pdf/qutip-5.1.x/">PDF documentation</a>
+</div>
+</div>
 
 ### Version 5.0.4
 
