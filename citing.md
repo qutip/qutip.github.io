@@ -62,7 +62,7 @@ We would love to hear how QuTiP is being used as a research tool.
 **QuantumToolbox.jl**
 
 * A. Mercurio, Y.-T. Huang, L.-X. Cai, Y.-N. Chen, V. Savona, F. Nori: "QuantumToolbox.jl: An efficient Julia framework for simulating open quantum systems.", Quantum **9**, 1866 (2025).
-[[PDF](https://arxiv.org/pdf/2504.21440)]
+[[PDF](https://quantum-journal.org/papers/q-2025-09-29-1866/pdf/)]
 [[Link](https://doi.org/10.22331/q-2025-09-29-1866)]
 [[arXiv](https://arxiv.org/abs/2504.21440)]
 <br><a href="/assets/qutij-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
