@@ -19,9 +19,9 @@ We would love to hear how QuTiP is being used as a research tool.
 
 **QuTiP - Main Package**
 
-* N. Lambert, E. Giguère, P. Menczel, B. Li, P. Hopf, G. Suárez, M. Gali, J. Lishman, R. Gadhvi, R. Agarwal, A. Galicia, N. Shammah, P. Nation, J. R. Johansson, S. Ahmed, S. Cross, A. Pitchford, F. Nori: "QuTiP 5: The Quantum Toolbox in Python.", arXiv:2412.04705 (2024).
-[[PDF](https://arxiv.org/pdf/2412.04705)]
-[[Link](https://doi.org/10.48550/arXiv.2412.04705)]
+* N. Lambert, E. Giguère, P. Menczel, B. Li, P. Hopf, G. Suárez, M. Gali, J. Lishman, R. Gadhvi, R. Agarwal, A. Galicia, N. Shammah, P. Nation, J. R. Johansson, S. Ahmed, S. Cross, A. Pitchford, F. Nori: "QuTiP 5: The Quantum Toolbox in Python.", Physics Reports **1153**, 1-62 (2026).
+[[PDF](https://dml.riken.jp/wp-content/uploads/PhysicsReports_1153_pp1-62_2_Nov_2025.pdf)]
+[[Link](https://doi.org/10.1016/j.physrep.2025.10.001)]
 [[arXiv](https://arxiv.org/abs/2412.04705)]
 <br><a href="/assets/qutip5-bibtex.txt" target="_blank">&#8618; Get BibTex</a>
 
