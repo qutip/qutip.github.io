@@ -9,7 +9,7 @@ If you are interested in contributing to QuTiP, check out the <a href="https://q
 
 ## Latest releases
 
-### Version 5.2.2
+### Version 5.2.3
 
 <div class="row">
 <div class="col-md-3 col-md-offset-1">
