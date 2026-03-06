@@ -21,7 +21,7 @@ April 2-6th is currently reserved for arrival and issue hacking days. For the co
 | **Apr 7** | PM | **QuTiP and cuQuantum** | Khaldoon Ghanem (NVIDIA) | — |
 | **Apr 8** | AM | **Two-track development system for QuTiP** (discussion) | — | Veronika Kurth |
 | **Apr 8** | PM | **Symbolic data in QuTiP (Part 2)** | — | Eric Giguère, Simon Cross |
-| **Apr 9** | AM | **QuTiP Julia** | — | Alberto Mercurio, Yi-te Huang |
+| **Apr 9** | AM | **Quantum Toolbox in Julia** | — | Alberto Mercurio, Yi-Te Huang |
 | **Apr 9** | PM | **QuTiP v6 planning** (discussion) | — | Alex Pitchford |
 | **Apr 10** | AM | **New and old solvers in QuTiP** (discussion) | — | *TBD* |
 | **Apr 10** | PM | **Krylov Solvers and Förster Theory** | Maximilian Meyer-Mölleringhof | — |
@@ -49,8 +49,8 @@ April 2-6th is currently reserved for arrival and issue hacking days. For the co
 ### Aberystwyth University
 - Alex Pitchford  
 
-### Tainan
-- Yi-te Huang  
+### QFort, Taiwan
+- Yi-Te Huang  
 
 ### EPFL
 - Alberto Mercurio  
