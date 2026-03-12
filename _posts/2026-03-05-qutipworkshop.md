@@ -15,25 +15,19 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 
 > *Schedule is very preliminary and may change.*
 
-| Date | Session | Topic / Format | Presenter(s) / Chair |
-|---|---|---|---|---|
-| **Apr 8** | AM | **Symbolic data in QuTiP** (Seminar) | Eric Giguère|
-| **Apr 8** | PM | **QuTiP and cuQuantum** (Seminar) | Khaldoon Ghanem (NVIDIA) |
-|---|---|---|---|---|
-| **Apr 9** | AM | **Two-track development system for QuTiP** (discussion) | Veronika Kurth |
-| **Apr 9** | PM | **Symbolic data in QuTiP (Part 2)** (Seminar) | Simon Cross |
-|---|---|---|---|---|
-| **Apr 10** | AM | **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yi-Te Huang |
-| **Apr 10** | PM | **QuTiP v6 planning** (discussion) | Alex Pitchford |
-|---|---|---|---|---|
-| **Apr 13** | AM | **Title TBD** (discussion) | Paul Menczel |
-| **Apr 13** | PM | **Krylov Solvers and Förster Theory** (seminar)| Maximilian Meyer-Mölleringhof |
-|---|---|---|---|---|
-| **Apr 14** | AM | **Future of non-Markovian solvers in QuTiP** (discussion) | Neill Lambert |
-| **Apr 14** | PM | **QuTiP-QIP/QOC** (discussion) | Boxi Li |
-|---|---|---|---|---|
-| **Apr 15** | PM | **Wrap-up: QuTiP, AI, etc.** (discussion)| Everyone |
-|---|---|---|---|---|
+| Date | Topic / Format | Presenter(s) / Chair |
+|:--|:--|:--|
+| **Apr 8**  | **AM:** **Symbolic data in QuTiP** (Seminar) | Eric Giguère |
+|            | **PM:** **QuTiP and cuQuantum** (Seminar) | Khaldoon Ghanem (NVIDIA) |
+| **Apr 9**  | **AM:** **Two-track development system for QuTiP** (Discussion) | Veronika Kurth |
+|            | **PM:** **Symbolic data in QuTiP (Part 2)** (Seminar) | Simon Cross |
+| **Apr 10** | **AM:** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yi-Te Huang |
+|            | **PM:** **QuTiP v6 planning** (Discussion) | Alex Pitchford |
+| **Apr 13** | **AM:** **Title TBD** (Discussion) | Paul Menczel |
+|            | **PM:** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof |
+| **Apr 14** | **AM:** **Future of non-Markovian solvers in QuTiP** (Discussion) | Neill Lambert |
+|            | **PM:** **QuTiP-QIP/QOC** (Discussion) | Boxi Li |
+| **Apr 15** | **PM:** **Wrap-up: QuTiP, AI, etc.** (Discussion) | Everyone |
 
 
 ## Attendees
