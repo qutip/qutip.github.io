@@ -26,7 +26,7 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 | **Apr 13** | **AM:** **QuTiP-QOC redesign** (Discussion) | Paul Menczel |
 |            | **PM:** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof |
 | **Apr 14** | **AM:** **QuTiP-QIP updates** (Discussion) | Boxi Li |
-|            | **PM:** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yi-Te Huang |
+|            | **PM:** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yueh-Nan Chen, Yi-Te Huang |
 | **Apr 15** | **AM:** **Issue squashing session** (Discussion) | Everyone |
 | **Apr 15** | **PM:** **Wrap-up: QuTiP, AI, etc.** (Discussion) | Everyone |
 
@@ -50,10 +50,11 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 - Alex Pitchford  
 
 ### QFort, Taiwan
+- Yueh-Nan Chen
 - Yi-Te Huang  
 
 ### EPFL
-- Alberto Mercurio  
+- Alberto Mercurio
 
 ### Zurich Instruments
 - Simon Cross  
