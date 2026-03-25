@@ -22,7 +22,7 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 | **Apr 9**  | **AM:** **Two-track development system for QuTiP** (Discussion) | Veronika Kurth |
 |            | **PM:** **Symbolic data in QuTiP (Part 1)** (Seminar) | Simon Cross |
 | **Apr 10** | **AM:** **QuTiP v6 planning** (Discussion) | Alex Pitchford |
-|            | **PM:** **Symbolic data in QuTiP (Part 2)** (Seminar) | Eric Giguère |
+|            | **PM:** **New Solvers in QuTiP** (Seminar) | Eric Giguère |
 | **Apr 13** | **AM:** **QuTiP-QOC redesign** (Discussion) | Paul Menczel |
 |            | **PM:** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof |
 | **Apr 14** | **AM:** **QuTiP-QIP updates** (Discussion) | Boxi Li |
@@ -44,7 +44,10 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 - Khaldoon Ghanem  
 
 ### Université de Sherbrooke
-- Eric Giguère  
+- Eric Giguère
+
+### University of Luxembourg
+-  Maximilian Meyer-Mölleringhof 
 
 ### Aberystwyth University
 - Alex Pitchford  
