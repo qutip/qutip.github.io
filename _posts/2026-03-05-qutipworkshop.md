@@ -15,20 +15,24 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 
 > *Schedule is very preliminary and may change.*
 
-| Date | Topic / Format | Presenter(s) / Chair |
-|:--|:--|:--|
-| **Apr 8**  | **PM:** **Introduction** | Franco Nori (RIKEN)
-|            | **PM:** **QuTiP and cuQuantum** (Seminar) | Khaldoon Ghanem (NVIDIA) |
-| **Apr 9**  | **AM:** **Two-track development system for QuTiP** (Discussion) | Veronika Kurth |
-|            | **PM:** **Symbolic data in QuTiP (Part 1)** (Seminar) | Simon Cross |
-| **Apr 10** | **AM:** **QuTiP v6 planning** (Discussion) | Alex Pitchford |
-|            | **PM:** **New Solvers in QuTiP** (Seminar) | Eric Giguère |
-| **Apr 13** | **AM:** **QuTiP-QOC redesign** (Discussion) | Paul Menczel |
-|            | **PM:** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof |
-| **Apr 14** | **AM:** **QuTiP-QIP updates** (Discussion) | Boxi Li |
-|            | **PM:** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yueh-Nan Chen, Yi-Te Huang |
-| **Apr 15** | **AM:** **Issue squashing session** (Discussion) | Everyone |
-| **Apr 15** | **PM:** **Wrap-up: QuTiP, AI, etc.** (Discussion) | Everyone |
+*Note all meetings are in the Main building C01, but the room varies depending on day.*
+There will also be issue squashinga and planning discussions before and after afternoon seminars.
+
+| Date | Topic / Format | Presenter(s) / Chair | Room |
+|:--|:--|:--|:--|
+| **Apr 8**  | **3:00 PM** **Introduction** | Franco Nori (RIKEN) | Room 345-347 |
+|            | **3:15 PM** **QuTiP and cuQuantum** (Seminar) | Khaldoon Ghanem (NVIDIA) | Room 345-347 |
+| **Apr 9**  | **10:30 AM** **Two-track development system for QuTiP** (Discussion) | Veronika Kurth | Room 345-347 |
+|            | **3:00 PM** **Symbolic data in QuTiP** (Seminar) | Simon Cross | Room 345-347 |
+| **Apr 10** | **10:30 AM** **QuTiP and the AI Physicist** (Discussion) | Alex Pitchford | Room 445-447 |
+|            | **2:00 PM** **New Solvers in QuTiP** (Seminar) | Eric Giguère | Room 445-447 |
+|            | **4:00 PM** **Ion Traps with QuTiP** (Seminar) | Spencer Churchill | Room 445-447 |
+| **Apr 13** | **10:30 AM** **QuTiP-QOC redesign** (Discussion) | Paul Menczel | Room 445-447 |
+|            | **3:00 PM** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof | Room 445-447 |
+| **Apr 14** | **10:30 AM** **QuTiP-QIP updates** (Discussion) | Boxi Li | Room 345-347 |
+|            | **3:00 PM** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yueh-Nan Chen, Yi-Te Huang | Room 345-347 |
+| **Apr 15** | **10:30 AM** **Final issue squashing wrapup** (Discussion) | Everyone | Room 345-347 |
+| **Apr 15** | **3:00 PM** **QuTiP v6 planning** (Discussion) | Everyone | Room 345-347 |
 
 
 ## Attendees
@@ -41,7 +45,7 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 - Franco Nori  
 
 ### NVIDIA
-- Khaldoon Ghanem  
+- Khaldoon Ghanem
 
 ### Université de Sherbrooke
 - Eric Giguère
@@ -60,7 +64,10 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 - Alberto Mercurio
 
 ### Zurich Instruments
-- Simon Cross  
+- Simon Cross
 
-### RIKEN RCCCS
+### Ion-Q
+- Spencer Churchill
+
+### RIKEN RCCS
 - Emil Vatai *(tentative)*
