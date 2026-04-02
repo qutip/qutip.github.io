@@ -16,7 +16,7 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 > *Schedule is very preliminary and may change.*
 
 *Note all meetings are in the Main building C01, but the room varies depending on day.*
-There will also be issue squashinga and planning discussions before and after afternoon seminars.
+There will also be issue squashing and planning discussions before and after afternoon seminars.
 
 | Date | Topic / Format | Presenter(s) / Chair | Room |
 |:--|:--|:--|:--|
