@@ -18,7 +18,7 @@ April 2-7th is currently reserved for arrival and issue hacking days. For the co
 *Note all meetings are in the Main building C01, but the room varies depending on day.*
 There will also be issue squashinga and planning discussions before and after afternoon seminars.
 
-| Date | Topic / Format | Presenter(s) / Chair |
+| Date | Topic / Format | Presenter(s) / Chair | Room |
 |:--|:--|:--|:--|
 | **Apr 8**  | **3:00 PM:** **Introduction** | Franco Nori (RIKEN) | Room 345-347 |
 |            | **3:15 PM:** **QuTiP and cuQuantum** (Seminar) | Khaldoon Ghanem (NVIDIA) | Room 345-347 |
