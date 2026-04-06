@@ -29,6 +29,7 @@ There will also be issue squashing and planning discussions before and after aft
 |            | **4:00 PM** **Ion Traps with QuTiP** (Seminar) | Spencer Churchill | Room 445-447 |
 | **Apr 13** | **10:30 AM** **QuTiP-QOC redesign** (Discussion) | Paul Menczel | Room 445-447 |
 |            | **3:00 PM** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof | Room 445-447 |
+|            | **4:00 PM** **GSOC 2026 discussion session** (Discussion) | Everyone | Room 445-447 |
 | **Apr 14** | **10:30 AM** **QuTiP-QIP updates** (Discussion) | Boxi Li | Room 345-347 |
 |            | **3:00 PM** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yueh-Nan Chen, Yi-Te Huang | Room 345-347 |
 | **Apr 15** | **10:30 AM** **QuTiP v6 planning** (Discussion) | Everyone | Room 345-347 |
