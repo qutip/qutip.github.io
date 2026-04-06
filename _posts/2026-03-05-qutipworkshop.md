@@ -31,8 +31,8 @@ There will also be issue squashing and planning discussions before and after aft
 |            | **3:00 PM** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof | Room 445-447 |
 | **Apr 14** | **10:30 AM** **QuTiP-QIP updates** (Discussion) | Boxi Li | Room 345-347 |
 |            | **3:00 PM** **Quantum Toolbox in Julia** (Seminar) | Alberto Mercurio, Yueh-Nan Chen, Yi-Te Huang | Room 345-347 |
-| **Apr 15** | **10:30 AM** **Final issue squashing wrapup** (Discussion) | Everyone | Room 345-347 |
-| **Apr 15** | **3:00 PM** **QuTiP v6 planning** (Discussion) | Everyone | Room 345-347 |
+| **Apr 15** | **10:30 AM** **QuTiP v6 planning** (Discussion) | Everyone | Room 345-347 |
+| **Apr 15** | **3:00 PM** **Final issue squashing wrapup** (Discussion) | Everyone | Room 345-347 |
 
 
 ## Attendees
