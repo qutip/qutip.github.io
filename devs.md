@@ -15,13 +15,14 @@ For the detailled list of all our contributors, check out [our GitHub repositori
     <div class="banner">
         <p>
             Do you want to contribute to QuTiP? Learn how on
-            <a href="https://github.com/qutip" target="about:blank">
+            <a href="https://github.com/qutip">
                 GitHub
             </a>
-            or consider 
-            <a href="" target="about:blank">
-                donating.
+            or consider
+            <a href="https://github.com/sponsors/qutip" target="_blank">
+                sponsoring
             </a>
+            the project.
         </p>
     </div>
 </div>

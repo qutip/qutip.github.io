@@ -144,4 +144,4 @@ Backed by a strong community all over the world, extensive documentation and tut
 </div>
 
 {% include supp_org.html %}
-{% include donate.html %}
+{% include sponsor.html %}
