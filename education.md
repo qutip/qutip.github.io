@@ -98,4 +98,4 @@ Educators around the world use QuTiP to create interactive examples, while stude
     </div>
 </div>
 
-{% include donate.html %}
+{% include sponsor.html %}
