@@ -22,19 +22,26 @@ There will also be issue squashing and planning discussions before and after aft
 |:--|:--|:--|:--|
 | **Apr 8**  | **3:00 PM** **Introduction** | Franco Nori (RIKEN) | Room 345-347 |
 |            | **3:15 PM** **QuTiP and cuQuantum** (Seminar) | Khaldoon Ghanem (NVIDIA) | Room 345-347 |
+|            | **4:00 PM** **Coffee break and discussion** | ---- | Common area |
 | **Apr 9**  | **10:30 AM** **Two-track development system for QuTiP** (Discussion) | Veronika Kurth | Room 345-347 |
+|            | **1:00 PM** **Coffee break and discussion** | ---- | Common area |
 |            | **3:00 PM** **Symbolic data in QuTiP** (Seminar) | Simon Cross | Room 345-347 |
 | **Apr 10** | **10:30 AM** **QuTiP and the AI Physicist** (Discussion) | Alex Pitchford | Room 445-447 |
+|            | **12:00 PM** **Working lunch (curry)** | ---- | 3rd floor coffee room |
+|            | **1:30 PM** **Coffee break and discussion** | ---- | Common area |
 |            | **2:00 PM** **New Solvers in QuTiP** (Seminar) | Eric Giguère | Room 445-447 |
 |            | **4:00 PM** **Ion Traps with QuTiP** (Seminar) | Spencer Churchill | Room 445-447 |
 | **Apr 13** | **10:30 AM** **QuTiP-QOC redesign** (Discussion) | Paul Menczel | Room 445-447 |
 |            | **1:00 PM** **Krylov Solvers and Förster Theory** (Seminar) | Maximilian Meyer-Mölleringhof | Room 445-447 |
+|            | **2:00 PM** **Coffee break and discussion** | ---- | Common area |
 |            | **4:00 PM** **GSOC 2026 discussion session** (Discussion) | Everyone | Room 445-447 |
 | **Apr 14** | **10:30 AM** **QuTiP-QIP updates** (Discussion) | Boxi Li | Room 345-347 |
+|            | **1:00 PM** **Coffee break and discussion** | ---- | Common area |
 |            | **2:00 PM** **Quantum Toolbox in Julia (1) and Hierarchical Equations of Motion** (Seminar) | Yi-Te Huang | Room 345-347 |
 |            | **3:30 PM** **Quantum Toolbox in Julia (2)** (Seminar) | Alberto Mercurio | Room 345-347 |
 | **Apr 15** | **10:30 AM** **QuTiP v6 planning** (Discussion) | Everyone | Room 345-347 |
-| **Apr 15** | **3:00 PM** **Final issue squashing wrapup** (Discussion) | Everyone | Room 345-347 |
+|            | **1:00 PM** **Coffee break and discussion** | ---- | Common area |
+|            | **3:00 PM** **Final issue squashing wrapup** (Discussion) | Everyone | Room 345-347 |
 
 
 ## Attendees
