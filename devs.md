@@ -133,6 +133,17 @@ For the detailled list of all our contributors, check out [our GitHub repositori
             <p style="font-weight: bold; margin-bottom: 0;">EPFL, Switzerland</p>
             <p>Main focus: Julia, quantum optomechanics</p>
         </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-10">
+            <img src="images/veronika.jpg" class="img-polaroid">
+            <h3>Veronika Kurth</h3>
+            <p style="font-weight: bold; margin-bottom: 0;">RIKEN</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-10">
+            <img src="images/max.jpg" class="img-polaroid">
+            <h3>Maximilian Meyer-Mölleringhof</h3>
+            <p style="font-weight: bold; margin-bottom: 0;">University of Luxembourg</p>
+            <p>Main focus: Open Quantum Systems, Krylov Methods</p>
+        </div>
     </div>
 </div>
 
