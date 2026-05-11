@@ -2,7 +2,7 @@
 //basic map config with custom fills, mercator projection
 var map = new Datamap({
     scope: 'world',
-    element: document.getElementById('container1'),
+    element: document.getElementById('map_container'),
     projection: 'mercator',
     geographyConfig: {
         highlightBorderColor: '#666666',

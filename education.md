@@ -59,7 +59,7 @@ Educators around the world use QuTiP to create interactive examples, while stude
                 </a>
             </div>
         </div>
-        <img class="col-md-6 col-s-12 m-auto image" src="images/qutip-virtual-lab.png">
+        <img class="col-md-6 col-s-12 m-auto media" src="images/qutip-virtual-lab.png">
     </div>
 </div>
 
