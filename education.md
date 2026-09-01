@@ -18,7 +18,7 @@ Educators around the world use QuTiP to create interactive examples, while stude
         <p class="px-3">
             QuTiP is used by educators around the world, teaching the scientists of tomorrow.
         </p>
-        <div class="slick-carousel education-carousel">
+        <div class="slick-carousel education-carousel carousel">
             {% assign courses = site.data.university_courses | where: "visible", true %}
             {% for c in courses %}
                 <div class="card">
