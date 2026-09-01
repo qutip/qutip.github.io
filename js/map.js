@@ -3,6 +3,7 @@
 var map = new Datamap({
     scope: 'world',
     element: document.getElementById('map_container'),
+    responsive: true,
     projection: 'mercator',
     geographyConfig: {
         highlightBorderColor: '#666666',
@@ -315,4 +316,8 @@ var map = new Datamap({
         TZA: {fillKey: 'TZA', visitors: 1, country: " Tanzania, United Republic of "},
         ZMB: {fillKey: 'ZMB', visitors: 1, country: " Zambia "},
     }
+});
+
+window.addEventListener('resize', function() {
+    map.resize();
 });
