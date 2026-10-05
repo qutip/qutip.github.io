@@ -74,7 +74,7 @@ Educators around the world use QuTiP to create interactive examples, while stude
         </p>
         <ul class="list-group list-group-flush lecture-list">
             {% for lecture in site.data.lectures limit:5 %}
-                <li class="list-group-item notebook-list-item my-bg-secondary">
+                <li class="list-group-item element-list-item my-bg-secondary">
                     <a href="{{ lecture.url }}" class="lecture-link">
                         <p>{{ lecture.title }}</p>
                         <p class="angle">&#8250;</p>
@@ -83,7 +83,7 @@ Educators around the world use QuTiP to create interactive examples, while stude
             {% endfor %}
             <div class="collapse list-group-flush" id="more-items">
                 {% for lecture in site.data.lectures offset:continue %}
-                    <li class="list-group-item notebook-list-item my-bg-secondary">
+                    <li class="list-group-item element-list-item my-bg-secondary">
                         <a href="{{ lecture.url }}" class="lecture-link">
                             <p>{{ lecture.title }}</p>
                             <p class="angle">&#8250;</p>

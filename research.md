@@ -24,7 +24,7 @@ Backed by a strong community all over the world, extensive documentation and tut
         <ul class="list-group list-group-flush lecture-list">
             {% assign papers = site.data.citations | where: "visible", true %}
             {% for p in papers %}
-                <li class="list-group-item notebook-list-item">
+                <li class="list-group-item element-list-item">
                     {% if p.notebook %}
                     <a href="{{ p.notebook }}" target="about:blank" class="lecture-link">
                     {% else %}

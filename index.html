@@ -19,26 +19,79 @@ layout: homepage
 </div>
 
 
+<div class="row">
+    <div class="d-flex flex-column flex-md-row justify-content-md-around align-items-stretch text-image-split">
+        <!-- Latest News -->
+        <div class="col-md-5 mx-auto col-s-12 text">
+            <h2 class="mt-0">
+                News
+            </h2>
+            <ul class="list-group list-group-flush">
+                {% for post in site.posts limit:4 %}
+                    <li class="list-group-item element-list-item">
+                        <a href="{{ post.url }}" class="lecture-link">
+                            <p>
+                                {{ post.title }}
+                                </br>
+                                <span style="color: var(--bs-gray)">{{ post.date | date: "%B, %Y" }}</span>
+                            </p>
+                            <p class="angle">&#8250;</p>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a class="my-3 btn-show-more" style="text-align: center; margin: 0 auto;" href="/news">Show More</a>
+        </div>
 
-<div class="container-fluid mb-3 pb-3 px-0 my-center-section my-bg-secondary">
-    <div class="container-xxl pb-3">
-        <h2>
-            News
-        </h2>
-        <ul class="list-group list-group-flush lecture-list">
-            {% for post in site.posts limit:4 %}
-                <li class="list-group-item notebook-list-item my-bg-secondary">
-                    <a href="{{ post.url }}" class="lecture-link">
-                        <p>{{ post.title }}</br>{{ post.date | date: "%B, %Y" }}</p>
-                        <p class="angle">&#8250;</p>
-                    </a>
+        <!-- Latest Releases -->
+        <div class="col-md-5 mx-auto col-s-12 p-3 text">
+            <h2 class="mt-0">
+                Latest Releases
+            </h2>
+            <ul class="list-group list-group-flush">
+                {% for release in site.data.release_info %}
+                <li class="mb-2 list-group-item element-list-item release-item">
+                    <strong>{{ release.version }}</strong>
+                    <br />
+                    <span>{{ release.date }}</span>
+                    <br />
+                    <div class="links">
+                        <a href="{{ release.install }}">install</a> &bull;
+                        <a href="{{ release.docs }}">docs</a> &bull;
+                        <a href="{{ release.src }}">src</a> &bull;
+                        <a href="{{ release.changelog }}">changelog</a>
+                    </div>
                 </li>
-            {% endfor %}
-        </ul>
-        <a class="my-3 btn-show-more" href="/news">Show More</a>
+                {% endfor %}
+            </ul>
+            <a class="mx-auto mb-0 btn-show-more" style="text-align: center; margin-top: auto;" href="/documentation">All Versions</a>
+        </div>
     </div>
 </div>
 
+
+<div class="container-fluid px-0 my-center-section my-bg-secondary">
+    <div class="container-xxl px-0 pb-3">
+        <h2>
+            The QuTiP Family
+        </h2>
+        <p class="px-3">
+            QuTiP is more than just a Python package. Check out all the related projects!
+        </p>
+        <div class="slick-carousel packages-carousel carousel">
+            {% assign packages = site.data.qutip_packages | where: "visible", true %}
+            {% for p in packages %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ p.name }}</h5>
+                        <p class="card-text">{{ p.details }}</p>
+                        <a href="{{ p.link }}" class="card-link">See more</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 
 <div class="row">
@@ -70,30 +123,6 @@ layout: homepage
             <div class="col-md-6 col-s-12 m-auto media" style="width: 100%;">
                 <div id="map_container" style="position: relative; height: 300px;"></div>
             </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="container-fluid px-0 my-center-section my-bg-secondary">
-    <div class="container-xxl px-0 pb-3">
-        <h2>
-            The QuTiP Family
-        </h2>
-        <p class="px-3">
-            QuTiP is more than just a Python package. Check out all the related projects!
-        </p>
-        <div class="slick-carousel packages-carousel carousel">
-            {% assign packages = site.data.qutip_packages | where: "visible", true %}
-            {% for p in packages %}
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ p.name }}</h5>
-                        <p class="card-text">{{ p.details }}</p>
-                        <a href="{{ p.link }}" class="card-link">See more</a>
-                    </div>
-                </div>
-            {% endfor %}
         </div>
     </div>
 </div>
