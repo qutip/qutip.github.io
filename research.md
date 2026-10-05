@@ -9,17 +9,7 @@ It is widely adopted in the fields of quantum optics, open quantum system dynami
 With a focus on efficiency, an intuitive API, and rich visualization tools, QuTiP enables rapid prototyping and testing of complex physical models.
 Backed by a strong community all over the world, extensive documentation and tutorials, QuTiP has established itself at the forefront of quantum physics research.
 
-<div class="container-xxl px-3">
-    <div class="banner">
-        <p>
-            We hope, you enjoy using QuTiP. Please help us make QuTiP even better by
-            <a href="/citing">
-                citing
-            </a>
-            it in your publications
-        </p>
-    </div>
-</div>
+{% include citing.html %}
 
 <div class="container-fluid mb-3 px-0 my-center-section">
     <div class="container-xxl pb-3">

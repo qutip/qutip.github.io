@@ -10,7 +10,7 @@ The recommended way to install QuTiP is with conda or pip, see the
 <div class="row">
      <div class="col-md-12">
           <div class="banner" style="margin-top: 0;">
-          <p id="cite">This page has been archived! For the latest updates please refer to the release info on our <a href="https://github.com/qutip/qutip/releases">GitHub Page</a></p>.
+          <p id="cite">This page has been archived! For the latest updates please refer to the release info on our <a href="https://github.com/qutip/qutip/releases">GitHub Page</a>.</p>
           </div>
      </div>
 </div>
