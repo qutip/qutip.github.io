@@ -112,7 +112,8 @@ max_users = 0
 total_users = 0
 countries = {}
 with open('2025.csv', 'rt') as csvfile:
-    reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    reader = csv.reader(csvfile, delimiter=',', quotechar='"', )
+    next(reader) # skip header
     for row in reader:
         name = row[0]
         if name in replace_countries.keys():
