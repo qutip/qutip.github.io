@@ -144,6 +144,12 @@ For the detailled list of all our contributors, check out [our GitHub repositori
             <p style="font-weight: bold; margin-bottom: 0;">University of Luxembourg</p>
             <p>Main focus: Open Quantum Systems, Krylov Methods</p>
         </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-10">
+            <img src="images/spencer.jpg" class="img-polaroid">
+            <h3>Spencer Churchill</h3>
+            <p style="font-weight: bold; margin-bottom: 0;">IonQ</p>
+            <p>Main focus: Quantum simulation, developer tools</p>
+        </div>
     </div>
 </div>
 
@@ -161,7 +167,7 @@ For the detailled list of all our contributors, check out [our GitHub repositori
         <div class="col-lg-3 col-md-4 col-sm-6">
             <img src="images/daniel-burgarth.jpeg" class="img-polaroid">
             <h3>Daniel Burgarth</h3>
-            <p style="font-weight: bold">Macquarie University</p>
+            <p style="font-weight: bold">Friedrich Alexander University</p>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6">
             <img src="images/franco.jpg" class="img-polaroid">
