@@ -19,6 +19,18 @@ A few things to keep in mind:
 See the difference of [this](https://qutip.org/news#new-website) and [this](https://qutip.org/news#qutip5-release) post.
 - Assets like images are managed in the `assets` (*not* `images`) folder.
 
+Announcing a new Release
+------------------------
+
+When a new version of qutip is released, the website needs to be updated as well.
+This comes in three simple steps:
+
+1. Update the corresponding links and version numbers in `_data/release_info.yaml`
+2. In `documentation.md`, move the (now) old entry to the **Previous releases** section and create a new one in the **Latest releases** one
+3. Update `download.md` in the same way
+
+Finally, check that the HTML and Markdown structure of the files is correct and validate your results by testing it locally.
+
 Testing locally
 ---------------
 
