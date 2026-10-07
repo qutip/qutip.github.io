@@ -13,13 +13,13 @@ There are already other files you can take inspiration from or you can [read the
 A few things to keep in mind:
 
 - Make sure the file name is in `YYYY-MM-DD-filename.md` format, where `filename` can be of your choosing but unique.
-- The `title` attribute at the top of the page will be the main header of the post and shown on the overview page.
-- The first paragraph of your post will be shown on the overview page. It is advisable to put important links or a short and catchy introduction there.
+- The `title` attribute at the top of the page will be the main header of the post and shows up on the overview page and homepage.
+- The first paragraph of your post will be shown on the overview page. It is advisable to put important links or a (very) short and catchy introduction there.
 - Using the `readmore` attribute, you can decide if your post should get its own page (set to `readmore: True`) or not (`readmore: False`).
 See the difference of [this](https://qutip.org/news#new-website) and [this](https://qutip.org/news#qutip5-release) post.
 - Assets like images are managed in the `assets` (*not* `images`) folder.
 
-Announcing a new Release
+Announcing a New Release
 ------------------------
 
 When a new version of qutip is released, the website needs to be updated as well.
@@ -29,7 +29,7 @@ This comes in three simple steps:
 2. In `documentation.md`, move the (now) old entry to the **Previous releases** section and create a new one in the **Latest releases** one
 3. Update `download.md` in the same way
 
-Finally, check that the HTML and Markdown structure of the files is correct and validate your results by testing it locally.
+Finally, check that the HTML and Markdown structure is correct and validate your results by testing it locally.
 
 Testing locally
 ---------------
