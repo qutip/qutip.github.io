@@ -49,15 +49,18 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $('.packages-carousel').slick({
-        arrows: false,
         mobileFirst: true,
-        arrows: true,
+        arrows: false,
+        centerMode: true,
+        autoplay: true,
+        autoplaySpeed: 2500,
+        infinite: true,
+        dots: true,
         responsive: [
             {
                 breakpoint: 1400,
                 settings: {
-                    slidesToShow: 4,
-                    centerMode: false,
+                    slidesToShow: 3,
                 }
             },
             {
@@ -69,21 +72,18 @@ $(document).ready(function(){
             {
                 breakpoint: 992,
                 settings: {
-                    centerMode: true,
                     slidesToShow: 3,
                 }
             },
             {
                 breakpoint: 768,
                 settings: {
-                    centerMode: true,
                     slidesToShow: 2,
                 }
             },
             {
                 breakpoint: 576,
                 settings: {
-                    centerMode: true,
                     slidesToShow: 1,
                 }
             }
