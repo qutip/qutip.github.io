@@ -45,3 +45,48 @@ $(document).ready(function(){
         ],
     });
 });
+
+
+$(document).ready(function(){
+    $('.packages-carousel').slick({
+        mobileFirst: true,
+        arrows: false,
+        centerMode: true,
+        autoplay: true,
+        autoplaySpeed: 2500,
+        infinite: true,
+        dots: true,
+        responsive: [
+            {
+                breakpoint: 1400,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                }
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 1,
+                }
+            }
+        ],
+    });
+});

@@ -5,30 +5,6 @@ layout: homepage
 
 {% include hero.html %}
 
-<div class="row">
-    <div class="col-md-9">
-
-<script>
-    var lng = navigator.language;
-    var txt;
-    if ((lng.indexOf("zh-TW") !== -1) || (lng.indexOf("zh-HK") !== -1) || (lng.indexOf("zh-Hant") !== -1))
-    {
-        txt = "感謝您使用QuTiP。如果您在文章或者論文中使用了QuTiP，請您記得<a href=\"/citing\">引用</a>QuTiP的文章。";
-    }
-    else if ((lng.indexOf("zh-CN") !== -1) || (lng.indexOf("zh-Hans") !== -1))
-    {
-        txt = "感谢您使用QuTiP。如果您在论文中使用了QuTiP，请您记得<a href=\"/citing\">引用</a>本篇论文。";
-    }
-    else if (lng.indexOf("ja") !== -1)
-    {
-        txt = "QuTiPのご利用ありがとうございます。 このソフトウェアを使っている出版物に、QuTiPの論文を<a href=\"/citing\">引用する</a>のを忘れないでください。";
-    }
-    else
-    {
-        txt = "We hope you enjoy using QuTiP.  Please help us make QuTiP better by <a href=\"/citing\">citing</a> it in your publications.";
-    }
-    document.getElementById("cite").innerHTML = txt;
-</script>
 
 <div class="row">
     <div class="col-md-12">
@@ -42,44 +18,128 @@ layout: homepage
     </div>
 </div>
 
+
+<div class="row my-3">
+    <div class="d-flex flex-column flex-md-row justify-content-md-around align-items-stretch text-image-split">
+        <!-- Latest News -->
+        <div class="col-md-5 mx-auto col-12 text">
+            <h2 class="mt-0">
+                News
+            </h2>
+            <ul class="list-group list-group-flush">
+                {% for post in site.posts limit:4 %}
+                    <li class="list-group-item element-list-item">
+                        <a href="{{ post.url }}" class="lecture-link">
+                            <p>
+                                {{ post.title }}
+                                </br>
+                                <span style="color: var(--bs-gray)">{{ post.date | date: "%B, %Y" }}</span>
+                            </p>
+                            <p class="angle">&#8250;</p>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a class="my-3 btn-show-more" style="text-align: center; margin: 0 auto;" href="/news">Show More</a>
+        </div>
+
+        <!-- Latest Releases -->
+        <div class="col-md-5 mx-auto col-12 text">
+            <h2 class="mt-0">
+                Latest Releases
+            </h2>
+            <ul class="list-group list-group-flush">
+                {% for release in site.data.release_info %}
+                <li class="mb-2 list-group-item element-list-item release-item">
+                    <strong>{{ release.version }}</strong>
+                    <br />
+                    <span>{{ release.date }}</span>
+                    <br />
+                    <div class="links">
+                        <a href="{{ release.install }}">install</a> &bull;
+                        <a href="{{ release.docs }}">docs</a> &bull;
+                        <a href="{{ release.src }}">src</a> &bull;
+                        <a href="{{ release.changelog }}">changelog</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <a class="mx-auto mb-3 btn-show-more" style="text-align: center; margin-top: auto;" href="/documentation">All Versions</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid my-lg-3 px-0 my-center-section my-bg-secondary">
+    <div class="container-xxl px-0 pb-4">
+        <h2>
+            The QuTiP Family
+        </h2>
+        <p class="px-3">
+            QuTiP is more than just a Python package. Check out all the related projects!
+        </p>
+        <div class="slick-carousel packages-carousel carousel">
+            {% assign packages = site.data.qutip_packages | where: "visible", true %}
+            {% for p in packages %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ p.name }}</h5>
+                        <p class="card-text">{{ p.details }}</p>
+                        <a href="{{ p.link }}" class="card-link">See more</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <a class="btn-show-more" href="https://github.com/qutip/">Explore All</a>
+    </div>
+</div>
+
+
 <div class="row">
-    <div class="col-md-12">
-        <p>
-            QuTiP is open-source software for simulating the dynamics of open quantum systems.  The QuTiP library depends on the excellent <a href='https://www.numpy.org'>Numpy</a>, <a href='https://www.scipy.org'>Scipy</a>, and <a href='https://cython.org'>Cython</a> numerical packages. In addition, graphical output is provided by <a href='https://matplotlib.org'>Matplotlib</a>.  QuTiP aims to provide user-friendly and efficient numerical simulations of a wide variety of Hamiltonians, including those with arbitrary time-dependence, commonly found in a wide range of physics applications such as quantum optics, trapped ions, superconducting circuits, and quantum nanomechanical resonators. QuTiP is freely available for use and/or modification on all major platforms such as Linux, Mac OSX, and Windows. Being free of any licensing fees, QuTiP is ideal for exploring quantum mechanics and dynamics in the classroom.
-        </p>
+    <div class="container-xxl mb-lg-3">
+        <h2 class="my-center-section">
+            World Wide Community
+        </h2>
+        <div class="row justify-content-md-center py-3 text-image-split">
+            <div class="mx-auto p-3 text">
+                <h5>
+                    From Education to Industry
+                </h5>
+                <p>
+                    QuTiP is used to advance research in quantum optics, quantum
+                    information, quantum open systems, opto&shy;mechanics, and
+                    many related fields. QuTiP is in use at nearly all research
+                    universities around the globe, government-funded research
+                    labs, and is relied upon by most major corporation
+                    developing a quantum computer.
+                </p>
+                <h5>
+                    Open-Source Community
+                </h5>
+                <p>
+                    QuTiP is used around the globe, and has been downloaded over
+                    a million times since its initial release. Need help in
+                    simulating a tricky problem? Our large community of users
+                    are happy to help in tackling even the most esoteric of
+                    issues.
+                </p>
+                <div>
+                    <a href="/research" class="mx-0 my-2 btn btn-primary">
+                        For Researchers
+                    </a>
+                    <a href="/education" class="mx-0 mx-md-2 btn btn-outline-primary">
+                        For Educators
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 col-s-12 m-auto media" style="width: 100%;">
+                <h5 style="text-align: center;">Distribution of 50,000+ unique visitors in 2025</h5>
+                <div id="map_container" style="position: relative; height: 300px;"></div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row" style='margin-top:20px'>
-    <div class="col-md-6">
-        <img src="images/corp_users.png">
-    </div>
-    <div class="col-md-5">
-        <p>
-            From the classroom to the corporate office, QuTiP is used around the world to advance research in quantum optics, quantum information, quantum open systems, optomechanics, and many related fields.  QuTiP is in use at nearly every single research university around the globe, government-funded research labs, and is relied upon by every major corporation focused on developing a quantum computer.
-        </p>
-    </div>
-</div>
-
-
-
-<div class="row" style='margin-top:20px; margin-bottom: 20px;'>
-    <div class="col-md-5">
-        <p style='margin-top:20px'>
-            QuTiP is already being used at a variety of institutions around the globe, and has been downloaded more than a million times since its initial release.  Need
-            help in simulating a tricky problem? Our large community of users are gracious enough to take a moment of their time and help in tackling even the most esoteric of issues.
-        </p>
-    </div>
-    <div class="col-md-6">
-        <center><h4>Distribution of the 39,420 Unique Visitors in 2020</h4></center>
-        <div id='container1' style='margin-top:10px; position: relative;height: 300px;'></div>
-    </div>
-</div>
-
-</div> <!-- col-md-9 main content div -->
-
-{% include old_sidebar.html %}
-
-</div> <!-- main row div -->
 
 {% include supp_org.html %}
+{% include sponsor.html %}

@@ -9,22 +9,12 @@ It is widely adopted in the fields of quantum optics, open quantum system dynami
 With a focus on efficiency, an intuitive API, and rich visualization tools, QuTiP enables rapid prototyping and testing of complex physical models.
 Backed by a strong community all over the world, extensive documentation and tutorials, QuTiP has established itself at the forefront of quantum physics research.
 
-<div class="container-xxl px-3">
-    <div class="banner">
-        <p>
-            We hope, you enjoy using QuTiP. Please help us make QuTiP even better by
-            <a href="/citing">
-                citing
-            </a>
-            it in your publications
-        </p>
-    </div>
-</div>
+{% include citing.html %}
 
 <div class="container-fluid mb-3 px-0 my-center-section">
     <div class="container-xxl pb-3">
         <h2>
-            3700+ citations
+            5000+ citations
         </h2>
         <p>
             Check out some selected papers and how they are making use of QuTiP.<br>
@@ -34,7 +24,7 @@ Backed by a strong community all over the world, extensive documentation and tut
         <ul class="list-group list-group-flush lecture-list">
             {% assign papers = site.data.citations | where: "visible", true %}
             {% for p in papers %}
-                <li class="list-group-item notebook-list-item">
+                <li class="list-group-item element-list-item">
                     {% if p.notebook %}
                     <a href="{{ p.notebook }}" target="about:blank" class="lecture-link">
                     {% else %}
@@ -88,10 +78,10 @@ Backed by a strong community all over the world, extensive documentation and tut
             <div class="card col">
                 <img class="card-img-top" src="images/choices.png">
                 <div class="card-body">
-                    <h5 class="card-title">Various Solvers</h5>
+                    <h5 class="card-title">Broad Range of Solvers</h5>
                     <p class="card-text">
                         QuTiP includes a variety of builtin solvers for dynamical simulations.
-                        In addition to the standard Lindblad and Monte Carlo Solvers, QuTiP includes routines for Bloch-Redfield evolution, periodic systems using the Floquet formalism, and stochastic solvers.
+                        In addition to the standard Lindblad and Monte Carlo Solvers, QuTiP includes routines for Bloch-Redfield evolution, periodic systems using the Floquet formalism, and stochastic solvers and HEOM solvers.
                         Add to this, steady state analysis and non-Markovian techniques, and you have a wide variety of tools from which to explore your systems behavior.
                     </p>
                 </div>

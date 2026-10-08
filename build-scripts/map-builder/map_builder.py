@@ -67,14 +67,18 @@ replace_countries = {
     "Vietnam": "Viet Nam",
     "Venezuela": "Venezuela, Bolivarian Republic of",
     "Palestine": "Palestine, State of",
+    "Congo - Kinshasa": "Congo, The Democratic Republic of the",
+    "Cape Verde": "Cabo Verde",
+    "Sint Maarten": "Sint Maarten (Dutch part)",
+    "Congo - Brazzaville": "Congo"
 }
 
 header_string = """
-//basic map config with custom fills, mercator projection
+//basic map config with custom fills
 var map = new Datamap({
     scope: 'world',
-    element: document.getElementById('container1'),
-    projection: 'mercator',
+    element: document.getElementById('map_container'),
+    responsive: true,
     geographyConfig: {
         highlightBorderColor: '#666666',
         popupTemplate: function(geography, data) {
@@ -107,19 +111,20 @@ class UnspecifiedCountry:
 max_users = 0
 total_users = 0
 countries = {}
-with open('2020.csv', 'rt') as csvfile:
-    reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+with open('2025.csv', 'rt') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',', quotechar='"', )
+    next(reader) # skip header
     for row in reader:
         name = row[0]
         if name in replace_countries.keys():
             name = replace_countries[name]
-        if name == "NOTSET":
+        if name == "NOTSET" or name == "(not set)":
             country = UnspecifiedCountry()
         else:
             country = pc.countries.get(name=name)
             if country is None:
                 raise ValueError(f"Unknown country {name!r}")
-        country_users = int(row[1].replace(',', ''))
+        country_users = int(row[1])
         countries[country] = country_users
         total_users += country_users
         max_users = max(max_users, country_users)
