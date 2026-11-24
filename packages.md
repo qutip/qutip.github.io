@@ -45,8 +45,8 @@ Here we catalogue independent, actively maintained Python packages published on 
                 </a>
                 <div class="mt-auto d-flex justify-content-between align-items-center border-top pt-2">
                     <div class="flex-shrink-0">
-                        <a href="https://pypi.org/project/{{p.pypi}}" class="card-link mt-auto small">PyPI</a>
-                        <a href="https://github.com/{{p.github}}" class="card-link mt-auto small">Github</a>
+                        <a href="https://pypi.org/project/{{p.pypi}}" target="_blank" rel="noopener noreferrer" class="card-link mt-auto small">PyPI</a>
+                        <a href="https://github.com/{{p.github}}" target="_blank" rel="noopener noreferrer" class="card-link mt-auto small">GitHub</a>
                     </div>
                 <small class="text-body-tertiary text-truncate ms-2">{{ p.organization }}</small>
                 </div>
