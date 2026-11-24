@@ -24,7 +24,7 @@ Here we catalogue independent, actively maintained Python packages published on 
             <div class="card shadow-sm h-100 border-dark">
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title pb-2">
-                    {{ p.name | capitalize }}
+                    {{ p.name }}
                 </h5>
                 <h6 class="card-subtitle mb-2 text-muted text-uppercase subtitle-sm  border-bottom mb-3">
                     {{ p.domain }}
