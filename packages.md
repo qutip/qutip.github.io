@@ -4,7 +4,7 @@ title: QuTiP Ecosystem
 
 # Scientific Packages Powered by QuTiP
 
-Here we catalogue independent, actively maintained Python packages published on PyPI that utilize QuTiP as an underlying computational engine. Each entry excludes internal QuTiP governance packages (such as qutip-qip or qutip-jax), meets continuous maintenance standards, and leverages QuTiP for Hamiltonian modeling, open-system master equations, or state synthesis.
+Here we catalogue independent, actively maintained Python packages published on PyPI that are compatible with or built on QuTiP. Each entry excludes internal QuTiP packages (such as qutip-qip or qutip-jax), meets continuous maintenance standards. Built something with QuTiP? We'd love to list it here. See the [contribution guidelines](https://github.com/qutip/qutip.github.io#adding-a-new-package-to-ecosystem-page) to add your package.
 
 
 <section class="container-fluid my-bg-secondary py-4">
