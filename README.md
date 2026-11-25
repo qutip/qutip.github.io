@@ -34,7 +34,7 @@ Finally, check that the HTML and Markdown structure is correct and validate your
 Adding a New Package to Ecosystem Page
 --------------------------------------
 
-To add a new Python package you only need to edit `_data/packages.yaml` file by adding the following details of your package:
+A package must be published on PyPI and well maintained to be added on our _[Qutip Ecosystem](https://qutip.org/packages)_ page. To add a new Python package you only need to edit `_data/packages.yaml` file by adding the following details of your package:
 
 ```
 - name:
