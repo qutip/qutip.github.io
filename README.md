@@ -31,6 +31,27 @@ This comes in three simple steps:
 
 Finally, check that the HTML and Markdown structure is correct and validate your results by testing it locally.
 
+Adding a New Package to Ecosystem Page
+--------------------------------------
+
+A package must be published on PyPI and well maintained to be added on our _[Qutip Ecosystem](https://qutip.org/packages)_ page. To add a new Python package you only need to edit `_data/packages.yaml` file by adding the following details of your package:
+
+```
+- name:
+  domain:
+  description:
+  pypi:
+  github:
+  organization:
+  dependency:
+  qutipRole:
+  license:
+```
+
+Only the organization name is optional. In case your package doesn't belong to any of the existing domains, you can add a new domain in `_data/domain.yaml`.
+
+Finally, test it locally and open a new PR for adding your package.
+
 Testing locally
 ---------------
 
